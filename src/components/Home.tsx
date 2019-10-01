@@ -4,6 +4,7 @@ import TopBar from "../components/TopBar";
 import {COLORS} from "../utils/_vars";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import {recommendedForYouHeader} from "../data/home";
+import LoginModal from "./LoginModal";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;
@@ -64,6 +65,7 @@ const renderAlbum = (album: any, index: number) => {
 const Home = ({data}: any) => {
   return (
     <View style={styles.container}>
+      <LoginModal />
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}
