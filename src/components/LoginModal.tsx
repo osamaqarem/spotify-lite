@@ -1,24 +1,28 @@
-import React, {useRef, useState} from "react";
-import {ActivityIndicator, Modal, Text, View, YellowBox} from "react-native";
+import React, {RefObject} from "react";
+import {Modal, YellowBox, View, Text, ActivityIndicator} from "react-native";
 import {WebView, WebViewNavigation} from "react-native-webview";
 import secret from "../../secret";
+import {SPOTIFY_API_BASE} from "../utils/_vars";
 
-YellowBox.ignoreWarnings(["localhost"]);
+// localhost refused connection.
+YellowBox.ignoreWarnings(["ERR_CONNECTION_REFUSED"]);
 
-const LoginModal = () => {
-  const [loading, setLoading] = useState(false);
-  const ref = useRef(null);
+export type LoginModalType = {
+  isLoading: boolean;
+  isVisible: boolean;
+  webViewRef: RefObject<WebView>;
+  handleNav: (e: WebViewNavigation) => void;
+};
 
-  const handleNav = (e: WebViewNavigation) => {
-    if (e.url.includes("http://localhost:8000") && !loading) {
-      setLoading(true);
-      console.log(e.url);
-    }
-  };
-
+const LoginModal = ({
+  isLoading,
+  isVisible,
+  webViewRef,
+  handleNav,
+}: LoginModalType) => {
   return (
-    <Modal visible={true}>
-      {loading && (
+    <Modal visible={isVisible} animationType="fade">
+      {isLoading && (
         <View
           style={{
             width: "100%",
@@ -32,10 +36,10 @@ const LoginModal = () => {
         </View>
       )}
       <WebView
-        ref={ref}
+        ref={webViewRef}
         onNavigationStateChange={handleNav}
         source={{
-          uri: `https://accounts.spotify.com/authorize?client_id=${secret.clientId}&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=user-read-private`,
+          uri: `${SPOTIFY_API_BASE}/authorize?client_id=${secret.clientId}&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=user-read-private`,
         }}
         renderError={() => (
           <View

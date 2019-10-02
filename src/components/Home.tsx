@@ -1,15 +1,24 @@
 import React from "react";
-import {ScrollView, Text, View, Image, StyleSheet} from "react-native";
-import TopBar from "../components/TopBar";
-import {COLORS} from "../utils/_vars";
+import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import TopBar from "../components/TopBar";
 import {recommendedForYouHeader} from "../data/home";
-import LoginModal from "./LoginModal";
+import {COLORS} from "../utils/_vars";
+import LoginModal, {LoginModalType} from "./LoginModal";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;
 
 const ALBUM_DIMEN_MADE = 172.5;
+
+type HomeType = {
+  data: {
+    madeForYou: any;
+    recentlyPlayed: any;
+    recommendedForYou: any;
+    loginModalProps: LoginModalType;
+  };
+};
 
 const settingsIcon = (
   <MaterialCommunityIcon
@@ -62,21 +71,23 @@ const renderAlbum = (album: any, index: number) => {
   );
 };
 
-const Home = ({data}: any) => {
+const Home = ({data}: HomeType) => {
   return (
     <View style={styles.container}>
-      <LoginModal />
+      <LoginModal {...data.loginModalProps} />
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}
       </TopBar>
       <ScrollView style={{width: "100%"}} showsVerticalScrollIndicator={false}>
-        <View style={styles.columnScrollContainer}>
-          <Text
-            style={[styles.centeredText, styles.headerText, {fontSize: 18.5}]}>
-            Recently played
-          </Text>
-        </View>
+        <Text
+          style={[
+            styles.centeredText,
+            styles.headerText,
+            {fontSize: 18.5, marginTop: 20, marginBottom: 10},
+          ]}>
+          Recently played
+        </Text>
         <ScrollView
           overScrollMode="never"
           style={{height: ROW_SCROLLVIEW_HEIGHT}}
@@ -145,7 +156,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  columnScrollContainer: {marginTop: 20, marginBottom: 10},
+  columnScrollContainer: {},
   rowScrollContainer: {flexDirection: "row", marginLeft: 9},
   centeredText: {
     alignSelf: "center",

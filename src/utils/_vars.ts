@@ -4,3 +4,5 @@ export const COLORS = {
   iconSelected: "#FFFFFF",
   background: "#121212",
 };
+
+export const SPOTIFY_API_BASE = "https://accounts.spotify.com";
