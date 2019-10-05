@@ -26,6 +26,8 @@ module.exports = {
     "@typescript-eslint/no-use-before-define": 0,
     "@typescript-eslint/prefer-interface": 0,
     "@typescript-eslint/no-non-null-assertion": 0,
+    "@typescript-eslint/ban-ts-ignore": 0,
+    "prefer-const": 0,
   },
   settings: {
     react: {

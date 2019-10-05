@@ -1,8 +1,8 @@
-// Source https://snack.expo.io/BktW0xdje
 const chars =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
 export const Base64 = {
+  // Source https://snack.expo.io/BktW0xdje
   btoa: (input = "") => {
     const str = input;
     let output = "";
@@ -47,4 +47,20 @@ export const Base64 = {
 
     return output;
   },
+};
+
+/**
+ *
+ * for "application/x-www-form-urlencoded" request body.
+ * takes in a flat JSON object
+ */
+export const getFormUrlEncoded = (jsonBody: any) => {
+  let formBody: any = [];
+
+  for (let key in jsonBody) {
+    const encodedKey = encodeURIComponent(key);
+    const encodedValue = encodeURIComponent(jsonBody[key]);
+    formBody.push(encodedKey + "=" + encodedValue);
+  }
+  return formBody.join("&");
 };

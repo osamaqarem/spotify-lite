@@ -1,9 +1,9 @@
 import React from "react";
 import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import TopBar from "../components/TopBar";
-import {recommendedForYouHeader} from "../data/home";
-import {COLORS} from "../utils/_vars";
+import TopBar from "../common/TopBar";
+import {recommendedForYouHeader} from "../../data/home";
+import {COLORS} from "../../utils";
 import LoginModal, {LoginModalType} from "./LoginModal";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;

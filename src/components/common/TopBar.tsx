@@ -1,6 +1,6 @@
 import React, {ReactNode} from "react";
 import {View} from "react-native";
-import {COLORS} from "../utils/_vars";
+import {COLORS} from "../../utils";
 
 const TopBar = ({children}: {children: ReactNode}) => {
   return (

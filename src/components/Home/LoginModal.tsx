@@ -1,8 +1,8 @@
 import React, {RefObject} from "react";
 import {Modal, YellowBox, View, Text, ActivityIndicator} from "react-native";
 import {WebView, WebViewNavigation} from "react-native-webview";
-import secret from "../../secret";
-import {SPOTIFY_API_BASE} from "../utils/_vars";
+import secret from "../../../secret";
+import {SPOTIFY_ACCOUNTS, SPOTIFY_REDIRECT_URI} from "../../utils";
 
 // localhost refused connection.
 YellowBox.ignoreWarnings(["ERR_CONNECTION_REFUSED"]);
@@ -11,14 +11,27 @@ export type LoginModalType = {
   isLoading: boolean;
   isVisible: boolean;
   webViewRef: RefObject<WebView>;
-  handleNav: (e: WebViewNavigation) => void;
+  pushNavEvent: (e: WebViewNavigation) => void;
 };
+
+// WebView URL for obtaining auth code from Spotify.
+// Has:
+// 1- client_id
+// 2- client_secret
+// 3- response_type
+// 4- redirect_uri
+// 5- scope
+const uri = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
+  secret.clientId
+}&response_type=code&redirect_uri=${encodeURIComponent(
+  SPOTIFY_REDIRECT_URI,
+)}&scope=user-read-private`;
 
 const LoginModal = ({
   isLoading,
   isVisible,
   webViewRef,
-  handleNav,
+  pushNavEvent,
 }: LoginModalType) => {
   return (
     <Modal visible={isVisible} animationType="fade">
@@ -37,9 +50,9 @@ const LoginModal = ({
       )}
       <WebView
         ref={webViewRef}
-        onNavigationStateChange={handleNav}
+        onNavigationStateChange={pushNavEvent}
         source={{
-          uri: `${SPOTIFY_API_BASE}/authorize?client_id=${secret.clientId}&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8000&scope=user-read-private`,
+          uri,
         }}
         renderError={() => (
           <View
@@ -49,7 +62,7 @@ const LoginModal = ({
               width: "100%",
               height: "100%",
             }}>
-            <Text style={{fontSize: 24}}>EVERYTHING IS FINE 👍</Text>
+            <Text style={{fontSize: 24, marginHorizontal: 45}}>LOADING 🔃</Text>
           </View>
         )}
       />

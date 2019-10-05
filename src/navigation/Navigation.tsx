@@ -7,11 +7,11 @@ import {
   HomeLabel,
   searchIcon,
   SearchLabel,
-} from "../components/TabBar";
+} from "../components/common/TabBar";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
-import {COLORS} from "../utils/_vars";
+import {COLORS} from "../utils";
 
 const sharedStyles = {
   activeColor: COLORS.iconSelected,

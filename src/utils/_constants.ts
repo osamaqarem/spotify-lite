@@ -1,0 +1,12 @@
+export const COLORS = {
+  tabBar: "#222326",
+  icon: "#ADAEB3",
+  iconSelected: "#FFFFFF",
+  background: "#121212",
+};
+
+export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";
+
+export const SPOTIFY_API_BASE = "https://api.spotify.com";
+
+export const SPOTIFY_REDIRECT_URI = "http://localhost:8000";

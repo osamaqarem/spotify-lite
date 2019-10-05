@@ -1,8 +1,8 @@
 import React from "react";
-import {StyleSheet, Text, TextStyle} from "react-native";
+import {StyleSheet, Text} from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Octicon from "react-native-vector-icons/Octicons";
-import {COLORS} from "../utils/_vars";
+import {COLORS} from "../../utils";
 
 const sizes = {
   home: 24.5,
