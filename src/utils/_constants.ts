@@ -1,3 +1,6 @@
+import secret from "../../secret";
+import { Base64 } from "./_helpers";
+
 export const COLORS = {
   tabBar: "#222326",
   icon: "#ADAEB3",
@@ -10,3 +13,5 @@ export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";
 export const SPOTIFY_API_BASE = "https://api.spotify.com";
 
 export const SPOTIFY_REDIRECT_URI = "http://localhost:8000";
+
+export const encoded = Base64.btoa(secret.clientId + ":" + secret.clientSecret);

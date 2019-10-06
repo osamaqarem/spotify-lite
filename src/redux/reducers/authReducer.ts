@@ -1,5 +1,6 @@
-import {DispatchObject} from "../../data/types";
-import {authActions} from "../actions";
+import { DispatchObject } from "../../data/types";
+import { storeTokens } from "../../utils";
+import { authActions } from "../actions";
 
 const initialState = {
   token: null,
@@ -8,16 +9,16 @@ const initialState = {
   error: null,
 };
 
-export default (state = initialState, {type, payload}: DispatchObject) => {
+export default (state = initialState, { type, payload }: DispatchObject) => {
   switch (type) {
-    case authActions.GET_TOKEN:
-      return {...state, ...payload};
-    case authActions.PROFILE:
-      debugger;
-      return {...state, ...payload};
+    case authActions.GET_TOKEN_SUCCESS:
+      storeTokens(payload);
+    case authActions.SET_TOKENS:
+      return { ...state, ...payload };
+    case authActions.PROFILE_SUCCESS:
+      return { ...state, ...payload };
     case authActions.ERROR:
-      debugger;
-      return {...state, ...payload};
+      return { ...state, ...payload };
     default:
       return state;
   }

@@ -1,10 +1,10 @@
 import React from "react";
-import {Image, ScrollView, StyleSheet, Text, View} from "react-native";
+import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import TopBar from "../common/TopBar";
-import {recommendedForYouHeader} from "../../data/home";
-import {COLORS} from "../../utils";
-import LoginModal, {LoginModalType} from "./LoginModal";
+import { recommendedForYouHeader } from "../../data/home";
+import { COLORS } from "../../utils";
+import LoginModal, { LoginModalType } from "./LoginModal";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;
@@ -25,13 +25,13 @@ const settingsIcon = (
     name="settings-outline"
     size={24}
     color={COLORS.icon}
-    style={{position: "absolute", right: 10}}
+    style={{ position: "absolute", right: 10 }}
   />
 );
 
 const renderAlbumRecent = (album: any, index: number) => {
   return (
-    <View key={index} style={{marginHorizontal: 8, flexDirection: "column"}}>
+    <View key={index} style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <Image
         source={album.img}
         style={{
@@ -55,7 +55,7 @@ const renderAlbumRecent = (album: any, index: number) => {
 
 const renderAlbum = (album: any, index: number) => {
   return (
-    <View key={index} style={[{width: ALBUM_DIMEN_MADE}]}>
+    <View key={index} style={[{ width: ALBUM_DIMEN_MADE }]}>
       <Image
         source={album.img}
         style={{
@@ -71,26 +71,32 @@ const renderAlbum = (album: any, index: number) => {
   );
 };
 
-const Home = ({data}: HomeType) => {
+const Home = ({ data }: HomeType) => {
+  const renderLoginModal = data.loginModalProps.isVisible ? (
+    <LoginModal {...data.loginModalProps} />
+  ) : null;
+
   return (
     <View style={styles.container}>
-      <LoginModal {...data.loginModalProps} />
+      {renderLoginModal}
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}
       </TopBar>
-      <ScrollView style={{width: "100%"}} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={{ width: "100%" }}
+        showsVerticalScrollIndicator={false}>
         <Text
           style={[
             styles.centeredText,
             styles.headerText,
-            {fontSize: 18.5, marginTop: 20, marginBottom: 10},
+            { fontSize: 18.5, marginTop: 20, marginBottom: 10 },
           ]}>
           Recently played
         </Text>
         <ScrollView
           overScrollMode="never"
-          style={{height: ROW_SCROLLVIEW_HEIGHT}}
+          style={{ height: ROW_SCROLLVIEW_HEIGHT }}
           horizontal
           showsHorizontalScrollIndicator={false}>
           <View style={styles.rowScrollContainer}>
@@ -99,7 +105,8 @@ const Home = ({data}: HomeType) => {
             )}
           </View>
         </ScrollView>
-        <Text style={[styles.centeredText, styles.headerText, {marginTop: 50}]}>
+        <Text
+          style={[styles.centeredText, styles.headerText, { marginTop: 50 }]}>
           Made for you
         </Text>
         <View style={styles.content}>
@@ -107,7 +114,8 @@ const Home = ({data}: HomeType) => {
             renderAlbum(album, index),
           )}
         </View>
-        <Text style={[styles.centeredText, styles.headerText, {marginTop: 30}]}>
+        <Text
+          style={[styles.centeredText, styles.headerText, { marginTop: 30 }]}>
           Recommended for you
         </Text>
         <View
@@ -130,7 +138,7 @@ const Home = ({data}: HomeType) => {
             style={[
               styles.centeredText,
               styles.albumText,
-              {marginBottom: 25, fontSize: 15},
+              { marginBottom: 25, fontSize: 15 },
             ]}>
             {recommendedForYouHeader.title}
           </Text>
@@ -157,7 +165,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   columnScrollContainer: {},
-  rowScrollContainer: {flexDirection: "row", marginLeft: 9},
+  rowScrollContainer: { flexDirection: "row", marginLeft: 9 },
   centeredText: {
     alignSelf: "center",
     color: "white",

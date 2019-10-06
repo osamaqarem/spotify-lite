@@ -1,38 +1,19 @@
-import React, {useEffect, useRef, useState} from "react";
-import {WebViewNavigation} from "react-native-webview";
-import {Subject} from "rxjs";
-import {filter, take} from "rxjs/operators";
+import React, { useEffect, useRef, useState } from "react";
+import { WebViewNavigation } from "react-native-webview";
+import { connect } from "react-redux";
+import { Subject } from "rxjs";
+import { filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
-import {madeForYou, recentlyPlayed, recommendedForYou} from "../data/home";
-import {connect} from "react-redux";
-import {getToken} from "../redux/actions";
-import {GetToken} from "../data/types";
-
-// TODO:
-// 1- Loading reducer and epic.
-// 2- HomeScreen will be injected with redux loading state and user data.
-// 3- HomeScreen will pass loading prop to its presentational components,
-// 4- LoginModal will be replaced with null when loading is complete.
-// 5- Remove local loading state from HomeScreen.
-// 6- Store access and refresh tokens in AsyncStorage.
-// 7- Retrieve tokens from asyncstorage on app load at App.js.
-// 8- Use stored token to retrieve user profile.
-// 9- if the response is
-/**
- *```js
- * "error": {
- *   "status": 401,
- *   "message": "The access token expired"
- * }
- *```
- */
-//  Then a request for a new token is dispatched
-// 10- API Error handling.
+import { madeForYou, recentlyPlayed, recommendedForYou } from "../data/home";
+import { GetToken as GetTokens, ProfileResponse } from "../data/types";
+import { getTokens, getProfile, setTokens } from "../redux/actions";
+import { Alert } from "react-native";
+import { getToken } from "../utils";
 
 /**
  * Flow:
- * 1- Open app.
- * 2- App tries to get data user with stored token (is now loading).
+ * 1- Open app. App obtains auth code and checks if token exists (is now loading).
+ * 2- App tries to get data user with stored token.
  * 3- OK (is now not loading).            3- Fail => Get new token (is now not loading).
  * 4- user data injected into home screen.
  * 5- HomeScreen sees injected user data => hides LoginModal.
@@ -52,22 +33,58 @@ const webView$ = webViewSub$.pipe(
   take(1),
 );
 
+type HomeScreenProps = {
+  getTokens: GetTokens;
+  token: string | null;
+  loading: boolean; // Controls loading indicator for LoginModal
+  profile: ProfileResponse | null; // Not loading once this is non-null
+  getProfile: () => void;
+  setTokens: ({
+    token,
+    refreshToken,
+  }: {
+    token: string;
+    refreshToken: string;
+  }) => {};
+};
+
 const HomeScreen = ({
-  getToken,
+  getTokens,
   loading = true,
-}: {
-  getToken: GetToken;
-  loading: boolean;
-}) => {
-  // TODO: The modal is always visible, but this should decide if the modal is rendered, or null.
+  profile,
+  getProfile,
+  setTokens,
+}: HomeScreenProps) => {
+  // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
+  const [authCode, setAuthCode] = useState("");
+
+  // Controls loading indicator in Home tab
+  const [loadingAlbums, setLoadingAlbums] = useState(true);
+
   const webViewRef = useRef(null);
 
   /**
-   * Subscribes to our navigation URL event stream
+   * Subscribes to our navigation URL event stream.
+   * Init tokens from AsyncStorage and dispatch them to redux store.
+   * If tokens exist, user profile action is dispatched.
    */
   useEffect(() => {
     webView$.subscribe(handleNav);
+
+    const initTokens = async () => {
+      const refreshToken = await getToken("refreshToken");
+      const token = await getToken("token");
+
+      if (token && refreshToken) {
+        setTokens({ token, refreshToken });
+        getProfile();
+      } else {
+        getTokens({ authCode });
+      }
+    };
+
+    initTokens();
     // eslint-disable-next-line
   }, []);
 
@@ -86,8 +103,14 @@ const HomeScreen = ({
   const handleNav = (url: string) => {
     const [, authCode] = url.split("?code=");
 
-    getToken({authCode});
+    setAuthCode(authCode);
   };
+
+  useEffect(() => {
+    if (profile) {
+      setIsVisible(false);
+    }
+  }, [profile]);
 
   const loginModalProps = {
     isVisible,
@@ -108,9 +131,12 @@ const HomeScreen = ({
   );
 };
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state: any) => ({
+  profile: state.authReducer.profile,
+  loading: state.loadingReducer.loading,
+});
 
 export default connect(
   mapStateToProps,
-  {getToken},
+  { getTokens, getProfile, setTokens },
 )(HomeScreen);

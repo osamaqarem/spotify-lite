@@ -5,3 +5,29 @@ export interface AccessTokenResponse {
   refresh_token: string;
   scope: string;
 }
+
+export interface ProfileResponse {
+  display_name: string;
+  email: string;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  images: Image[];
+  product: string;
+  type: string;
+  uri: string;
+}
+
+export interface ExternalUrls {
+  spotify: string;
+}
+
+export interface Image {
+  height?: any;
+  url: string;
+  width?: any;
+}
+
+export type ProfileError = {
+  error: { status: string; message: string };
+};
