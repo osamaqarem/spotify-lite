@@ -1,15 +1,14 @@
-import React, {RefObject} from "react";
-import {Modal, YellowBox, View, Text, ActivityIndicator} from "react-native";
-import {WebView, WebViewNavigation} from "react-native-webview";
+import React, { RefObject } from "react";
+import { Modal, YellowBox, View, Text, ActivityIndicator } from "react-native";
+import { WebView, WebViewNavigation } from "react-native-webview";
 import secret from "../../../secret";
-import {SPOTIFY_ACCOUNTS, SPOTIFY_REDIRECT_URI} from "../../utils";
+import { SPOTIFY_ACCOUNTS, SPOTIFY_REDIRECT_URI } from "../../utils";
 
 // localhost refused connection.
 YellowBox.ignoreWarnings(["ERR_CONNECTION_REFUSED"]);
 
 export type LoginModalType = {
   isLoading: boolean;
-  isVisible: boolean;
   webViewRef: RefObject<WebView>;
   pushNavEvent: (e: WebViewNavigation) => void;
 };
@@ -29,12 +28,11 @@ const uri = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
 
 const LoginModal = ({
   isLoading,
-  isVisible,
   webViewRef,
   pushNavEvent,
 }: LoginModalType) => {
   return (
-    <Modal visible={isVisible} animationType="fade">
+    <Modal animationType="fade">
       {isLoading && (
         <View
           style={{
@@ -62,7 +60,9 @@ const LoginModal = ({
               width: "100%",
               height: "100%",
             }}>
-            <Text style={{fontSize: 24, marginHorizontal: 45}}>LOADING 🔃</Text>
+            <Text style={{ fontSize: 24, marginHorizontal: 45 }}>
+              LOADING 🔃
+            </Text>
           </View>
         )}
       />

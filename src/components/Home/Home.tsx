@@ -14,6 +14,7 @@ const ALBUM_DIMEN_MADE = 172.5;
 type HomeType = {
   data: {
     madeForYou: any;
+    isVisible: boolean;
     recentlyPlayed: any;
     recommendedForYou: any;
     loginModalProps: LoginModalType;
@@ -72,7 +73,7 @@ const renderAlbum = (album: any, index: number) => {
 };
 
 const Home = ({ data }: HomeType) => {
-  const renderLoginModal = data.loginModalProps.isVisible ? (
+  const renderLoginModal = data.isVisible ? (
     <LoginModal {...data.loginModalProps} />
   ) : null;
 

@@ -5,7 +5,7 @@ import { authActions, loadingActions } from "./actionTypes";
 
 export const loadingEpic = (action$: ActionsObservable<DispatchObject>) =>
   action$.pipe(
-    ofType(authActions.GET_TOKEN_SUCCESS),
+    ofType(authActions.GET_TOKENS_SUCCESS),
     map(() => ({
       type: loadingActions.LOADING,
     })),

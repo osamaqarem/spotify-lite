@@ -28,6 +28,6 @@ export interface Image {
   width?: any;
 }
 
-export type ProfileError = {
+export interface ProfileError {
   error: { status: string; message: string };
-};
+}

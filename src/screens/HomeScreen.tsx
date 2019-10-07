@@ -113,7 +113,6 @@ const HomeScreen = ({
   }, [profile]);
 
   const loginModalProps = {
-    isVisible,
     webViewRef,
     pushNavEvent,
     isLoading: loading,
@@ -122,6 +121,7 @@ const HomeScreen = ({
   return (
     <Home
       data={{
+        isVisible,
         madeForYou,
         recentlyPlayed,
         recommendedForYou,

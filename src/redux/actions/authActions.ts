@@ -8,12 +8,14 @@ import {
   switchMap,
   take,
   withLatestFrom,
+  mapTo,
 } from "rxjs/operators";
 import {
   AccessTokenResponse,
   DispatchFun,
   DispatchObject,
   ProfileError,
+  ProfileResponse,
 } from "../../data/types";
 import {
   encoded,
@@ -32,8 +34,6 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
   dispatch: DispatchFun,
 ) => {
   try {
-    debugger;
-
     const body = {
       code: authCode,
       // eslint-disable-next-line
@@ -59,7 +59,7 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
     const refreshToken = resJson.refresh_token;
 
     dispatch({
-      type: authActions.GET_TOKEN_SUCCESS,
+      type: authActions.GET_TOKENS_SUCCESS,
       payload: { token, refreshToken },
     });
 
@@ -101,20 +101,23 @@ export const getProfileEpic = (
       );
       return request$.pipe(
         switchMap(res => res.json()),
-        map(profile => ({
-          type: authActions.PROFILE_SUCCESS,
-          payload: { profile },
-        })),
-        catchError(({ error }: ProfileError) => {
-          if (error.message.includes("expired")) {
-            Alert.alert("Expired token");
+        map((profile: any) => {
+          if (profile && profile.error) {
+            throw profile.error.message;
+          }
+          return {
+            type: authActions.PROFILE_SUCCESS,
+            payload: { profile },
+          };
+        }),
+        catchError((message: string) => {
+          if (message.includes("expired")) {
             return of({
               type: authActions.REFRESH_TOKEN,
               payload: authReducer.refreshToken,
             });
           }
-          Alert.alert("valid token. different error");
-          return of({ type: authActions.ERROR, payload: { error } });
+          return of({ type: authActions.ERROR, payload: { message } });
         }),
       );
     }),
@@ -126,8 +129,7 @@ export const getProfileEpic = (
 export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
   action$.pipe(
     ofType(authActions.REFRESH_TOKEN),
-    mergeMap(({ payload }) => {
-      debugger;
+    switchMap(({ payload }) => {
       const body = {
         // eslint-disable-next-line
         grant_type: "refresh_token",
@@ -149,22 +151,22 @@ export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
       );
 
       return request$.pipe(
-        take(1),
         switchMap(res => res.json()),
+        // mapTo({ type: "test" }),
         map((resJson: AccessTokenResponse) => {
+          // no new refresh token
           const token = resJson.access_token;
-          const refreshToken = resJson.refresh_token;
 
           // Return new token and dispatch get profile epic.
-          return of(
+          return [
             {
-              type: authActions.GET_TOKEN_SUCCESS,
-              payload: { token, refreshToken },
+              type: authActions.GET_TOKENS_SUCCESS,
+              payload: { token },
             },
             {
               type: authActions.GET_PROFILE,
             },
-          );
+          ];
         }),
         catchError(error =>
           of({ type: authActions.ERROR, payload: { error } }),

@@ -4,12 +4,12 @@ export const storeTokens = async ({
   token,
   refreshToken,
 }: {
-  token: string;
-  refreshToken: string;
+  token: string | undefined;
+  refreshToken: string | undefined;
 }) => {
   try {
-    await AsyncStorage.setItem("token", token);
-    await AsyncStorage.setItem("refreshToken", refreshToken);
+    token && (await AsyncStorage.setItem("token", token));
+    refreshToken && (await AsyncStorage.setItem("refreshToken", refreshToken));
   } catch (e) {
     console.warn("storeTokens Error: " + e);
   }
