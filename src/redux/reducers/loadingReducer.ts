@@ -2,7 +2,7 @@ import { DispatchObject } from "../../data/types";
 import { loadingActions } from "../actions";
 
 const initialState = {
-  loading: true, // Loading until we a get user profile.
+  loading: false,
 };
 
 export default (state = initialState, { type, payload }: DispatchObject) => {

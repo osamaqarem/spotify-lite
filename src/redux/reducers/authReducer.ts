@@ -13,6 +13,7 @@ export default (state = initialState, { type, payload }: DispatchObject) => {
   switch (type) {
     case authActions.GET_TOKENS_SUCCESS:
       storeTokens(payload);
+      return { ...state, ...payload };
     case authActions.SET_TOKENS:
       return { ...state, ...payload };
     case authActions.PROFILE_SUCCESS:

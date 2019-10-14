@@ -4,6 +4,8 @@ export interface AccessTokenResponse {
   expires_in: number;
   refresh_token: string;
   scope: string;
+  error: string | null;
+  error_description: string | null;
 }
 
 export interface ProfileResponse {

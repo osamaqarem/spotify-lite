@@ -6,8 +6,7 @@ import { filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
 import { madeForYou, recentlyPlayed, recommendedForYou } from "../data/home";
 import { GetToken as GetTokens, ProfileResponse } from "../data/types";
-import { getTokens, getProfile, setTokens } from "../redux/actions";
-import { Alert } from "react-native";
+import { getProfile, getTokens, setTokens } from "../redux/actions";
 import { getToken } from "../utils";
 
 /**
@@ -50,7 +49,6 @@ type HomeScreenProps = {
 
 const HomeScreen = ({
   getTokens,
-  loading = true,
   profile,
   getProfile,
   setTokens,
@@ -58,6 +56,8 @@ const HomeScreen = ({
   // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
   const [authCode, setAuthCode] = useState("");
+
+  const [loading, setLoading] = useState(false);
 
   // Controls loading indicator in Home tab
   const [loadingAlbums, setLoadingAlbums] = useState(true);
@@ -70,7 +70,7 @@ const HomeScreen = ({
    * If tokens exist, user profile action is dispatched.
    */
   useEffect(() => {
-    webView$.subscribe(handleNav);
+    const sub = webView$.subscribe(handleNav);
 
     const initTokens = async () => {
       const refreshToken = await getToken("refreshToken");
@@ -80,13 +80,16 @@ const HomeScreen = ({
         setTokens({ token, refreshToken });
         getProfile();
       } else {
-        getTokens({ authCode });
+        if (authCode.length > 0) {
+          sub.unsubscribe();
+          debugger;
+          getTokens({ authCode });
+        }
       }
     };
 
     initTokens();
-    // eslint-disable-next-line
-  }, []);
+  }, [setTokens, getProfile, getTokens, authCode]);
 
   /**
    *
@@ -101,6 +104,7 @@ const HomeScreen = ({
    * Receives the URL with the authorization code
    */
   const handleNav = (url: string) => {
+    setLoading(true);
     const [, authCode] = url.split("?code=");
 
     setAuthCode(authCode);

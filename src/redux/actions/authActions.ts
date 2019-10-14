@@ -1,21 +1,17 @@
-import { Alert } from "react-native";
 import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { from, of } from "rxjs";
 import {
   catchError,
   map,
-  mergeMap,
   switchMap,
-  take,
   withLatestFrom,
-  mapTo,
+  tap,
+  mergeMap,
 } from "rxjs/operators";
 import {
   AccessTokenResponse,
   DispatchFun,
   DispatchObject,
-  ProfileError,
-  ProfileResponse,
 } from "../../data/types";
 import {
   encoded,
@@ -55,15 +51,22 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
 
     const resJson: AccessTokenResponse = await res.json();
 
-    const token = resJson.access_token;
-    const refreshToken = resJson.refresh_token;
+    if (resJson.error) {
+      dispatch({
+        type: authActions.GET_TOKENS_ERROR,
+      });
+    } else {
+      const token = resJson.access_token;
+      const refreshToken = resJson.refresh_token;
 
-    dispatch({
-      type: authActions.GET_TOKENS_SUCCESS,
-      payload: { token, refreshToken },
-    });
+      dispatch({
+        type: authActions.GET_TOKENS_SUCCESS,
+        payload: { token, refreshToken },
+      });
 
-    dispatch(getProfile());
+      debugger;
+      dispatch(getProfile());
+    }
   } catch (error) {
     dispatch({
       type: authActions.ERROR,
@@ -158,7 +161,7 @@ export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
           const token = resJson.access_token;
 
           // Return new token and dispatch get profile epic.
-          return [
+          return of(
             {
               type: authActions.GET_TOKENS_SUCCESS,
               payload: { token },
@@ -166,8 +169,9 @@ export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
             {
               type: authActions.GET_PROFILE,
             },
-          ];
+          );
         }),
+        mergeMap(a => a),
         catchError(error =>
           of({ type: authActions.ERROR, payload: { error } }),
         ),

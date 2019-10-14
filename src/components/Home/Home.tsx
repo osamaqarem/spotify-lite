@@ -1,10 +1,12 @@
 import React from "react";
 import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import TopBar from "../common/TopBar";
 import { recommendedForYouHeader } from "../../data/home";
 import { COLORS } from "../../utils";
+import TopBar from "../common/TopBar";
 import LoginModal, { LoginModalType } from "./LoginModal";
+import { ReactReduxContext } from "react-redux";
+import reactotron from "reactotron-react-native";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;
@@ -73,13 +75,9 @@ const renderAlbum = (album: any, index: number) => {
 };
 
 const Home = ({ data }: HomeType) => {
-  const renderLoginModal = data.isVisible ? (
-    <LoginModal {...data.loginModalProps} />
-  ) : null;
-
   return (
     <View style={styles.container}>
-      {renderLoginModal}
+      {data.isVisible ? <LoginModal {...data.loginModalProps} /> : null}
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}
