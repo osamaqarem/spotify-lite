@@ -3,10 +3,9 @@ import { from, of } from "rxjs";
 import {
   catchError,
   map,
+  mergeMap,
   switchMap,
   withLatestFrom,
-  tap,
-  mergeMap,
 } from "rxjs/operators";
 import {
   AccessTokenResponse,
@@ -21,6 +20,7 @@ import {
   SPOTIFY_REDIRECT_URI,
 } from "../../utils";
 import { authActions } from "./actionTypes";
+import { Alert } from "react-native";
 
 /**
  *
@@ -52,9 +52,8 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
     const resJson: AccessTokenResponse = await res.json();
 
     if (resJson.error) {
-      dispatch({
-        type: authActions.GET_TOKENS_ERROR,
-      });
+      Alert.alert(resJson.error);
+      return;
     } else {
       const token = resJson.access_token;
       const refreshToken = resJson.refresh_token;
@@ -64,7 +63,6 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
         payload: { token, refreshToken },
       });
 
-      debugger;
       dispatch(getProfile());
     }
   } catch (error) {
@@ -117,7 +115,10 @@ export const getProfileEpic = (
           if (message.includes("expired")) {
             return of({
               type: authActions.REFRESH_TOKEN,
-              payload: authReducer.refreshToken,
+              payload: {
+                refreshToken: authReducer.refreshToken,
+                actionToRestart: getProfile,
+              },
             });
           }
           return of({ type: authActions.ERROR, payload: { message } });
@@ -128,16 +129,20 @@ export const getProfileEpic = (
 
 /**
  * Gets a new token pair using the old refresh token.
+ * Calls passed action after token refresh.
+ * @param payload : { refreshToken, actionToRestart }
  */
 export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
   action$.pipe(
     ofType(authActions.REFRESH_TOKEN),
     switchMap(({ payload }) => {
+      const { refreshToken, actionToRestart } = payload;
+
       const body = {
         // eslint-disable-next-line
         grant_type: "refresh_token",
         // eslint-disable-next-line
-        refresh_token: payload,
+        refresh_token: refreshToken,
       };
 
       const formBody = getFormUrlEncoded(body);
@@ -166,9 +171,7 @@ export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
               type: authActions.GET_TOKENS_SUCCESS,
               payload: { token },
             },
-            {
-              type: authActions.GET_PROFILE,
-            },
+            actionToRestart(),
           );
         }),
         mergeMap(a => a),

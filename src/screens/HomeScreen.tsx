@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { WebViewNavigation } from "react-native-webview";
 import { connect } from "react-redux";
-import { Subject } from "rxjs";
-import { filter, take } from "rxjs/operators";
+import { Subject, interval } from "rxjs";
+import { filter, take, debounce, debounceTime } from "rxjs/operators";
 import Home from "../components/Home/Home";
 import { madeForYou, recentlyPlayed, recommendedForYou } from "../data/home";
 import { GetToken as GetTokens, ProfileResponse } from "../data/types";
@@ -29,6 +29,7 @@ const webViewSub$: Subject<string> = new Subject();
 // Pulls the URL with the authorization code from the stream
 const webView$ = webViewSub$.pipe(
   filter(v => v.includes("?code=")),
+  debounceTime(500), // The first few codes are incorrect. Take the last one.
   take(1),
 );
 
@@ -60,18 +61,26 @@ const HomeScreen = ({
   const [loading, setLoading] = useState(false);
 
   // Controls loading indicator in Home tab
-  const [loadingAlbums, setLoadingAlbums] = useState(true);
+  // const [loadingAlbums, setLoadingAlbums] = useState(true);
 
   const webViewRef = useRef(null);
 
   /**
    * Subscribes to our navigation URL event stream.
-   * Init tokens from AsyncStorage and dispatch them to redux store.
-   * If tokens exist, user profile action is dispatched.
    */
   useEffect(() => {
     const sub = webView$.subscribe(handleNav);
+    return () => {
+      sub.unsubscribe();
+    };
+  }, []);
 
+  /**
+   * Init tokens from AsyncStorage and dispatch them to redux store.
+   * If tokens exist, user profile action is dispatched.
+   * If profile already in redux store: Dont do anything, just hide the modal.
+   */
+  useEffect(() => {
     const initTokens = async () => {
       const refreshToken = await getToken("refreshToken");
       const token = await getToken("token");
@@ -80,16 +89,21 @@ const HomeScreen = ({
         setTokens({ token, refreshToken });
         getProfile();
       } else {
+        // if there is no profile and authCode changed, this will run
         if (authCode.length > 0) {
-          sub.unsubscribe();
-          debugger;
+          // getTokens automatically does getProfile when done
           getTokens({ authCode });
         }
       }
     };
-
-    initTokens();
-  }, [setTokens, getProfile, getTokens, authCode]);
+    // if profile not already retrieved
+    if (!profile) {
+      initTokens();
+    } else {
+      // hide modal
+      setIsVisible(false);
+    }
+  }, [setTokens, getProfile, getTokens, authCode, profile]);
 
   /**
    *
@@ -106,15 +120,10 @@ const HomeScreen = ({
   const handleNav = (url: string) => {
     setLoading(true);
     const [, authCode] = url.split("?code=");
-
-    setAuthCode(authCode);
+    // Don't know why "#_=_" is at the end. Has to be removed
+    const fixed = authCode.replace("#_=_", "");
+    setAuthCode(fixed);
   };
-
-  useEffect(() => {
-    if (profile) {
-      setIsVisible(false);
-    }
-  }, [profile]);
 
   const loginModalProps = {
     webViewRef,

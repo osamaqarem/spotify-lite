@@ -5,8 +5,6 @@ import { recommendedForYouHeader } from "../../data/home";
 import { COLORS } from "../../utils";
 import TopBar from "../common/TopBar";
 import LoginModal, { LoginModalType } from "./LoginModal";
-import { ReactReduxContext } from "react-redux";
-import reactotron from "reactotron-react-native";
 
 const ROW_SCROLLVIEW_HEIGHT = 170;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;

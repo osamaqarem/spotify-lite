@@ -33,7 +33,7 @@ const LoginModal = ({
 }: LoginModalType) => {
   return (
     <Modal animationType="fade">
-      {/* {isLoading && (
+      {isLoading && (
         <View
           style={{
             width: "100%",
@@ -45,7 +45,7 @@ const LoginModal = ({
           }}>
           <ActivityIndicator size={60} color="darkgreen" />
         </View>
-      )} */}
+      )}
       <WebView
         ref={webViewRef}
         onNavigationStateChange={pushNavEvent}
