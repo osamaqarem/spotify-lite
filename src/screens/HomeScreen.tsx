@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { WebViewNavigation } from "react-native-webview";
 import { connect } from "react-redux";
-import { Subject, interval } from "rxjs";
-import { filter, take, debounce, debounceTime } from "rxjs/operators";
+import { Subject } from "rxjs";
+import { debounceTime, filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
 import { madeForYou, recentlyPlayed, recommendedForYou } from "../data/home";
 import { GetToken as GetTokens, ProfileResponse } from "../data/types";
@@ -20,18 +20,6 @@ import { getToken } from "../utils";
  * 7- Get albums and playlists etc. through API and handle local loading state.
  *
  */
-
-// Handling webview navigation events this way,
-// because it fires 2-3 events with the SAME URL and we only want 1 event.
-// Otherwise, getToken() action would be called more than once
-const webViewSub$: Subject<string> = new Subject();
-
-// Pulls the URL with the authorization code from the stream
-const webView$ = webViewSub$.pipe(
-  filter(v => v.includes("?code=")),
-  debounceTime(500), // The first few codes are incorrect. Take the last one.
-  take(1),
-);
 
 type HomeScreenProps = {
   getTokens: GetTokens;
@@ -64,11 +52,26 @@ const HomeScreen = ({
   // const [loadingAlbums, setLoadingAlbums] = useState(true);
 
   const webViewRef = useRef(null);
+  const webViewSub$: React.MutableRefObject<Subject<string>> = useRef(
+    new Subject(),
+  );
 
   /**
    * Subscribes to our navigation URL event stream.
    */
   useEffect(() => {
+    // Handling webview navigation events this way,
+    // because it fires 2-3 events with the SAME URL and we only want 1 event.
+    // Otherwise, getToken() action would be called more than once
+    // const webViewSub$: Subject<string> = new Subject();
+
+    // Pulls the URL with the authorization code from the stream
+    const webView$ = webViewSub$.current.pipe(
+      filter(v => v.includes("?code=")),
+      debounceTime(500), // The first few codes are incorrect. Take the last one.
+      take(1),
+    );
+
     const sub = webView$.subscribe(handleNav);
     return () => {
       sub.unsubscribe();
@@ -110,7 +113,7 @@ const HomeScreen = ({
    * Feed URL values to the stream on every URL change
    */
   const pushNavEvent = (e: WebViewNavigation) => {
-    webViewSub$.next(e.url);
+    webViewSub$.current.next(e.url);
   };
 
   /**
