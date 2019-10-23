@@ -1,3 +1,8 @@
+export const loadingActions = {
+  LOADING: "LOADING",
+  DONE: "DONE",
+};
+
 export const authActions = {
   GET_TOKENS_SUCCESS: "GET_TOKENS_SUCCESS",
   GET_TOKENS_ERROR: "GET_TOKENS_ERROR",
@@ -8,7 +13,7 @@ export const authActions = {
   PROFILE_SUCCESS: "PROFILE_SUCCESS",
 };
 
-export const loadingActions = {
-  LOADING: "LOADING",
-  DONE: "DONE",
+export const playlistActions = {
+  RECENTLY_PLAYED: "RECENTLY_PLAYED",
+  RECENTLY_PLAYED_SUCCESS: "RECENTLY_PLAYED_SUCCESS",
 };

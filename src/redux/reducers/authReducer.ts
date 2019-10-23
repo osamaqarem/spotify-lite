@@ -1,4 +1,4 @@
-import { DispatchObject } from "../../data/types";
+import { Action } from "../../data/types";
 import { storeTokens } from "../../utils";
 import { authActions } from "../actions";
 
@@ -9,7 +9,7 @@ const initialState = {
   error: null,
 };
 
-export default (state = initialState, { type, payload }: DispatchObject) => {
+export default (state = initialState, { type, payload }: Action) => {
   switch (type) {
     case authActions.GET_TOKENS_SUCCESS:
       storeTokens(payload);

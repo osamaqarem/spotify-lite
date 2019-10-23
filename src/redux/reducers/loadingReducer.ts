@@ -1,11 +1,11 @@
-import { DispatchObject } from "../../data/types";
+import { Action } from "../../data/types";
 import { loadingActions } from "../actions";
 
 const initialState = {
   loading: false,
 };
 
-export default (state = initialState, { type, payload }: DispatchObject) => {
+export default (state = initialState, { type, payload }: Action) => {
   switch (type) {
     case loadingActions.LOADING:
       return { ...state, ...payload };

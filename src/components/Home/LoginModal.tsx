@@ -20,11 +20,13 @@ export type LoginModalType = {
 // 3- response_type
 // 4- redirect_uri
 // 5- scope
+const scopes = "user-read-private user-read-recently-played";
+
 const uri = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
   secret.clientId
 }&response_type=code&redirect_uri=${encodeURIComponent(
   SPOTIFY_REDIRECT_URI,
-)}&scope=user-read-private`;
+)}&scope=${encodeURIComponent(scopes)}`;
 
 const LoginModal = ({
   isLoading,

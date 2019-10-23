@@ -7,11 +7,7 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
-import {
-  AccessTokenResponse,
-  DispatchFun,
-  DispatchObject,
-} from "../../data/types";
+import { AccessTokenResponse, DispatchFun, Action } from "../../data/types";
 import {
   encoded,
   getFormUrlEncoded,
@@ -85,7 +81,7 @@ export const getProfile = () => ({
  * If token is expired, it will trigger @epic refreshTokenEpic
  */
 export const getProfileEpic = (
-  action$: ActionsObservable<DispatchObject>,
+  action$: ActionsObservable<Action>,
   state$: StateObservable<any>,
 ) =>
   action$.pipe(
@@ -132,7 +128,7 @@ export const getProfileEpic = (
  * Calls passed action after token refresh.
  * @param payload : { refreshToken, actionToRestart }
  */
-export const refreshTokenEpic = (action$: ActionsObservable<DispatchObject>) =>
+export const refreshTokenEpic = (action$: ActionsObservable<Action>) =>
   action$.pipe(
     ofType(authActions.REFRESH_TOKEN),
     switchMap(({ payload }) => {

@@ -1,5 +1,6 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { recommendedForYouHeader } from "../../data/home";
 import { COLORS } from "../../utils";
@@ -33,7 +34,7 @@ const settingsIcon = (
 const renderAlbumRecent = (album: any, index: number) => {
   return (
     <View key={index} style={{ marginHorizontal: 8, flexDirection: "column" }}>
-      <Image
+      <FastImage
         source={album.img}
         style={{
           height: ALBUM_DIMEN_RECENT,
@@ -57,7 +58,7 @@ const renderAlbumRecent = (album: any, index: number) => {
 const renderAlbum = (album: any, index: number) => {
   return (
     <View key={index} style={[{ width: ALBUM_DIMEN_MADE }]}>
-      <Image
+      <FastImage
         source={album.img}
         style={{
           height: ALBUM_DIMEN_MADE,
@@ -122,7 +123,7 @@ const Home = ({ data }: HomeType) => {
               alignSelf: "center",
             },
           ]}>
-          <Image
+          <FastImage
             source={recommendedForYouHeader.img}
             style={{
               height: ALBUM_DIMEN_MADE + 70,

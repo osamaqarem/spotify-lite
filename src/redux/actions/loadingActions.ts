@@ -1,9 +1,9 @@
 import { ActionsObservable, ofType } from "redux-observable";
 import { map } from "rxjs/operators";
-import { DispatchObject } from "../../data/types";
+import { Action } from "../../data/types";
 import { authActions, loadingActions } from "./actionTypes";
 
-export const loadingEpic = (action$: ActionsObservable<DispatchObject>) =>
+export const loadingEpic = (action$: ActionsObservable<Action>) =>
   action$.pipe(
     ofType(authActions.GET_TOKENS_SUCCESS),
     map(() => ({
@@ -11,7 +11,7 @@ export const loadingEpic = (action$: ActionsObservable<DispatchObject>) =>
     })),
   );
 
-export const doneEpic = (action$: ActionsObservable<DispatchObject>) =>
+export const doneEpic = (action$: ActionsObservable<Action>) =>
   action$.pipe(
     ofType(authActions.PROFILE_SUCCESS),
     map(() => ({
