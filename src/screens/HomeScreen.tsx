@@ -23,8 +23,8 @@ import { getToken } from "../utils";
 
 type HomeScreenProps = {
   getTokens: GetTokens;
-  token: string | null;
-  loading: boolean; // Controls loading indicator for LoginModal
+  // token: string | null;
+  // loading: boolean; // Controls loading indicator for LoginModal
   profile: ProfileResponse | null; // Not loading once this is non-null
   getProfile: () => void;
   setTokens: ({
@@ -34,6 +34,8 @@ type HomeScreenProps = {
     token: string;
     refreshToken: string;
   }) => {};
+  recentlyPlayedAlbums: string[];
+  playlists: [{ name: string; url: string }];
 };
 
 const HomeScreen = ({
@@ -41,6 +43,8 @@ const HomeScreen = ({
   profile,
   getProfile,
   setTokens,
+  recentlyPlayedAlbums,
+  playlists,
 }: HomeScreenProps) => {
   // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
@@ -142,6 +146,8 @@ const HomeScreen = ({
         recentlyPlayed,
         recommendedForYou,
         loginModalProps,
+        recentlyPlayedAlbums,
+        playlists,
       }}
     />
   );
@@ -150,6 +156,8 @@ const HomeScreen = ({
 const mapStateToProps = (state: any) => ({
   profile: state.authReducer.profile,
   loading: state.loadingReducer.loading,
+  recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,
+  playlists: state.libraryReducer.playlists,
 });
 
 export default connect(

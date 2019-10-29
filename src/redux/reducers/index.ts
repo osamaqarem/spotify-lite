@@ -1,10 +1,18 @@
 import { combineReducers } from "redux";
-import authReducer from "./authReducer";
 import { combineEpics } from "redux-observable";
-import { getProfileEpic, refreshTokenEpic } from "../actions";
-import loadingReducer from "./loadingReducer";
-import { loadingEpic, doneEpic } from "../actions/loadingActions";
+import {
+  getProfileEpic,
+  refreshTokenEpic,
+  getAllFeaturedPlaylistsEpic,
+} from "../actions";
+import { doneEpic, loadingEpic } from "../actions/loadingActions";
 import { getRecentlyPlayedEpic } from "../actions/playlistActions";
+import { getMultipleAlbumsEpic } from "../actions/albumActions";
+import albumReducer from "./albumReducer";
+import authReducer from "./authReducer";
+import loadingReducer from "./loadingReducer";
+import playlistReducer from "./playlistReducer";
+import libraryReducer from "./libraryReducer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -12,6 +20,15 @@ export const rootEpic = combineEpics(
   doneEpic,
   refreshTokenEpic,
   getRecentlyPlayedEpic,
+  // getPlayListCoverByIdEpic,
+  getMultipleAlbumsEpic,
+  getAllFeaturedPlaylistsEpic,
 );
 
-export default combineReducers({ authReducer, loadingReducer });
+export default combineReducers({
+  authReducer,
+  loadingReducer,
+  albumReducer,
+  playlistReducer,
+  libraryReducer,
+});

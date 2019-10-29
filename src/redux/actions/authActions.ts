@@ -17,6 +17,9 @@ import {
 } from "../../utils";
 import { authActions } from "./actionTypes";
 import { Alert } from "react-native";
+import reactotron from "reactotron-react-native";
+import { getRecentlyPlayed } from "./playlistActions";
+import { getAllFeaturedPlaylists } from "./libraryActions";
 
 /**
  *
@@ -102,13 +105,18 @@ export const getProfileEpic = (
           if (profile && profile.error) {
             throw profile.error.message;
           }
-          return {
-            type: authActions.PROFILE_SUCCESS,
-            payload: { profile },
-          };
+          return of(
+            {
+              type: authActions.PROFILE_SUCCESS,
+              payload: { profile },
+            },
+            getRecentlyPlayed(),
+            getAllFeaturedPlaylists(),
+          );
         }),
-        catchError((message: string) => {
-          if (message.includes("expired")) {
+        mergeMap(a => a),
+        catchError((err: string) => {
+          if (err.includes("expired")) {
             return of({
               type: authActions.REFRESH_TOKEN,
               payload: {
@@ -117,7 +125,8 @@ export const getProfileEpic = (
               },
             });
           }
-          return of({ type: authActions.ERROR, payload: { message } });
+          reactotron.log(JSON.stringify(err));
+          return of({ type: authActions.ERROR, payload: { err } });
         }),
       );
     }),

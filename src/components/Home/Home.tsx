@@ -19,6 +19,8 @@ type HomeType = {
     recentlyPlayed: any;
     recommendedForYou: any;
     loginModalProps: LoginModalType;
+    recentlyPlayedAlbums: string[];
+    playlists: [{ name: string; url: string }];
   };
 };
 
@@ -35,7 +37,9 @@ const renderAlbumRecent = (album: any, index: number) => {
   return (
     <View key={index} style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage
-        source={album.img}
+        source={{
+          uri: album,
+        }}
         style={{
           height: ALBUM_DIMEN_RECENT,
           width: ALBUM_DIMEN_RECENT,
@@ -55,11 +59,19 @@ const renderAlbumRecent = (album: any, index: number) => {
   );
 };
 
-const renderAlbum = (album: any, index: number) => {
+const renderAlbum = (
+  album: {
+    name: string;
+    url: string;
+  },
+  index: number,
+) => {
   return (
     <View key={index} style={[{ width: ALBUM_DIMEN_MADE }]}>
       <FastImage
-        source={album.img}
+        source={{
+          uri: album.url,
+        }}
         style={{
           height: ALBUM_DIMEN_MADE,
           width: ALBUM_DIMEN_MADE,
@@ -67,7 +79,7 @@ const renderAlbum = (album: any, index: number) => {
         }}
       />
       <Text numberOfLines={2} style={[styles.centeredText, styles.albumText]}>
-        {album.title}
+        {album.name}
       </Text>
     </View>
   );
@@ -98,17 +110,17 @@ const Home = ({ data }: HomeType) => {
           horizontal
           showsHorizontalScrollIndicator={false}>
           <View style={styles.rowScrollContainer}>
-            {data.recentlyPlayed.map((album: any, index: number) =>
+            {data.recentlyPlayedAlbums.map((album: any, index: number) =>
               renderAlbumRecent(album, index),
             )}
           </View>
         </ScrollView>
         <Text
           style={[styles.centeredText, styles.headerText, { marginTop: 50 }]}>
-          Made for you
+          Featured playlists
         </Text>
         <View style={styles.content}>
-          {data.madeForYou.map((album: any, index: number) =>
+          {data.playlists.map((album, index: number) =>
             renderAlbum(album, index),
           )}
         </View>
