@@ -16,7 +16,7 @@ import { SPOTIFY_API_BASE } from "../../utils";
 // });
 
 // export const getAlbumEpic = (
-//   actions$: Observable<Action>,
+//   actions$: Observable<Action<any>>,
 //   state$: Observable<any>,
 // ) =>
 //   actions$.pipe(
@@ -68,7 +68,7 @@ export const getMultipleAlbums = (commaList: string) => ({
 });
 
 export const getMultipleAlbumsEpic = (
-  actions$: Observable<Action>,
+  actions$: Observable<Action<any>>,
   state$: Observable<any>,
 ) =>
   actions$.pipe(
@@ -97,7 +97,7 @@ export const getMultipleAlbumsEpic = (
           const albumImageUrls = res.albums.map(
             // [2] is lowest quality
             // [0] is highest quality
-            album => album.images[0].url,
+            album => ({ name: album.name, url: album.images[0].url }),
           );
 
           return {

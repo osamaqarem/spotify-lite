@@ -5,7 +5,7 @@ const initialState = {
   loading: false,
 };
 
-export default (state = initialState, { type, payload }: Action) => {
+export default (state = initialState, { type, payload }: Action<any>) => {
   switch (type) {
     case loadingActions.LOADING:
       return { ...state, ...payload };

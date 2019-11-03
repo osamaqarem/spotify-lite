@@ -19,14 +19,17 @@ import { authActions } from "./actionTypes";
 import { Alert } from "react-native";
 import reactotron from "reactotron-react-native";
 import { getRecentlyPlayed } from "./playlistActions";
-import { getAllFeaturedPlaylists } from "./libraryActions";
+import {
+  getAllFeaturedPlaylists,
+  getCurrentUserTopArtists,
+} from "./libraryActions";
 
 /**
  *
  * Get token and refresh token.
  */
 export const getTokens = ({ authCode }: { authCode: string }) => async (
-  dispatch: DispatchFun,
+  dispatch: DispatchFun<any>,
 ) => {
   try {
     const body = {
@@ -84,7 +87,7 @@ export const getProfile = () => ({
  * If token is expired, it will trigger @epic refreshTokenEpic
  */
 export const getProfileEpic = (
-  action$: ActionsObservable<Action>,
+  action$: ActionsObservable<Action<any>>,
   state$: StateObservable<any>,
 ) =>
   action$.pipe(
@@ -112,6 +115,7 @@ export const getProfileEpic = (
             },
             getRecentlyPlayed(),
             getAllFeaturedPlaylists(),
+            getCurrentUserTopArtists(),
           );
         }),
         mergeMap(a => a),
@@ -137,7 +141,7 @@ export const getProfileEpic = (
  * Calls passed action after token refresh.
  * @param payload : { refreshToken, actionToRestart }
  */
-export const refreshTokenEpic = (action$: ActionsObservable<Action>) =>
+export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
   action$.pipe(
     ofType(authActions.REFRESH_TOKEN),
     switchMap(({ payload }) => {

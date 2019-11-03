@@ -7,14 +7,16 @@ import {
   mergeMap,
   switchMap,
   withLatestFrom,
+  zipAll,
 } from "rxjs/operators";
 import {
   Action,
   ErrorResponse,
+  PlaylistResponse,
   RecentlyPlayedResponse,
 } from "../../data/types";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { authActions, playlistActions } from "./actionTypes";
+import { authActions, playlistActions, libraryActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 
 export const getRecentlyPlayed = () => ({
@@ -22,7 +24,7 @@ export const getRecentlyPlayed = () => ({
 });
 
 export const getRecentlyPlayedEpic = (
-  actions$: Observable<Action>,
+  actions$: Observable<Action<any>>,
   state$: Observable<any>,
 ) =>
   actions$.pipe(
@@ -32,7 +34,7 @@ export const getRecentlyPlayedEpic = (
       const { token } = state.authReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/player/recently-played`, {
+        fetch(`${SPOTIFY_API_BASE}/v1/me/player/recently-played?limit=20`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -49,7 +51,8 @@ export const getRecentlyPlayedEpic = (
           let commaList = "";
           res.items.forEach(item => {
             const [, albumId] = item.track.album.href.split("albums/");
-            commaList = commaList.concat(albumId + ",");
+            if (!commaList.includes(albumId))
+              commaList = commaList.concat(albumId + ",");
           });
           // Remove last comma. else request fails
           const commaListCommaRemoved = commaList.slice(
@@ -70,12 +73,12 @@ export const getRecentlyPlayedEpic = (
           //   if (index === 0) {
           //     arrayOfIds.push(id);
           //     const action = getPlayListCoverById(id);
-          //     arrayOfActions.push(action);
+          //     arrayOfActions.push(Action<any>;
           //     return;
           //   } else if (arrayOfIds.indexOf(id) === -1) {
           //     arrayOfIds.push(id);
           //     const action = getPlayListCoverById(id);
-          //     arrayOfActions.push(action);
+          //     arrayOfActions.push(Action<any>;
           //     return;
           //   }
           // });
@@ -108,52 +111,64 @@ export const getRecentlyPlayedEpic = (
     }),
   );
 
-// export const getPlayListCoverById = (playListId: string) => ({
-//   type: playlistActions.GET_PLAYLIST_COVER_BY_ID,
-//   payload: playListId,
-// });
+export const getPlayListCoverById = (playListIds: string[]) => ({
+  type: playlistActions.GET_PLAYLIST_COVER_BY_ID,
+  payload: playListIds,
+});
 
-// export const getPlayListCoverByIdEpic = (
-//   actions$: Observable<Action>,
-//   state$: Observable<any>,
-// ) =>
-//   actions$.pipe(
-//     ofType(playlistActions.GET_PLAYLIST_COVER_BY_ID),
-//     withLatestFrom(state$),
-//     concatMap(([{ payload: playListId }, state]) => {
-//       const { token } = state.authReducer;
+export const getPlayListCoverByIdEpic = (
+  actions$: Observable<Action<any>>,
+  state$: Observable<any>,
+) =>
+  actions$.pipe(
+    ofType(playlistActions.GET_PLAYLIST_COVER_BY_ID),
+    withLatestFrom(state$),
+    switchMap(([{ payload: playListIds }, state]: [Action<string[]>, any]) => {
+      const { token } = state.authReducer;
 
-//       const request$ = from(
-//         fetch(`https://api.spotify.com/v1/playlists/${playListId}/images`, {
-//           method: "GET",
-//           headers: {
-//             authorization: `Bearer ${token}`,
-//           },
-//         }),
-//       );
+      const requestsArray = playListIds!.map((id: string) => {
+        return from(
+          fetch(`https://api.spotify.com/v1/playlists/${id}`, {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }),
+        ).pipe(mergeMap(res => res.json()));
+      });
 
-//       return request$.pipe(
-//         switchMap(res => res.json()),
-//         map(res => {
-//           debugger;
+      const requestsArray$ = from(requestsArray);
 
-//           return {
-//             type: playlistActions.GET_PLAYLIST_COVER_BY_ID_SUCCESS,
-//             payload: "",
-//           };
-//         }),
-//         catchError(err => {
-//           // FIXME: more efficient way of handling token expiry for this epic?
-//           if (err.includes("expired")) {
-//             return of(getRecentlyPlayed());
-//           }
-//           // handle error
-//           reactotron.log(JSON.stringify(err));
-//           return of({
-//             type: playlistActions.GET_PLAYLIST_COVER_BY_ID_ERROR,
-//             payload: err,
-//           });
-//         }),
-//       );
-//     }),
-//   );
+      return requestsArray$.pipe(
+        zipAll(),
+        map(res => res.flat()),
+        map((res: PlaylistResponse[] | ErrorResponse) => {
+          if ("error" in res) throw res.error.message;
+
+          const data = res.map(item => {
+            return { name: item.description, url: item.images[0].url };
+          });
+
+          return of(
+            { type: playlistActions.GET_PLAYLIST_COVER_BY_ID_SUCCESS },
+            {
+              type: libraryActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
+              payload: data,
+            },
+          );
+        }),
+        mergeMap(a => a),
+        catchError(err => {
+          if (err.includes("expired")) {
+            return of(getPlayListCoverById(playListIds!));
+          }
+          // handle error
+          reactotron.log(JSON.stringify(err));
+          return of({
+            type: playlistActions.GET_PLAYLIST_COVER_BY_ID_ERROR,
+            payload: err,
+          });
+        }),
+      );
+    }),
+  );

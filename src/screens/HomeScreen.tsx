@@ -34,8 +34,10 @@ type HomeScreenProps = {
     token: string;
     refreshToken: string;
   }) => {};
-  recentlyPlayedAlbums: string[];
-  playlists: [{ name: string; url: string }];
+  recentlyPlayedAlbums: [{ name: string; url: string }];
+  featuredPlaylists: [{ name: string; url: string }];
+  userTopArtists: [{ name: string; url: string }];
+  userTopArtistsHeader: { name: string; url: string };
 };
 
 const HomeScreen = ({
@@ -44,7 +46,9 @@ const HomeScreen = ({
   getProfile,
   setTokens,
   recentlyPlayedAlbums,
-  playlists,
+  featuredPlaylists,
+  userTopArtists,
+  userTopArtistsHeader,
 }: HomeScreenProps) => {
   // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
@@ -147,7 +151,9 @@ const HomeScreen = ({
         recommendedForYou,
         loginModalProps,
         recentlyPlayedAlbums,
-        playlists,
+        featuredPlaylists,
+        userTopArtists,
+        userTopArtistsHeader,
       }}
     />
   );
@@ -157,7 +163,9 @@ const mapStateToProps = (state: any) => ({
   profile: state.authReducer.profile,
   loading: state.loadingReducer.loading,
   recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,
-  playlists: state.libraryReducer.playlists,
+  featuredPlaylists: state.libraryReducer.featuredPlaylists,
+  userTopArtists: state.libraryReducer.userTopArtists,
+  userTopArtistsHeader: state.libraryReducer.userTopArtistsHeader,
 });
 
 export default connect(

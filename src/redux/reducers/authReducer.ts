@@ -9,7 +9,7 @@ const initialState = {
   error: null,
 };
 
-export default (state = initialState, { type, payload }: Action) => {
+export default (state = initialState, { type, payload }: Action<any>) => {
   switch (type) {
     case authActions.GET_TOKENS_SUCCESS:
       storeTokens(payload);

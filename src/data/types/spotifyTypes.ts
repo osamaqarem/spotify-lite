@@ -47,15 +47,11 @@ export interface Artist {
   uri: string;
 }
 
-export interface ExternalUrls2 {
-  spotify: string;
-}
-
 export interface Album {
   album_type: string;
   artists: Artist[];
   available_markets: string[];
-  external_urls: ExternalUrls2;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   images: Image[];
@@ -67,12 +63,12 @@ export interface Album {
   uri: string;
 }
 
-export interface ExternalUrls3 {
+export interface ExternalUrls {
   spotify: string;
 }
 
 export interface Artist2 {
-  external_urls: ExternalUrls3;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   name: string;
@@ -84,7 +80,7 @@ export interface ExternalIds {
   isrc: string;
 }
 
-export interface ExternalUrls4 {
+export interface ExternalUrls {
   spotify: string;
 }
 
@@ -96,7 +92,7 @@ export interface Track {
   duration_ms: number;
   explicit: boolean;
   external_ids: ExternalIds;
-  external_urls: ExternalUrls4;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   is_local: boolean;
@@ -108,13 +104,13 @@ export interface Track {
   uri: string;
 }
 
-export interface ExternalUrls5 {
+export interface ExternalUrls {
   spotify: string;
 }
 
 export interface Context {
   type: string;
-  external_urls: ExternalUrls5;
+  external_urls: ExternalUrls;
   href: string;
   uri: string;
 }
@@ -160,16 +156,12 @@ export interface ExternalIds {
   upc: string;
 }
 
-export interface ExternalUrls2 {
-  spotify: string;
-}
-
-export interface ExternalUrls3 {
+export interface ExternalUrls {
   spotify: string;
 }
 
 export interface Artist2 {
-  external_urls: ExternalUrls3;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   name: string;
@@ -177,7 +169,7 @@ export interface Artist2 {
   uri: string;
 }
 
-export interface ExternalUrls4 {
+export interface ExternalUrls {
   spotify: string;
 }
 
@@ -187,7 +179,7 @@ export interface Item {
   disc_number: number;
   duration_ms: number;
   explicit: boolean;
-  external_urls: ExternalUrls4;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   is_local: boolean;
@@ -198,23 +190,13 @@ export interface Item {
   uri: string;
 }
 
-export interface Tracks {
-  href: string;
-  items: Item[];
-  limit: number;
-  next?: any;
-  offset: number;
-  previous?: any;
-  total: number;
-}
-
 export interface Album {
   album_type: string;
   artists: Artist[];
   available_markets: string[];
   copyrights: Copyright[];
   external_ids: ExternalIds;
-  external_urls: ExternalUrls2;
+  external_urls: ExternalUrls;
   genres: any[];
   href: string;
   id: string;
@@ -244,13 +226,9 @@ export interface Image {
   width?: any;
 }
 
-export interface ExternalUrls2 {
-  spotify: string;
-}
-
 export interface Owner {
   display_name: string;
-  external_urls: ExternalUrls2;
+  external_urls: ExternalUrls;
   href: string;
   id: string;
   type: string;
@@ -291,4 +269,165 @@ export interface Playlists {
 export interface FeaturedPlaylistsResponse {
   message: string;
   playlists: Playlists;
+}
+
+export interface ExternalUrls {
+  spotify: string;
+}
+
+export interface Followers {
+  href?: any;
+  total: number;
+}
+
+export interface Item {
+  external_urls: ExternalUrls;
+  followers: Followers;
+  genres: string[];
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  popularity: number;
+  type: string;
+  uri: string;
+}
+
+export interface UserTopArtistsResponse {
+  items: Item[];
+  total: number;
+  limit: number;
+  offset: number;
+  previous?: any;
+  href: string;
+  next: string;
+}
+
+export interface Followers {
+  href?: any;
+  total: number;
+}
+
+export interface Image {
+  height?: any;
+  url: string;
+  width?: any;
+}
+
+export interface Owner {
+  display_name: string;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  type: string;
+  uri: string;
+}
+
+export interface AddedBy {
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  type: string;
+  uri: string;
+}
+
+export interface Artist {
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  name: string;
+  type: string;
+  uri: string;
+}
+
+export interface Album {
+  album_type: string;
+  artists: Artist[];
+  available_markets: string[];
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  release_date: string;
+  release_date_precision: string;
+  total_tracks: number;
+  type: string;
+  uri: string;
+}
+
+export interface Artist2 {
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  name: string;
+  type: string;
+  uri: string;
+}
+
+export interface ExternalIds {
+  isrc: string;
+}
+
+export interface Track {
+  album: Album;
+  artists: Artist2[];
+  available_markets: string[];
+  disc_number: number;
+  duration_ms: number;
+  episode: boolean;
+  explicit: boolean;
+  external_ids: ExternalIds;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  is_local: boolean;
+  name: string;
+  popularity: number;
+  preview_url: string;
+  track: boolean;
+  track_number: number;
+  type: string;
+  uri: string;
+}
+
+export interface VideoThumbnail {
+  url?: any;
+}
+
+export interface Item {
+  added_at: Date;
+  added_by: AddedBy;
+  is_local: boolean;
+  primary_color?: any;
+  track: Track;
+  video_thumbnail: VideoThumbnail;
+}
+
+export interface Tracks {
+  href: string;
+  items: Item[];
+  limit: number;
+  next: string;
+  offset: number;
+  previous?: any;
+  total: number;
+}
+
+export interface PlaylistResponse {
+  collaborative: boolean;
+  description: string;
+  external_urls: ExternalUrls;
+  followers: Followers;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  owner: Owner;
+  primary_color?: any;
+  public: boolean;
+  snapshot_id: string;
+  tracks: Tracks;
+  type: string;
+  uri: string;
 }

@@ -2,13 +2,12 @@ import React from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { recommendedForYouHeader } from "../../data/home";
 import { COLORS } from "../../utils";
 import TopBar from "../common/TopBar";
 import LoginModal, { LoginModalType } from "./LoginModal";
 
-const ROW_SCROLLVIEW_HEIGHT = 170;
-const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 28;
+const ROW_SCROLLVIEW_HEIGHT = 180;
+const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 38;
 
 const ALBUM_DIMEN_MADE = 172.5;
 
@@ -19,8 +18,10 @@ type HomeType = {
     recentlyPlayed: any;
     recommendedForYou: any;
     loginModalProps: LoginModalType;
-    recentlyPlayedAlbums: string[];
-    playlists: [{ name: string; url: string }];
+    recentlyPlayedAlbums: [{ name: string; url: string }];
+    featuredPlaylists: [{ name: string; url: string }];
+    userTopArtists: [{ name: string; url: string }];
+    userTopArtistsHeader: { name: string; url: string };
   };
 };
 
@@ -33,28 +34,39 @@ const settingsIcon = (
   />
 );
 
-const renderAlbumRecent = (album: any, index: number) => {
+const renderAlbumRecent = (
+  album: { name: string; url: string },
+  index: number,
+) => {
   return (
     <View key={index} style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage
         source={{
-          uri: album,
+          uri: album.url,
         }}
         style={{
           height: ALBUM_DIMEN_RECENT,
           width: ALBUM_DIMEN_RECENT,
         }}
       />
-      <Text
-        style={[
-          styles.centeredText,
-          {
-            fontSize: 13,
-            top: 5,
-          },
-        ]}>
-        {album.title}
-      </Text>
+      <View
+        style={{
+          width: 140,
+          top: 5,
+          alignSelf: "center",
+        }}>
+        <Text
+          numberOfLines={2}
+          style={[
+            styles.centeredText,
+            {
+              fontSize: 13,
+              textAlign: "center",
+            },
+          ]}>
+          {album.name}
+        </Text>
+      </View>
     </View>
   );
 };
@@ -110,7 +122,7 @@ const Home = ({ data }: HomeType) => {
           horizontal
           showsHorizontalScrollIndicator={false}>
           <View style={styles.rowScrollContainer}>
-            {data.recentlyPlayedAlbums.map((album: any, index: number) =>
+            {data.recentlyPlayedAlbums.map((album, index: number) =>
               renderAlbumRecent(album, index),
             )}
           </View>
@@ -120,13 +132,13 @@ const Home = ({ data }: HomeType) => {
           Featured playlists
         </Text>
         <View style={styles.content}>
-          {data.playlists.map((album, index: number) =>
+          {data.featuredPlaylists.map((album, index: number) =>
             renderAlbum(album, index),
           )}
         </View>
         <Text
           style={[styles.centeredText, styles.headerText, { marginTop: 30 }]}>
-          Recommended for you
+          Your top artists
         </Text>
         <View
           style={[
@@ -136,7 +148,9 @@ const Home = ({ data }: HomeType) => {
             },
           ]}>
           <FastImage
-            source={recommendedForYouHeader.img}
+            source={{
+              uri: data.userTopArtistsHeader.url,
+            }}
             style={{
               height: ALBUM_DIMEN_MADE + 70,
               width: ALBUM_DIMEN_MADE + 70,
@@ -150,11 +164,11 @@ const Home = ({ data }: HomeType) => {
               styles.albumText,
               { marginBottom: 25, fontSize: 15 },
             ]}>
-            {recommendedForYouHeader.title}
+            {data.userTopArtistsHeader.name}
           </Text>
         </View>
         <View style={styles.content}>
-          {data.recommendedForYou.map((album: any, index: number) =>
+          {data.userTopArtists.map((album: any, index: number) =>
             renderAlbum(album, index),
           )}
         </View>
@@ -189,6 +203,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginHorizontal: 15,
+    marginBottom: 38,
   },
   albumText: {
     width: "94%",
