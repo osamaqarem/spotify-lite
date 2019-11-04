@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
-import { madeForYou, recentlyPlayed, recommendedForYou } from "../data/home";
 import { GetToken as GetTokens, ProfileResponse } from "../data/types";
 import { getProfile, getTokens, setTokens } from "../redux/actions";
 import { getToken } from "../utils";
@@ -146,9 +145,6 @@ const HomeScreen = ({
     <Home
       data={{
         isVisible,
-        madeForYou,
-        recentlyPlayed,
-        recommendedForYou,
         loginModalProps,
         recentlyPlayedAlbums,
         featuredPlaylists,

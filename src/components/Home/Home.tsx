@@ -13,10 +13,7 @@ const ALBUM_DIMEN_MADE = 172.5;
 
 type HomeType = {
   data: {
-    madeForYou: any;
     isVisible: boolean;
-    recentlyPlayed: any;
-    recommendedForYou: any;
     loginModalProps: LoginModalType;
     recentlyPlayedAlbums: [{ name: string; url: string }];
     featuredPlaylists: [{ name: string; url: string }];
