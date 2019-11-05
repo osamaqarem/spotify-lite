@@ -1,8 +1,10 @@
 export const COLORS = {
   tabBar: "#222326",
-  icon: "#ADAEB3",
-  iconSelected: "#FFFFFF",
+  itemInactive: "#ADAEB3",
+  itemActive: "#FFFFFF",
   background: "#121212",
+  textLight: "#FFFFFF",
+  textDim: "#B8B8B8",
 };
 
 export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";

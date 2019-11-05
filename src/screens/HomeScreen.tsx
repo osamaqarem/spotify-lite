@@ -75,7 +75,7 @@ const HomeScreen = ({
     // Pulls the URL with the authorization code from the stream
     const webView$ = webViewSub$.current.pipe(
       filter(v => v.includes("?code=")),
-      debounceTime(500), // The first few codes are incorrect. Take the last one.
+      debounceTime(5000), // The first few codes are incorrect. Take the last one.
       take(1),
     );
 

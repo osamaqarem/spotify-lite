@@ -20,7 +20,8 @@ export type LoginModalType = {
 // 3- response_type
 // 4- redirect_uri
 // 5- scope
-const scopes = "user-read-private user-read-recently-played user-top-read";
+const scopes =
+  "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read";
 
 const uri = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
   secret.clientId

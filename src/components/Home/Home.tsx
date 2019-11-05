@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View, StatusBar } from "react-native";
 import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
@@ -26,7 +26,7 @@ const settingsIcon = (
   <MaterialCommunityIcon
     name="settings-outline"
     size={24}
-    color={COLORS.icon}
+    color={COLORS.itemInactive}
     style={{ position: "absolute", right: 10 }}
   />
 );
@@ -97,6 +97,7 @@ const renderAlbum = (
 const Home = ({ data }: HomeType) => {
   return (
     <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.background} />
       {data.isVisible ? <LoginModal {...data.loginModalProps} /> : null}
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
@@ -207,7 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     fontWeight: "normal",
-    color: "#B8B8B8",
+    color: COLORS.textDim,
     top: 10,
     fontSize: 13,
   },

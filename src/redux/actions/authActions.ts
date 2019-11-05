@@ -18,10 +18,10 @@ import {
 import { authActions } from "./actionTypes";
 import { Alert } from "react-native";
 import reactotron from "reactotron-react-native";
-import { getRecentlyPlayed } from "./playlistActions";
 import {
   getAllFeaturedPlaylists,
   getCurrentUserTopArtists,
+  getRecentlyPlayed,
 } from "./libraryActions";
 
 /**

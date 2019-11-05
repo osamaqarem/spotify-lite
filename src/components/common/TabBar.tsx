@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 });
 
 export const homeIcon = (color: string) => {
-  if (color === COLORS.icon) {
+  if (color === COLORS.itemInactive) {
     return (
       <MaterialCommunityIcon
         style={styles.marginHome}
@@ -57,7 +57,7 @@ export const searchIcon = (color: string) => (
 );
 
 export const favoritesIcon = (color: string) => {
-  if (color === COLORS.icon) {
+  if (color === COLORS.itemInactive) {
     return (
       <MaterialCommunityIcon
         style={styles.marginFavorites}
