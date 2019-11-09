@@ -1,3 +1,4 @@
+import reactotron from "reactotron-react-native";
 import { ActionsObservable, ofType, StateObservable } from "redux-observable";
 import { from, of } from "rxjs";
 import {
@@ -7,7 +8,9 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
-import { AccessTokenResponse, DispatchFun, Action } from "../../data/types";
+import { Action, DispatchFun, ErrorResponse } from "../../data/types";
+import { AccessTokenResponse } from "../../data/types/AccessTokenResponse";
+import { UserProfileResponse } from "../../data/types/UserProfileResponse";
 import {
   encoded,
   getFormUrlEncoded,
@@ -16,8 +19,6 @@ import {
   SPOTIFY_REDIRECT_URI,
 } from "../../utils";
 import { authActions } from "./actionTypes";
-import { Alert } from "react-native";
-import reactotron from "reactotron-react-native";
 import {
   getAllFeaturedPlaylists,
   getCurrentUserTopArtists,
@@ -51,22 +52,19 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
       body: formBody,
     });
 
-    const resJson: AccessTokenResponse = await res.json();
+    const resJson: AccessTokenResponse | ErrorResponse = await res.json();
 
-    if (resJson.error) {
-      Alert.alert(resJson.error);
-      return;
-    } else {
-      const token = resJson.access_token;
-      const refreshToken = resJson.refresh_token;
+    if ("error" in resJson) throw resJson.error.message;
 
-      dispatch({
-        type: authActions.GET_TOKENS_SUCCESS,
-        payload: { token, refreshToken },
-      });
+    const token = resJson.access_token;
+    const refreshToken = resJson.refresh_token;
 
-      dispatch(getProfile());
-    }
+    dispatch({
+      type: authActions.GET_TOKENS_SUCCESS,
+      payload: { token, refreshToken },
+    });
+
+    dispatch(getProfile());
   } catch (error) {
     dispatch({
       type: authActions.ERROR,
@@ -104,14 +102,13 @@ export const getProfileEpic = (
       );
       return request$.pipe(
         switchMap(res => res.json()),
-        map((profile: any) => {
-          if (profile && profile.error) {
-            throw profile.error.message;
-          }
+        map((res: UserProfileResponse | ErrorResponse) => {
+          if ("error" in res) throw res.error.message;
+
           return of(
             {
               type: authActions.PROFILE_SUCCESS,
-              payload: { profile },
+              payload: res,
             },
             getRecentlyPlayed(),
             getAllFeaturedPlaylists(),
@@ -169,8 +166,9 @@ export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
 
       return request$.pipe(
         switchMap(res => res.json()),
-        // mapTo({ type: "test" }),
-        map((resJson: AccessTokenResponse) => {
+        map((resJson: AccessTokenResponse | ErrorResponse) => {
+          if ("error" in resJson) throw resJson.error.message;
+
           // no new refresh token
           const token = resJson.access_token;
 

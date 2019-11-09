@@ -1,5 +1,5 @@
 export * from "./actionTypes";
-export * from "./authActions";
+export * from "./userActions";
 export * from "./libraryActions";
 export * from "./loadingActions";
 export * from "./albumActions";

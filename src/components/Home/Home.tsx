@@ -1,5 +1,5 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, View, StatusBar } from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
@@ -13,7 +13,6 @@ const ALBUM_DIMEN_MADE = 172.5;
 
 type HomeType = {
   data: {
-    isVisible: boolean;
     loginModalProps: LoginModalType;
     recentlyPlayedAlbums: [{ name: string; url: string }];
     featuredPlaylists: [{ name: string; url: string }];
@@ -98,7 +97,7 @@ const Home = ({ data }: HomeType) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.background} />
-      {data.isVisible ? <LoginModal {...data.loginModalProps} /> : null}
+      <LoginModal {...data.loginModalProps} />
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}

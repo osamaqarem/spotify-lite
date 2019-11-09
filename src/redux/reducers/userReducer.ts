@@ -17,7 +17,7 @@ export default (state = initialState, { type, payload }: Action<any>) => {
     case authActions.SET_TOKENS:
       return { ...state, ...payload };
     case authActions.PROFILE_SUCCESS:
-      return { ...state, ...payload };
+      return { ...state, profile: payload };
     case authActions.ERROR:
       return { ...state, ...payload };
     default:

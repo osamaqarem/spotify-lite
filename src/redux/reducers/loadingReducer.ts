@@ -8,9 +8,9 @@ const initialState = {
 export default (state = initialState, { type, payload }: Action<any>) => {
   switch (type) {
     case loadingActions.LOADING:
-      return { ...state, ...payload };
+      return { ...state, loading: true };
     case loadingActions.DONE:
-      return { ...state, ...payload };
+      return { ...state, loading: false };
 
     default:
       return state;

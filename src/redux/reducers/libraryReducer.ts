@@ -6,6 +6,9 @@ const initialState = {
   userTopArtists: [],
   userTopArtistsHeader: { name: null, url: null },
   currentUserPlaylists: [],
+  currentUserSavedTracksCount: null,
+  currentUserSavedAlbums: [],
+  currentUserSavedArtists: [],
 };
 
 export default (state = initialState, { type, payload }: Action<any>) => {
@@ -22,6 +25,21 @@ export default (state = initialState, { type, payload }: Action<any>) => {
       return {
         ...state,
         currentUserPlaylists: payload,
+      };
+    case libraryActions.GET_CURRENT_USER_SAVED_TRACKS_SUCCESS:
+      return {
+        ...state,
+        currentUserSavedTracksCount: payload,
+      };
+    case libraryActions.GET_CURRENT_USER_SAVED_ALBUMS_SUCCESS:
+      return {
+        ...state,
+        currentUserSavedAlbums: payload,
+      };
+    case libraryActions.GET_CURRENT_USER_SAVED_ARTISTS_SUCCESS:
+      return {
+        ...state,
+        currentUserSavedArtists: payload,
       };
     default:
       return state;

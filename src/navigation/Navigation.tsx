@@ -9,9 +9,9 @@ import {
   searchIcon,
   SearchLabel,
 } from "../components/common/TabBar";
-import FavAlbumsScreens from "../screens/Favorites/FavAlbumsScreens";
-import FavArtistsScreen from "../screens/Favorites/FavArtistsScreen";
-import FavPlaylistScreen from "../screens/Favorites/FavPlaylistScreen";
+import FavAlbumsScreens from "../screens/FavAlbumsScreens";
+import FavArtistsScreen from "../screens/FavArtistsScreen";
+import FavPlaylistScreen from "../screens/FavPlaylistScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import { COLORS } from "../utils";

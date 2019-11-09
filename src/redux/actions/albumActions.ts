@@ -2,13 +2,10 @@ import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
-import {
-  Action,
-  ErrorResponse,
-  MultipleAlbumsResponse,
-} from "../../data/types";
-import { albumActions, authActions } from "./actionTypes";
+import { Action, ErrorResponse } from "../../data/types";
+import { AlbumListResponse } from "../../data/types/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
+import { albumActions, authActions } from "./actionTypes";
 
 // export const getAlbumById = (href: string) => ({
 //   type: albumActions.GET_ALBUM,
@@ -88,7 +85,7 @@ export const getMultipleAlbumsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: MultipleAlbumsResponse | ErrorResponse) => {
+        map((res: AlbumListResponse | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }

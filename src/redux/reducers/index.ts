@@ -8,11 +8,14 @@ import {
   getRecentlyPlayedEpic,
   getPlayListCoverByIdEpic,
   getCurrentUserPlaylistsEpic,
+  getCurrentUserSavedTracksEpic,
+  getCurrentUserSavedAlbumsEpic,
+  getCurrentUserSavedArtistsEpic,
 } from "../actions";
 import { doneEpic, loadingEpic } from "../actions/loadingActions";
 import { getMultipleAlbumsEpic } from "../actions/albumActions";
 import albumReducer from "./albumReducer";
-import authReducer from "./authReducer";
+import authReducer from "./userReducer";
 import loadingReducer from "./loadingReducer";
 import libraryReducer from "./libraryReducer";
 
@@ -27,6 +30,9 @@ export const rootEpic = combineEpics(
   getCurrentUserTopArtistsEpic,
   getPlayListCoverByIdEpic,
   getCurrentUserPlaylistsEpic,
+  getCurrentUserSavedTracksEpic,
+  getCurrentUserSavedAlbumsEpic,
+  getCurrentUserSavedArtistsEpic,
 );
 
 export default combineReducers({

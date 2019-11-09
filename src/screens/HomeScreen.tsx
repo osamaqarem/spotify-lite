@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
-import { GetToken as GetTokens, ProfileResponse } from "../data/types";
+import { GetToken as GetTokens, UserProfileResponse } from "../data/types";
 import { getProfile, getTokens, setTokens } from "../redux/actions";
 import { getToken } from "../utils";
 
@@ -23,8 +23,8 @@ import { getToken } from "../utils";
 type HomeScreenProps = {
   getTokens: GetTokens;
   // token: string | null;
-  // loading: boolean; // Controls loading indicator for LoginModal
-  profile: ProfileResponse | null; // Not loading once this is non-null
+  loading: boolean; // Controls loading indicator for LoginModal
+  profile: UserProfileResponse | null; // Not loading once this is non-null
   getProfile: () => void;
   setTokens: ({
     token,
@@ -48,12 +48,13 @@ const HomeScreen = ({
   featuredPlaylists,
   userTopArtists,
   userTopArtistsHeader,
+  loading,
 }: HomeScreenProps) => {
   // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
   const [authCode, setAuthCode] = useState("");
 
-  const [loading, setLoading] = useState(false);
+  // const loadingData = useRef(false);
 
   // Controls loading indicator in Home tab
   // const [loadingAlbums, setLoadingAlbums] = useState(true);
@@ -91,12 +92,15 @@ const HomeScreen = ({
    * If profile already in redux store: Dont do anything, just hide the modal.
    */
   useEffect(() => {
+    // loadingData.current = loading;
+
     const initTokens = async () => {
       const refreshToken = await getToken("refreshToken");
       const token = await getToken("token");
 
       if (token && refreshToken) {
         setTokens({ token, refreshToken });
+
         getProfile();
       } else {
         // if there is no profile and authCode changed, this will run
@@ -106,14 +110,15 @@ const HomeScreen = ({
         }
       }
     };
+
     // if profile not already retrieved
-    if (!profile) {
+    if (!profile && !loading) {
       initTokens();
-    } else {
+    } else if (isVisible && !loading) {
       // hide modal
       setIsVisible(false);
     }
-  }, [setTokens, getProfile, getTokens, authCode, profile]);
+  }, [setTokens, getProfile, getTokens, authCode, profile, loading, isVisible]);
 
   /**
    *
@@ -128,7 +133,6 @@ const HomeScreen = ({
    * Receives the URL with the authorization code
    */
   const handleNav = (url: string) => {
-    setLoading(true);
     const [, authCode] = url.split("?code=");
     // Don't know why "#_=_" is at the end. Has to be removed
     const fixed = authCode.replace("#_=_", "");
@@ -138,13 +142,12 @@ const HomeScreen = ({
   const loginModalProps = {
     webViewRef,
     pushNavEvent,
-    isLoading: loading,
+    isVisible,
   };
 
   return (
     <Home
       data={{
-        isVisible,
         loginModalProps,
         recentlyPlayedAlbums,
         featuredPlaylists,
