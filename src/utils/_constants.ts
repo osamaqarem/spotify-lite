@@ -1,5 +1,6 @@
 export const COLORS = {
   tabBar: "#222326",
+  tabSearch: "#FFFFFF",
   itemInactive: "#ADAEB3",
   itemActive: "#FFFFFF",
   background: "#121212",

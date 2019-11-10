@@ -11,3 +11,4 @@ export * from "./CurrentUserPlaylistsResponse";
 export * from "./CurrentUserSavedTracks";
 export * from "./CurrentUserSavedAlbums";
 export * from "./CurrentUserSavedArtistsResponse";
+export * from "./GetAllCategoriesResponse";

@@ -5,7 +5,7 @@ import reactotron from "../../../ReactotronConfig";
 import { Action, ErrorResponse } from "../../data/types";
 import { AlbumListResponse } from "../../data/types/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { albumActions, authActions } from "./actionTypes";
+import { albumActions, userActions } from "./actionTypes";
 
 // export const getAlbumById = (href: string) => ({
 //   type: albumActions.GET_ALBUM,
@@ -20,7 +20,7 @@ import { albumActions, authActions } from "./actionTypes";
 //     ofType(albumActions.GET_ALBUM),
 //     withLatestFrom(state$),
 //     concatMap(([{ payload: href }, state]) => {
-//       const { token } = state.authReducer;
+//       const { token } = state.userReducer;
 
 //       debugger;
 
@@ -43,7 +43,7 @@ import { albumActions, authActions } from "./actionTypes";
 //             return of({
 //               type: authActions.REFRESH_TOKEN,
 //               payload: {
-//                 refreshToken: state.authReducer.refreshToken,
+//                 refreshToken: state.userReducer.refreshToken,
 //                 actionToRestart: getAlbumById(href),
 //               },
 //             });
@@ -72,7 +72,7 @@ export const getMultipleAlbumsEpic = (
     ofType(albumActions.GET_ALBUM),
     withLatestFrom(state$),
     switchMap(([{ payload: commaList }, state]) => {
-      const { token } = state.authReducer;
+      const { token } = state.userReducer;
 
       const request$ = from(
         fetch(`${SPOTIFY_API_BASE}/v1/albums?ids=${commaList}`, {
@@ -105,9 +105,9 @@ export const getMultipleAlbumsEpic = (
         catchError(err => {
           if (err.includes("expired")) {
             return of({
-              type: authActions.REFRESH_TOKEN,
+              type: userActions.REFRESH_TOKEN,
               payload: {
-                refreshToken: state.authReducer.refreshToken,
+                refreshToken: state.userReducer.refreshToken,
                 actionToRestart: getMultipleAlbums(commaList),
               },
             });

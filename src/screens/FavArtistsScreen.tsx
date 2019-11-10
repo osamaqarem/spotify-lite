@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import ArtistsList from "../components/Favorites/ArtistsList";
-import { getCurrentUserSavedArtists } from "../redux/actions";
+import { getCurrentUserSavedArtists } from "../redux/actions/followActions";
 
 const FavArtistsScreen = ({
   getCurrentUserSavedArtists,
@@ -18,7 +18,7 @@ const FavArtistsScreen = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  currentUserArtists: state.libraryReducer.currentUserSavedArtists,
+  currentUserArtists: state.followRedcuer.currentUserSavedArtists,
 });
 
 export default connect(

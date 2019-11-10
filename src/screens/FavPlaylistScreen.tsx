@@ -36,7 +36,7 @@ const FavPlaylistScreen = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  profile: state.authReducer.profile,
+  profile: state.userReducer.profile,
   currentUserPlaylists: state.libraryReducer.currentUserPlaylists,
   savedTracksCount: state.libraryReducer.currentUserSavedTracksCount,
 });

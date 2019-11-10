@@ -1,5 +1,12 @@
 import React from "react";
-import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
+import {
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+} from "react-native";
 import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";

@@ -18,12 +18,10 @@ import {
   SPOTIFY_API_BASE,
   SPOTIFY_REDIRECT_URI,
 } from "../../utils";
-import { authActions } from "./actionTypes";
-import {
-  getAllFeaturedPlaylists,
-  getCurrentUserTopArtists,
-  getRecentlyPlayed,
-} from "./libraryActions";
+import { userActions } from "./actionTypes";
+import { getAllFeaturedPlaylists } from "./browseActions";
+import { getCurrentUserTopArtists } from "./personalizationActions";
+import { getRecentlyPlayed } from "./playerActions";
 
 /**
  *
@@ -60,14 +58,14 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
     const refreshToken = resJson.refresh_token;
 
     dispatch({
-      type: authActions.GET_TOKENS_SUCCESS,
+      type: userActions.GET_TOKENS_SUCCESS,
       payload: { token, refreshToken },
     });
 
     dispatch(getProfile());
   } catch (error) {
     dispatch({
-      type: authActions.ERROR,
+      type: userActions.ERROR,
       payload: { error },
     });
   }
@@ -77,7 +75,7 @@ export const getTokens = ({ authCode }: { authCode: string }) => async (
  * Trigger @epic getProfileEpic
  */
 export const getProfile = () => ({
-  type: authActions.GET_PROFILE,
+  type: userActions.GET_PROFILE,
 });
 
 /**
@@ -89,14 +87,14 @@ export const getProfileEpic = (
   state$: StateObservable<any>,
 ) =>
   action$.pipe(
-    ofType(authActions.GET_PROFILE),
+    ofType(userActions.GET_PROFILE),
     withLatestFrom(state$),
-    switchMap(([, { authReducer }]) => {
+    switchMap(([, { userReducer }]) => {
       const request$ = from(
         fetch(`${SPOTIFY_API_BASE}/v1/me`, {
           method: "GET",
           headers: {
-            authorization: `Bearer ${authReducer.token}`,
+            authorization: `Bearer ${userReducer.token}`,
           },
         }),
       );
@@ -107,7 +105,7 @@ export const getProfileEpic = (
 
           return of(
             {
-              type: authActions.PROFILE_SUCCESS,
+              type: userActions.PROFILE_SUCCESS,
               payload: res,
             },
             getRecentlyPlayed(),
@@ -119,15 +117,15 @@ export const getProfileEpic = (
         catchError((err: string) => {
           if (err.includes("expired")) {
             return of({
-              type: authActions.REFRESH_TOKEN,
+              type: userActions.REFRESH_TOKEN,
               payload: {
-                refreshToken: authReducer.refreshToken,
+                refreshToken: userReducer.refreshToken,
                 actionToRestart: getProfile,
               },
             });
           }
           reactotron.log(JSON.stringify(err));
-          return of({ type: authActions.ERROR, payload: { err } });
+          return of({ type: userActions.ERROR, payload: { err } });
         }),
       );
     }),
@@ -140,7 +138,7 @@ export const getProfileEpic = (
  */
 export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
   action$.pipe(
-    ofType(authActions.REFRESH_TOKEN),
+    ofType(userActions.REFRESH_TOKEN),
     switchMap(({ payload }) => {
       const { refreshToken, actionToRestart } = payload;
 
@@ -175,7 +173,7 @@ export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
           // Return new token and dispatch get profile epic.
           return of(
             {
-              type: authActions.GET_TOKENS_SUCCESS,
+              type: userActions.GET_TOKENS_SUCCESS,
               payload: { token },
             },
             actionToRestart(),
@@ -183,7 +181,7 @@ export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
         }),
         mergeMap(a => a),
         catchError(error =>
-          of({ type: authActions.ERROR, payload: { error } }),
+          of({ type: userActions.ERROR, payload: { error } }),
         ),
       );
     }),
@@ -200,6 +198,6 @@ export const setTokens = ({
   token: string;
   refreshToken: string;
 }) => ({
-  type: authActions.SET_TOKENS,
+  type: userActions.SET_TOKENS,
   payload: { token, refreshToken },
 });

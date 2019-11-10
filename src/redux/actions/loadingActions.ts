@@ -1,11 +1,11 @@
 import { ActionsObservable, ofType } from "redux-observable";
 import { map } from "rxjs/operators";
 import { Action } from "../../data/types";
-import { authActions, libraryActions, loadingActions } from "./actionTypes";
+import { browseActions, loadingActions, userActions } from "./actionTypes";
 
 export const loadingEpic = (action$: ActionsObservable<Action<any>>) =>
   action$.pipe(
-    ofType(authActions.GET_PROFILE),
+    ofType(userActions.GET_PROFILE),
     map(() => ({
       type: loadingActions.LOADING,
     })),
@@ -15,7 +15,7 @@ export const loadingEpic = (action$: ActionsObservable<Action<any>>) =>
 export const doneEpic = (action$: ActionsObservable<Action<any>>) =>
   action$.pipe(
     // ofType(playlistActions.RECENTLY_PLAYED_SUCCESS),
-    ofType(libraryActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS),
+    ofType(userActions.PROFILE_SUCCESS),
     map(() => ({
       type: loadingActions.DONE,
     })),

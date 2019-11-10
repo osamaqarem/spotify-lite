@@ -1,6 +1,6 @@
 import { Action } from "../../data/types";
 import { storeTokens } from "../../utils";
-import { authActions } from "../actions";
+import { userActions } from "../actions";
 
 const initialState = {
   token: null,
@@ -11,14 +11,14 @@ const initialState = {
 
 export default (state = initialState, { type, payload }: Action<any>) => {
   switch (type) {
-    case authActions.GET_TOKENS_SUCCESS:
+    case userActions.GET_TOKENS_SUCCESS:
       storeTokens(payload);
       return { ...state, ...payload };
-    case authActions.SET_TOKENS:
+    case userActions.SET_TOKENS:
       return { ...state, ...payload };
-    case authActions.PROFILE_SUCCESS:
+    case userActions.PROFILE_SUCCESS:
       return { ...state, profile: payload };
-    case authActions.ERROR:
+    case userActions.ERROR:
       return { ...state, ...payload };
     default:
       return state;

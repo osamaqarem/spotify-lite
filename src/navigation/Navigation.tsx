@@ -91,7 +91,7 @@ const TabsNavigator = createMaterialBottomTabNavigator(
     },
   },
   {
-    // initialRouteName: "Favorites",
+    initialRouteName: "Home",
   },
 );
 

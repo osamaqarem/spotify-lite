@@ -159,12 +159,12 @@ const HomeScreen = ({
 };
 
 const mapStateToProps = (state: any) => ({
-  profile: state.authReducer.profile,
+  profile: state.userReducer.profile,
   loading: state.loadingReducer.loading,
   recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,
-  featuredPlaylists: state.libraryReducer.featuredPlaylists,
-  userTopArtists: state.libraryReducer.userTopArtists,
-  userTopArtistsHeader: state.libraryReducer.userTopArtistsHeader,
+  featuredPlaylists: state.browseReducer.featuredPlaylists,
+  userTopArtists: state.personalizationReducer.userTopArtists,
+  userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
 });
 
 export default connect(
