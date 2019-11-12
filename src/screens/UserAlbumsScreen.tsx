@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import AlbumsList from "../components/Favorites/AlbumsList";
 import { getCurrentUserSavedAlbums } from "../redux/actions";
 
-const FavAlbumsScreens = ({
+const UserAlbumsScreen = ({
   getCurrentUserSavedAlbums,
   currentUserAlbums,
 }: {
@@ -21,9 +21,6 @@ const mapStateToProps = (state: any) => ({
   currentUserAlbums: state.libraryReducer.currentUserSavedAlbums,
 });
 
-export default connect(
-  mapStateToProps,
-  {
-    getCurrentUserSavedAlbums,
-  },
-)(FavAlbumsScreens);
+export default connect(mapStateToProps, {
+  getCurrentUserSavedAlbums,
+})(UserAlbumsScreen);

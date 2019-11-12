@@ -1,4 +1,4 @@
-import { Action } from "../../data/types";
+import { Action } from "../../data/models";
 import { personalizationActions } from "../actions";
 
 const initialState = {

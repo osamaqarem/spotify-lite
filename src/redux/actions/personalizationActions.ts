@@ -6,7 +6,7 @@ import {
   Action,
   ErrorResponse,
   UserTopArtistsResponse,
-} from "../../data/types";
+} from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, personalizationActions } from "./actionTypes";
 

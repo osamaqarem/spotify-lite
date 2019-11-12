@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
-import { GetToken as GetTokens, UserProfileResponse } from "../data/types";
+import { GetToken as GetTokens, UserProfileResponse } from "../data/models";
 import { getProfile, getTokens, setTokens } from "../redux/actions";
 import { getToken } from "../utils";
 
@@ -54,11 +54,6 @@ const HomeScreen = ({
   const [isVisible, setIsVisible] = useState(true);
   const [authCode, setAuthCode] = useState("");
 
-  // const loadingData = useRef(false);
-
-  // Controls loading indicator in Home tab
-  // const [loadingAlbums, setLoadingAlbums] = useState(true);
-
   const webViewRef = useRef(null);
   const webViewSub$: React.MutableRefObject<Subject<string>> = useRef(
     new Subject(),
@@ -92,8 +87,6 @@ const HomeScreen = ({
    * If profile already in redux store: Dont do anything, just hide the modal.
    */
   useEffect(() => {
-    // loadingData.current = loading;
-
     const initTokens = async () => {
       const refreshToken = await getToken("refreshToken");
       const token = await getToken("token");
@@ -147,7 +140,7 @@ const HomeScreen = ({
 
   return (
     <Home
-      data={{
+      {...{
         loginModalProps,
         recentlyPlayedAlbums,
         featuredPlaylists,
@@ -167,7 +160,6 @@ const mapStateToProps = (state: any) => ({
   userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
 });
 
-export default connect(
-  mapStateToProps,
-  { getTokens, getProfile, setTokens },
-)(HomeScreen);
+export default connect(mapStateToProps, { getTokens, getProfile, setTokens })(
+  HomeScreen,
+);

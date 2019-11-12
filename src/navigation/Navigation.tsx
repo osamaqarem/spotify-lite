@@ -8,10 +8,10 @@ import {
   HomeLabel,
   searchIcon,
   SearchLabel,
-} from "../components/common/TabBar";
-import FavAlbumsScreens from "../screens/FavAlbumsScreens";
-import FavArtistsScreen from "../screens/FavArtistsScreen";
-import FavPlaylistScreen from "../screens/FavPlaylistScreen";
+} from "../components/Navigation/TabBar";
+import UserAlbumsScreen from "../screens/UserAlbumsScreen";
+import UserArtistsScreen from "../screens/UserArtistsScreen";
+import UserPlaylistsScreen from "../screens/UserPlaylistsScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import { COLORS } from "../utils";
@@ -24,15 +24,9 @@ const sharedStyles = {
 
 const FavoritesTabs = createMaterialTopTabNavigator(
   {
-    Playlists: {
-      screen: FavPlaylistScreen,
-    },
-    Artists: {
-      screen: FavArtistsScreen,
-    },
-    Albums: {
-      screen: FavAlbumsScreens,
-    },
+    UserPlaylistsScreen,
+    UserArtistsScreen,
+    FavAlbumsScreens: UserAlbumsScreen,
   },
   {
     initialRouteName: "Playlists",

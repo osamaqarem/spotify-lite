@@ -5,9 +5,9 @@ import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
 } from "../redux/actions";
-import { UserProfileResponse } from "../data/types";
+import { UserProfileResponse } from "../data/models";
 
-type FavPlaylistScreenType = {
+type UserPlaylistsScreenType = {
   profile: UserProfileResponse;
   getCurrentUserPlaylists: () => void;
   getCurrentUserSavedTracks: () => void;
@@ -15,13 +15,13 @@ type FavPlaylistScreenType = {
   savedTracksCount: number;
 };
 
-const FavPlaylistScreen = ({
+const UserPlaylistsScreen = ({
   profile,
   currentUserPlaylists,
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
   savedTracksCount,
-}: FavPlaylistScreenType) => {
+}: UserPlaylistsScreenType) => {
   useEffect(() => {
     getCurrentUserPlaylists();
     getCurrentUserSavedTracks();
@@ -41,7 +41,7 @@ const mapStateToProps = (state: any) => ({
   savedTracksCount: state.libraryReducer.currentUserSavedTracksCount,
 });
 
-export default connect(
-  mapStateToProps,
-  { getCurrentUserPlaylists, getCurrentUserSavedTracks },
-)(FavPlaylistScreen);
+export default connect(mapStateToProps, {
+  getCurrentUserPlaylists,
+  getCurrentUserSavedTracks,
+})(UserPlaylistsScreen);

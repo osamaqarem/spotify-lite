@@ -1,26 +1,11 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import FastImage from "react-native-fast-image";
 import { COLORS } from "../../utils";
-import { PlaylistCoverBlank, PlaylistCover } from "../common/PlaylistCover";
+import { PlaylistCover } from "../common/PlaylistCover";
+import PlaylistRowFav from "./PlaylistFavRow";
+import PlaylistCoverBlank from "../common/PlaylistCoverBlank";
 
 type RenderItemType = { item: any; index: number };
-
-const PlaylistRowFav = ({ savedTracksCount }: { savedTracksCount: number }) => (
-  <>
-    <FastImage
-      source={require("../../data/assets/savedTracks.jpg")}
-      style={styles.cover}
-    />
-    <View style={styles.favRowText}>
-      <Text style={styles.playlistTitle}>Favorite Songs</Text>
-      <Text style={styles.playlistOwner}>
-        {(savedTracksCount && savedTracksCount + " favorite songs") || ""}
-      </Text>
-    </View>
-    <View style={styles.lineBreak} />
-  </>
-);
 
 const renderItem = (
   { item, index }: RenderItemType,
@@ -73,6 +58,7 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flex: 1,
     flexDirection: "row",
+    flexWrap: "wrap",
     maxWidth: "77%",
   },
   playlistTitle: {
@@ -88,15 +74,9 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
-  lineBreak: { flexBasis: "100%" },
   rowText: {
     marginLeft: 10,
     justifyContent: "center",
-  },
-  favRowText: {
-    marginLeft: 10,
-    justifyContent: "center",
-    marginBottom: 15,
   },
 });
 

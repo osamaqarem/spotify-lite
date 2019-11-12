@@ -1,7 +1,7 @@
 import { ActionsObservable, ofType } from "redux-observable";
 import { map } from "rxjs/operators";
-import { Action } from "../../data/types";
-import { browseActions, loadingActions, userActions } from "./actionTypes";
+import { Action } from "../../data/models";
+import { loadingActions, userActions } from "./actionTypes";
 
 export const loadingEpic = (action$: ActionsObservable<Action<any>>) =>
   action$.pipe(

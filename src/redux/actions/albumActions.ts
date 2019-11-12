@@ -2,8 +2,8 @@ import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
-import { Action, ErrorResponse } from "../../data/types";
-import { AlbumListResponse } from "../../data/types/AlbumListResponse";
+import { Action, ErrorResponse } from "../../data/models";
+import { AlbumListResponse } from "../../data/models/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { albumActions, userActions } from "./actionTypes";
 

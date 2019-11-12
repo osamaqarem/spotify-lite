@@ -1,11 +1,11 @@
-import { Action } from "../../data/types";
+import { Action } from "../../data/models";
 import { loadingActions } from "../actions";
 
 const initialState = {
   loading: false,
 };
 
-export default (state = initialState, { type, payload }: Action<any>) => {
+export default (state = initialState, { type }: Action<any>) => {
   switch (type) {
     case loadingActions.LOADING:
       return { ...state, loading: true };

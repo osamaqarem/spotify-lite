@@ -15,8 +15,8 @@ import {
   CurrentUserSavedTracks,
   ErrorResponse,
   PlaylistResponse,
-} from "../../data/types";
-import { CurrentUserPlaylistsResponse } from "../../data/types/CurrentUserPlaylistsResponse";
+} from "../../data/models";
+import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlaylistsResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { browseActions, libraryActions, playlistActions } from "./actionTypes";
 

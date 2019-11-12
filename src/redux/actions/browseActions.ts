@@ -8,7 +8,7 @@ import {
   FeaturedPlaylistsResponse,
   GetAllCategoriesResponse,
   UserProfileResponse,
-} from "../../data/types";
+} from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, browseActions } from "./actionTypes";
 import { getPlayListCoverById } from "./libraryActions";

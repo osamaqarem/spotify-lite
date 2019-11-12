@@ -1,7 +1,8 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
-import { PlaylistCover, PlaylistCoverBlank } from "../common/PlaylistCover";
+import { PlaylistCover } from "../common/PlaylistCover";
+import PlaylistCoverBlank from "../common/PlaylistCoverBlank";
 
 const renderItem = ({ item }: any) => {
   return (

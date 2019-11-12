@@ -1,5 +1,5 @@
 import { libraryActions, playlistActions } from "../actions";
-import { Action } from "../../data/types";
+import { Action } from "../../data/models";
 
 const initialState = {
   currentUserPlaylists: [],

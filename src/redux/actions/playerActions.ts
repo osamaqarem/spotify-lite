@@ -12,7 +12,7 @@ import {
   Action,
   ErrorResponse,
   RecentlyPlayedResponse,
-} from "../../data/types";
+} from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { playerActions, userActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";

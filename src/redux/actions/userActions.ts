@@ -8,11 +8,10 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
-import { Action, DispatchFun, ErrorResponse } from "../../data/types";
-import { AccessTokenResponse } from "../../data/types/AccessTokenResponse";
-import { UserProfileResponse } from "../../data/types/UserProfileResponse";
+import { Action, DispatchFun, ErrorResponse } from "../../data/models";
+import { AccessTokenResponse } from "../../data/models/AccessTokenResponse";
+import { UserProfileResponse } from "../../data/models/UserProfileResponse";
 import {
-  encoded,
   getFormUrlEncoded,
   SPOTIFY_ACCOUNTS,
   SPOTIFY_API_BASE,
@@ -22,6 +21,7 @@ import { userActions } from "./actionTypes";
 import { getAllFeaturedPlaylists } from "./browseActions";
 import { getCurrentUserTopArtists } from "./personalizationActions";
 import { getRecentlyPlayed } from "./playerActions";
+import { encoded } from "../../../secret";
 
 /**
  *

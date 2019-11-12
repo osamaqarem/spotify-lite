@@ -1,4 +1,4 @@
-import { Action } from "../../data/types";
+import { Action } from "../../data/models";
 import { storeTokens } from "../../utils";
 import { userActions } from "../actions";
 

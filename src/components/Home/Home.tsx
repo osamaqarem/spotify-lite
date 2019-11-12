@@ -1,31 +1,22 @@
 import React from "react";
-import {
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-  FlatList,
-} from "react-native";
+import { ScrollView, StatusBar, StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
-import TopBar from "../common/TopBar";
 import LoginModal, { LoginModalType } from "./LoginModal";
+import TopBar from "./TopBar";
 
 const ROW_SCROLLVIEW_HEIGHT = 180;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 38;
-
 const ALBUM_DIMEN_MADE = 172.5;
 
+type RenderAlbumType = { name: string; url: string };
 type HomeType = {
-  data: {
-    loginModalProps: LoginModalType;
-    recentlyPlayedAlbums: [{ name: string; url: string }];
-    featuredPlaylists: [{ name: string; url: string }];
-    userTopArtists: [{ name: string; url: string }];
-    userTopArtistsHeader: { name: string; url: string };
-  };
+  loginModalProps: LoginModalType;
+  recentlyPlayedAlbums: RenderAlbumType[];
+  featuredPlaylists: RenderAlbumType[];
+  userTopArtists: RenderAlbumType[];
+  userTopArtistsHeader: RenderAlbumType;
 };
 
 const settingsIcon = (
@@ -100,11 +91,17 @@ const renderAlbum = (
   );
 };
 
-const Home = ({ data }: HomeType) => {
+const Home = ({
+  loginModalProps,
+  recentlyPlayedAlbums,
+  featuredPlaylists,
+  userTopArtists,
+  userTopArtistsHeader,
+}: HomeType) => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.background} />
-      <LoginModal {...data.loginModalProps} />
+      <LoginModal {...loginModalProps} />
       <TopBar>
         <Text style={styles.barHeader}>Home</Text>
         {settingsIcon}
@@ -126,7 +123,7 @@ const Home = ({ data }: HomeType) => {
           horizontal
           showsHorizontalScrollIndicator={false}>
           <View style={styles.rowScrollContainer}>
-            {data.recentlyPlayedAlbums.map((album, index: number) =>
+            {recentlyPlayedAlbums.map((album, index: number) =>
               renderAlbumRecent(album, index),
             )}
           </View>
@@ -136,7 +133,7 @@ const Home = ({ data }: HomeType) => {
           Featured playlists
         </Text>
         <View style={styles.content}>
-          {data.featuredPlaylists.map((album, index: number) =>
+          {featuredPlaylists.map((album, index: number) =>
             renderAlbum(album, index),
           )}
         </View>
@@ -153,7 +150,7 @@ const Home = ({ data }: HomeType) => {
           ]}>
           <FastImage
             source={{
-              uri: data.userTopArtistsHeader.url,
+              uri: userTopArtistsHeader.url,
             }}
             style={{
               height: ALBUM_DIMEN_MADE + 70,
@@ -168,11 +165,11 @@ const Home = ({ data }: HomeType) => {
               styles.albumText,
               { marginBottom: 25, fontSize: 15 },
             ]}>
-            {data.userTopArtistsHeader.name}
+            {userTopArtistsHeader.name}
           </Text>
         </View>
         <View style={styles.content}>
-          {data.userTopArtists.map((album: any, index: number) =>
+          {userTopArtists.map((album: any, index: number) =>
             renderAlbum(album, index),
           )}
         </View>
