@@ -3,6 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
 import { PlaylistCover } from "../common/PlaylistCover";
 import PlaylistCoverBlank from "../common/PlaylistCoverBlank";
+import { AlbumType } from "../../redux/reducers/albumReducer";
 
 const renderItem = ({ item }: any) => {
   return (
@@ -21,7 +22,11 @@ const renderItem = ({ item }: any) => {
   );
 };
 
-const ArtistsList = ({ currentUserArtists }: { currentUserArtists: any }) => {
+const ArtistsList = ({
+  currentUserArtists,
+}: {
+  currentUserArtists: AlbumType[];
+}) => {
   return (
     <View style={styles.container}>
       <FlatList

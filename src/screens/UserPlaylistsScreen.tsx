@@ -6,13 +6,15 @@ import {
   getCurrentUserSavedTracks,
 } from "../redux/actions";
 import { UserProfileResponse } from "../data/models";
+import { ReduxStoreType } from "../redux/reducers";
+import { SavedPlaylistsType } from "../redux/reducers/libraryReducer";
 
 type UserPlaylistsScreenType = {
-  profile: UserProfileResponse;
+  profile: UserProfileResponse | null;
   getCurrentUserPlaylists: () => void;
   getCurrentUserSavedTracks: () => void;
-  currentUserPlaylists: { name: string; url: string; owner: string };
-  savedTracksCount: number;
+  currentUserPlaylists: SavedPlaylistsType[];
+  savedTracksCount: number | null;
 };
 
 const UserPlaylistsScreen = ({
@@ -35,7 +37,7 @@ const UserPlaylistsScreen = ({
   return <PlaylistsList {...PlaylistsListProps} />;
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: ReduxStoreType) => ({
   profile: state.userReducer.profile,
   currentUserPlaylists: state.libraryReducer.currentUserPlaylists,
   savedTracksCount: state.libraryReducer.currentUserSavedTracksCount,

@@ -5,18 +5,18 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { COLORS } from "../../utils";
 import LoginModal, { LoginModalType } from "./LoginModal";
 import TopBar from "./TopBar";
+import { AlbumType } from "../../redux/reducers/albumReducer";
 
 const ROW_SCROLLVIEW_HEIGHT = 180;
 const ALBUM_DIMEN_RECENT = ROW_SCROLLVIEW_HEIGHT - 38;
 const ALBUM_DIMEN_MADE = 172.5;
 
-type RenderAlbumType = { name: string; url: string };
 type HomeType = {
   loginModalProps: LoginModalType;
-  recentlyPlayedAlbums: RenderAlbumType[];
-  featuredPlaylists: RenderAlbumType[];
-  userTopArtists: RenderAlbumType[];
-  userTopArtistsHeader: RenderAlbumType;
+  recentlyPlayedAlbums: AlbumType[];
+  featuredPlaylists: AlbumType[];
+  userTopArtists: AlbumType[];
+  userTopArtistsHeader: AlbumType;
 };
 
 const settingsIcon = (
@@ -28,10 +28,7 @@ const settingsIcon = (
   />
 );
 
-const renderAlbumRecent = (
-  album: { name: string; url: string },
-  index: number,
-) => {
+const renderAlbumRecent = (album: AlbumType, index: number) => {
   return (
     <View key={index} style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage
@@ -67,8 +64,8 @@ const renderAlbumRecent = (
 
 const renderAlbum = (
   album: {
-    name: string;
-    url: string;
+    name: string | null;
+    url: string | null;
   },
   index: number,
 ) => {

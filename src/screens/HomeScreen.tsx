@@ -2,23 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { WebViewNavigation } from "react-native-webview";
 import { connect } from "react-redux";
 import { Subject } from "rxjs";
-import { debounceTime, filter, take } from "rxjs/operators";
+import { debounceTime, filter, map, take } from "rxjs/operators";
 import Home from "../components/Home/Home";
-import { GetToken as GetTokens, UserProfileResponse } from "../data/models";
+import { GetTokens, UserProfileResponse } from "../data/models";
 import { getProfile, getTokens, setTokens } from "../redux/actions";
+import { ReduxStoreType } from "../redux/reducers";
+import { AlbumType } from "../redux/reducers/albumReducer";
 import { getToken } from "../utils";
-
-/**
- * Flow:
- * 1- Open app. App obtains auth code and checks if token exists (is now loading).
- * 2- App tries to get data user with stored token.
- * 3- OK (is now not loading).            3- Fail => Get new token (is now not loading).
- * 4- user data injected into home screen.
- * 5- HomeScreen sees injected user data => hides LoginModal.
- * 6- The user is now on the HomeScreen.
- * 7- Get albums and playlists etc. through API and handle local loading state.
- *
- */
 
 type HomeScreenProps = {
   getTokens: GetTokens;
@@ -33,10 +23,10 @@ type HomeScreenProps = {
     token: string;
     refreshToken: string;
   }) => {};
-  recentlyPlayedAlbums: [{ name: string; url: string }];
-  featuredPlaylists: [{ name: string; url: string }];
-  userTopArtists: [{ name: string; url: string }];
-  userTopArtistsHeader: { name: string; url: string };
+  recentlyPlayedAlbums: AlbumType[];
+  featuredPlaylists: AlbumType[];
+  userTopArtists: AlbumType[];
+  userTopArtistsHeader: AlbumType;
 };
 
 const HomeScreen = ({
@@ -62,17 +52,16 @@ const HomeScreen = ({
   /**
    * Subscribes to our navigation URL event stream.
    */
+  // Handling webview navigation events this way,
+  // because it fires 2-3 events with the SAME URL and we only want 1 event.
+  // Otherwise, getToken() action would be called more than once
   useEffect(() => {
-    // Handling webview navigation events this way,
-    // because it fires 2-3 events with the SAME URL and we only want 1 event.
-    // Otherwise, getToken() action would be called more than once
-    // const webViewSub$: Subject<string> = new Subject();
-
     // Pulls the URL with the authorization code from the stream
     const webView$ = webViewSub$.current.pipe(
       filter(v => v.includes("?code=")),
       debounceTime(5000), // The first few codes are incorrect. Take the last one.
       take(1),
+      map(res => res.replace("#_=_", "")),
     );
 
     const sub = webView$.subscribe(handleNav);
@@ -93,12 +82,14 @@ const HomeScreen = ({
 
       if (token && refreshToken) {
         setTokens({ token, refreshToken });
+        debugger;
 
         getProfile();
       } else {
         // if there is no profile and authCode changed, this will run
         if (authCode.length > 0) {
           // getTokens automatically does getProfile when done
+          debugger;
           getTokens({ authCode });
         }
       }
@@ -127,9 +118,8 @@ const HomeScreen = ({
    */
   const handleNav = (url: string) => {
     const [, authCode] = url.split("?code=");
-    // Don't know why "#_=_" is at the end. Has to be removed
-    const fixed = authCode.replace("#_=_", "");
-    setAuthCode(fixed);
+
+    setAuthCode(authCode);
   };
 
   const loginModalProps = {
@@ -151,7 +141,7 @@ const HomeScreen = ({
   );
 };
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: ReduxStoreType) => ({
   profile: state.userReducer.profile,
   loading: state.loadingReducer.loading,
   recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,

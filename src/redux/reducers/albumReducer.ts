@@ -1,7 +1,11 @@
 import { Action } from "../../data/models";
 import { albumActions } from "../actions";
 
-const initialState = {
+export type AlbumType = { name: string | null; url: string | null };
+
+export type AlbumReducerType = { recentlyPlayedAlbums: AlbumType[] };
+
+const initialState: AlbumReducerType = {
   recentlyPlayedAlbums: [{ name: null, url: null }],
 };
 

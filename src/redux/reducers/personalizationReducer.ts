@@ -1,7 +1,13 @@
 import { Action } from "../../data/models";
 import { personalizationActions } from "../actions";
+import { AlbumType } from "../../screens/HomeScreen";
 
-const initialState = {
+export type PersonalizationReducerType = {
+  userTopArtists: [];
+  userTopArtistsHeader: AlbumType;
+};
+
+const initialState: PersonalizationReducerType = {
   userTopArtists: [],
   userTopArtistsHeader: { name: null, url: null },
 };

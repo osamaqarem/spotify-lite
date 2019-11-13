@@ -1,12 +1,17 @@
-import { Action } from "../../data/models";
+import { Action, UserProfileResponse } from "../../data/models";
 import { storeTokens } from "../../utils";
 import { userActions } from "../actions";
 
-const initialState = {
+export type UserReducerType = {
+  token: null | string;
+  refreshToken: null | string;
+  profile: null | UserProfileResponse;
+};
+
+const initialState: UserReducerType = {
   token: null,
   refreshToken: null,
   profile: null,
-  error: null,
 };
 
 export default (state = initialState, { type, payload }: Action<any>) => {
@@ -18,8 +23,6 @@ export default (state = initialState, { type, payload }: Action<any>) => {
       return { ...state, ...payload };
     case userActions.PROFILE_SUCCESS:
       return { ...state, profile: payload };
-    case userActions.ERROR:
-      return { ...state, ...payload };
     default:
       return state;
   }

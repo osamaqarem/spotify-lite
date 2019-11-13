@@ -1,11 +1,11 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { searchIcon } from "../navigation/TabBar";
 import { COLORS } from "../../utils";
+import SearchIcon from "../Navigation/SearchIcon";
 
 const TopBarSearch = () => (
   <View style={styles.container}>
-    <View style={styles.iconContainer}>{searchIcon("#000")}</View>
+    <View style={styles.iconContainer}>{SearchIcon("#000")}</View>
     <View>
       <Text
         style={{

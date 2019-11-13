@@ -1,7 +1,12 @@
 import { Action } from "../../data/models";
 import { followActions } from "../actions";
+import { AlbumType } from "./albumReducer";
 
-const initialState = {
+export type FollowReducerType = {
+  currentUserSavedArtists: AlbumType[];
+};
+
+const initialState: FollowReducerType = {
   currentUserSavedArtists: [],
 };
 

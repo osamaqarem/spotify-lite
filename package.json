@@ -25,6 +25,7 @@
     "react-redux": "^7.1.1",
     "redux": "^4.0.4",
     "redux-observable": "^1.2.0",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "rxjs": "^6.5.3"
   },
@@ -49,7 +50,7 @@
     "react-test-renderer": "16.8.1",
     "reactotron-react-native": "^4.0.2",
     "reactotron-redux": "^3.1.2",
-    "typescript": "^3.6.3"
+    "typescript": "^3.7.2"
   },
   "jest": {
     "preset": "react-native",

@@ -1,7 +1,16 @@
 import { libraryActions, playlistActions } from "../actions";
 import { Action } from "../../data/models";
 
-const initialState = {
+export type SavedAlbumType = { name: string; url: string; owner: string };
+export type SavedPlaylistsType = { name: string; url: string; owner: string };
+
+export type LibraryReducerType = {
+  currentUserPlaylists: SavedPlaylistsType[];
+  currentUserSavedTracksCount: null | number;
+  currentUserSavedAlbums: SavedAlbumType[];
+};
+
+const initialState: LibraryReducerType = {
   currentUserPlaylists: [],
   currentUserSavedTracksCount: null,
   currentUserSavedAlbums: [],

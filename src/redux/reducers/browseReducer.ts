@@ -1,7 +1,13 @@
 import { Action } from "../../data/models";
 import { browseActions } from "../actions";
 
-const initialState = {
+export type CountryCategoryType = { name: string; id: string };
+export type BorwserReducerType = {
+  featuredPlaylists: [];
+  categoriesForCountry: CountryCategoryType[];
+};
+
+const initialState: BorwserReducerType = {
   featuredPlaylists: [],
   categoriesForCountry: [],
 };

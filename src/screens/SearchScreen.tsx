@@ -4,12 +4,14 @@ import { connect } from "react-redux";
 import { getAllCategoriesForCountry } from "../redux/actions";
 import { View, StyleSheet } from "react-native";
 import TopBarSearch from "../components/Search/TopBarSearch";
+import { ReduxStoreType } from "../redux/reducers";
+import { CountryCategoryType } from "../redux/reducers/browseReducer";
 
 const SearchScreen = ({
   categoriesForCountry,
   getAllCategoriesForCountry,
 }: {
-  categoriesForCountry: { name: string; id: string }[];
+  categoriesForCountry: CountryCategoryType[];
   getAllCategoriesForCountry: () => void;
 }) => {
   useEffect(() => {
@@ -18,8 +20,8 @@ const SearchScreen = ({
 
   return (
     <View style={styles.container}>
-      <GenreList categoriesForCountry={categoriesForCountry} />
       <TopBarSearch />
+      <GenreList categoriesForCountry={categoriesForCountry} />
     </View>
   );
 };
@@ -28,7 +30,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: ReduxStoreType) => ({
   categoriesForCountry: state.browseReducer.categoriesForCountry,
 });
 

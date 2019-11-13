@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, ImageStyle } from "react-native";
+import { StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 
 export const PlaylistCover = ({ uri }: { uri: string }) => {

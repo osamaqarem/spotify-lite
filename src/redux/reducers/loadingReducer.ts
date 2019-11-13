@@ -1,6 +1,9 @@
 import { Action } from "../../data/models";
 import { loadingActions } from "../actions";
 
+export type LoadingReducerType = {
+  loading: boolean;
+};
 const initialState = {
   loading: false,
 };

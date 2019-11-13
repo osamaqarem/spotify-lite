@@ -1,20 +1,17 @@
+import React from "react";
 import { createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import {
-  favoritesIcon,
-  FavoritesLabel,
-  homeIcon,
-  HomeLabel,
-  searchIcon,
-  SearchLabel,
-} from "../components/Navigation/TabBar";
 import UserAlbumsScreen from "../screens/UserAlbumsScreen";
 import UserArtistsScreen from "../screens/UserArtistsScreen";
 import UserPlaylistsScreen from "../screens/UserPlaylistsScreen";
 import HomeScreen from "../screens/HomeScreen";
 import SearchScreen from "../screens/SearchScreen";
 import { COLORS } from "../utils";
+import { Text } from "react-native";
+import HomeIcon from "../components/Navigation/HomeIcon";
+import SearchIcon from "../components/Navigation/SearchIcon";
+import FavoritesIcon from "../components/Navigation/FavoritesIcon";
 
 const sharedStyles = {
   activeColor: COLORS.itemActive,
@@ -22,11 +19,15 @@ const sharedStyles = {
   barStyle: { backgroundColor: COLORS.tabBar, padding: 2 },
 };
 
+const HomeLabel = <Text style={{ fontSize: 10 }}>Home</Text>;
+const SearchLabel = <Text style={{ fontSize: 10 }}>Search</Text>;
+const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
+
 const FavoritesTabs = createMaterialTopTabNavigator(
   {
-    UserPlaylistsScreen,
-    UserArtistsScreen,
-    FavAlbumsScreens: UserAlbumsScreen,
+    Playlists: UserPlaylistsScreen,
+    Artists: UserArtistsScreen,
+    Albums: UserAlbumsScreen,
   },
   {
     initialRouteName: "Playlists",
@@ -60,7 +61,7 @@ const TabsNavigator = createMaterialBottomTabNavigator(
       screen: HomeScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          homeIcon(tintColor),
+          HomeIcon(tintColor),
         ...sharedStyles,
         tabBarLabel: HomeLabel,
       },
@@ -69,7 +70,7 @@ const TabsNavigator = createMaterialBottomTabNavigator(
       screen: SearchScreen,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          searchIcon(tintColor),
+          SearchIcon(tintColor),
         ...sharedStyles,
         tabBarLabel: SearchLabel,
       },
@@ -78,7 +79,7 @@ const TabsNavigator = createMaterialBottomTabNavigator(
       screen: FavoritesTabs,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          favoritesIcon(tintColor),
+          FavoritesIcon(tintColor),
         ...sharedStyles,
         tabBarLabel: FavoritesLabel,
       },

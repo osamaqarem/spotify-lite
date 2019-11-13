@@ -16,13 +16,15 @@ import {
   getAllCategoriesForCountryEpic,
 } from "../actions";
 import { combineReducers } from "redux";
-import userReducer from "./userReducer";
-import loadingReducer from "./loadingReducer";
-import albumReducer from "./albumReducer";
-import libraryReducer from "./libraryReducer";
-import browseReducer from "./browseReducer";
-import personalizationReducer from "./personalizationReducer";
-import followRedcuer from "./followRedcuer";
+import userReducer, { UserReducerType } from "./userReducer";
+import loadingReducer, { LoadingReducerType } from "./loadingReducer";
+import albumReducer, { AlbumReducerType } from "./albumReducer";
+import libraryReducer, { LibraryReducerType } from "./libraryReducer";
+import browseReducer, { BorwserReducerType } from "./browseReducer";
+import personalizationReducer, {
+  PersonalizationReducerType,
+} from "./personalizationReducer";
+import followRedcuer, { FollowReducerType } from "./followRedcuer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -50,3 +52,13 @@ export default combineReducers({
   personalizationReducer,
   followRedcuer,
 });
+
+export type ReduxStoreType = {
+  userReducer: UserReducerType;
+  loadingReducer: LoadingReducerType;
+  albumReducer: AlbumReducerType;
+  libraryReducer: LibraryReducerType;
+  browseReducer: BorwserReducerType;
+  personalizationReducer: PersonalizationReducerType;
+  followRedcuer: FollowReducerType;
+};
