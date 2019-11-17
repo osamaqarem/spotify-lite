@@ -1,20 +1,12 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
-import { PlaylistCover } from "../common/PlaylistCover";
-import PlaylistRowFav from "./PlaylistFavRow";
-import PlaylistCoverBlank from "../common/PlaylistCoverBlank";
+import { PlaylistCover } from "./PlaylistCover";
+import PlaylistCoverBlank from "./PlaylistCoverBlank";
 
-type RenderItemType = { item: any; index: number };
-
-const renderItem = (
-  { item, index }: RenderItemType,
-  username: string,
-  savedTracksCount: number,
-) => {
+const renderItem = ({ item }: any) => {
   return (
     <View style={styles.flatListContainer}>
-      {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
       {item.url ? (
         <PlaylistCover uri={item.url} />
       ) : (
@@ -24,22 +16,18 @@ const renderItem = (
         <Text style={styles.playlistTitle} numberOfLines={1}>
           {item.name}
         </Text>
-        <Text style={styles.playlistOwner}>
-          by {item.owner === username ? "you" : item.owner}
-        </Text>
+        <Text style={styles.playlistOwner}>by {item.owner}</Text>
       </View>
     </View>
   );
 };
 
-const PlaylistsList = ({ data, username }: { data: any; username: string }) => {
+const AlbumsList = ({ currentUserAlbums }: { currentUserAlbums: any }) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={data.currentUserPlaylists}
-        renderItem={({ item, index }: RenderItemType) => {
-          return renderItem({ item, index }, username, data.savedTracksCount);
-        }}
+        data={currentUserAlbums}
+        renderItem={renderItem}
         keyExtractor={(_, index) => {
           return index + "";
         }}
@@ -58,7 +46,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     flex: 1,
     flexDirection: "row",
-    flexWrap: "wrap",
     maxWidth: "77%",
   },
   playlistTitle: {
@@ -74,10 +61,16 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
+  lineBreak: { flexBasis: "100%" },
   rowText: {
     marginLeft: 10,
     justifyContent: "center",
   },
+  favRowText: {
+    marginLeft: 10,
+    justifyContent: "center",
+    marginBottom: 15,
+  },
 });
 
-export default PlaylistsList;
+export default AlbumsList;

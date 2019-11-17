@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import PlaylistsList from "../components/Favorites/PlaylistsList";
+import PlaylistsList from "../../common/PlaylistsList";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
-} from "../redux/actions";
-import { UserProfileResponse } from "../data/models";
-import { ReduxStoreType } from "../redux/reducers";
-import { SavedPlaylistsType } from "../redux/reducers/libraryReducer";
+} from "../../../redux/actions";
+import { UserProfileResponse } from "../../../data/models";
+import { ReduxStoreType } from "../../../redux/reducers";
+import { SavedPlaylistsType } from "../../../redux/reducers/libraryReducer";
 
 type UserPlaylistsScreenType = {
   profile: UserProfileResponse | null;

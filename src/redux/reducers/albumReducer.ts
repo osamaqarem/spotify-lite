@@ -6,7 +6,7 @@ export type AlbumType = { name: string | null; url: string | null };
 export type AlbumReducerType = { recentlyPlayedAlbums: AlbumType[] };
 
 const initialState: AlbumReducerType = {
-  recentlyPlayedAlbums: [{ name: null, url: null }],
+  recentlyPlayedAlbums: [],
 };
 
 export default (state = initialState, { type, payload }: Action<any>) => {

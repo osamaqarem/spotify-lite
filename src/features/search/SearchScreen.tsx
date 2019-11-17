@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
-import GenreList from "../components/Search/GenreList";
+import GenreList from "./GenreList";
 import { connect } from "react-redux";
-import { getAllCategoriesForCountry } from "../redux/actions";
+import { getAllCategoriesForCountry } from "../../redux/actions";
 import { View, StyleSheet } from "react-native";
-import TopBarSearch from "../components/Search/TopBarSearch";
-import { ReduxStoreType } from "../redux/reducers";
-import { CountryCategoryType } from "../redux/reducers/browseReducer";
+import TopBarSearch from "./TopBarSearch";
+import { ReduxStoreType } from "../../redux/reducers";
+import { CountryCategoryType } from "../../redux/reducers/browseReducer";
 
 const SearchScreen = ({
   categoriesForCountry,

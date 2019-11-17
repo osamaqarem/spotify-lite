@@ -1,17 +1,19 @@
 import React from "react";
+import { Text } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
+import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import UserAlbumsScreen from "../screens/UserAlbumsScreen";
-import UserArtistsScreen from "../screens/UserArtistsScreen";
-import UserPlaylistsScreen from "../screens/UserPlaylistsScreen";
-import HomeScreen from "../screens/HomeScreen";
-import SearchScreen from "../screens/SearchScreen";
-import { COLORS } from "../utils";
-import { Text } from "react-native";
-import HomeIcon from "../components/Navigation/HomeIcon";
-import SearchIcon from "../components/Navigation/SearchIcon";
-import FavoritesIcon from "../components/Navigation/FavoritesIcon";
+import { COLORS } from "../../utils";
+import UserAlbumsScreen from "../favorites/albums/UserAlbumsScreen";
+import UserArtistsScreen from "../favorites/artists/UserArtistsScreen";
+import UserPlaylistsScreen from "../favorites/playlists/UserPlaylistsScreen";
+import PlaylistDetailsScreen from "../playlist/PlaylistDetailsScreen";
+import SearchScreen from "../search/SearchScreen";
+import FavoritesIcon from "./FavoritesIcon";
+import HomeIcon from "./HomeIcon";
+import SearchIcon from "./SearchIcon";
+import HomeScreen from "../home/HomeScreen";
 
 const sharedStyles = {
   activeColor: COLORS.itemActive,
@@ -55,10 +57,21 @@ const FavoritesTabs = createMaterialTopTabNavigator(
   },
 );
 
+const PlaylistDetailsStackFromHome = createStackNavigator(
+  {
+    HomeScreen,
+    PlaylistDetailsScreen,
+  },
+  {
+    initialRouteName: "HomeScreen",
+    headerMode: "none",
+  },
+);
+
 const TabsNavigator = createMaterialBottomTabNavigator(
   {
     Home: {
-      screen: HomeScreen,
+      screen: PlaylistDetailsStackFromHome,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           HomeIcon(tintColor),

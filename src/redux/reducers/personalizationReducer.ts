@@ -1,6 +1,6 @@
 import { Action } from "../../data/models";
 import { personalizationActions } from "../actions";
-import { AlbumType } from "../../screens/HomeScreen";
+import { AlbumType } from "../../features/Home/HomeScreen";
 
 export type PersonalizationReducerType = {
   userTopArtists: [];

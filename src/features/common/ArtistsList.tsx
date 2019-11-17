@@ -1,8 +1,9 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
-import { PlaylistCover } from "../common/PlaylistCover";
-import PlaylistCoverBlank from "../common/PlaylistCoverBlank";
+import { PlaylistCover } from "./PlaylistCover";
+import PlaylistCoverBlank from "./PlaylistCoverBlank";
+import { AlbumType } from "../../redux/reducers/albumReducer";
 
 const renderItem = ({ item }: any) => {
   return (
@@ -16,17 +17,20 @@ const renderItem = ({ item }: any) => {
         <Text style={styles.playlistTitle} numberOfLines={1}>
           {item.name}
         </Text>
-        <Text style={styles.playlistOwner}>by {item.owner}</Text>
       </View>
     </View>
   );
 };
 
-const AlbumsList = ({ currentUserAlbums }: { currentUserAlbums: any }) => {
+const ArtistsList = ({
+  currentUserArtists,
+}: {
+  currentUserArtists: AlbumType[];
+}) => {
   return (
     <View style={styles.container}>
       <FlatList
-        data={currentUserAlbums}
+        data={currentUserArtists}
         renderItem={renderItem}
         keyExtractor={(_, index) => {
           return index + "";
@@ -73,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlbumsList;
+export default ArtistsList;

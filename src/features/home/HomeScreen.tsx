@@ -1,14 +1,27 @@
 import React, { useEffect, useRef, useState } from "react";
+import { ScrollView, StatusBar, View } from "react-native";
 import { WebViewNavigation } from "react-native-webview";
-import { connect } from "react-redux";
+import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
 import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
-import Home from "../components/Home/Home";
-import { GetTokens, UserProfileResponse } from "../data/models";
-import { getProfile, getTokens, setTokens } from "../redux/actions";
-import { ReduxStoreType } from "../redux/reducers";
-import { AlbumType } from "../redux/reducers/albumReducer";
-import { getToken } from "../utils";
+import { GetTokens, UserProfileResponse } from "../../data/models";
+import { AlbumType } from "../../redux/reducers/albumReducer";
+import { getToken } from "../../utils";
+import LoginModal from "./LoginModal";
+import TopBar from "./TopBar";
+import RecentlyPlayed from "./RecentlyPlayed";
+import FeaturedPlaylists from "./FeaturedPlaylists";
+import TopArtists from "./TopArtists";
+import { connect } from "react-redux";
+import { ReduxStoreType } from "../../redux/reducers";
+import {
+  getTokens,
+  getProfile,
+  setTokens,
+  getRecentlyPlayed,
+} from "../../redux/actions";
+import { COLORS } from "../../utils";
+import { styles } from "./styles";
 
 type HomeScreenProps = {
   getTokens: GetTokens;
@@ -16,6 +29,7 @@ type HomeScreenProps = {
   loading: boolean; // Controls loading indicator for LoginModal
   profile: UserProfileResponse | null; // Not loading once this is non-null
   getProfile: () => void;
+  getRecentlyPlayed: () => void;
   setTokens: ({
     token,
     refreshToken,
@@ -27,18 +41,21 @@ type HomeScreenProps = {
   featuredPlaylists: AlbumType[];
   userTopArtists: AlbumType[];
   userTopArtistsHeader: AlbumType;
+  navigation: NavigationTabProp;
 };
 
 const HomeScreen = ({
   getTokens,
   profile,
   getProfile,
+  getRecentlyPlayed,
   setTokens,
   recentlyPlayedAlbums,
   featuredPlaylists,
   userTopArtists,
   userTopArtistsHeader,
   loading,
+  navigation,
 }: HomeScreenProps) => {
   // Visibility of LoginModal
   const [isVisible, setIsVisible] = useState(true);
@@ -82,14 +99,12 @@ const HomeScreen = ({
 
       if (token && refreshToken) {
         setTokens({ token, refreshToken });
-        debugger;
 
         getProfile();
       } else {
         // if there is no profile and authCode changed, this will run
         if (authCode.length > 0) {
           // getTokens automatically does getProfile when done
-          debugger;
           getTokens({ authCode });
         }
       }
@@ -99,6 +114,8 @@ const HomeScreen = ({
     if (!profile && !loading) {
       initTokens();
     } else if (isVisible && !loading) {
+      debugger;
+
       // hide modal
       setIsVisible(false);
     }
@@ -122,22 +139,41 @@ const HomeScreen = ({
     setAuthCode(authCode);
   };
 
-  const loginModalProps = {
-    webViewRef,
-    pushNavEvent,
-    isVisible,
-  };
+  // Fetch recently played every time the screen is focused
+  useEffect(() => {
+    const didFocusSub = navigation.addListener("didFocus", () => {
+      if (recentlyPlayedAlbums) {
+        getRecentlyPlayed();
+      }
+    });
+    return () => {
+      didFocusSub.remove();
+    };
+  }, [navigation, getRecentlyPlayed, recentlyPlayedAlbums]);
 
   return (
-    <Home
-      {...{
-        loginModalProps,
-        recentlyPlayedAlbums,
-        featuredPlaylists,
-        userTopArtists,
-        userTopArtistsHeader,
-      }}
-    />
+    <View style={styles.container}>
+      <StatusBar backgroundColor={COLORS.background} />
+      <LoginModal {...{ webViewRef, pushNavEvent, isVisible }} />
+      <TopBar />
+      <ScrollView
+        style={{ width: "100%" }}
+        showsVerticalScrollIndicator={false}>
+        <RecentlyPlayed
+          navigation={navigation}
+          recentlyPlayedAlbums={recentlyPlayedAlbums}
+        />
+        <FeaturedPlaylists
+          navigation={navigation}
+          featuredPlaylists={featuredPlaylists}
+        />
+        <TopArtists
+          navigation={navigation}
+          userTopArtists={userTopArtists}
+          userTopArtistsHeader={userTopArtistsHeader}
+        />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -150,6 +186,9 @@ const mapStateToProps = (state: ReduxStoreType) => ({
   userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
 });
 
-export default connect(mapStateToProps, { getTokens, getProfile, setTokens })(
-  HomeScreen,
-);
+export default connect(mapStateToProps, {
+  getTokens,
+  getProfile,
+  setTokens,
+  getRecentlyPlayed,
+})(HomeScreen);

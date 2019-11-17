@@ -11,6 +11,7 @@ const initialState = {
 export default (state = initialState, { type }: Action<any>) => {
   switch (type) {
     case loadingActions.LOADING:
+      // TODO:
       return { ...state, loading: true };
     case loadingActions.DONE:
       return { ...state, loading: false };
