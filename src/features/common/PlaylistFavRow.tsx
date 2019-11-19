@@ -33,12 +33,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   playlistTitle: {
-    color: COLORS.textLight,
+    color: COLORS.white,
     textAlignVertical: "center",
     fontSize: 16,
   },
   playlistOwner: {
-    color: COLORS.textDim,
+    color: COLORS.lightGrey,
     textAlignVertical: "center",
   },
 });

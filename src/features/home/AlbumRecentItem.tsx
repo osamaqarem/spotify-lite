@@ -4,6 +4,7 @@ import FastImage from "react-native-fast-image";
 import { albumDimensions, styles } from "./styles";
 import { AlbumType } from "../../redux/reducers/albumReducer";
 import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
+import { NestedStackRoutes } from "../navigation/Navigation";
 
 const AlbumRecentItem = (
   album: AlbumType,
@@ -12,11 +13,9 @@ const AlbumRecentItem = (
 ) => {
   return (
     <TouchableOpacity
-      onPress={() => {
-        // TODO: 2- It will fetch the details of that playlist/album
-        // 1- it will navigate to that screen
-        navigation.navigate("PlaylistDetailsScreen");
-      }}
+      onPress={() =>
+        navigation.navigate(NestedStackRoutes.PlaylistDetailsScreen)
+      }
       key={index}
       style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage

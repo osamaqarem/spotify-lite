@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     height: 60,
-    backgroundColor: COLORS.tabSearch,
+    backgroundColor: COLORS.white,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",

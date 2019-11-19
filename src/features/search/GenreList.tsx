@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   genreText: {
     fontSize: 16,
-    color: COLORS.textLight,
+    color: COLORS.white,
     top: 10,
     left: 10,
     fontWeight: "bold",

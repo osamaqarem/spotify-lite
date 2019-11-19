@@ -49,12 +49,12 @@ const styles = StyleSheet.create({
     maxWidth: "77%",
   },
   playlistTitle: {
-    color: COLORS.textLight,
+    color: COLORS.white,
     textAlignVertical: "center",
     fontSize: 16,
   },
   playlistOwner: {
-    color: COLORS.textDim,
+    color: COLORS.lightGrey,
     textAlignVertical: "center",
   },
   cover: {

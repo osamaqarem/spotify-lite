@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, View } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createStackNavigator } from "react-navigation-stack";
@@ -16,7 +16,7 @@ import SearchIcon from "./SearchIcon";
 import HomeScreen from "../home/HomeScreen";
 
 const sharedStyles = {
-  activeColor: COLORS.itemActive,
+  activeColor: COLORS.white,
   inactiveColor: COLORS.itemInactive,
   barStyle: { backgroundColor: COLORS.tabBar, padding: 2 },
 };
@@ -25,7 +25,8 @@ const HomeLabel = <Text style={{ fontSize: 10 }}>Home</Text>;
 const SearchLabel = <Text style={{ fontSize: 10 }}>Search</Text>;
 const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
 
-const FavoritesTabs = createMaterialTopTabNavigator(
+// Favorites tab
+const NestedTopTabsNav = createMaterialTopTabNavigator(
   {
     Playlists: UserPlaylistsScreen,
     Artists: UserArtistsScreen,
@@ -38,7 +39,7 @@ const FavoritesTabs = createMaterialTopTabNavigator(
       labelStyle: {
         fontSize: 15.5,
       },
-      activeTintColor: COLORS.itemActive,
+      activeTintColor: COLORS.white,
       inactiveTintColor: COLORS.itemInactive,
       style: {
         backgroundColor: COLORS.tabBar,
@@ -57,21 +58,23 @@ const FavoritesTabs = createMaterialTopTabNavigator(
   },
 );
 
-const PlaylistDetailsStackFromHome = createStackNavigator(
+// Stack
+const NestedStack = createStackNavigator(
   {
     HomeScreen,
     PlaylistDetailsScreen,
   },
   {
-    initialRouteName: "HomeScreen",
+    initialRouteName: "PlaylistDetailsScreen",
     headerMode: "none",
   },
 );
 
-const TabsNavigator = createMaterialBottomTabNavigator(
+// Main
+const BottomTabsNav = createMaterialBottomTabNavigator(
   {
     Home: {
-      screen: PlaylistDetailsStackFromHome,
+      screen: NestedStack,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           HomeIcon(tintColor),
@@ -89,7 +92,7 @@ const TabsNavigator = createMaterialBottomTabNavigator(
       },
     },
     Favorites: {
-      screen: FavoritesTabs,
+      screen: NestedTopTabsNav,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           FavoritesIcon(tintColor),
@@ -103,4 +106,22 @@ const TabsNavigator = createMaterialBottomTabNavigator(
   },
 );
 
-export default createAppContainer(TabsNavigator);
+// Route names
+export const NestedTopTabsNavRoutes = {
+  Playlists: "Playlists",
+  Artists: "Artists",
+  Albums: "Albums",
+};
+
+export const NestedStackRoutes = {
+  HomeScreen: "HomeScreen",
+  PlaylistDetailsScreen: "PlaylistDetailsScreen",
+};
+
+export const BottomTabsNavRoutes = {
+  Home: "Home",
+  Search: "Search",
+  Favorites: "Favorites",
+};
+
+export default createAppContainer(BottomTabsNav);
