@@ -4,7 +4,7 @@ import { Action } from "../../data/models";
 export type SavedAlbumType = { name: string; url: string; owner: string };
 export type SavedPlaylistsType = { name: string; url: string; owner: string };
 
-export type LibraryReducerType = {
+ type LibraryReducerType = {
   currentUserPlaylists: SavedPlaylistsType[];
   currentUserSavedTracksCount: null | number;
   currentUserSavedAlbums: SavedAlbumType[];
@@ -16,7 +16,7 @@ const initialState: LibraryReducerType = {
   currentUserSavedAlbums: [],
 };
 
-export default (state = initialState, { type, payload }: Action<any>) => {
+export default (state = initialState, { type, payload }: Action<any>) :LibraryReducerType=> {
   switch (type) {
     case playlistActions.GET_CURRENT_USER_PLAYLISTS_SUCCESS:
       return {

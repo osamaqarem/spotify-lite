@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   playlistOwner: {
-    color: COLORS.lightGrey,
+    color: COLORS.grey,
     textAlignVertical: "center",
   },
 });

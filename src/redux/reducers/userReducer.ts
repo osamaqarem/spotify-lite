@@ -2,7 +2,7 @@ import { Action, UserProfileResponse } from "../../data/models";
 import { storeTokens } from "../../utils";
 import { userActions } from "../actions";
 
-export type UserReducerType = {
+type UserReducerType = {
   token: null | string;
   refreshToken: null | string;
   profile: null | UserProfileResponse;
@@ -14,7 +14,7 @@ const initialState: UserReducerType = {
   profile: null,
 };
 
-export default (state = initialState, { type, payload }: Action<any>) => {
+export default (state = initialState, { type, payload }: Action<any>) : UserReducerType=> {
   switch (type) {
     case userActions.GET_TOKENS_SUCCESS:
       storeTokens(payload);

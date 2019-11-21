@@ -13,7 +13,6 @@ import RecentlyPlayed from "./RecentlyPlayed";
 import FeaturedPlaylists from "./FeaturedPlaylists";
 import TopArtists from "./TopArtists";
 import { connect } from "react-redux";
-import { ReduxStoreType } from "../../redux/reducers";
 import {
   getTokens,
   getProfile,
@@ -22,6 +21,7 @@ import {
 } from "../../redux/actions";
 import { COLORS } from "../../utils";
 import { styles } from "./styles";
+import { RootStoreType } from "../../redux/store";
 
 type HomeScreenProps = {
   getTokens: GetTokens;
@@ -177,7 +177,7 @@ const HomeScreen = ({
   );
 };
 
-const mapStateToProps = (state: ReduxStoreType) => ({
+const mapStateToProps = (state: RootStoreType) => ({
   profile: state.userReducer.profile,
   loading: state.loadingReducer.loading,
   recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,

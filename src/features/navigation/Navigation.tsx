@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
 import { createAppContainer } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createStackNavigator } from "react-navigation-stack";
@@ -8,12 +8,12 @@ import { COLORS } from "../../utils";
 import UserAlbumsScreen from "../favorites/albums/UserAlbumsScreen";
 import UserArtistsScreen from "../favorites/artists/UserArtistsScreen";
 import UserPlaylistsScreen from "../favorites/playlists/UserPlaylistsScreen";
+import HomeScreen from "../home/HomeScreen";
 import PlaylistDetailsScreen from "../playlist/PlaylistDetailsScreen";
 import SearchScreen from "../search/SearchScreen";
 import FavoritesIcon from "./FavoritesIcon";
 import HomeIcon from "./HomeIcon";
 import SearchIcon from "./SearchIcon";
-import HomeScreen from "../home/HomeScreen";
 
 const sharedStyles = {
   activeColor: COLORS.white,

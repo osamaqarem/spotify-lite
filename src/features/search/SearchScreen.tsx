@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { getAllCategoriesForCountry } from "../../redux/actions";
 import { View, StyleSheet } from "react-native";
 import TopBarSearch from "./TopBarSearch";
-import { ReduxStoreType } from "../../redux/reducers";
 import { CountryCategoryType } from "../../redux/reducers/browseReducer";
+import { RootStoreType } from "../../redux/store";
 
 const SearchScreen = ({
   categoriesForCountry,
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
 
-const mapStateToProps = (state: ReduxStoreType) => ({
+const mapStateToProps = (state: RootStoreType) => ({
   categoriesForCountry: state.browseReducer.categoriesForCountry,
 });
 

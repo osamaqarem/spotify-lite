@@ -2,7 +2,8 @@ import { Action } from "../../data/models";
 import { browseActions } from "../actions";
 
 export type CountryCategoryType = { name: string; id: string };
-export type BorwserReducerType = {
+
+type BorwserReducerType = {
   featuredPlaylists: [];
   categoriesForCountry: CountryCategoryType[];
 };
@@ -12,7 +13,7 @@ const initialState: BorwserReducerType = {
   categoriesForCountry: [],
 };
 
-export default (state = initialState, { type, payload }: Action<any>) => {
+export default (state = initialState, { type, payload }: Action<any>) : BorwserReducerType => {
   switch (type) {
     case browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS:
       return { ...state, featuredPlaylists: payload };

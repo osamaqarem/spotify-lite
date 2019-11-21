@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { AlbumType } from "../../../redux/reducers/albumReducer";
 import ArtistsList from "../../common/ArtistsList";
-import { ReduxStoreType } from "../../../redux/reducers";
 import { getCurrentUserSavedArtists } from "../../../redux/actions";
+import { RootStoreType } from "../../../redux/store";
 
 const UserArtistsScreen = ({
   getCurrentUserSavedArtists,
@@ -19,7 +19,7 @@ const UserArtistsScreen = ({
   return <ArtistsList currentUserArtists={currentUserArtists} />;
 };
 
-const mapStateToProps = (state: ReduxStoreType) => ({
+const mapStateToProps = (state: RootStoreType) => ({
   currentUserArtists: state.followRedcuer.currentUserSavedArtists,
 });
 
