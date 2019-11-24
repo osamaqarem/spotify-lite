@@ -4,7 +4,7 @@ import { COLORS } from "../../utils";
 
 const ShuffleButton = () => {
   return (
-    <View style={{ alignSelf: "center", marginTop: 32, marginBottom: 16 }}>
+    <View style={{ alignSelf: "center", marginTop: 14, marginBottom: 16 }}>
       <TouchableOpacity
         style={{
           width: 230,

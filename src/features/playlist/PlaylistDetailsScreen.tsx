@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useEffect } from "react";
+import { View, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { COLORS } from "../../utils";
 import AlbumCover from "./AlbumCover";
@@ -7,6 +7,9 @@ import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader from "./PlayListDetailsHeader";
 import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
+import LinearGradient from "react-native-linear-gradient";
+// @ts-ignore
+import { colorsFromUrl } from "react-native-dominant-color";
 
 export const HEADER_HEIGHT = 50;
 export const ICON_SIZE = 24;
@@ -26,12 +29,19 @@ const onScroll = (contentOffset: {
 const PlaylistDetailsScreen = () => {
   const offsetY = new Animated.Value(0);
 
-  const marginAnim = offsetY.interpolate({
-    inputRange: [0, 200],
-    outputRange: [0, -100],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
+  useEffect(() => {
+    const test = async () => {
+      await colorsFromUrl(
+        "https://source.unsplash.com/random/800x600",
+        (err: any, colors: any) => {
+          // TODO: set lineargradient color from URL
+          console.log(JSON.stringify(colors));
+        },
+      );
+    };
 
+    test();
+  }, []);
   return (
     <>
       <View
@@ -45,14 +55,14 @@ const PlaylistDetailsScreen = () => {
           showsVerticalScrollIndicator={false}
           stickyHeaderIndices={[0]}
           style={{
-            backgroundColor: COLORS.background,
+            backgroundColor: "crimson",
           }}>
           <AlbumCover offsetY={offsetY} />
           <Animated.View
             style={{
               zIndex: 10,
               backgroundColor: COLORS.background,
-              marginTop: marginAnim,
+              marginTop: 20,
             }}>
             <ShuffleButton />
             <View
@@ -66,6 +76,24 @@ const PlaylistDetailsScreen = () => {
               ))}
             </View>
           </Animated.View>
+          <LinearGradient
+            start={{ x: 0, y: 0 }}
+            end={{ x: 0, y: 0.8 }}
+            colors={[
+              "#8A425A", // TODO: change to dynamic value
+              COLORS.background,
+              COLORS.background,
+              COLORS.background,
+              COLORS.background,
+              COLORS.background,
+            ]}
+            style={{
+              alignSelf: "center",
+              opacity: 1,
+              ...StyleSheet.absoluteFillObject,
+              position: "absolute",
+            }}
+          />
         </Animated.ScrollView>
         <PlayListDetailsHeader />
       </View>

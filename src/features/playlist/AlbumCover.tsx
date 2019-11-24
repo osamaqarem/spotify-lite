@@ -5,7 +5,7 @@ import FastImage from "react-native-fast-image";
 import { COLORS } from "../../utils";
 import Animated from "react-native-reanimated";
 
-const cover = { url: require("../../data/assets/exampleCover.jpg") };
+export const cover = { url: require("../../data/assets/exampleCover.jpg") };
 
 const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
   const opacityAnim = offsetY.interpolate({
