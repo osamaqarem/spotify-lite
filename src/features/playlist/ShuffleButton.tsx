@@ -1,14 +1,31 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../utils";
+import Animated from "react-native-reanimated";
 
-const ShuffleButton = () => {
+export const BUTTON_HEIGHT = 50;
+
+const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
+  const translateY = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [0, -270],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
   return (
-    <View style={{ alignSelf: "center", marginTop: 14, marginBottom: 16 }}>
+    <Animated.View
+      style={{
+        marginTop: "85%",
+        marginBottom: 16,
+        ...StyleSheet.absoluteFillObject,
+        alignItems: "center",
+        transform: [{ translateY: translateY }],
+        height: BUTTON_HEIGHT,
+        zIndex: 1,
+      }}>
       <TouchableOpacity
         style={{
           width: 230,
-          height: 50,
+          height: BUTTON_HEIGHT,
           backgroundColor: COLORS.green,
           justifyContent: "center",
           alignItems: "center",
@@ -24,7 +41,7 @@ const ShuffleButton = () => {
           SHUFFLE PLAY
         </Text>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 

@@ -5,7 +5,7 @@ import { COLORS } from "../../utils";
 import AlbumCover from "./AlbumCover";
 import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader from "./PlayListDetailsHeader";
-import ShuffleButton from "./ShuffleButton";
+import ShuffleButton, { BUTTON_HEIGHT } from "./ShuffleButton";
 import Track from "./Track";
 import LinearGradient from "react-native-linear-gradient";
 // @ts-ignore
@@ -29,77 +29,85 @@ const onScroll = (contentOffset: {
 const PlaylistDetailsScreen = () => {
   const offsetY = new Animated.Value(0);
 
-  useEffect(() => {
-    const test = async () => {
-      await colorsFromUrl(
-        "https://source.unsplash.com/random/800x600",
-        (err: any, colors: any) => {
-          // TODO: set lineargradient color from URL
-          console.log(JSON.stringify(colors));
-        },
-      );
-    };
+  const opacityAnim = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [1, 0.12],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
 
-    test();
-  }, []);
+  // useEffect(() => {
+  //   const test = async () => {
+  //     await colorsFromUrl(
+  //       "https://source.unsplash.com/random/800x600",
+  //       (err: any, colors: any) => {
+  //         // TODO: set lineargradient color from URL
+  //         console.log(JSON.stringify(colors));
+  //       },
+  //     );
+  //   };
+
+  //   test();
+  // }, []);
+
   return (
-    <>
-      <View
+    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <PlayListDetailsHeader offsetY={offsetY} />
+      <Animated.View
         style={{
-          flex: 1,
-          backgroundColor: COLORS.background,
+          alignSelf: "center",
+          alignItems: "center",
+          ...StyleSheet.absoluteFillObject,
+          height: "60%",
+          opacity: opacityAnim,
         }}>
-        <Animated.ScrollView
-          onScroll={onScroll({ y: offsetY })}
-          scrollEventThrottle={1}
-          showsVerticalScrollIndicator={false}
-          stickyHeaderIndices={[0]}
+        <LinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 0.8 }}
+          colors={[
+            "#8A425A", // TODO: change to dynamic value
+            COLORS.background,
+          ]}
           style={{
-            backgroundColor: "crimson",
+            alignSelf: "center",
+            alignItems: "center",
+            ...StyleSheet.absoluteFillObject,
+            // height: "60%",
           }}>
           <AlbumCover offsetY={offsetY} />
-          <Animated.View
-            style={{
-              zIndex: 10,
-              backgroundColor: COLORS.background,
-              marginTop: 20,
-            }}>
-            <ShuffleButton />
-            <View
-              style={{
-                flex: 1,
-                marginHorizontal: 10,
-              }}>
-              <DownloadHeader />
-              {albumData.map((track, index) => (
-                <Track key={index} title={track.name} artist={track.artist} />
-              ))}
-            </View>
-          </Animated.View>
-          <LinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 0.8 }}
-            colors={[
-              "#8A425A", // TODO: change to dynamic value
-              COLORS.background,
-              COLORS.background,
-              COLORS.background,
-              COLORS.background,
-              COLORS.background,
-            ]}
-            style={{
-              alignSelf: "center",
-              opacity: 1,
-              ...StyleSheet.absoluteFillObject,
-              position: "absolute",
-            }}
-          />
-        </Animated.ScrollView>
-        <PlayListDetailsHeader />
-      </View>
-    </>
+        </LinearGradient>
+      </Animated.View>
+      <ShuffleButton offsetY={offsetY} />
+      <Animated.ScrollView
+        overScrollMode="never"
+        onScroll={onScroll({ y: offsetY })}
+        showsVerticalScrollIndicator={false}
+        scrollEventThrottle={1}
+        style={{ marginTop: HEADER_HEIGHT + BUTTON_HEIGHT }}
+        contentContainerStyle={{ marginTop: "75%", zIndex: 10 }}>
+        <PlaylistContent />
+      </Animated.ScrollView>
+    </View>
   );
 };
+
+const PlaylistContent = () => (
+  <View
+    style={{
+      // backgroundColor: "lightblue",
+      backgroundColor: COLORS.background,
+    }}>
+    <View
+      style={{
+        flex: 1,
+        marginHorizontal: 10,
+      }}>
+      <DownloadHeader />
+      {albumData.map((track, index) => (
+        <Track key={index} title={track.name} artist={track.artist} />
+      ))}
+    </View>
+  </View>
+);
 
 const albumData = [
   { name: "Be on My Side", artist: "Kip Nelson" },

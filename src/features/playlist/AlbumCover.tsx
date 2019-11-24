@@ -1,17 +1,19 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { HEADER_HEIGHT } from "./PlaylistDetailsScreen";
 import FastImage from "react-native-fast-image";
 import { COLORS } from "../../utils";
 import Animated from "react-native-reanimated";
+import LinearGradient from "react-native-linear-gradient";
+import PlayListDetailsHeader from "./PlayListDetailsHeader";
 
 export const cover = { url: require("../../data/assets/exampleCover.jpg") };
 
 const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
-  const opacityAnim = offsetY.interpolate({
-    inputRange: [0, 100, 300],
-    outputRange: [1, 0.1, 0],
-  });
+  // const opacityAnim = offsetY.interpolate({
+  //   inputRange: [0, 100, 300],
+  //   outputRange: [1, 0.1, 0],
+  // });
 
   const scaleAnim = offsetY.interpolate({
     inputRange: [0, 250, 300],
@@ -22,13 +24,15 @@ const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
   return (
     <Animated.View
       style={{
-        marginTop: 16 + HEADER_HEIGHT,
+        justifyContent: "center",
         alignItems: "center",
-        opacity: opacityAnim,
+        // opacity: opacityAnim,
         transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
+        marginTop: HEADER_HEIGHT,
       }}>
       <FastImage
         style={{
+          marginTop: 16,
           height: 175,
           width: 175,
         }}

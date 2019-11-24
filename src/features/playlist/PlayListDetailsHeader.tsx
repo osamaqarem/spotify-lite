@@ -4,58 +4,73 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
 import DotsView from "./DotsView";
 import { HEADER_HEIGHT, ICON_SIZE } from "./PlaylistDetailsScreen";
+import Animated from "react-native-reanimated";
 
-const PlayListDetailsHeader = () => (
-  <View
-    style={{
-      height: HEADER_HEIGHT,
-      ...StyleSheet.absoluteFillObject,
-    }}>
+const PlayListDetailsHeader = ({
+  offsetY,
+}: {
+  offsetY: Animated.Value<number>;
+}) => {
+  const opacityAnim = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [0, 1],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
+  return (
     <View
       style={{
-        flex: 1,
-        flexDirection: "row",
         alignItems: "center",
         justifyContent: "center",
-        alignContent: "center",
+        height: HEADER_HEIGHT,
+        ...StyleSheet.absoluteFillObject,
+        zIndex: 10,
       }}>
-      <Icon
-        name="arrow-left"
-        size={ICON_SIZE}
-        style={{
-          color: COLORS.white,
-          position: "absolute",
-          left: 15,
-        }}
-      />
-      <Text
-        style={{
-          opacity: 0.5,
-          fontSize: 16,
-          fontWeight: "bold",
-          letterSpacing: 0.6,
-          color: COLORS.white,
-        }}>
-        Psyche Pop & Surf Rock
-      </Text>
-      <Icon
-        name={true ? "heart" : "heart-outline"} // TODO: heart
-        size={ICON_SIZE}
-        style={{
-          color: COLORS.green,
-          right: 54,
-          position: "absolute",
-        }}
-      />
       <View
         style={{
-          position: "absolute",
-          right: 15,
+          marginTop: 8,
+          alignItems: "center",
+          justifyContent: "center",
+          width: "100%",
         }}>
-        <DotsView />
+        <Icon
+          name="arrow-left"
+          size={ICON_SIZE}
+          style={{
+            color: COLORS.white,
+            position: "absolute",
+            left: 15,
+          }}
+        />
+        <Animated.Text
+          style={{
+            fontSize: 16,
+            fontWeight: "bold",
+            letterSpacing: 0.6,
+            color: COLORS.white,
+            opacity: opacityAnim,
+          }}>
+          Psyche Pop & Surf Rock
+        </Animated.Text>
+        <Icon
+          name={true ? "heart" : "heart-outline"} // TODO: heart
+          size={ICON_SIZE}
+          style={{
+            color: COLORS.green,
+            right: 54,
+            position: "absolute",
+          }}
+        />
+        <View
+          style={{
+            position: "absolute",
+            right: 15,
+          }}>
+          <DotsView />
+        </View>
       </View>
     </View>
-  </View>
-);
+  );
+};
 
 export default PlayListDetailsHeader;
