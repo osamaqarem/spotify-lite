@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { StyleSheet, View } from "react-native";
+import Animated from "react-native-reanimated";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
 import DotsView from "./DotsView";
 import { HEADER_HEIGHT, ICON_SIZE } from "./PlaylistDetailsScreen";
-import Animated from "react-native-reanimated";
 
 const PlayListDetailsHeader = ({
   offsetY,
@@ -18,59 +18,72 @@ const PlayListDetailsHeader = ({
   });
 
   return (
-    <View
-      style={{
-        alignItems: "center",
-        justifyContent: "center",
-        height: HEADER_HEIGHT,
-        ...StyleSheet.absoluteFillObject,
-        zIndex: 10,
-      }}>
-      <View
-        style={{
-          marginTop: 8,
-          alignItems: "center",
-          justifyContent: "center",
-          width: "100%",
-        }}>
-        <Icon
-          name="arrow-left"
-          size={ICON_SIZE}
+    <View style={styles.container}>
+      <View style={styles.content}>
+        <Icon name="arrow-left" size={ICON_SIZE} style={styles.arrowIcon} />
+        <View
           style={{
-            color: COLORS.white,
-            position: "absolute",
-            left: 15,
-          }}
-        />
-        <Animated.Text
-          style={{
-            fontSize: 16,
-            fontWeight: "bold",
-            letterSpacing: 0.6,
-            color: COLORS.white,
-            opacity: opacityAnim,
+            width: "54%",
+            alignItems: "center",
           }}>
-          Psyche Pop & Surf Rock
-        </Animated.Text>
+          <Animated.Text
+            numberOfLines={1}
+            style={[
+              styles.title,
+              {
+                opacity: opacityAnim,
+              },
+            ]}>
+            Psyche Pop & Surf Rock
+          </Animated.Text>
+        </View>
         <Icon
           name={true ? "heart" : "heart-outline"} // TODO: heart
           size={ICON_SIZE}
-          style={{
-            color: COLORS.green,
-            right: 54,
-            position: "absolute",
-          }}
+          style={styles.icon}
         />
-        <View
-          style={{
-            position: "absolute",
-            right: 15,
-          }}>
+        <View style={styles.dotsContainer}>
           <DotsView />
         </View>
       </View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    zIndex: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    height: HEADER_HEIGHT,
+    ...StyleSheet.absoluteFillObject,
+  },
+  content: {
+    marginTop: 8,
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: "bold",
+    letterSpacing: 0.6,
+    color: COLORS.white,
+  },
+  icon: {
+    color: COLORS.green,
+    right: 54,
+    position: "absolute",
+  },
+  arrowIcon: {
+    color: COLORS.white,
+    position: "absolute",
+    left: 15,
+  },
+  dotsContainer: {
+    position: "absolute",
+    right: 15,
+  },
+});
 
 export default PlayListDetailsHeader;

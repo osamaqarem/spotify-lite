@@ -1,64 +1,67 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { HEADER_HEIGHT } from "./PlaylistDetailsScreen";
+import { Text, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
-import { COLORS } from "../../utils";
 import Animated from "react-native-reanimated";
-import LinearGradient from "react-native-linear-gradient";
-import PlayListDetailsHeader from "./PlayListDetailsHeader";
+import { COLORS } from "../../utils";
+import { HEADER_HEIGHT } from "./PlaylistDetailsScreen";
 
 export const cover = { url: require("../../data/assets/exampleCover.jpg") };
 
 const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
-  // const opacityAnim = offsetY.interpolate({
-  //   inputRange: [0, 100, 300],
-  //   outputRange: [1, 0.1, 0],
-  // });
-
   const scaleAnim = offsetY.interpolate({
-    inputRange: [0, 250, 300],
-    outputRange: [1, 0.9, 0.5],
+    inputRange: [0, 250],
+    outputRange: [1, 0.9],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
+  const opacityAnim = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [1, 0],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
   return (
     <Animated.View
-      style={{
-        justifyContent: "center",
-        alignItems: "center",
-        // opacity: opacityAnim,
-        transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
-        marginTop: HEADER_HEIGHT,
-      }}>
-      <FastImage
-        style={{
-          marginTop: 16,
-          height: 175,
-          width: 175,
-        }}
-        source={cover.url}
-      />
-      <View style={{ marginTop: 20, alignItems: "center" }}>
-        <Text
-          style={{
-            color: COLORS.white,
-            fontSize: 18,
-            fontWeight: "bold",
-            letterSpacing: 0.6,
-          }}>
-          Psyche Pop & Surf Rock
-        </Text>
-        <Text
-          style={{
-            marginTop: 5,
-            color: COLORS.grey,
-            fontSize: 14,
-            letterSpacing: 0.6,
-          }}>
-          by Delicieuse Musique
-        </Text>
+      style={[
+        styles.container,
+        {
+          opacity: opacityAnim,
+          transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
+        },
+      ]}>
+      <FastImage style={styles.cover} source={cover.url} />
+      <View style={styles.textContainer}>
+        <Text style={styles.title}>Psyche Pop & Surf Rock</Text>
+        <Text style={styles.artist}>by Delicieuse Musique</Text>
       </View>
     </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: HEADER_HEIGHT,
+  },
+  cover: {
+    marginTop: 16,
+    height: 165,
+    width: 165,
+  },
+  textContainer: { marginTop: 20, alignItems: "center" },
+  title: {
+    color: COLORS.white,
+    fontSize: 18,
+    fontWeight: "bold",
+    letterSpacing: 0.6,
+  },
+  artist: {
+    marginTop: 5,
+    color: COLORS.grey,
+    fontSize: 14,
+    letterSpacing: 0.6,
+  },
+});
+
 export default AlbumCover;

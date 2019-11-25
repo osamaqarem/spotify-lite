@@ -1,23 +1,10 @@
 import React from "react";
-import { View, Text, ToastAndroid, Switch } from "react-native";
+import { View, Text, ToastAndroid, Switch, StyleSheet } from "react-native";
 import { COLORS } from "../../utils";
 
 const DownloadHeader = () => (
-  <View
-    style={{
-      flexDirection: "row",
-      marginBottom: 10,
-    }}>
-    <Text
-      style={{
-        flex: 1,
-        color: COLORS.darkWhite,
-        fontSize: 16,
-        fontWeight: "bold",
-        letterSpacing: 1,
-      }}>
-      Download
-    </Text>
+  <View style={styles.container}>
+    <Text style={styles.download}>Download</Text>
     <Switch
       value={false}
       style={{ flex: 1 }}
@@ -33,5 +20,19 @@ const DownloadHeader = () => (
     />
   </View>
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    marginBottom: 10,
+  },
+  download: {
+    flex: 1,
+    color: COLORS.darkWhite,
+    fontSize: 16,
+    fontWeight: "bold",
+    letterSpacing: 1,
+  },
+});
 
 export default DownloadHeader;

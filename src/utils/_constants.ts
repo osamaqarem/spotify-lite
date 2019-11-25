@@ -1,4 +1,5 @@
 import secret from "../../secret";
+import { Dimensions } from "react-native";
 
 export const COLORS = {
   tabBar: "#222326",
@@ -10,6 +11,11 @@ export const COLORS = {
   grey: "#B9B9B9",
   darkGrey: "#5A5A5A",
 };
+
+export const { height, width } = Dimensions.get("window");
+
+export const MAGIC_NUM = 1000;
+export const ratio = (width / 414 / height) * MAGIC_NUM;
 
 export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";
 

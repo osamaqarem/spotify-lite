@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import Animated from "react-native-reanimated";
-import { COLORS } from "../../utils";
+import { COLORS, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
 import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader from "./PlayListDetailsHeader";
@@ -12,7 +12,7 @@ import LinearGradient from "react-native-linear-gradient";
 import { colorsFromUrl } from "react-native-dominant-color";
 
 export const HEADER_HEIGHT = 50;
-export const ICON_SIZE = 24;
+export const ICON_SIZE = 20 * ratio;
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -30,8 +30,14 @@ const PlaylistDetailsScreen = () => {
   const offsetY = new Animated.Value(0);
 
   const opacityAnim = offsetY.interpolate({
+    inputRange: [0, 220],
+    outputRange: [1, 0.3],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
+  const heightAnim = offsetY.interpolate({
     inputRange: [0, 300],
-    outputRange: [1, 0.12],
+    outputRange: [60, 16],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
@@ -53,37 +59,32 @@ const PlaylistDetailsScreen = () => {
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <PlayListDetailsHeader offsetY={offsetY} />
       <Animated.View
-        style={{
-          alignSelf: "center",
-          alignItems: "center",
-          ...StyleSheet.absoluteFillObject,
-          height: "60%",
-          opacity: opacityAnim,
-        }}>
+        style={[
+          styles.gradientContainer,
+          {
+            height: Animated.concat(heightAnim, "%"),
+            opacity: opacityAnim,
+          },
+        ]}>
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 0.8 }}
-          colors={[
-            "#8A425A", // TODO: change to dynamic value
-            COLORS.background,
-          ]}
-          style={{
-            alignSelf: "center",
-            alignItems: "center",
-            ...StyleSheet.absoluteFillObject,
-            // height: "60%",
-          }}>
-          <AlbumCover offsetY={offsetY} />
-        </LinearGradient>
+          colors={["#8A425A", COLORS.background]}
+          style={styles.gradient}></LinearGradient>
       </Animated.View>
+      <View style={styles.coverContainer}>
+        <View style={styles.coverContent}>
+          <AlbumCover offsetY={offsetY} />
+        </View>
+      </View>
       <ShuffleButton offsetY={offsetY} />
       <Animated.ScrollView
         overScrollMode="never"
         onScroll={onScroll({ y: offsetY })}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
-        style={{ marginTop: HEADER_HEIGHT + BUTTON_HEIGHT }}
-        contentContainerStyle={{ marginTop: "75%", zIndex: 10 }}>
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}>
         <PlaylistContent />
       </Animated.ScrollView>
     </View>
@@ -93,8 +94,8 @@ const PlaylistDetailsScreen = () => {
 const PlaylistContent = () => (
   <View
     style={{
-      // backgroundColor: "lightblue",
       backgroundColor: COLORS.background,
+      paddingTop: 44 * ratio,
     }}>
     <View
       style={{
@@ -108,6 +109,32 @@ const PlaylistContent = () => (
     </View>
   </View>
 );
+
+const styles = StyleSheet.create({
+  gradientContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    ...StyleSheet.absoluteFillObject,
+  },
+  gradient: {
+    alignSelf: "center",
+    alignItems: "center",
+    ...StyleSheet.absoluteFillObject,
+  },
+  coverContainer: {
+    alignSelf: "center",
+    alignItems: "center",
+    ...StyleSheet.absoluteFillObject,
+    height: "60%",
+  },
+  coverContent: {
+    alignSelf: "center",
+    alignItems: "center",
+    ...StyleSheet.absoluteFillObject,
+  },
+  scrollContainer: { marginTop: HEADER_HEIGHT + BUTTON_HEIGHT },
+  scrollContent: { marginTop: 188 * ratio, zIndex: 10 },
+});
 
 const albumData = [
   { name: "Be on My Side", artist: "Kip Nelson" },
