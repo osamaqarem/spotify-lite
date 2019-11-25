@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: HEADER_HEIGHT,
+    marginTop: HEADER_HEIGHT - 24,
   },
   cover: {
     marginTop: 16,

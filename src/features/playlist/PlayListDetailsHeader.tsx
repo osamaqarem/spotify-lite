@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import Animated from "react-native-reanimated";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../utils";
+import { COLORS, ratio, height } from "../../utils";
 import DotsView from "./DotsView";
 import { HEADER_HEIGHT, ICON_SIZE } from "./PlaylistDetailsScreen";
 
@@ -17,23 +17,28 @@ const PlayListDetailsHeader = ({
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
+  const zAnim = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [-1, 3],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
   return (
-    <View style={styles.container}>
+    <Animated.View
+      style={[
+        styles.container,
+        {
+          zIndex: zAnim,
+          opacity: opacityAnim,
+        },
+      ]}>
       <View style={styles.content}>
         <Icon name="arrow-left" size={ICON_SIZE} style={styles.arrowIcon} />
         <View
           style={{
             width: "54%",
-            alignItems: "center",
           }}>
-          <Animated.Text
-            numberOfLines={1}
-            style={[
-              styles.title,
-              {
-                opacity: opacityAnim,
-              },
-            ]}>
+          <Animated.Text numberOfLines={1} style={[styles.title, {}]}>
             Psyche Pop & Surf Rock
           </Animated.Text>
         </View>
@@ -43,24 +48,21 @@ const PlayListDetailsHeader = ({
           style={styles.icon}
         />
         <View style={styles.dotsContainer}>
-          <DotsView />
+          <DotsView color={COLORS.white} />
         </View>
       </View>
-    </View>
+    </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    zIndex: 10,
-    alignItems: "center",
-    justifyContent: "center",
     height: HEADER_HEIGHT,
     ...StyleSheet.absoluteFillObject,
   },
   content: {
-    marginTop: 8,
     alignItems: "center",
+    top: 16 * ratio,
     justifyContent: "center",
     width: "100%",
   },

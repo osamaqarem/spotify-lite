@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { View, StyleSheet, Dimensions } from "react-native";
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { COLORS, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
@@ -7,11 +8,8 @@ import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader from "./PlayListDetailsHeader";
 import ShuffleButton, { BUTTON_HEIGHT } from "./ShuffleButton";
 import Track from "./Track";
-import LinearGradient from "react-native-linear-gradient";
-// @ts-ignore
-import { colorsFromUrl } from "react-native-dominant-color";
 
-export const HEADER_HEIGHT = 50;
+export const HEADER_HEIGHT = 90;
 export const ICON_SIZE = 20 * ratio;
 
 const onScroll = (contentOffset: {
@@ -38,6 +36,12 @@ const PlaylistDetailsScreen = () => {
   const heightAnim = offsetY.interpolate({
     inputRange: [0, 300],
     outputRange: [60, 16],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
+  const translateScroll = offsetY.interpolate({
+    inputRange: [0, 300],
+    outputRange: [0, HEADER_HEIGHT],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
@@ -83,7 +87,12 @@ const PlaylistDetailsScreen = () => {
         onScroll={onScroll({ y: offsetY })}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
-        style={styles.scrollContainer}
+        style={[
+          styles.scrollContainer,
+          {
+            transform: [{ translateY: translateScroll }],
+          },
+        ]}
         contentContainerStyle={styles.scrollContent}>
         <PlaylistContent />
       </Animated.ScrollView>
@@ -132,8 +141,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     ...StyleSheet.absoluteFillObject,
   },
-  scrollContainer: { marginTop: HEADER_HEIGHT + BUTTON_HEIGHT },
-  scrollContent: { marginTop: 188 * ratio, zIndex: 10 },
+  scrollContainer: {
+    // marginTop: HEADER_HEIGHT + BUTTON_HEIGHT,
+    zIndex: 2,
+  },
+  scrollContent: { marginTop: 290 * ratio },
 });
 
 const albumData = [

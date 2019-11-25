@@ -7,8 +7,8 @@ export const BUTTON_HEIGHT = 50;
 
 const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
   const translateY = offsetY.interpolate({
-    inputRange: [0, 280],
-    outputRange: [0, -212 * ratio],
+    inputRange: [0, 430],
+    outputRange: [0, -232 * ratio],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
   return (
@@ -24,11 +24,11 @@ const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    marginTop: 262 * ratio,
+    marginTop: 280 * ratio,
     marginBottom: 16,
     alignItems: "center",
     height: BUTTON_HEIGHT,
-    zIndex: 1,
+    zIndex: 10,
   },
   button: {
     width: 230,
