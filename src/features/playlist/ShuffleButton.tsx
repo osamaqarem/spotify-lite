@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     alignItems: "center",
     height: BUTTON_HEIGHT,
-    zIndex: 10,
+    zIndex: 1,
   },
   button: {
     width: 230,

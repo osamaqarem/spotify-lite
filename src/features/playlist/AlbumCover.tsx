@@ -3,7 +3,6 @@ import { Text, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { COLORS } from "../../utils";
-import { HEADER_HEIGHT } from "./PlaylistDetailsScreen";
 
 export const cover = { url: require("../../data/assets/exampleCover.jpg") };
 
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: "center",
     alignItems: "center",
-    marginTop: HEADER_HEIGHT - 24,
   },
   cover: {
     marginTop: 16,

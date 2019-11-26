@@ -6,7 +6,7 @@ import { COLORS, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
 import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader from "./PlayListDetailsHeader";
-import ShuffleButton, { BUTTON_HEIGHT } from "./ShuffleButton";
+import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
 
 export const HEADER_HEIGHT = 90;
@@ -61,7 +61,7 @@ const PlaylistDetailsScreen = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <PlayListDetailsHeader offsetY={offsetY} />
+      <PlayListDetailsHeader />
       <Animated.View
         style={[
           styles.gradientContainer,
@@ -77,22 +77,17 @@ const PlaylistDetailsScreen = () => {
           style={styles.gradient}></LinearGradient>
       </Animated.View>
       <View style={styles.coverContainer}>
-        <View style={styles.coverContent}>
-          <AlbumCover offsetY={offsetY} />
-        </View>
+        <AlbumCover offsetY={offsetY} />
       </View>
       <ShuffleButton offsetY={offsetY} />
       <Animated.ScrollView
+        bounces={false}
+        decelerationRate={0.994}
         overScrollMode="never"
         onScroll={onScroll({ y: offsetY })}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
-        style={[
-          styles.scrollContainer,
-          {
-            transform: [{ translateY: translateScroll }],
-          },
-        ]}
+        style={[{ transform: [{ translateY: translateScroll }] }]}
         contentContainerStyle={styles.scrollContent}>
         <PlaylistContent />
       </Animated.ScrollView>
@@ -131,21 +126,15 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
   coverContainer: {
-    alignSelf: "center",
-    alignItems: "center",
     ...StyleSheet.absoluteFillObject,
     height: "60%",
+    top: HEADER_HEIGHT,
   },
-  coverContent: {
-    alignSelf: "center",
-    alignItems: "center",
-    ...StyleSheet.absoluteFillObject,
+  scrollContent: {
+    marginTop: 290 * ratio,
+    paddingBottom: 364 * ratio,
+    zIndex: 5,
   },
-  scrollContainer: {
-    // marginTop: HEADER_HEIGHT + BUTTON_HEIGHT,
-    zIndex: 2,
-  },
-  scrollContent: { marginTop: 290 * ratio },
 });
 
 const albumData = [
@@ -176,7 +165,7 @@ const albumData = [
   { name: "Morning Song", artist: "Babe Rainbow" },
   { name: "Morning Song", artist: "Babe Rainbow" },
   { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
+  { name: "Last", artist: "Babe Rainbow" },
 ];
 
 export default PlaylistDetailsScreen;

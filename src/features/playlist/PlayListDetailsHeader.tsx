@@ -1,57 +1,58 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
-import Animated from "react-native-reanimated";
+import {
+  StyleSheet,
+  ToastAndroid,
+  TouchableWithoutFeedback,
+  View,
+  Text,
+} from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, ratio, height } from "../../utils";
+import { COLORS, ratio } from "../../utils";
 import DotsView from "./DotsView";
 import { HEADER_HEIGHT, ICON_SIZE } from "./PlaylistDetailsScreen";
 
-const PlayListDetailsHeader = ({
-  offsetY,
-}: {
-  offsetY: Animated.Value<number>;
-}) => {
-  const opacityAnim = offsetY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [0, 1],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
-
-  const zAnim = offsetY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [-1, 3],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
-
+const PlayListDetailsHeader = () => {
   return (
-    <Animated.View
-      style={[
-        styles.container,
-        {
-          zIndex: zAnim,
-          opacity: opacityAnim,
-        },
-      ]}>
-      <View style={styles.content}>
-        <Icon name="arrow-left" size={ICON_SIZE} style={styles.arrowIcon} />
-        <View
-          style={{
-            width: "54%",
-          }}>
-          <Animated.Text numberOfLines={1} style={[styles.title, {}]}>
-            Psyche Pop & Surf Rock
-          </Animated.Text>
-        </View>
-        <Icon
-          name={true ? "heart" : "heart-outline"} // TODO: heart
-          size={ICON_SIZE}
-          style={styles.icon}
-        />
+    <>
+      <Icon
+        onPress={() => {
+          ToastAndroid.show("Arrow left!", ToastAndroid.SHORT);
+        }}
+        name="arrow-left"
+        size={ICON_SIZE}
+        style={[styles.arrowIcon]}
+      />
+
+      <Icon
+        onPress={() => {
+          ToastAndroid.show("Heart!", ToastAndroid.SHORT);
+        }}
+        name={true ? "heart" : "heart-outline"} // TODO: heart
+        size={ICON_SIZE}
+        style={[styles.heart]}
+      />
+
+      <TouchableWithoutFeedback
+        onPress={() => {
+          ToastAndroid.show("Dots!", ToastAndroid.SHORT);
+        }}>
         <View style={styles.dotsContainer}>
           <DotsView color={COLORS.white} />
         </View>
+      </TouchableWithoutFeedback>
+      <View style={[styles.container]}>
+        <View style={styles.content}>
+          <View
+            style={{
+              width: "54%",
+            }}>
+            <Text numberOfLines={1} style={[styles.title]}>
+              Psyche Pop & Surf Rock
+            </Text>
+          </View>
+        </View>
       </View>
-    </Animated.View>
+    </>
   );
 };
 
@@ -72,19 +73,34 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
     color: COLORS.white,
   },
-  icon: {
+  heart: {
     color: COLORS.green,
-    right: 54,
     position: "absolute",
+    justifyContent: "center",
+    textAlignVertical: "center",
+    top: 8,
+    zIndex: 1,
+    right: 54,
+    padding: 10,
   },
   arrowIcon: {
     color: COLORS.white,
     position: "absolute",
     left: 15,
+    justifyContent: "center",
+    textAlignVertical: "center",
+    top: 8,
+    zIndex: 1,
+    padding: 10,
   },
   dotsContainer: {
     position: "absolute",
     right: 15,
+    justifyContent: "center",
+    alignItems: "center",
+    top: 8,
+    zIndex: 1,
+    padding: 14,
   },
 });
 

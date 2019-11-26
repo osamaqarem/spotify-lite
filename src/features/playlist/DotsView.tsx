@@ -1,13 +1,19 @@
 import React from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ViewStyle } from "react-native";
 import { COLORS } from "../../utils";
 import { Color } from "csstype";
 
-const DotsView = ({ color }: { color?: Color }) => {
+const DotsView = ({
+  color,
+  containerStyle,
+}: {
+  color?: Color;
+  containerStyle?: ViewStyle;
+}) => {
   const bgColor = color ? color : COLORS.grey;
 
   return (
-    <View style={{ flexDirection: "column", marginRight: 10 }}>
+    <View style={[{ flexDirection: "column" }, containerStyle]}>
       <View
         style={[
           styles.dot,

@@ -9,7 +9,7 @@ const Track = ({ title, artist }: { title: string; artist: string }) => (
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.artist}>{artist}</Text>
     </View>
-    <DotsView />
+    <DotsView containerStyle={{ marginRight: 10 }} />
   </View>
 );
 
