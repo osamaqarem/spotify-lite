@@ -6,7 +6,7 @@ import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
 import { GetTokens, UserProfileResponse } from "../../data/models";
 import { AlbumType } from "../../redux/reducers/albumReducer";
-import { getToken } from "../../utils";
+import { getToken, NestedStackRoutes } from "../../utils";
 import LoginModal from "./LoginModal";
 import TopBar from "./TopBar";
 import RecentlyPlayed from "./RecentlyPlayed";
@@ -18,10 +18,12 @@ import {
   getProfile,
   setTokens,
   getRecentlyPlayed,
+  getAlbumById,
 } from "../../redux/actions";
 import { COLORS } from "../../utils";
 import { styles } from "./styles";
 import { RootStoreType } from "../../redux/store";
+import AlbumRecentItem from "./AlbumRecentItem";
 
 type HomeScreenProps = {
   getTokens: GetTokens;
@@ -30,6 +32,7 @@ type HomeScreenProps = {
   profile: UserProfileResponse | null; // Not loading once this is non-null
   getProfile: () => void;
   getRecentlyPlayed: () => void;
+  getAlbumById: (id: string) => void;
   setTokens: ({
     token,
     refreshToken,
@@ -49,6 +52,7 @@ const HomeScreen = ({
   profile,
   getProfile,
   getRecentlyPlayed,
+  getAlbumById,
   setTokens,
   recentlyPlayedAlbums,
   featuredPlaylists,
@@ -114,8 +118,6 @@ const HomeScreen = ({
     if (!profile && !loading) {
       initTokens();
     } else if (isVisible && !loading) {
-      debugger;
-
       // hide modal
       setIsVisible(false);
     }
@@ -140,16 +142,24 @@ const HomeScreen = ({
   };
 
   // Fetch recently played every time the screen is focused
-  useEffect(() => {
-    const didFocusSub = navigation.addListener("didFocus", () => {
-      if (recentlyPlayedAlbums) {
-        getRecentlyPlayed();
-      }
-    });
-    return () => {
-      didFocusSub.remove();
-    };
-  }, [navigation, getRecentlyPlayed, recentlyPlayedAlbums]);
+  // useEffect(() => {
+  //   const didFocusSub = navigation.addListener("didFocus", () => {
+  //     if (recentlyPlayedAlbums) {
+  //       getRecentlyPlayed();
+  //     }
+  //   });
+  //   return () => {
+  //     didFocusSub.remove();
+  //   };
+  // }, [navigation, getRecentlyPlayed, recentlyPlayedAlbums]);
+
+  const fetchAlbumDetails = (id: string) => {
+    getAlbumById(id);
+  };
+
+  const goToPlaylistDetails = () => {
+    navigation.navigate(NestedStackRoutes.PlaylistDetailsScreen);
+  };
 
   return (
     <View style={styles.container}>
@@ -159,10 +169,17 @@ const HomeScreen = ({
       <ScrollView
         style={{ width: "100%" }}
         showsVerticalScrollIndicator={false}>
-        <RecentlyPlayed
-          navigation={navigation}
-          recentlyPlayedAlbums={recentlyPlayedAlbums}
-        />
+        <RecentlyPlayed>
+          {recentlyPlayedAlbums &&
+            recentlyPlayedAlbums.map((album, index: number) => (
+              <AlbumRecentItem
+                key={index}
+                album={album}
+                fetchAlbumDetails={fetchAlbumDetails}
+                goToPlaylistDetails={goToPlaylistDetails}
+              />
+            ))}
+        </RecentlyPlayed>
         <FeaturedPlaylists
           navigation={navigation}
           featuredPlaylists={featuredPlaylists}
@@ -191,4 +208,5 @@ export default connect(mapStateToProps, {
   getProfile,
   setTokens,
   getRecentlyPlayed,
+  getAlbumById,
 })(HomeScreen);

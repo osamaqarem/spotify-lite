@@ -1,9 +1,8 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
 import { styles, albumDimensions } from "./styles";
 import { NavigationTabProp } from "react-navigation-tabs";
-import { TouchableOpacity } from "react-native-gesture-handler";
 
 const AlbumItem = (
   album: {

@@ -4,9 +4,17 @@ import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { COLORS } from "../../utils";
 
-export const cover = { url: require("../../data/assets/exampleCover.jpg") };
-
-const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
+const AlbumCover = ({
+  offsetY,
+  artistName,
+  name,
+  imageUrl,
+}: {
+  offsetY: Animated.Value<number>;
+  name: string | undefined;
+  artistName: string | undefined;
+  imageUrl: string | undefined;
+}) => {
   const scaleAnim = offsetY.interpolate({
     inputRange: [0, 250],
     outputRange: [1, 0.9],
@@ -28,10 +36,12 @@ const AlbumCover = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
           transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
         },
       ]}>
-      <FastImage style={styles.cover} source={cover.url} />
+      {/* <FastImage style={styles.cover} source={cover.url} /> */}
+      <FastImage style={styles.cover} source={{ uri: imageUrl }} />
       <View style={styles.textContainer}>
-        <Text style={styles.title}>Psyche Pop & Surf Rock</Text>
-        <Text style={styles.artist}>by Delicieuse Musique</Text>
+        {/* <Text style={styles.title}>Psyche Pop & Surf Rock</Text> */}
+        <Text style={styles.title}>{name}</Text>
+        <Text style={styles.artist}>{artistName}</Text>
       </View>
     </Animated.View>
   );

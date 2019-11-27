@@ -14,15 +14,16 @@ import {
   getCurrentUserSavedArtistsEpic,
   getCurrentUserSavedAlbumsEpic,
   getAllCategoriesForCountryEpic,
+  getAlbumByIdEpic,
 } from "../actions";
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
 import loadingReducer from "./loadingReducer";
-import albumReducer  from "./albumReducer";
+import albumReducer from "./albumReducer";
 import libraryReducer from "./libraryReducer";
 import browseReducer from "./browseReducer";
 import personalizationReducer from "./personalizationReducer";
-import followRedcuer  from "./followRedcuer";
+import followRedcuer from "./followRedcuer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -30,6 +31,7 @@ export const rootEpic = combineEpics(
   doneEpic,
   refreshTokenEpic,
   getRecentlyPlayedEpic,
+  getAlbumByIdEpic,
   getMultipleAlbumsEpic,
   getAllFeaturedPlaylistsEpic,
   getCurrentUserTopArtistsEpic,

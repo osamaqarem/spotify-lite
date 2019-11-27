@@ -1,16 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
+import { NavigationStackProp } from "react-navigation-stack";
+import { connect, ConnectedProps } from "react-redux";
+import { AlbumDetailsType } from "../../redux/reducers/albumReducer";
+import { RootStoreType } from "../../redux/store";
 import { COLORS, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
 import DownloadHeader from "./DownloadHeader";
-import PlayListDetailsHeader from "./PlayListDetailsHeader";
+import PlayListDetailsHeader, { HEADER_HEIGHT } from "./PlayListDetailsHeader";
 import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
-
-export const HEADER_HEIGHT = 90;
-export const ICON_SIZE = 20 * ratio;
+// @ts-ignore
+import { colorsFromUrl } from "react-native-dominant-color";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -24,9 +27,12 @@ const onScroll = (contentOffset: {
     },
   ]);
 
-const PlaylistDetailsScreen = () => {
-  const offsetY = new Animated.Value(0);
+const offsetY = new Animated.Value(0);
 
+const PlaylistDetailsScreen = ({
+  albumDetails,
+  navigation,
+}: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const opacityAnim = offsetY.interpolate({
     inputRange: [0, 220],
     outputRange: [1, 0.3],
@@ -39,29 +45,32 @@ const PlaylistDetailsScreen = () => {
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
-  const translateScroll = offsetY.interpolate({
+  const translateAnim = offsetY.interpolate({
     inputRange: [0, 300],
     outputRange: [0, HEADER_HEIGHT],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 
-  // useEffect(() => {
-  //   const test = async () => {
-  //     await colorsFromUrl(
-  //       "https://source.unsplash.com/random/800x600",
-  //       (err: any, colors: any) => {
-  //         // TODO: set lineargradient color from URL
-  //         console.log(JSON.stringify(colors));
-  //       },
-  //     );
-  //   };
+  const [dominantColor, setDominantColor] = useState(COLORS.darkWhite);
 
-  //   test();
-  // }, []);
+  const goBack = () => {
+    navigation.goBack();
+  };
+
+  useEffect(() => {
+    const getColors = async () => {
+      await colorsFromUrl(albumDetails?.imageUrl, (err: any, colors: any) => {
+        console.log(JSON.stringify(colors));
+        setDominantColor(colors.dominantColor);
+      });
+    };
+
+    albumDetails?.imageUrl && getColors();
+  }, [albumDetails?.imageUrl]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <PlayListDetailsHeader />
+      <PlayListDetailsHeader name={albumDetails?.name} goBack={goBack} />
       <Animated.View
         style={[
           styles.gradientContainer,
@@ -73,11 +82,16 @@ const PlaylistDetailsScreen = () => {
         <LinearGradient
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 0.8 }}
-          colors={["#8A425A", COLORS.background]}
+          colors={[dominantColor, COLORS.background]}
           style={styles.gradient}></LinearGradient>
       </Animated.View>
       <View style={styles.coverContainer}>
-        <AlbumCover offsetY={offsetY} />
+        <AlbumCover
+          offsetY={offsetY}
+          name={albumDetails?.name}
+          imageUrl={albumDetails?.imageUrl}
+          artistName={albumDetails?.artistName}
+        />
       </View>
       <ShuffleButton offsetY={offsetY} />
       <Animated.ScrollView
@@ -87,15 +101,19 @@ const PlaylistDetailsScreen = () => {
         onScroll={onScroll({ y: offsetY })}
         showsVerticalScrollIndicator={false}
         scrollEventThrottle={1}
-        style={[{ transform: [{ translateY: translateScroll }] }]}
+        style={[{ transform: [{ translateY: translateAnim }] }]}
         contentContainerStyle={styles.scrollContent}>
-        <PlaylistContent />
+        {albumDetails && <PlaylistContent albumDetails={albumDetails} />}
       </Animated.ScrollView>
     </View>
   );
 };
 
-const PlaylistContent = () => (
+const PlaylistContent = ({
+  albumDetails,
+}: {
+  albumDetails: AlbumDetailsType;
+}) => (
   <View
     style={{
       backgroundColor: COLORS.background,
@@ -107,8 +125,8 @@ const PlaylistContent = () => (
         marginHorizontal: 10,
       }}>
       <DownloadHeader />
-      {albumData.map((track, index) => (
-        <Track key={index} title={track.name} artist={track.artist} />
+      {albumDetails.tracks.map((track, index) => (
+        <Track key={index} title={track.name} artist={track.artistName} />
       ))}
     </View>
   </View>
@@ -137,35 +155,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const albumData = [
-  { name: "Be on My Side", artist: "Kip Nelson" },
-  { name: "Personal", artist: "Blue Material" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Morning Song", artist: "Babe Rainbow" },
-  { name: "Last", artist: "Babe Rainbow" },
-];
+const mapStateToProps = (state: RootStoreType) => ({
+  albumDetails: state.albumReducer.albumDetails,
+});
 
-export default PlaylistDetailsScreen;
+const mapDispatchToProps = {};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(PlaylistDetailsScreen);

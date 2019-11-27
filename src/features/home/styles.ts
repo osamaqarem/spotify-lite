@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     fontWeight: "normal",
-    color: COLORS.lightGrey,
+    color: COLORS.grey,
     top: 10,
     fontSize: 13,
   },

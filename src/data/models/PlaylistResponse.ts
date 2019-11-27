@@ -75,7 +75,7 @@ export interface VideoThumbnail {
   url?: any;
 }
 
-export interface Item {
+export interface PlaylistItem {
   added_at: Date;
   added_by: AddedBy;
   is_local: boolean;
@@ -86,7 +86,7 @@ export interface Item {
 
 export interface PlaylistResponseTracks {
   href: string;
-  items: Item[];
+  items: PlaylistItem[];
   limit: number;
   next: string;
   offset: number;

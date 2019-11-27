@@ -10,7 +10,7 @@ import Reactotron from "../../../ReactotronConfig";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["userReducer", "loadingReducer"],
+  blacklist: ["userReducer", "loadingReducer", "albumReducer"],
 };
 const persistedReducer = persistReducer(persistConfig, combinedReducers);
 
@@ -30,7 +30,6 @@ epicMiddleware.run(rootEpic);
 const persistor = persistStore(store);
 
 const redux = { store, persistor };
-
 
 export type RootStoreType = ReturnType<typeof combinedReducers>;
 

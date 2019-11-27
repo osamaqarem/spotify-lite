@@ -67,7 +67,7 @@ export const getPlayListCoverByIdEpic = (
         }),
         mergeMap(a => a),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of(getPlayListCoverById(playListIds!));
           }
           // handle error
@@ -125,7 +125,7 @@ export const getCurrentUserPlaylistsEpic = (
           };
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of(getCurrentUserPlaylists());
           }
           // handle error
@@ -173,7 +173,7 @@ export const getCurrentUserSavedTracksEpic = (
           };
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of(getCurrentUserSavedTracks());
           }
           // handle error
@@ -229,7 +229,7 @@ export const getCurrentUserSavedAlbumsEpic = (
           };
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of(getCurrentUserSavedAlbums());
           }
           // handle error

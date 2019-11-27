@@ -12,6 +12,24 @@ export const COLORS = {
   darkGrey: "#5A5A5A",
 };
 
+// Route names
+export const NestedTopTabsNavRoutes = {
+  Playlists: "Playlists",
+  Artists: "Artists",
+  Albums: "Albums",
+};
+
+export const NestedStackRoutes = {
+  HomeScreen: "HomeScreen",
+  PlaylistDetailsScreen: "PlaylistDetailsScreen",
+};
+
+export const BottomTabsNavRoutes = {
+  Home: "Home",
+  Search: "Search",
+  Favorites: "Favorites",
+};
+
 export const { height, width } = Dimensions.get("window");
 
 export const MAGIC_NUM = 1000;

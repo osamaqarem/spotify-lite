@@ -65,7 +65,7 @@ const NestedStack = createStackNavigator(
     PlaylistDetailsScreen,
   },
   {
-    initialRouteName: "PlaylistDetailsScreen",
+    // initialRouteName: "PlaylistDetailsScreen",
     headerMode: "none",
   },
 );
@@ -105,23 +105,5 @@ const BottomTabsNav = createMaterialBottomTabNavigator(
     initialRouteName: "Home",
   },
 );
-
-// Route names
-export const NestedTopTabsNavRoutes = {
-  Playlists: "Playlists",
-  Artists: "Artists",
-  Albums: "Albums",
-};
-
-export const NestedStackRoutes = {
-  HomeScreen: "HomeScreen",
-  PlaylistDetailsScreen: "PlaylistDetailsScreen",
-};
-
-export const BottomTabsNavRoutes = {
-  Home: "Home",
-  Search: "Search",
-  Favorites: "Favorites",
-};
 
 export default createAppContainer(BottomTabsNav);

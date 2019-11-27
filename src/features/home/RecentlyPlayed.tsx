@@ -1,18 +1,8 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { AlbumType } from "../../redux/reducers/albumReducer";
-import { styles, albumDimensions } from "./styles";
-import { ScrollView } from "react-native-gesture-handler";
-import AlbumRecentItem from "./AlbumRecentItem";
-import { NavigationTabProp } from "react-navigation-tabs";
+import React, { ReactNode } from "react";
+import { Text, View, ScrollView } from "react-native";
+import { albumDimensions, styles } from "./styles";
 
-const RecentlyPlayed = ({
-  recentlyPlayedAlbums,
-  navigation,
-}: {
-  recentlyPlayedAlbums: AlbumType[];
-  navigation: NavigationTabProp;
-}) => {
+const RecentlyPlayed = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <Text
@@ -28,12 +18,7 @@ const RecentlyPlayed = ({
         style={{ height: albumDimensions.ROW_SCROLLVIEW_HEIGHT }}
         horizontal
         showsHorizontalScrollIndicator={false}>
-        <View style={styles.rowScrollContainer}>
-          {recentlyPlayedAlbums &&
-            recentlyPlayedAlbums.map((album, index: number) =>
-              AlbumRecentItem(album, index, navigation),
-            )}
-        </View>
+        <View style={styles.rowScrollContainer}>{children}</View>
       </ScrollView>
     </>
   );

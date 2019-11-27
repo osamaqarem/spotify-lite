@@ -9,14 +9,22 @@ import {
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS, ratio } from "../../utils";
 import DotsView from "./DotsView";
-import { HEADER_HEIGHT, ICON_SIZE } from "./PlaylistDetailsScreen";
 
-const PlayListDetailsHeader = () => {
+export const HEADER_HEIGHT = 90;
+export const ICON_SIZE = 20 * ratio;
+
+const PlayListDetailsHeader = ({
+  name,
+  goBack,
+}: {
+  name: string | undefined;
+  goBack: () => void;
+}) => {
   return (
     <>
       <Icon
         onPress={() => {
-          ToastAndroid.show("Arrow left!", ToastAndroid.SHORT);
+          goBack();
         }}
         name="arrow-left"
         size={ICON_SIZE}
@@ -47,7 +55,8 @@ const PlayListDetailsHeader = () => {
               width: "54%",
             }}>
             <Text numberOfLines={1} style={[styles.title]}>
-              Psyche Pop & Surf Rock
+              {/* Psyche Pop & Surf Rock */}
+              {name}
             </Text>
           </View>
         </View>

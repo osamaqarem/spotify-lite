@@ -51,7 +51,7 @@ export const getCurrentUserSavedArtistsEpic = (
           };
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of(getCurrentUserSavedArtists());
           }
           // handle error

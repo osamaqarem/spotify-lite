@@ -52,7 +52,7 @@ export const getAllFeaturedPlaylistsEpic = (
           return getPlayListCoverById(playlistIds);
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of({
               type: userActions.REFRESH_TOKEN,
               payload: {
@@ -118,7 +118,7 @@ export const getAllCategoriesForCountryEpic = (
           };
         }),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of({
               type: userActions.REFRESH_TOKEN,
               payload: {

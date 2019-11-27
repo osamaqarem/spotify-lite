@@ -89,7 +89,7 @@ export const getRecentlyPlayedEpic = (
         }),
         mergeMap(a => a),
         catchError(err => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of({
               type: userActions.REFRESH_TOKEN,
               payload: {

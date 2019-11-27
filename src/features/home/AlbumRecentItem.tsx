@@ -3,20 +3,24 @@ import { View, Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
 import { albumDimensions, styles } from "./styles";
 import { AlbumType } from "../../redux/reducers/albumReducer";
-import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
-import { NestedStackRoutes } from "../navigation/Navigation";
 
 const AlbumRecentItem = (
-  album: AlbumType,
-  index: number,
-  navigation: NavigationTabProp,
+{
+  album,
+  fetchAlbumDetails,
+  goToPlaylistDetails
+}:{
+  album: AlbumType;
+  fetchAlbumDetails: (id:string) => void;
+goToPlaylistDetails: () => void;
+}
 ) => {
   return (
     <TouchableOpacity
-      onPress={() =>
-        navigation.navigate(NestedStackRoutes.PlaylistDetailsScreen)
-      }
-      key={index}
+      onPress={() => {
+        fetchAlbumDetails(album.id)
+        goToPlaylistDetails();
+      }}
       style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage
         source={{

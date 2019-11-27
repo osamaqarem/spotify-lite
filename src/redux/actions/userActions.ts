@@ -115,7 +115,7 @@ export const getProfileEpic = (
         }),
         mergeMap(a => a),
         catchError((err: string) => {
-          if (err.includes("expired")) {
+          if (typeof err === "string" && err.includes("expired")) {
             return of({
               type: userActions.REFRESH_TOKEN,
               payload: {
