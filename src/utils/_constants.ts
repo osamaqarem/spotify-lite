@@ -13,21 +13,21 @@ export const COLORS = {
 };
 
 // Route names
-export const NestedTopTabsNavRoutes = {
-  Playlists: "Playlists",
-  Artists: "Artists",
-  Albums: "Albums",
-};
-
-export const NestedStackRoutes = {
-  HomeScreen: "HomeScreen",
-  PlaylistDetailsScreen: "PlaylistDetailsScreen",
-};
-
-export const BottomTabsNavRoutes = {
-  Home: "Home",
-  Search: "Search",
-  Favorites: "Favorites",
+export const Routes = {
+  NestedTopTabs: {
+    Playlists: "Playlists",
+    Artists: "Artists",
+    Albums: "Albums",
+  },
+  NestedStack: {
+    HomeScreen: "HomeScreen",
+    PlaylistDetailsScreen: "PlaylistDetailsScreen",
+  },
+  BottomTabsNav: {
+    Home: "Home",
+    Search: "Search",
+    Favorites: "Favorites",
+  },
 };
 
 export const { height, width } = Dimensions.get("window");
@@ -55,4 +55,4 @@ export const LOGIN_URL = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
   secret.clientId
 }&response_type=code&redirect_uri=${encodeURIComponent(
   SPOTIFY_REDIRECT_URI,
-)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=true`;
+)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=false`;

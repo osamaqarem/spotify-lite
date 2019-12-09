@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
+// @ts-ignore
+import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { AlbumDetailsType } from "../../redux/reducers/albumReducer";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, ratio } from "../../utils";
+import { COLORS, height, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
 import DownloadHeader from "./DownloadHeader";
 import PlayListDetailsHeader, { HEADER_HEIGHT } from "./PlayListDetailsHeader";
 import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
-// @ts-ignore
-import { colorsFromUrl } from "react-native-dominant-color";
+import usePlaylistAnim from "./usePlaylistAnim";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -27,84 +28,81 @@ const onScroll = (contentOffset: {
     },
   ]);
 
-const offsetY = new Animated.Value(0);
+const LoadingView = () => (
+  <ActivityIndicator
+    size={50}
+    color={COLORS.green}
+    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+  />
+);
 
 const PlaylistDetailsScreen = ({
   albumDetails,
   navigation,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
-  const opacityAnim = offsetY.interpolate({
-    inputRange: [0, 220],
-    outputRange: [1, 0.3],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
-
-  const heightAnim = offsetY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [60, 16],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
-
-  const translateAnim = offsetY.interpolate({
-    inputRange: [0, 300],
-    outputRange: [0, HEADER_HEIGHT],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  });
-
-  const [dominantColor, setDominantColor] = useState(COLORS.darkWhite);
+  const offsetY = useRef(new Animated.Value(0)).current;
+  const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
+  const [dominantColor, setDominantColor] = useState(COLORS.background);
+  const [isLoading, setIsLoading] = useState(true);
 
   const goBack = () => {
     navigation.goBack();
   };
 
   useEffect(() => {
-    const getColors = async () => {
-      await colorsFromUrl(albumDetails?.imageUrl, (err: any, colors: any) => {
-        console.log(JSON.stringify(colors));
-        setDominantColor(colors.dominantColor);
+    albumDetails?.imageUrl &&
+      colorsFromUrl(albumDetails?.imageUrl, (err: any, colors: any) => {
+        if (!err) {
+          setDominantColor(colors.averageColor);
+          setIsLoading(false);
+        }
       });
-    };
-
-    albumDetails?.imageUrl && getColors();
   }, [albumDetails?.imageUrl]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <PlayListDetailsHeader name={albumDetails?.name} goBack={goBack} />
-      <Animated.View
-        style={[
-          styles.gradientContainer,
-          {
-            height: Animated.concat(heightAnim, "%"),
-            opacity: opacityAnim,
-          },
-        ]}>
-        <LinearGradient
-          start={{ x: 0, y: 0 }}
-          end={{ x: 0, y: 0.8 }}
-          colors={[dominantColor, COLORS.background]}
-          style={styles.gradient}></LinearGradient>
-      </Animated.View>
-      <View style={styles.coverContainer}>
-        <AlbumCover
-          offsetY={offsetY}
-          name={albumDetails?.name}
-          imageUrl={albumDetails?.imageUrl}
-          artistName={albumDetails?.artistName}
-        />
-      </View>
-      <ShuffleButton offsetY={offsetY} />
-      <Animated.ScrollView
-        bounces={false}
-        decelerationRate={0.994}
-        overScrollMode="never"
-        onScroll={onScroll({ y: offsetY })}
-        showsVerticalScrollIndicator={false}
-        scrollEventThrottle={1}
-        style={[{ transform: [{ translateY: translateAnim }] }]}
-        contentContainerStyle={styles.scrollContent}>
-        {albumDetails && <PlaylistContent albumDetails={albumDetails} />}
-      </Animated.ScrollView>
+      {isLoading ? (
+        <LoadingView />
+      ) : (
+        <>
+          <Animated.View
+            style={[
+              styles.gradientContainer,
+              {
+                height: Animated.concat(heightAnim, "%"),
+                opacity: opacityAnim,
+              },
+            ]}>
+            <LinearGradient
+              start={{ x: 0, y: 0 }}
+              end={{ x: 0, y: 0.9 }}
+              colors={[dominantColor, COLORS.background]}
+              style={styles.gradient}
+            />
+          </Animated.View>
+          <View style={styles.coverContainer}>
+            <AlbumCover
+              offsetY={offsetY}
+              name={albumDetails?.name}
+              imageUrl={albumDetails?.imageUrl}
+              artistName={albumDetails?.artistName}
+            />
+          </View>
+          <ShuffleButton offsetY={offsetY} />
+          <Animated.ScrollView
+            bounces={false}
+            decelerationRate={0.994}
+            overScrollMode="never"
+            onScroll={onScroll({ y: offsetY })}
+            showsVerticalScrollIndicator={false}
+            scrollEventThrottle={1}
+            style={[{ transform: [{ translateY: translateAnim }] }]}
+            contentContainerStyle={styles.scrollContent}>
+            {albumDetails && <PlaylistContent albumDetails={albumDetails} />}
+          </Animated.ScrollView>
+        </>
+      )}
     </View>
   );
 };
@@ -150,7 +148,8 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     marginTop: 290 * ratio,
-    paddingBottom: 364 * ratio,
+    // paddingBottom: 364 * ratio,
+    paddingBottom: height * 1.2,
     zIndex: 5,
   },
 });

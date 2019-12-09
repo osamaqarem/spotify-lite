@@ -70,6 +70,12 @@ const NestedStack = createStackNavigator(
   },
 );
 
+export type BottomTabsNavRoutes = {
+  Home: undefined;
+  Search: undefined;
+  Feed: undefined;
+};
+
 // Main
 const BottomTabsNav = createMaterialBottomTabNavigator(
   {

@@ -7,6 +7,7 @@ export type AlbumDetailsType = {
   artistName: string;
   imageUrl: string;
   tracks: { name: string; artistName: string }[];
+  dominantColor?: string;
 };
 type AlbumReducerType = {
   recentlyPlayedAlbums: AlbumType[];

@@ -4,22 +4,22 @@ import FastImage from "react-native-fast-image";
 import { albumDimensions, styles } from "./styles";
 import { AlbumType } from "../../redux/reducers/albumReducer";
 
-const AlbumRecentItem = (
-{
+const AlbumRecentItem = ({
   album,
   fetchAlbumDetails,
-  goToPlaylistDetails
-}:{
+  goToPlaylistDetails,
+}: {
   album: AlbumType;
-  fetchAlbumDetails: (id:string) => void;
-goToPlaylistDetails: () => void;
-}
-) => {
+  fetchAlbumDetails: (id: string) => void;
+  goToPlaylistDetails: () => void;
+}) => {
   return (
     <TouchableOpacity
       onPress={() => {
-        fetchAlbumDetails(album.id)
-        goToPlaylistDetails();
+        fetchAlbumDetails(album.id);
+        requestAnimationFrame(() => {
+          goToPlaylistDetails();
+        });
       }}
       style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage

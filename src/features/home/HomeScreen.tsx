@@ -6,7 +6,7 @@ import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
 import { GetTokens, UserProfileResponse } from "../../data/models";
 import { AlbumType } from "../../redux/reducers/albumReducer";
-import { getToken, NestedStackRoutes } from "../../utils";
+import { getToken, Routes } from "../../utils";
 import LoginModal from "./LoginModal";
 import TopBar from "./TopBar";
 import RecentlyPlayed from "./RecentlyPlayed";
@@ -141,24 +141,25 @@ const HomeScreen = ({
     setAuthCode(authCode);
   };
 
-  // Fetch recently played every time the screen is focused
-  // useEffect(() => {
-  //   const didFocusSub = navigation.addListener("didFocus", () => {
-  //     if (recentlyPlayedAlbums) {
-  //       getRecentlyPlayed();
-  //     }
-  //   });
-  //   return () => {
-  //     didFocusSub.remove();
-  //   };
-  // }, [navigation, getRecentlyPlayed, recentlyPlayedAlbums]);
+  // Refetch recently played subscription
+  useEffect(() => {
+    const refetchRecentlyPlayedAlbums = setInterval(() => {
+      if (recentlyPlayedAlbums) {
+        getRecentlyPlayed();
+      }
+    }, 60 * 1000);
+
+    return () => {
+      clearInterval(refetchRecentlyPlayedAlbums);
+    };
+  }, [getRecentlyPlayed, recentlyPlayedAlbums]);
 
   const fetchAlbumDetails = (id: string) => {
     getAlbumById(id);
   };
 
   const goToPlaylistDetails = () => {
-    navigation.navigate(NestedStackRoutes.PlaylistDetailsScreen);
+    navigation.navigate(Routes.NestedStack.PlaylistDetailsScreen);
   };
 
   return (
