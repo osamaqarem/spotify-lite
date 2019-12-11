@@ -4,7 +4,7 @@ import {
   Copyright,
   ExternalIds,
   Image,
-} from "./SpotifyCommonTypes";
+} from "./SpotifyCommon";
 
 export interface AlbumItem {
   artists: Artist[];

@@ -11,7 +11,6 @@ import {
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, browseActions } from "./actionTypes";
-import { getPlayListCoverById } from "./libraryActions";
 
 export const getAllFeaturedPlaylists = () => ({
   type: browseActions.GET_ALL_FEATURED_PLAYLISTS,
@@ -43,13 +42,14 @@ export const getAllFeaturedPlaylistsEpic = (
             throw res.error.message;
           }
 
-          // const data = res.playlists.items.map(item => {
-          //   return { name: item.name, url: item.images[0].url };
-          // });
+          const data = res.playlists.items.map(item => {
+            return { name: item.name, url: item.images[0].url, id: item.id };
+          });
 
-          const playlistIds = res.playlists.items.map(item => item.id);
-
-          return getPlayListCoverById(playlistIds);
+          return{
+            type: browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
+            payload: data,
+          }
         }),
         catchError(err => {
           if (typeof err === "string" && err.includes("expired")) {

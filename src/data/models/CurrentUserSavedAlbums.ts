@@ -4,7 +4,7 @@ import {
   ExternalIds,
   Image,
   Copyright,
-} from "./SpotifyCommonTypes";
+} from "./SpotifyCommon";
 
 export interface CurrentUserSavedAlbums {
   href: string;

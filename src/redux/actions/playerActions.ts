@@ -58,33 +58,9 @@ export const getRecentlyPlayedEpic = (
             commaList.length - 1,
           );
 
-          // // for keeping track of duplicate actions
-          // let arrayOfIds: string[] = [];
-          // // for storing actions
-          // let arrayOfActions: Action[] = [];
-
-          // res.items.forEach(({ context }, index) => {
-          //   const { href } = context;
-          //   // Get playlist id
-          //   const [, id] = href.split("playlists/");
-
-          //   if (index === 0) {
-          //     arrayOfIds.push(id);
-          //     const action = getPlayListCoverById(id);
-          //     arrayOfActions.push(Action<any>;
-          //     return;
-          //   } else if (arrayOfIds.indexOf(id) === -1) {
-          //     arrayOfIds.push(id);
-          //     const action = getPlayListCoverById(id);
-          //     arrayOfActions.push(Action<any>;
-          //     return;
-          //   }
-          // });
-
           return of(
             { type: playerActions.RECENTLY_PLAYED_TRACKS_SUCCESS },
             getMultipleAlbums(commaListCommaRemoved),
-            // getPlayListCoverById(arrayOfHref),
           );
         }),
         mergeMap(a => a),

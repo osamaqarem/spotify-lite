@@ -1,4 +1,4 @@
-import { Artist, ExternalUrls, ExternalIds, Image } from "./SpotifyCommonTypes";
+import { Artist, ExternalUrls, ExternalIds, Image } from "./SpotifyCommon";
 
 export interface CurrentUserSavedTracks {
   href: string;

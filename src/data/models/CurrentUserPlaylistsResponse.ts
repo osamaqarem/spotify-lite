@@ -1,4 +1,4 @@
-import { ExternalUrls, Image, Owner } from "./SpotifyCommonTypes";
+import { ExternalUrls, Image, Owner } from "./SpotifyCommon";
 
 export interface CurrentUserPlaylistsResponse {
   href: string;

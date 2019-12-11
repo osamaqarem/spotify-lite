@@ -1,4 +1,4 @@
-import { ExternalUrls, Image, Followers } from "./SpotifyCommonTypes";
+import { ExternalUrls, Image, Followers } from "./SpotifyCommon";
 
 export interface UserProfileResponse {
   country: string;

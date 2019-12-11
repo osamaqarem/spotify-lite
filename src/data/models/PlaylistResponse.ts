@@ -5,7 +5,7 @@ import {
   Followers,
   Artist,
   Owner,
-} from "./SpotifyCommonTypes";
+} from "./SpotifyCommon";
 
 export interface PlaylistResponse {
   collaborative: boolean;

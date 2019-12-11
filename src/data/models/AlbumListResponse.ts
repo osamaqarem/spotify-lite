@@ -4,7 +4,7 @@ import {
   ExternalIds,
   Artist,
   Copyright,
-} from "./SpotifyCommonTypes";
+} from "./SpotifyCommon";
 
 export interface AlbumListResponse {
   albums: AlbumListResponseAlbum[];

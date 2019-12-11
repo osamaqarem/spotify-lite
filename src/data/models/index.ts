@@ -1,5 +1,5 @@
-export * from "./reduxTypes";
-export * from "./SpotifyCommonTypes";
+export * from "./ReduxCommon";
+export * from "./SpotifyCommon";
 export * from "./AccessTokenResponse";
 export * from "./AlbumListResponse";
 export * from "./UserProfileResponse";

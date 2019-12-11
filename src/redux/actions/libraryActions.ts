@@ -20,17 +20,17 @@ import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlayl
 import { SPOTIFY_API_BASE } from "../../utils";
 import { browseActions, libraryActions, playlistActions } from "./actionTypes";
 
-export const getPlayListCoverById = (playListIds: string[]) => ({
-  type: playlistActions.GET_PLAYLIST_COVER_BY_ID,
+export const getPlayListById = (playListIds: string[]) => ({
+  type: playlistActions.GET_PLAYLIST_BY_ID,
   payload: playListIds,
 });
 
-export const getPlayListCoverByIdEpic = (
+export const getPlayListByIdEpic = (
   actions$: Observable<Action<any>>,
   state$: Observable<any>,
 ) =>
   actions$.pipe(
-    ofType(playlistActions.GET_PLAYLIST_COVER_BY_ID),
+    ofType(playlistActions.GET_PLAYLIST_BY_ID),
     withLatestFrom(state$),
     switchMap(([{ payload: playListIds }, state]: [Action<string[]>, any]) => {
       const { token } = state.userReducer;
@@ -58,7 +58,7 @@ export const getPlayListCoverByIdEpic = (
           });
 
           return of(
-            { type: playlistActions.GET_PLAYLIST_COVER_BY_ID_SUCCESS },
+            { type: playlistActions.GET_PLAYLIST_BY_ID_SUCCESS },
             {
               type: browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
               payload: data,
@@ -68,14 +68,14 @@ export const getPlayListCoverByIdEpic = (
         mergeMap(a => a),
         catchError(err => {
           if (typeof err === "string" && err.includes("expired")) {
-            return of(getPlayListCoverById(playListIds!));
+            return of(getPlayListById(playListIds!));
           }
           // handle error
 
           reactotron.log("whaaaat");
           reactotron.log(err);
           return of({
-            type: playlistActions.GET_PLAYLIST_COVER_BY_ID_ERROR,
+            type: playlistActions.GET_PLAYLIST_BY_ID_ERROR,
             payload: err,
           });
         }),

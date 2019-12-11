@@ -8,13 +8,13 @@ import {
   getMultipleAlbumsEpic,
   getAllFeaturedPlaylistsEpic,
   getCurrentUserTopArtistsEpic,
-  getPlayListCoverByIdEpic,
   getCurrentUserPlaylistsEpic,
   getCurrentUserSavedTracksEpic,
   getCurrentUserSavedArtistsEpic,
   getCurrentUserSavedAlbumsEpic,
   getAllCategoriesForCountryEpic,
   getAlbumByIdEpic,
+  getPlayListByIdEpic,
 } from "../actions";
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
@@ -35,12 +35,12 @@ export const rootEpic = combineEpics(
   getMultipleAlbumsEpic,
   getAllFeaturedPlaylistsEpic,
   getCurrentUserTopArtistsEpic,
-  getPlayListCoverByIdEpic,
   getCurrentUserPlaylistsEpic,
   getCurrentUserSavedTracksEpic,
   getCurrentUserSavedAlbumsEpic,
   getCurrentUserSavedArtistsEpic,
   getAllCategoriesForCountryEpic,
+  getPlayListByIdEpic,
 );
 
 export default combineReducers({

@@ -1,10 +1,12 @@
-import { Action } from "../../data/models";
+import { Action, AlbumType } from "../../data/models";
 import { browseActions } from "../actions";
 
 export type CountryCategoryType = { name: string; id: string };
 
+
+
 type BorwserReducerType = {
-  featuredPlaylists: [];
+  featuredPlaylists: AlbumType[];
   categoriesForCountry: CountryCategoryType[];
 };
 

@@ -1,4 +1,4 @@
-import { Followers, ExternalUrls, Image } from "./SpotifyCommonTypes";
+import { Followers, ExternalUrls, Image } from "./SpotifyCommon";
 
 export interface CurrentUserSavedArtistsResponse {
   artists: Artists;

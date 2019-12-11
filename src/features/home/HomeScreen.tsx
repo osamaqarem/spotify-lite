@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, StatusBar, View } from "react-native";
+import { ScrollView, StatusBar, View, YellowBox } from "react-native";
 import { WebViewNavigation } from "react-native-webview";
 import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
 import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
-import { GetTokens, UserProfileResponse } from "../../data/models";
-import { AlbumType } from "../../redux/reducers/albumReducer";
+import { GetTokens, UserProfileResponse, AlbumType } from "../../data/models";
 import { getToken, Routes } from "../../utils";
 import LoginModal from "./LoginModal";
 import TopBar from "./TopBar";
@@ -143,11 +142,15 @@ const HomeScreen = ({
 
   // Refetch recently played subscription
   useEffect(() => {
+    // React Native complains that although the interval keeps on running in the background, it cannot be called.
+    // In this particular case calling getRecentlyPlayed() when the app comes to foreground is the better UX.
+    YellowBox.ignoreWarnings(["180000ms"]);
+
     const refetchRecentlyPlayedAlbums = setInterval(() => {
       if (recentlyPlayedAlbums) {
         getRecentlyPlayed();
       }
-    }, 60 * 1000);
+    }, 180 * 1000); // average song length is 3 minutes ¯\(ツ)/¯
 
     return () => {
       clearInterval(refetchRecentlyPlayedAlbums);

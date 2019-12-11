@@ -1,4 +1,4 @@
-import { ExternalUrls, Image, ExternalIds, Artist } from "./SpotifyCommonTypes";
+import { ExternalUrls, Image, ExternalIds, Artist } from "./SpotifyCommon";
 
 export interface RecentlyPlayedResponse {
   items: RecentlyPlayedResponseItem[];

@@ -1,7 +1,6 @@
-import { Action } from "../../data/models";
+import { Action, AlbumType } from "../../data/models";
 import { albumActions } from "../actions";
 
-export type AlbumType = { name: string | null; url: string | null; id: string };
 export type AlbumDetailsType = {
   name: string;
   artistName: string;

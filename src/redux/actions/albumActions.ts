@@ -2,11 +2,11 @@ import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
-import { Action, ErrorResponse, AlbumDetailsResponse } from "../../data/models";
+import { Action, ErrorResponse, AlbumDetailsResponse, AlbumType } from "../../data/models";
 import { AlbumListResponse } from "../../data/models/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { albumActions, userActions } from "./actionTypes";
-import { AlbumType, AlbumDetailsType } from "../reducers/albumReducer";
+import { AlbumDetailsType } from "../reducers/albumReducer";
 
 export const getAlbumById = (id: string) => ({
   type: albumActions.GET_ALBUM,
