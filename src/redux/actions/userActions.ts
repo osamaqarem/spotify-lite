@@ -8,6 +8,7 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
+import { encoded } from "../../../secret";
 import { Action, DispatchFun, ErrorResponse } from "../../data/models";
 import { AccessTokenResponse } from "../../data/models/AccessTokenResponse";
 import { UserProfileResponse } from "../../data/models/UserProfileResponse";
@@ -20,8 +21,7 @@ import {
 import { userActions } from "./actionTypes";
 import { getAllFeaturedPlaylists } from "./browseActions";
 import { getCurrentUserTopArtists } from "./personalizationActions";
-import { getRecentlyPlayed } from "./playerActions";
-import { encoded } from "../../../secret";
+import { getRecentlyPlayedTracks } from "./playerActions";
 
 /**
  *
@@ -102,13 +102,12 @@ export const getProfileEpic = (
         switchMap(res => res.json()),
         map((res: UserProfileResponse | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
-
           return of(
             {
               type: userActions.PROFILE_SUCCESS,
               payload: res,
             },
-            getRecentlyPlayed(),
+            getRecentlyPlayedTracks(),
             getAllFeaturedPlaylists(),
             getCurrentUserTopArtists(),
           );
@@ -170,7 +169,7 @@ export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
           // no new refresh token
           const token = resJson.access_token;
 
-          // Return new token and dispatch get profile epic.
+          // Dispatch success and action to restart
           return of(
             {
               type: userActions.GET_TOKENS_SUCCESS,

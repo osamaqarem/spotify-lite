@@ -1,9 +1,10 @@
 import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
-import { from, Observable, of } from "rxjs";
+import { from, interval, Observable, of } from "rxjs";
 import {
   catchError,
   map,
+  mapTo,
   mergeMap,
   switchMap,
   withLatestFrom,
@@ -14,20 +15,22 @@ import {
   RecentlyPlayedResponse,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
+import { RootStoreType } from "../store";
 import { playerActions, userActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 
-export const getRecentlyPlayed = () => ({
+export const getRecentlyPlayedTracks = () => ({
   type: playerActions.RECENTLY_PLAYED_TRACKS,
 });
 
 export const getRecentlyPlayedEpic = (
-  actions$: Observable<Action<any>>,
-  state$: Observable<any>,
+  actions$: Observable<Action<undefined>>,
+  state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
     ofType(playerActions.RECENTLY_PLAYED_TRACKS),
     withLatestFrom(state$),
+    switchMap(a => interval(180 * 1000).pipe(mapTo(a))),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
 
@@ -70,7 +73,7 @@ export const getRecentlyPlayedEpic = (
               type: userActions.REFRESH_TOKEN,
               payload: {
                 refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getRecentlyPlayed,
+                actionToRestart: getRecentlyPlayedTracks,
               },
             });
           }

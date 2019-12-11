@@ -1,56 +1,34 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ScrollView, StatusBar, View, YellowBox } from "react-native";
+import { ScrollView, StatusBar, View } from "react-native";
 import { WebViewNavigation } from "react-native-webview";
 import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
+import { connect, ConnectedProps } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
-import { GetTokens, UserProfileResponse, AlbumType } from "../../data/models";
-import { getToken, Routes } from "../../utils";
-import LoginModal from "./LoginModal";
-import TopBar from "./TopBar";
-import RecentlyPlayed from "./RecentlyPlayed";
-import FeaturedPlaylists from "./FeaturedPlaylists";
-import TopArtists from "./TopArtists";
-import { connect } from "react-redux";
 import {
-  getTokens,
-  getProfile,
-  setTokens,
-  getRecentlyPlayed,
   getAlbumById,
+  getProfile,
+  getTokens,
+  setTokens,
 } from "../../redux/actions";
-import { COLORS } from "../../utils";
-import { styles } from "./styles";
 import { RootStoreType } from "../../redux/store";
+import { COLORS, getToken, Routes } from "../../utils";
 import AlbumRecentItem from "./AlbumRecentItem";
+import FeaturedPlaylists from "./FeaturedPlaylists";
+import LoginModal from "./LoginModal";
+import RecentlyPlayed from "./RecentlyPlayed";
+import { styles } from "./styles";
+import TopArtists from "./TopArtists";
+import TopBar from "./TopBar";
 
 type HomeScreenProps = {
-  getTokens: GetTokens;
-  // token: string | null;
-  loading: boolean; // Controls loading indicator for LoginModal
-  profile: UserProfileResponse | null; // Not loading once this is non-null
-  getProfile: () => void;
-  getRecentlyPlayed: () => void;
-  getAlbumById: (id: string) => void;
-  setTokens: ({
-    token,
-    refreshToken,
-  }: {
-    token: string;
-    refreshToken: string;
-  }) => {};
-  recentlyPlayedAlbums: AlbumType[];
-  featuredPlaylists: AlbumType[];
-  userTopArtists: AlbumType[];
-  userTopArtistsHeader: AlbumType;
   navigation: NavigationTabProp;
-};
+} & ReduxProps;
 
 const HomeScreen = ({
   getTokens,
   profile,
   getProfile,
-  getRecentlyPlayed,
   getAlbumById,
   setTokens,
   recentlyPlayedAlbums,
@@ -140,23 +118,6 @@ const HomeScreen = ({
     setAuthCode(authCode);
   };
 
-  // Refetch recently played subscription
-  useEffect(() => {
-    // React Native complains that although the interval keeps on running in the background, it cannot be called.
-    // In this particular case calling getRecentlyPlayed() when the app comes to foreground is the better UX.
-    YellowBox.ignoreWarnings(["180000ms"]);
-
-    const refetchRecentlyPlayedAlbums = setInterval(() => {
-      if (recentlyPlayedAlbums) {
-        getRecentlyPlayed();
-      }
-    }, 180 * 1000); // average song length is 3 minutes ¯\(ツ)/¯
-
-    return () => {
-      clearInterval(refetchRecentlyPlayedAlbums);
-    };
-  }, [getRecentlyPlayed, recentlyPlayedAlbums]);
-
   const fetchAlbumDetails = (id: string) => {
     getAlbumById(id);
   };
@@ -207,10 +168,15 @@ const mapStateToProps = (state: RootStoreType) => ({
   userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
 });
 
-export default connect(mapStateToProps, {
+const mapDispatchToProps = {
   getTokens,
   getProfile,
   setTokens,
-  getRecentlyPlayed,
   getAlbumById,
-})(HomeScreen);
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export default connector(HomeScreen);
