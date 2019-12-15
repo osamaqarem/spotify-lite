@@ -6,12 +6,20 @@ import { RootStoreType } from "../../redux/store";
 import { Routes } from "../../utils";
 import AlbumItem from "./AlbumItem";
 import { styles } from "./styles";
+import { getPlayListById } from "../../redux/actions/playlistActions";
+import { AlbumType } from "../../data/models";
 
-const FeaturedPlaylists = ({ featuredPlaylists }: ReduxProps) => {
+const FeaturedPlaylists = ({
+  featuredPlaylists,
+  getPlayListById,
+}: ReduxProps) => {
   const navigation = useContext(NavigationContext);
 
-  const onPlaylistPressed = () => {
-    navigation.navigate(Routes.NestedStack.PlaylistDetailsScreen);
+  const onPlaylistPressed = (id: string) => {
+    getPlayListById(id);
+    requestAnimationFrame(() => {
+      navigation.navigate(Routes.NestedStack.PlaylistDetailsScreen);
+    });
   };
 
   return (
@@ -21,7 +29,7 @@ const FeaturedPlaylists = ({ featuredPlaylists }: ReduxProps) => {
       </Text>
       <View style={styles.content}>
         {featuredPlaylists &&
-          featuredPlaylists.map((album, index: number) => (
+          featuredPlaylists.map((album: AlbumType, index: number) => (
             <AlbumItem
               key={index}
               {...{
@@ -40,7 +48,9 @@ const mapStateToProps = (state: RootStoreType) => ({
   featuredPlaylists: state.browseReducer.featuredPlaylists,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getPlayListById,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

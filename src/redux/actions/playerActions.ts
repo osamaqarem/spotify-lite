@@ -6,12 +6,9 @@ import {
   map,
   mapTo,
   mergeMap,
+  startWith,
   switchMap,
   withLatestFrom,
-  switchMapTo,
-  startWith,
-  concatMap,
-  exhaustMap,
 } from "rxjs/operators";
 import {
   Action,

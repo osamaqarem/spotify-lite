@@ -2,11 +2,16 @@ import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
-import { Action, ErrorResponse, AlbumDetailsResponse, AlbumType } from "../../data/models";
+import {
+  Action,
+  ErrorResponse,
+  AlbumDetailsResponse,
+  AlbumType,
+} from "../../data/models";
 import { AlbumListResponse } from "../../data/models/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { albumActions, userActions } from "./actionTypes";
-import { AlbumDetailsType } from "../reducers/albumReducer";
+import { albumActions, userActions, playlistActions } from "./actionTypes";
+import { PlaylistDetailsType } from "../reducers/playlistReducer";
 
 export const getAlbumById = (id: string) => ({
   type: albumActions.GET_ALBUM,
@@ -44,15 +49,15 @@ export const getAlbumByIdEpic = (
             artistName: track.artists[i]?.name || res.artists[0].name,
           }));
 
-          const album: AlbumDetailsType = {
+          const album: PlaylistDetailsType = {
             name: res.name,
-            artistName: res.artists[0].name,
+            ownerName: res.artists[0].name,
             tracks,
             imageUrl: res.images[0].url,
           };
 
           return {
-            type: albumActions.GET_ALBUM_SUCCESS,
+            type: playlistActions.GET_PLAYLIST_DETAILS_SUCCESS,
             payload: album,
           };
         }),

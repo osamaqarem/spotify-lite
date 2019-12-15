@@ -6,7 +6,6 @@ import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import { AlbumDetailsType } from "../../redux/reducers/albumReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
 import AlbumCover from "./AlbumCover";
@@ -15,6 +14,7 @@ import PlayListDetailsHeader, { HEADER_HEIGHT } from "./PlayListDetailsHeader";
 import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
 import usePlaylistAnim from "./usePlaylistAnim";
+import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -37,7 +37,7 @@ const LoadingView = () => (
 );
 
 const PlaylistDetailsScreen = ({
-  albumDetails,
+  playlistDetails,
   navigation,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
@@ -50,18 +50,18 @@ const PlaylistDetailsScreen = ({
   };
 
   useEffect(() => {
-    albumDetails?.imageUrl &&
-      colorsFromUrl(albumDetails?.imageUrl, (err: any, colors: any) => {
+    playlistDetails?.imageUrl &&
+      colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
         if (!err) {
           setDominantColor(colors.averageColor);
           setIsLoading(false);
         }
       });
-  }, [albumDetails?.imageUrl]);
+  }, [playlistDetails?.imageUrl]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <PlayListDetailsHeader name={albumDetails?.name} goBack={goBack} />
+      <PlayListDetailsHeader name={playlistDetails?.name} goBack={goBack} />
       {isLoading ? (
         <LoadingView />
       ) : (
@@ -84,9 +84,9 @@ const PlaylistDetailsScreen = ({
           <View style={styles.coverContainer}>
             <AlbumCover
               offsetY={offsetY}
-              name={albumDetails?.name}
-              imageUrl={albumDetails?.imageUrl}
-              artistName={albumDetails?.artistName}
+              name={playlistDetails?.name}
+              imageUrl={playlistDetails?.imageUrl}
+              artistName={playlistDetails?.ownerName}
             />
           </View>
           <ShuffleButton offsetY={offsetY} />
@@ -99,7 +99,9 @@ const PlaylistDetailsScreen = ({
             scrollEventThrottle={1}
             style={[{ transform: [{ translateY: translateAnim }] }]}
             contentContainerStyle={styles.scrollContent}>
-            {albumDetails && <PlaylistContent albumDetails={albumDetails} />}
+            {playlistDetails && (
+              <PlaylistContent playlistDetails={playlistDetails} />
+            )}
           </Animated.ScrollView>
         </>
       )}
@@ -108,9 +110,9 @@ const PlaylistDetailsScreen = ({
 };
 
 const PlaylistContent = ({
-  albumDetails,
+  playlistDetails,
 }: {
-  albumDetails: AlbumDetailsType;
+  playlistDetails: PlaylistDetailsType;
 }) => (
   <View
     style={{
@@ -123,7 +125,7 @@ const PlaylistContent = ({
         marginHorizontal: 10,
       }}>
       <DownloadHeader />
-      {albumDetails.tracks.map((track, index) => (
+      {playlistDetails.tracks.map((track, index) => (
         <Track key={index} title={track.name} artist={track.artistName} />
       ))}
     </View>
@@ -155,7 +157,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootStoreType) => ({
-  albumDetails: state.albumReducer.albumDetails,
+  playlistDetails: state.playlistReducer.playlistDetails,
 });
 
 const mapDispatchToProps = {};

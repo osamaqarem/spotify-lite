@@ -14,7 +14,6 @@ import {
   getCurrentUserSavedAlbumsEpic,
   getAllCategoriesForCountryEpic,
   getAlbumByIdEpic,
-  getPlayListByIdEpic,
 } from "../actions";
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
@@ -23,7 +22,9 @@ import albumReducer from "./albumReducer";
 import libraryReducer from "./libraryReducer";
 import browseReducer from "./browseReducer";
 import personalizationReducer from "./personalizationReducer";
-import followRedcuer from "./followRedcuer";
+import followRedcuer from "./followReducer";
+import { getPlayListByIdEpic } from "../actions/playlistActions";
+import playlistReducer from "./playlistReducer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -51,4 +52,5 @@ export default combineReducers({
   browseReducer,
   personalizationReducer,
   followRedcuer,
+  playlistReducer,
 });

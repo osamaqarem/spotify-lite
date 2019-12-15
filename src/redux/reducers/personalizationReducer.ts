@@ -1,10 +1,9 @@
-import { Action } from "../../data/models";
+import { Action, AlbumType } from "../../data/models";
 import { personalizationActions } from "../actions";
-import { AlbumType } from "./albumReducer";
 
- type PersonalizationReducerType = {
+type PersonalizationReducerType = {
   userTopArtists: [];
-  userTopArtistsHeader: AlbumType;
+  userTopArtistsHeader: Pick<AlbumType, "name" | "url">;
 };
 
 const initialState: PersonalizationReducerType = {
@@ -12,7 +11,10 @@ const initialState: PersonalizationReducerType = {
   userTopArtistsHeader: { name: null, url: null },
 };
 
-export default (state = initialState, { type, payload }: Action<any>) :PersonalizationReducerType=> {
+export default (
+  state = initialState,
+  { type, payload }: Action<any>,
+): PersonalizationReducerType => {
   switch (type) {
     case personalizationActions.GET_USER_TOP_ARTISTS_SUCCESS:
       return {

@@ -3,7 +3,7 @@ import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
 import { PlaylistCover } from "./PlaylistCover";
 import PlaylistCoverBlank from "./PlaylistCoverBlank";
-import { AlbumType } from "../../redux/reducers/albumReducer";
+import { AlbumType } from "../../data/models";
 
 const renderItem = ({ item }: any) => {
   return (

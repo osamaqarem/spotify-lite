@@ -11,11 +11,11 @@ const AlbumItem = ({
 }: {
   album: AlbumType;
   index: number;
-  onPress: () => void;
+  onPress: (id: string) => void;
 }) => {
   return (
     <TouchableOpacity
-      onPress={onPress}
+      onPress={() => onPress(album.id)}
       key={index}
       style={[{ width: albumDimensions.ALBUM_DIMEN_MADE }]}>
       <FastImage

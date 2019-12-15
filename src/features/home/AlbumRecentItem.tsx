@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
 import { albumDimensions, styles } from "./styles";
-import { AlbumType } from "../../redux/reducers/albumReducer";
+import { AlbumType } from "../../data/models";
 
 const AlbumRecentItem = ({
   album,
