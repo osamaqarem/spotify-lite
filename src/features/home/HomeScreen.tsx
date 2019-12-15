@@ -1,19 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ScrollView, StatusBar, View } from "react-native";
 import { WebViewNavigation } from "react-native-webview";
-import { NavigationTabProp } from "react-navigation-material-bottom-tabs";
 import { connect, ConnectedProps } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
-import {
-  getAlbumById,
-  getProfile,
-  getTokens,
-  setTokens,
-} from "../../redux/actions";
+import { getProfile, getTokens, setTokens } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, getToken, Routes } from "../../utils";
-import AlbumRecentItem from "./AlbumRecentItem";
+import { COLORS, getToken } from "../../utils";
 import FeaturedPlaylists from "./FeaturedPlaylists";
 import LoginModal from "./LoginModal";
 import RecentlyPlayed from "./RecentlyPlayed";
@@ -21,31 +14,18 @@ import { styles } from "./styles";
 import TopArtists from "./TopArtists";
 import TopBar from "./TopBar";
 
-type HomeScreenProps = {
-  navigation: NavigationTabProp;
-} & ReduxProps;
+const webViewSub$: Subject<string> = new Subject();
 
 const HomeScreen = ({
   getTokens,
   profile,
   getProfile,
-  getAlbumById,
   setTokens,
-  recentlyPlayedAlbums,
-  featuredPlaylists,
-  userTopArtists,
-  userTopArtistsHeader,
   loading,
-  navigation,
-}: HomeScreenProps) => {
-  // Visibility of LoginModal
+}: ReduxProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [authCode, setAuthCode] = useState("");
-
   const webViewRef = useRef(null);
-  const webViewSub$: React.MutableRefObject<Subject<string>> = useRef(
-    new Subject(),
-  );
 
   /**
    * Subscribes to our navigation URL event stream.
@@ -55,7 +35,7 @@ const HomeScreen = ({
   // Otherwise, getToken() action would be called more than once
   useEffect(() => {
     // Pulls the URL with the authorization code from the stream
-    const webView$ = webViewSub$.current.pipe(
+    const webView$ = webViewSub$.pipe(
       filter(v => v.includes("?code=")),
       debounceTime(5000), // The first few codes are incorrect. Take the last one.
       take(1),
@@ -105,7 +85,7 @@ const HomeScreen = ({
    * Feed URL values to the stream on every URL change
    */
   const pushNavEvent = (e: WebViewNavigation) => {
-    webViewSub$.current.next(e.url);
+    webViewSub$.next(e.url);
   };
 
   /**
@@ -118,14 +98,6 @@ const HomeScreen = ({
     setAuthCode(authCode);
   };
 
-  const fetchAlbumDetails = (id: string) => {
-    getAlbumById(id);
-  };
-
-  const goToPlaylistDetails = () => {
-    navigation.navigate(Routes.NestedStack.PlaylistDetailsScreen);
-  };
-
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.background} />
@@ -134,26 +106,9 @@ const HomeScreen = ({
       <ScrollView
         style={{ width: "100%" }}
         showsVerticalScrollIndicator={false}>
-        <RecentlyPlayed>
-          {recentlyPlayedAlbums &&
-            recentlyPlayedAlbums.map((album, index: number) => (
-              <AlbumRecentItem
-                key={index}
-                album={album}
-                fetchAlbumDetails={fetchAlbumDetails}
-                goToPlaylistDetails={goToPlaylistDetails}
-              />
-            ))}
-        </RecentlyPlayed>
-        <FeaturedPlaylists
-          navigation={navigation}
-          featuredPlaylists={featuredPlaylists}
-        />
-        <TopArtists
-          navigation={navigation}
-          userTopArtists={userTopArtists}
-          userTopArtistsHeader={userTopArtistsHeader}
-        />
+        <RecentlyPlayed />
+        <FeaturedPlaylists />
+        <TopArtists />
       </ScrollView>
     </View>
   );
@@ -162,17 +117,12 @@ const HomeScreen = ({
 const mapStateToProps = (state: RootStoreType) => ({
   profile: state.userReducer.profile,
   loading: state.loadingReducer.loading,
-  recentlyPlayedAlbums: state.albumReducer.recentlyPlayedAlbums,
-  featuredPlaylists: state.browseReducer.featuredPlaylists,
-  userTopArtists: state.personalizationReducer.userTopArtists,
-  userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
 });
 
 const mapDispatchToProps = {
   getTokens,
   getProfile,
   setTokens,
-  getAlbumById,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

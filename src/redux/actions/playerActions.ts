@@ -8,6 +8,10 @@ import {
   mergeMap,
   switchMap,
   withLatestFrom,
+  switchMapTo,
+  startWith,
+  concatMap,
+  exhaustMap,
 } from "rxjs/operators";
 import {
   Action,
@@ -23,14 +27,14 @@ export const getRecentlyPlayedTracks = () => ({
   type: playerActions.RECENTLY_PLAYED_TRACKS,
 });
 
-export const getRecentlyPlayedEpic = (
+export const getRecentlyPlayedTracksEpic = (
   actions$: Observable<Action<undefined>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
     ofType(playerActions.RECENTLY_PLAYED_TRACKS),
     withLatestFrom(state$),
-    switchMap(a => interval(180 * 1000).pipe(mapTo(a))),
+    switchMap(a => interval(180 * 1000).pipe(mapTo(a), startWith(a))),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
 
@@ -42,6 +46,7 @@ export const getRecentlyPlayedEpic = (
           },
         }),
       );
+
       return request$.pipe(
         switchMap(res => res.json()),
         map((res: RecentlyPlayedResponse | ErrorResponse) => {
@@ -61,10 +66,7 @@ export const getRecentlyPlayedEpic = (
             commaList.length - 1,
           );
 
-          return of(
-            { type: playerActions.RECENTLY_PLAYED_TRACKS_SUCCESS },
-            getMultipleAlbums(commaListCommaRemoved),
-          );
+          return of(getMultipleAlbums(commaListCommaRemoved));
         }),
         mergeMap(a => a),
         catchError(err => {

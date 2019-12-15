@@ -6,21 +6,14 @@ import { AlbumType } from "../../redux/reducers/albumReducer";
 
 const AlbumRecentItem = ({
   album,
-  fetchAlbumDetails,
-  goToPlaylistDetails,
+  onPress,
 }: {
   album: AlbumType;
-  fetchAlbumDetails: (id: string) => void;
-  goToPlaylistDetails: () => void;
+  onPress: (id: string) => void;
 }) => {
   return (
     <TouchableOpacity
-      onPress={() => {
-        fetchAlbumDetails(album.id);
-        requestAnimationFrame(() => {
-          goToPlaylistDetails();
-        });
-      }}
+      onPress={() => onPress(album.id)}
       style={{ marginHorizontal: 8, flexDirection: "column" }}>
       <FastImage
         source={{

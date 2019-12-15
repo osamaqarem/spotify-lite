@@ -11,14 +11,17 @@ if (__DEV__) {
 }
 
 /**
- * SafeView: from react-navigation
+ * SafeView: from react-navigation library.
  *
  * 180000ms: React Native complains that although the interval
  * keeps on running in the background, it cannot be called.
  * In this particular case calling getRecentlyPlayed() when the
  * app comes to foreground is the better UX.
+ *
+ * ERR_CONNECTION_REFUSED: in @function LoginModal we navigate to localhost
+ * which refuses connection.
  */
-YellowBox.ignoreWarnings(["SafeView", "180000ms"]);
+YellowBox.ignoreWarnings(["SafeView", "180000ms", "ERR_CONNECTION_REFUSED"]);
 
 const AppWithStore = () => (
   <Provider store={redux.store}>

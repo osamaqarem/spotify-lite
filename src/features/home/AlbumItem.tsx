@@ -1,22 +1,21 @@
 import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
-import { styles, albumDimensions } from "./styles";
-import { NavigationTabProp } from "react-navigation-tabs";
+import { AlbumType } from "../../data/models";
+import { albumDimensions, styles } from "./styles";
 
-const AlbumItem = (
-  album: {
-    name: string | null;
-    url: string | null;
-  },
-  index: number,
-  navigation: NavigationTabProp,
-) => {
+const AlbumItem = ({
+  album,
+  index,
+  onPress,
+}: {
+  album: AlbumType;
+  index: number;
+  onPress: () => void;
+}) => {
   return (
     <TouchableOpacity
-      onPress={() => {
-        // TODO:
-      }}
+      onPress={onPress}
       key={index}
       style={[{ width: albumDimensions.ALBUM_DIMEN_MADE }]}>
       <FastImage

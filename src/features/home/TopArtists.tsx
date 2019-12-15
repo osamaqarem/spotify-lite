@@ -1,20 +1,12 @@
 import React from "react";
-import { AlbumType } from "../../redux/reducers/albumReducer";
 import { Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { styles, albumDimensions } from "./styles";
+import { connect, ConnectedProps } from "react-redux";
+import { RootStoreType } from "../../redux/store";
 import AlbumItem from "./AlbumItem";
-import { NavigationTabProp } from "react-navigation-tabs";
+import { albumDimensions, styles } from "./styles";
 
-const TopArtists = ({
-  userTopArtistsHeader,
-  userTopArtists,
-  navigation,
-}: {
-  userTopArtistsHeader: AlbumType;
-  userTopArtists: AlbumType[];
-  navigation: NavigationTabProp;
-}) => (
+const TopArtists = ({ userTopArtistsHeader, userTopArtists }: ReduxProps) => (
   <>
     <Text style={[styles.centeredText, styles.headerText, { marginTop: 30 }]}>
       Your top artists
@@ -48,11 +40,29 @@ const TopArtists = ({
     </View>
     <View style={styles.content}>
       {userTopArtists &&
-        userTopArtists.map((album: any, index: number) =>
-          AlbumItem(album, index, navigation),
-        )}
+        userTopArtists.map((album: any, index: number) => (
+          <AlbumItem
+            key={index}
+            {...{
+              album,
+              index,
+              onPress: () => {},
+            }}
+          />
+        ))}
     </View>
   </>
 );
 
-export default TopArtists;
+const mapStateToProps = (state: RootStoreType) => ({
+  userTopArtists: state.personalizationReducer.userTopArtists,
+  userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
+});
+
+const mapDispatchToProps = {};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export default connector(TopArtists);
