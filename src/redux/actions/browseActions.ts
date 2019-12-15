@@ -46,10 +46,10 @@ export const getAllFeaturedPlaylistsEpic = (
             return { name: item.name, url: item.images[0].url, id: item.id };
           });
 
-          return{
+          return {
             type: browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
             payload: data,
-          }
+          };
         }),
         catchError(err => {
           if (typeof err === "string" && err.includes("expired")) {
@@ -108,13 +108,17 @@ export const getAllCategoriesForCountryEpic = (
             throw res.error.message;
           }
 
-          const data = res.categories.items.map(item => {
+          const data = res.categories.items;
+
+          const dataWithoutFirstElement = data.slice(1, data.length - 1);
+
+          const categories = dataWithoutFirstElement.map(item => {
             return { name: item.name, id: item.id };
           });
 
           return {
             type: browseActions.GET_ALL_CATEGORIES_FOR_COUNTRY_SUCCESS,
-            payload: data,
+            payload: categories,
           };
         }),
         catchError(err => {

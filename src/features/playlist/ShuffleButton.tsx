@@ -24,7 +24,7 @@ const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    marginTop: 280 * ratio,
+    marginTop: 288 * ratio,
     marginBottom: 16,
     alignItems: "center",
     height: BUTTON_HEIGHT,

@@ -34,6 +34,8 @@ export default (
       };
     case playlistActions.GET_PLAYLIST_DETAILS_SUCCESS:
       return { ...state, playlistDetails: payload };
+    case playlistActions.CLEAR_PLAYLIST_DETAILS:
+      return { ...state, playlistDetails: null };
     default:
       return state;
   }

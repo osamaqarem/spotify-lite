@@ -36,11 +36,16 @@ const AlbumCover = ({
           transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
         },
       ]}>
-      {/* <FastImage style={styles.cover} source={cover.url} /> */}
       <FastImage style={styles.cover} source={{ uri: imageUrl }} />
       <View style={styles.textContainer}>
-        {/* <Text style={styles.title}>Psyche Pop & Surf Rock</Text> */}
-        <Text style={styles.title}>{name}</Text>
+        <Text
+          numberOfLines={2}
+          style={[
+            styles.title,
+            { fontSize: name && name.length > 36 ? 12 : 18 },
+          ]}>
+          {name}
+        </Text>
         <Text style={styles.artist}>{artistName}</Text>
       </View>
     </Animated.View>
@@ -63,6 +68,8 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     letterSpacing: 0.6,
+    textAlign: "center",
+    marginHorizontal: 50,
   },
   artist: {
     marginTop: 5,

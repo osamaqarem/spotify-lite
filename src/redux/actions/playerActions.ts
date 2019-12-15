@@ -31,7 +31,9 @@ export const getRecentlyPlayedTracksEpic = (
   actions$.pipe(
     ofType(playerActions.RECENTLY_PLAYED_TRACKS),
     withLatestFrom(state$),
-    switchMap(a => interval(180 * 1000).pipe(mapTo(a), startWith(a))),
+    switchMap(state =>
+      interval(180 * 1000).pipe(mapTo(state), startWith(state)),
+    ),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
 

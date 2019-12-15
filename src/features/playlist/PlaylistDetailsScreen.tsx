@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import React, { useEffect, useRef, useState, useCallback } from "react";
+import { ActivityIndicator, StyleSheet, View, BackHandler } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
@@ -15,6 +15,7 @@ import ShuffleButton from "./ShuffleButton";
 import Track from "./Track";
 import usePlaylistAnim from "./usePlaylistAnim";
 import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
+import { clearPlaylistDetails } from "../../redux/actions";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -38,6 +39,7 @@ const LoadingView = () => (
 
 const PlaylistDetailsScreen = ({
   playlistDetails,
+  clearPlaylistDetails,
   navigation,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
@@ -45,23 +47,38 @@ const PlaylistDetailsScreen = ({
   const [dominantColor, setDominantColor] = useState(COLORS.background);
   const [isLoading, setIsLoading] = useState(true);
 
-  const goBack = () => {
+  const goBack = useCallback(() => {
+    clearPlaylistDetails();
     navigation.goBack();
-  };
+    return true;
+  }, [clearPlaylistDetails, navigation]);
 
   useEffect(() => {
-    playlistDetails?.imageUrl &&
-      colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
-        if (!err) {
-          setDominantColor(colors.averageColor);
-          setIsLoading(false);
-        }
-      });
-  }, [playlistDetails?.imageUrl]);
+    const didFocusSub = navigation.addListener("didFocus", () => {
+      BackHandler.addEventListener("hardwareBackPress", goBack);
+
+      playlistDetails?.imageUrl &&
+        colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
+          if (!err) {
+            setDominantColor(colors.averageColor);
+            setIsLoading(false);
+          }
+        });
+    });
+
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", goBack);
+      didFocusSub.remove();
+    };
+  }, [goBack, navigation, playlistDetails?.imageUrl]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <PlayListDetailsHeader name={playlistDetails?.name} goBack={goBack} />
+      <PlayListDetailsHeader
+        name={playlistDetails?.name}
+        goBack={goBack}
+        isLoading={isLoading}
+      />
       {isLoading ? (
         <LoadingView />
       ) : (
@@ -98,7 +115,15 @@ const PlaylistDetailsScreen = ({
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
             style={[{ transform: [{ translateY: translateAnim }] }]}
-            contentContainerStyle={styles.scrollContent}>
+            contentContainerStyle={[
+              styles.scrollContent,
+              {
+                paddingBottom:
+                  playlistDetails && playlistDetails.tracks.length > 8
+                    ? 364 * ratio
+                    : height,
+              },
+            ]}>
             {playlistDetails && (
               <PlaylistContent playlistDetails={playlistDetails} />
             )}
@@ -150,8 +175,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     marginTop: 290 * ratio,
-    // paddingBottom: 364 * ratio,
-    paddingBottom: height * 1.2,
     zIndex: 5,
   },
 });
@@ -160,7 +183,9 @@ const mapStateToProps = (state: RootStoreType) => ({
   playlistDetails: state.playlistReducer.playlistDetails,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  clearPlaylistDetails,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

@@ -16,9 +16,11 @@ export const ICON_SIZE = 20 * ratio;
 const PlayListDetailsHeader = ({
   name,
   goBack,
+  isLoading,
 }: {
   name: string | undefined;
   goBack: () => void;
+  isLoading: boolean;
 }) => {
   return (
     <>
@@ -31,36 +33,38 @@ const PlayListDetailsHeader = ({
         style={[styles.arrowIcon]}
       />
 
-      <Icon
-        onPress={() => {
-          ToastAndroid.show("Heart!", ToastAndroid.SHORT);
-        }}
-        name={true ? "heart" : "heart-outline"} // TODO: heart
-        size={ICON_SIZE}
-        style={[styles.heart]}
-      />
-
-      <TouchableWithoutFeedback
-        onPress={() => {
-          ToastAndroid.show("Dots!", ToastAndroid.SHORT);
-        }}>
-        <View style={styles.dotsContainer}>
-          <DotsView color={COLORS.white} />
-        </View>
-      </TouchableWithoutFeedback>
-      <View style={[styles.container]}>
-        <View style={styles.content}>
-          <View
-            style={{
-              width: "54%",
+      {!isLoading && (
+        <>
+          <Icon
+            onPress={() => {
+              ToastAndroid.show("Heart!", ToastAndroid.SHORT);
+            }}
+            name={true ? "heart" : "heart-outline"} // TODO: heart
+            size={ICON_SIZE}
+            style={[styles.heart]}
+          />
+          <TouchableWithoutFeedback
+            onPress={() => {
+              ToastAndroid.show("Dots!", ToastAndroid.SHORT);
             }}>
-            <Text numberOfLines={1} style={[styles.title]}>
-              {/* Psyche Pop & Surf Rock */}
-              {name}
-            </Text>
+            <View style={styles.dotsContainer}>
+              <DotsView color={COLORS.white} />
+            </View>
+          </TouchableWithoutFeedback>
+          <View style={[styles.container]}>
+            <View style={styles.content}>
+              <View
+                style={{
+                  width: "54%",
+                }}>
+                <Text numberOfLines={1} style={[styles.title]}>
+                  {name}
+                </Text>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
+        </>
+      )}
     </>
   );
 };
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     letterSpacing: 0.6,
     color: COLORS.white,
+    textAlign: "center",
   },
   heart: {
     color: COLORS.green,

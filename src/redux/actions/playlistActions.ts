@@ -7,8 +7,11 @@ import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlayl
 import { SPOTIFY_API_BASE } from "../../utils";
 import { PlaylistDetailsType, TrackType } from "../reducers/playlistReducer";
 import { RootStoreType } from "../store";
-import { albumActions, playlistActions } from "./actionTypes";
+import { playlistActions } from "./actionTypes";
 
+export const clearPlaylistDetails = () => ({
+  type: playlistActions.CLEAR_PLAYLIST_DETAILS,
+});
 export const getPlayListById = (playListId: string) => ({
   type: playlistActions.GET_PLAYLIST_BY_ID,
   payload: playListId,
@@ -40,8 +43,10 @@ export const getPlayListByIdEpic = (
             if ("error" in res) throw res.error.message;
 
             const tracks: TrackType[] = res.tracks.items.map(item => ({
-              artistName: item.track.artists[0].name,
-              name: item.track.name,
+              artistName:
+                item.track?.artists[0].name ??
+                "No track returned by spotify :(",
+              name: item.track?.name ?? "No track",
             }));
 
             const data: PlaylistDetailsType = {
@@ -52,7 +57,7 @@ export const getPlayListByIdEpic = (
             };
 
             return {
-              type: albumActions.GET_ALBUM_SUCCESS,
+              type: playlistActions.GET_PLAYLIST_DETAILS_SUCCESS,
               payload: data,
             };
           }),

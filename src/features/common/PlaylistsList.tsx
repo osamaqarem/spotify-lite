@@ -5,41 +5,50 @@ import { PlaylistCover } from "./PlaylistCover";
 import PlaylistRowFav from "./PlaylistFavRow";
 import PlaylistCoverBlank from "./PlaylistCoverBlank";
 
-type RenderItemType = { item: any; index: number };
-
-const renderItem = (
-  { item, index }: RenderItemType,
-  username: string,
-  savedTracksCount: number,
-) => {
-  return (
-    <View style={styles.flatListContainer}>
-      {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
-      {item.url ? (
-        <PlaylistCover uri={item.url} />
-      ) : (
-        <PlaylistCoverBlank styles={[styles.cover]} />
-      )}
-      <View style={styles.rowText}>
-        <Text style={styles.playlistTitle} numberOfLines={1}>
-          {item.name}
-        </Text>
-        <Text style={styles.playlistOwner}>
-          by {item.owner === username ? "you" : item.owner}
-        </Text>
-      </View>
+const PlaylistItem = ({
+  item,
+  index,
+  username,
+  savedTracksCount,
+}: {
+  item: any;
+  index: number;
+  username: string;
+  savedTracksCount: number;
+}) => (
+  <View style={styles.flatListContainer}>
+    {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
+    {item.url ? (
+      <PlaylistCover uri={item.url} />
+    ) : (
+      <PlaylistCoverBlank styles={[styles.cover]} />
+    )}
+    <View style={styles.rowText}>
+      <Text style={styles.playlistTitle} numberOfLines={1}>
+        {item.name}
+      </Text>
+      <Text style={styles.playlistOwner}>
+        by {item.owner === username ? "you" : item.owner}
+      </Text>
     </View>
-  );
-};
+  </View>
+);
 
 const PlaylistsList = ({ data, username }: { data: any; username: string }) => {
   return (
     <View style={styles.container}>
       <FlatList
         data={data.currentUserPlaylists}
-        renderItem={({ item, index }: RenderItemType) => {
-          return renderItem({ item, index }, username, data.savedTracksCount);
-        }}
+        renderItem={({ item, index }) => (
+          <PlaylistItem
+            {...{
+              item,
+              index,
+              username,
+              savedTracksCount: data.savedTracksCount,
+            }}
+          />
+        )}
         keyExtractor={(_, index) => {
           return index + "";
         }}
