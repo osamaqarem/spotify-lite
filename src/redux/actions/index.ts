@@ -9,3 +9,4 @@ export * from "./personalizationActions";
 export * from "./followActions";
 export * from "./browseActions";
 export * from "./playlistActions";
+export * from "./artistActions";

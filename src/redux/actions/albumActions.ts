@@ -54,6 +54,7 @@ export const getAlbumByIdEpic = (
             ownerName: res.artists[0].name,
             tracks,
             imageUrl: res.images[0].url,
+            playlistType: "ALBUM",
           };
 
           return {

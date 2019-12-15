@@ -54,6 +54,7 @@ export const getPlayListByIdEpic = (
               name: res.name,
               ownerName: res.owner.display_name,
               tracks,
+              playlistType: "PLAYLIST",
             };
 
             return {

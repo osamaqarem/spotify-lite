@@ -8,6 +8,7 @@ export type PlaylistDetailsType = {
   ownerName: string;
   imageUrl: string;
   tracks: TrackType[];
+  playlistType: "PLAYLIST" | "ARTIST" | "ALBUM";
 };
 
 export type SavedPlaylistsType = { name: string; url: string; owner: string };
