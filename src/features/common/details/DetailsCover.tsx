@@ -2,9 +2,9 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { COLORS } from "../../utils";
+import { COLORS } from "../../../utils";
 
-const AlbumCover = ({
+const DetailsCover = ({
   offsetY,
   artistName,
   name,
@@ -79,4 +79,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AlbumCover;
+export default DetailsCover;

@@ -14,6 +14,7 @@ import SearchScreen from "../search/SearchScreen";
 import FavoritesIcon from "./FavoritesIcon";
 import HomeIcon from "./HomeIcon";
 import SearchIcon from "./SearchIcon";
+import ArtistDetailsScreen from "../artist/ArtistDetailsScreen";
 
 const sharedStyles = {
   activeColor: COLORS.white,
@@ -59,10 +60,11 @@ const NestedTopTabsNav = createMaterialTopTabNavigator(
 );
 
 // Stack
-const NestedStack = createStackNavigator(
+const DetailsStack = createStackNavigator(
   {
     HomeScreen,
     PlaylistDetailsScreen,
+    ArtistDetailsScreen,
   },
   {
     // initialRouteName: "PlaylistDetailsScreen",
@@ -74,7 +76,7 @@ const NestedStack = createStackNavigator(
 const BottomTabsNav = createMaterialBottomTabNavigator(
   {
     Home: {
-      screen: NestedStack,
+      screen: DetailsStack,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           HomeIcon(tintColor),

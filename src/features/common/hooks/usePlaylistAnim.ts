@@ -1,5 +1,5 @@
 import Animated from "react-native-reanimated";
-import { HEADER_HEIGHT } from "./PlayListDetailsHeader";
+import { HEADER_HEIGHT } from "../details/DetailsHeader";
 
 const usePlaylistAnim = (offsetY: Animated.Value<number>) => {
   const opacityAnim = offsetY.interpolate({

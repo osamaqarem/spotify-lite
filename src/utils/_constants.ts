@@ -19,9 +19,10 @@ export const Routes = {
     Artists: "Artists",
     Albums: "Albums",
   },
-  NestedStack: {
+  DetailsStack: {
     HomeScreen: "HomeScreen",
     PlaylistDetailsScreen: "PlaylistDetailsScreen",
+    ArtistDetailsScreen: "ArtistDetailsScreen",
   },
   BottomTabsNav: {
     Home: "Home",

@@ -7,13 +7,13 @@ import {
   Text,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, ratio } from "../../utils";
+import { COLORS, ratio } from "../../../utils";
 import DotsView from "./DotsView";
 
 export const HEADER_HEIGHT = 90;
 export const ICON_SIZE = 20 * ratio;
 
-const PlayListDetailsHeader = ({
+const DetailsHeader = ({
   name,
   goBack,
   isLoading,
@@ -118,4 +118,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlayListDetailsHeader;
+export default DetailsHeader;

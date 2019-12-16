@@ -8,14 +8,14 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
-import DetailsCover from "../common/details/DetailsCover";
-import DownloadHeader from "../common/details/DownloadHeader";
-import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
-import ShuffleButton from "../common/details/ShuffleButton";
-import Track from "../common/details/Track";
-import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
 import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
 import { clearPlaylistDetails } from "../../redux/actions";
+import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
+import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
+import DetailsCover from "../common/details/DetailsCover";
+import ShuffleButton from "../common/details/ShuffleButton";
+import DownloadHeader from "../common/details/DownloadHeader";
+import Track from "../common/details/Track";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -37,7 +37,7 @@ const LoadingView = () => (
   />
 );
 
-const PlaylistDetailsScreen = ({
+const ArtistDetailsScreen = ({
   playlistDetails,
   clearPlaylistDetails,
   navigation,
@@ -71,6 +71,8 @@ const PlaylistDetailsScreen = ({
       didFocusSub.remove();
     };
   }, [goBack, navigation, playlistDetails?.imageUrl]);
+
+  // TODO: fetch data based on artist id
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
@@ -191,4 +193,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type PropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(PlaylistDetailsScreen);
+export default connector(ArtistDetailsScreen);
