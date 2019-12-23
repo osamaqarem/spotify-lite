@@ -43,7 +43,7 @@ export interface CurrentUserSavedAlbumsTracks {
   total: number;
 }
 
-export interface Album {
+export interface CurrentUserSavedAlbum {
   album_type: string;
   artists: Artist[];
   available_markets: string[];
@@ -67,5 +67,5 @@ export interface Album {
 
 export interface CurrentUserSavedAlbumsItem {
   added_at: Date;
-  album: Album;
+  album: CurrentUserSavedAlbum;
 }

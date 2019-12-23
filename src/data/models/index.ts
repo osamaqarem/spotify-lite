@@ -13,3 +13,4 @@ export * from "./CurrentUserSavedAlbums";
 export * from "./CurrentUserSavedArtistsResponse";
 export * from "./GetAllCategoriesResponse";
 export * from "./AlbumDetailsResponse";
+export * from "./ArtistTopTracksResponse";

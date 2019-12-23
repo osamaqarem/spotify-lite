@@ -1,21 +1,31 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import { ActivityIndicator, StyleSheet, View, BackHandler } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
+import { from, Subscription, zip } from "rxjs";
+import { switchMap } from "rxjs/operators";
+import {
+  AlbumType,
+  Artist,
+  ArtistTopTracksResponse,
+  ErrorResponse,
+} from "../../data/models";
+import { refreshUserToken } from "../../redux/actions";
+import {
+  PlaylistDetailsType,
+  TrackType,
+} from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, height, ratio } from "../../utils";
-import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
-import { clearPlaylistDetails } from "../../redux/actions";
-import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
+import { COLORS, height, ratio, SPOTIFY_API_BASE } from "../../utils";
 import DetailsCover from "../common/details/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
 import ShuffleButton from "../common/details/ShuffleButton";
-import DownloadHeader from "../common/details/DownloadHeader";
-import Track from "../common/details/Track";
+import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
+import PlaylistContent from "../common/playlist/PlaylistContent";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -37,48 +47,131 @@ const LoadingView = () => (
   />
 );
 
+type ArtistDetails = PlaylistDetailsType & { relatedArtists: AlbumType[] };
+
 const ArtistDetailsScreen = ({
-  playlistDetails,
-  clearPlaylistDetails,
+  artistId,
   navigation,
+  token,
+  refreshUserToken,
+  refreshToken,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
   const [dominantColor, setDominantColor] = useState(COLORS.background);
   const [isLoading, setIsLoading] = useState(true);
 
-  const goBack = useCallback(() => {
-    clearPlaylistDetails();
-    navigation.goBack();
-    return true;
-  }, [clearPlaylistDetails, navigation]);
+  const [artistDetails, setArtistDetails] = useState<null | ArtistDetails>(
+    null,
+  );
 
+  // fetch data
   useEffect(() => {
-    const didFocusSub = navigation.addListener("didFocus", () => {
-      BackHandler.addEventListener("hardwareBackPress", goBack);
+    let subscription: Subscription | undefined;
 
-      playlistDetails?.imageUrl &&
-        colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
-          if (!err) {
-            setDominantColor(colors.averageColor);
-            setIsLoading(false);
-          }
-        });
-    });
+    const fetchData = async () => {
+      try {
+        const artist$ = from(
+          fetch(`${SPOTIFY_API_BASE}/v1/artists/${artistId}`, {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }),
+        ).pipe(switchMap(res => res.json()));
+
+        const topTracks$ = from(
+          fetch(
+            `${SPOTIFY_API_BASE}/v1/artists/${artistId}/top-tracks?market=US`,
+            {
+              method: "GET",
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            },
+          ),
+        ).pipe(switchMap(res => res.json()));
+
+        const relatedArtists$ = from(
+          fetch(`${SPOTIFY_API_BASE}/v1/artists/${artistId}/related-artists`, {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }),
+        ).pipe(switchMap(res => res.json()));
+
+        subscription = zip(artist$, topTracks$, relatedArtists$).subscribe(
+          ([artist, topTracks, relatedArtistsList]: [
+            Artist | ErrorResponse,
+            ArtistTopTracksResponse | ErrorResponse,
+            { artists: Artist[] } | ErrorResponse,
+          ]) => {
+            if ("error" in artist) {
+              throw artist.error.message;
+            }
+            if ("error" in topTracks) {
+              throw topTracks.error.message;
+            }
+            if ("error" in relatedArtistsList) {
+              throw relatedArtistsList.error.message;
+            }
+
+            const tracks: TrackType[] = topTracks.tracks.map(item => ({
+              artistName:
+                item.artists[0].name ?? "No track returned by spotify :(",
+              name: item.name ?? "No track",
+            }));
+
+            const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
+              artist => ({
+                name: artist.name,
+                url: artist.images[0].url,
+                id: artist.id,
+              }),
+            );
+
+            setArtistDetails({
+              imageUrl: artist.images[0].url,
+              name: artist.name,
+              ownerName: artist.name,
+              tracks,
+              relatedArtists,
+            });
+
+            colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
+              if (!err) {
+                setDominantColor(colors.averageColor);
+                setIsLoading(false);
+              }
+            });
+          },
+        );
+      } catch (err) {
+        // handle error
+        if (typeof err === "string" && err.includes("expired")) {
+          refreshToken
+            ? refreshUserToken(refreshToken)
+            : console.error("ArtistDetailsScreen: Refresh token is null.");
+        }
+      }
+    };
+
+    // only run the effect if details are currently null
+    if (!artistDetails) {
+      fetchData();
+    }
 
     return () => {
-      BackHandler.removeEventListener("hardwareBackPress", goBack);
-      didFocusSub.remove();
+      if (subscription) subscription.unsubscribe();
     };
-  }, [goBack, navigation, playlistDetails?.imageUrl]);
-
-  // TODO: fetch data based on artist id
+  }, [refreshToken, token, artistId, refreshUserToken, artistDetails]);
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <DetailsHeader
-        name={playlistDetails?.name}
-        goBack={goBack}
+        name={artistDetails?.name}
+        goBack={() => navigation.goBack()}
         isLoading={isLoading}
       />
       {isLoading ? (
@@ -103,9 +196,9 @@ const ArtistDetailsScreen = ({
           <View style={styles.coverContainer}>
             <DetailsCover
               offsetY={offsetY}
-              name={playlistDetails?.name}
-              imageUrl={playlistDetails?.imageUrl}
-              artistName={playlistDetails?.ownerName}
+              name={artistDetails?.name}
+              imageUrl={artistDetails?.imageUrl}
+              artistName={artistDetails?.ownerName}
             />
           </View>
           <ShuffleButton offsetY={offsetY} />
@@ -121,13 +214,13 @@ const ArtistDetailsScreen = ({
               styles.scrollContent,
               {
                 paddingBottom:
-                  playlistDetails && playlistDetails.tracks.length > 8
+                  artistDetails && artistDetails.tracks.length > 8
                     ? 364 * ratio
                     : height,
               },
             ]}>
-            {playlistDetails && (
-              <PlaylistContent playlistDetails={playlistDetails} />
+            {artistDetails && (
+              <PlaylistContent playlistDetails={artistDetails} />
             )}
           </Animated.ScrollView>
         </>
@@ -135,29 +228,6 @@ const ArtistDetailsScreen = ({
     </View>
   );
 };
-
-const PlaylistContent = ({
-  playlistDetails,
-}: {
-  playlistDetails: PlaylistDetailsType;
-}) => (
-  <View
-    style={{
-      backgroundColor: COLORS.background,
-      paddingTop: 44 * ratio,
-    }}>
-    <View
-      style={{
-        flex: 1,
-        marginHorizontal: 10,
-      }}>
-      <DownloadHeader />
-      {playlistDetails.tracks.map((track, index) => (
-        <Track key={index} title={track.name} artist={track.artistName} />
-      ))}
-    </View>
-  </View>
-);
 
 const styles = StyleSheet.create({
   gradientContainer: {
@@ -182,12 +252,12 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: RootStoreType) => ({
-  playlistDetails: state.playlistReducer.playlistDetails,
+  artistId: state.artistReducer.artistId,
+  token: state.userReducer.token,
+  refreshToken: state.userReducer.refreshToken,
 });
 
-const mapDispatchToProps = {
-  clearPlaylistDetails,
-};
+const mapDispatchToProps = { refreshUserToken };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

@@ -135,7 +135,9 @@ export const getProfileEpic = (
  * Calls passed action after token refresh.
  * @param payload : { refreshToken, actionToRestart }
  */
-export const refreshTokenEpic = (action$: ActionsObservable<Action<any>>) =>
+export const refreshTokenAndRestartActionEpic = (
+  action$: ActionsObservable<Action<any>>,
+) =>
   action$.pipe(
     ofType(userActions.REFRESH_TOKEN),
     switchMap(({ payload }) => {
@@ -200,3 +202,44 @@ export const setTokens = ({
   type: userActions.SET_TOKENS,
   payload: { token, refreshToken },
 });
+
+export const refreshUserToken = (refreshToken: string) => async (
+  dispatch: DispatchFun<any>,
+) => {
+  const body = {
+    // eslint-disable-next-line
+    grant_type: "refresh_token",
+    // eslint-disable-next-line
+    refresh_token: refreshToken,
+  };
+
+  const formBody = getFormUrlEncoded(body);
+
+  try {
+    const res = await fetch(`${SPOTIFY_ACCOUNTS}/api/token`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded",
+        authorization: `Basic ${encoded}`,
+      },
+      body: formBody,
+    });
+
+    const resJson: AccessTokenResponse | ErrorResponse = await res.json();
+
+    if ("error" in resJson) {
+      throw resJson.error.message;
+    }
+
+    // no new refresh token
+    const token = resJson.access_token;
+
+    // Dispatch success and action to restart
+    dispatch({
+      type: userActions.GET_TOKENS_SUCCESS,
+      payload: { token },
+    });
+  } catch (error) {
+    dispatch({ type: userActions.ERROR, payload: { error } });
+  }
+};

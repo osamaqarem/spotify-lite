@@ -1,21 +1,22 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
-import { ActivityIndicator, StyleSheet, View, BackHandler } from "react-native";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
+import { ActivityIndicator, BackHandler, StyleSheet, View } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
+import { clearPlaylistDetails } from "../../redux/actions";
+import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
 import DetailsCover from "../common/details/DetailsCover";
-import DownloadHeader from "../common/details/DownloadHeader";
 import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
+import DownloadHeader from "../common/details/DownloadHeader";
 import ShuffleButton from "../common/details/ShuffleButton";
 import Track from "../common/details/Track";
 import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
-import { clearPlaylistDetails } from "../../redux/actions";
+import PlaylistContent from "../common/playlist/PlaylistContent";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -53,7 +54,7 @@ const PlaylistDetailsScreen = ({
     return true;
   }, [clearPlaylistDetails, navigation]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const didFocusSub = navigation.addListener("didFocus", () => {
       BackHandler.addEventListener("hardwareBackPress", goBack);
 
@@ -133,29 +134,6 @@ const PlaylistDetailsScreen = ({
     </View>
   );
 };
-
-const PlaylistContent = ({
-  playlistDetails,
-}: {
-  playlistDetails: PlaylistDetailsType;
-}) => (
-  <View
-    style={{
-      backgroundColor: COLORS.background,
-      paddingTop: 44 * ratio,
-    }}>
-    <View
-      style={{
-        flex: 1,
-        marginHorizontal: 10,
-      }}>
-      <DownloadHeader />
-      {playlistDetails.tracks.map((track, index) => (
-        <Track key={index} title={track.name} artist={track.artistName} />
-      ))}
-    </View>
-  </View>
-);
 
 const styles = StyleSheet.create({
   gradientContainer: {

@@ -6,6 +6,7 @@ import {
   Action,
   ErrorResponse,
   UserTopArtistsResponse,
+  AlbumType,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, personalizationActions } from "./actionTypes";
@@ -40,8 +41,8 @@ export const getCurrentUserTopArtistsEpic = (
             throw res.error.message;
           }
 
-          const artists = res.items.map(item => {
-            return { name: item.name, url: item.images[0].url };
+          const artists: AlbumType[] = res.items.map(item => {
+            return { name: item.name, url: item.images[0].url, id: item.id };
           });
 
           const data = artists.slice(1, artists.length);
