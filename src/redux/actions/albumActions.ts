@@ -62,19 +62,20 @@ export const getAlbumByIdEpic = (
           };
         }),
         catchError(err => {
-          if (
-            typeof err === "string" &&
-            typeof err === "string" &&
-            err.includes("expired")
-          ) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getAlbumById(id),
-              },
-            });
-          }
+          //TODO:
+          // if (
+          //   typeof err === "string" &&
+          //   typeof err === "string" &&
+          //   err.includes("expired")
+          // ) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getAlbumById(id),
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({
@@ -134,15 +135,16 @@ export const getMultipleAlbumsEpic = (
           };
         }),
         catchError(err => {
-          if (typeof err === "string" && err.includes("expired")) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getMultipleAlbums(commaList),
-              },
-            });
-          }
+          // TODO:
+          // if (typeof err === "string" && err.includes("expired")) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getMultipleAlbums(commaList),
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

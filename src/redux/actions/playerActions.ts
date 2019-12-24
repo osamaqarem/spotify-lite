@@ -20,16 +20,12 @@ import { RootStoreType } from "../store";
 import { playerActions, userActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 
-export const getRecentlyPlayedTracks = () => ({
-  type: playerActions.RECENTLY_PLAYED_TRACKS,
-});
-
 export const getRecentlyPlayedTracksEpic = (
   actions$: Observable<Action<undefined>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(playerActions.RECENTLY_PLAYED_TRACKS),
+    ofType(userActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(state =>
       interval(180 * 1000).pipe(mapTo(state), startWith(state)),
@@ -69,15 +65,16 @@ export const getRecentlyPlayedTracksEpic = (
         }),
         mergeMap(a => a),
         catchError(err => {
-          if (typeof err === "string" && err.includes("expired")) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getRecentlyPlayedTracks,
-              },
-            });
-          }
+          // TODO:
+          // if (typeof err === "string" && err.includes("expired")) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getRecentlyPlayedTracks,
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

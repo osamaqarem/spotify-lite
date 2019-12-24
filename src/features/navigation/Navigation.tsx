@@ -1,13 +1,13 @@
 import React from "react";
 import { Text } from "react-native";
-import { createAppContainer } from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { COLORS } from "../../utils";
-import UserAlbumsScreen from "../favorites/albums/UserAlbumsScreen";
-import UserArtistsScreen from "../favorites/artists/UserArtistsScreen";
-import UserPlaylistsScreen from "../favorites/playlists/UserPlaylistsScreen";
+import FavoriteAlbumsScreen from "../favorites/FavoriteAlbumsScreen";
+import FavoriteArtistsScreen from "../favorites/FavoriteArtistsScreen";
+import FavoritePlaylistsScreen from "../favorites/FavoritePlaylistsScreen";
 import HomeScreen from "../home/HomeScreen";
 import PlaylistDetailsScreen from "../playlist/PlaylistDetailsScreen";
 import SearchScreen from "../search/SearchScreen";
@@ -15,6 +15,7 @@ import FavoritesIcon from "./FavoritesIcon";
 import HomeIcon from "./HomeIcon";
 import SearchIcon from "./SearchIcon";
 import ArtistDetailsScreen from "../artist/ArtistDetailsScreen";
+import LoginScreen from "../auth/LoginScreen";
 
 const sharedStyles = {
   activeColor: COLORS.white,
@@ -29,9 +30,9 @@ const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
 // Favorites tab
 const NestedTopTabsNav = createMaterialTopTabNavigator(
   {
-    Playlists: UserPlaylistsScreen,
-    Artists: UserArtistsScreen,
-    Albums: UserAlbumsScreen,
+    Playlists: FavoritePlaylistsScreen,
+    Artists: FavoriteArtistsScreen,
+    Albums: FavoriteAlbumsScreen,
   },
   {
     initialRouteName: "Playlists",
@@ -62,9 +63,13 @@ const NestedTopTabsNav = createMaterialTopTabNavigator(
 // Stack
 const DetailsStack = createStackNavigator(
   {
-    HomeScreen,
-    PlaylistDetailsScreen,
-    ArtistDetailsScreen,
+    Home: { screen: HomeScreen },
+    PlaylistDetails: {
+      screen: PlaylistDetailsScreen,
+    },
+    ArtistDetails: {
+      screen: ArtistDetailsScreen,
+    },
   },
   {
     // initialRouteName: "PlaylistDetailsScreen",
@@ -108,4 +113,15 @@ const BottomTabsNav = createMaterialBottomTabNavigator(
   },
 );
 
-export default createAppContainer(BottomTabsNav);
+const AppStack = createStackNavigator(
+  { BottomTabsNav },
+  { headerMode: "none" },
+);
+const AuthStack = createStackNavigator({ LoginScreen }, { headerMode: "none" });
+
+const StackSwitcher = createSwitchNavigator(
+  { AppStack, AuthStack },
+  { initialRouteName: "AuthStack" },
+);
+
+export default createAppContainer(StackSwitcher);

@@ -1,9 +1,14 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Text, View } from "react-native";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
 
-const TopBar = () => {
+const TopBar = ({
+  title,
+  children,
+}: {
+  title: string;
+  children?: ReactNode;
+}) => {
   return (
     <View
       style={{
@@ -20,14 +25,9 @@ const TopBar = () => {
           fontSize: 16,
           fontWeight: "bold",
         }}>
-        Home
+        {title}
       </Text>
-      <MaterialCommunityIcon
-        name="settings-outline"
-        size={24}
-        color={COLORS.itemInactive}
-        style={{ position: "absolute", right: 10 }}
-      />
+      {children}
     </View>
   );
 };

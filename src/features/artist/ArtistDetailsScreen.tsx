@@ -20,7 +20,7 @@ import {
   ArtistTopTracksResponse,
   ErrorResponse,
 } from "../../data/models";
-import { refreshUserToken, setArtistId } from "../../redux/actions";
+import { setArtistId } from "../../redux/actions";
 import {
   PlaylistDetailsType,
   TrackType,
@@ -61,8 +61,6 @@ const ArtistDetailsScreen = ({
   setArtistId,
   navigation,
   token,
-  refreshUserToken,
-  refreshToken,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
@@ -157,11 +155,12 @@ const ArtistDetailsScreen = ({
         );
       } catch (err) {
         // handle error
-        if (typeof err === "string" && err.includes("expired")) {
-          refreshToken
-            ? refreshUserToken(refreshToken)
-            : console.error("ArtistDetailsScreen: Refresh token is null.");
-        }
+        // TODO:
+        //   if (typeof err === "string" && err.includes("expired")) {
+        //     refreshToken
+        //       ? refreshUserToken(refreshToken)
+        //       : console.error("ArtistDetailsScreen: Refresh token is null.");
+        //   }
       }
     };
 
@@ -173,11 +172,11 @@ const ArtistDetailsScreen = ({
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, [refreshToken, token, artistId, refreshUserToken, artistDetails]);
+  }, [token, artistId, artistDetails]);
 
   const goToArtist = (id: string) => {
     setArtistId(id);
-    navigation.push(Routes.DetailsStack.ArtistDetailsScreen);
+    navigation.push(Routes.DetailsStack.ArtistDetails);
   };
 
   return (
@@ -303,10 +302,9 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: RootStoreType) => ({
   artistId: state.artistReducer.artistId,
   token: state.userReducer.token,
-  refreshToken: state.userReducer.refreshToken,
 });
 
-const mapDispatchToProps = { refreshUserToken, setArtistId };
+const mapDispatchToProps = { setArtistId };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

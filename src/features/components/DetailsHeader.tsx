@@ -39,7 +39,7 @@ const DetailsHeader = ({
             onPress={() => {
               ToastAndroid.show("Heart!", ToastAndroid.SHORT);
             }}
-            name={true ? "heart" : "heart-outline"} // TODO: heart
+            name={true ? "heart" : "heart-outline"}
             size={ICON_SIZE}
             style={[styles.heart]}
           />

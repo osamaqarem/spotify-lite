@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
-import { PlaylistCover } from "./PlaylistCover";
 import PlaylistRowFav from "./PlaylistFavRow";
 import PlaylistCoverBlank from "./PlaylistCoverBlank";
+import PlaylistCover from "./PlaylistCover";
 
 const PlaylistItem = ({
   item,

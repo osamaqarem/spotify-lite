@@ -11,17 +11,14 @@ import {
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, browseActions } from "./actionTypes";
-
-export const getAllFeaturedPlaylists = () => ({
-  type: browseActions.GET_ALL_FEATURED_PLAYLISTS,
-});
+import { RootStoreType } from "../store";
 
 export const getAllFeaturedPlaylistsEpic = (
   actions$: Observable<Action<any>>,
-  state$: Observable<any>,
+  state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(browseActions.GET_ALL_FEATURED_PLAYLISTS),
+    ofType(userActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
@@ -52,15 +49,16 @@ export const getAllFeaturedPlaylistsEpic = (
           };
         }),
         catchError(err => {
-          if (typeof err === "string" && err.includes("expired")) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getAllFeaturedPlaylists(),
-              },
-            });
-          }
+          // TODO:
+          // if (typeof err === "string" && err.includes("expired")) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getAllFeaturedPlaylists(),
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({
@@ -122,15 +120,16 @@ export const getAllCategoriesForCountryEpic = (
           };
         }),
         catchError(err => {
-          if (typeof err === "string" && err.includes("expired")) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getAllCategoriesForCountry(),
-              },
-            });
-          }
+          // TODO:
+          // if (typeof err === "string" && err.includes("expired")) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getAllCategoriesForCountry(),
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

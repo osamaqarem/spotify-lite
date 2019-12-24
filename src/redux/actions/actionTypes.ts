@@ -1,17 +1,10 @@
-export const loadingActions = {
-  LOADING: "LOADING",
-  DONE: "DONE",
-};
-
 // User profile API and auth API
 export const userActions = {
   GET_TOKENS_SUCCESS: "GET_TOKENS_SUCCESS",
-  GET_TOKENS_ERROR: "GET_TOKENS_ERROR",
-  SET_TOKENS: "SET_TOKENS",
-  REFRESH_TOKEN: "REFRESH_TOKEN",
   ERROR: "ERROR",
   GET_PROFILE: "GET_PROFILE",
-  PROFILE_SUCCESS: "PROFILE_SUCCESS",
+  GET_PROFILE_SUCCESS: "PROFILE_SUCCESS",
+  REHYDRATE_FROM_API: "REHYDRATE_FROM_API",
 };
 
 export const playlistActions = {

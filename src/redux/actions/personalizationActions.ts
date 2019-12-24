@@ -11,16 +11,12 @@ import {
 import { SPOTIFY_API_BASE } from "../../utils";
 import { userActions, personalizationActions } from "./actionTypes";
 
-export const getCurrentUserTopArtists = () => ({
-  type: personalizationActions.GET_USER_TOP_ARTISTS,
-});
-
 export const getCurrentUserTopArtistsEpic = (
   actions$: Observable<Action<any>>,
   state$: Observable<any>,
 ) =>
   actions$.pipe(
-    ofType(personalizationActions.GET_USER_TOP_ARTISTS),
+    ofType(userActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
@@ -54,15 +50,16 @@ export const getCurrentUserTopArtistsEpic = (
           };
         }),
         catchError(err => {
-          if (typeof err === "string" && err.includes("expired")) {
-            return of({
-              type: userActions.REFRESH_TOKEN,
-              payload: {
-                refreshToken: state.userReducer.refreshToken,
-                actionToRestart: getCurrentUserTopArtists(),
-              },
-            });
-          }
+          // TODO:
+          // if (typeof err === "string" && err.includes("expired")) {
+          //   return of({
+          //     type: userActions.REFRESH_TOKEN,
+          //     payload: {
+          //       refreshToken: state.userReducer.refreshToken,
+          //       actionToRestart: getCurrentUserTopArtists(),
+          //     },
+          //   });
+          // }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

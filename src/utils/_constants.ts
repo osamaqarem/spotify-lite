@@ -14,20 +14,19 @@ export const COLORS = {
 
 // Route names
 export const Routes = {
-  NestedTopTabs: {
-    Playlists: "Playlists",
-    Artists: "Artists",
-    Albums: "Albums",
-  },
   DetailsStack: {
-    HomeScreen: "HomeScreen",
-    PlaylistDetailsScreen: "PlaylistDetailsScreen",
-    ArtistDetailsScreen: "ArtistDetailsScreen",
+    Home: "Home",
+    PlaylistDetails: "PlaylistDetails",
+    ArtistDetails: "ArtistDetails",
   },
-  BottomTabsNav: {
+  AppStack: {
     Home: "Home",
     Search: "Search",
     Favorites: "Favorites",
+  },
+  AuthFlow: {
+    AuthStack: "AuthStack",
+    AppStack: "AppStack",
   },
 };
 

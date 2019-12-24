@@ -19,7 +19,7 @@ const TopArtists = ({
   const onArtistPressed = (id: string) => {
     setArtistId(id);
     // requestAnimationFrame(() => {
-    navigation.navigate(Routes.DetailsStack.ArtistDetailsScreen);
+    navigation.navigate(Routes.DetailsStack.ArtistDetails);
     // });
   };
 

@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import AlbumsList from "../../components/AlbumsList";
-import { getCurrentUserSavedAlbums } from "../../../redux/actions";
-import { SavedAlbumType } from "../../../redux/reducers/libraryReducer";
-import { RootStoreType } from "../../../redux/store";
+import AlbumsList from "../components/AlbumsList";
+import { getCurrentUserSavedAlbums } from "../../redux/actions";
+import { SavedAlbumType } from "../../redux/reducers/libraryReducer";
+import { RootStoreType } from "../../redux/store";
 
-const UserAlbumsScreen = ({
+const FavoriteAlbumsScreen = ({
   getCurrentUserSavedAlbums,
   currentUserAlbums,
 }: {
@@ -25,4 +25,4 @@ const mapStateToProps = (state: RootStoreType) => ({
 
 export default connect(mapStateToProps, {
   getCurrentUserSavedAlbums,
-})(UserAlbumsScreen);
+})(FavoriteAlbumsScreen);

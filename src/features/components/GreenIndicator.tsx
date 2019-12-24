@@ -1,5 +1,6 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
+import { COLORS } from "../../utils";
 
 const GreenIndicator = () => {
   return (
@@ -10,7 +11,7 @@ const GreenIndicator = () => {
         justifyContent: "center",
         top: 0,
         left: 0,
-        backgroundColor: "#000",
+        backgroundColor: COLORS.background,
       }}>
       <ActivityIndicator size={60} color="darkgreen" />
     </View>
