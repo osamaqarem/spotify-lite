@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import PlaylistsList from "../../common/PlaylistsList";
+import PlaylistsList from "../../components/PlaylistsList";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,

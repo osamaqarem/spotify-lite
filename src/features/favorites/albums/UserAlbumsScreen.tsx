@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import AlbumsList from "../../common/AlbumsList";
+import AlbumsList from "../../components/AlbumsList";
 import { getCurrentUserSavedAlbums } from "../../../redux/actions";
 import { SavedAlbumType } from "../../../redux/reducers/libraryReducer";
 import { RootStoreType } from "../../../redux/store";

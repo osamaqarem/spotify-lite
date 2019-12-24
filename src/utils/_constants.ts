@@ -52,8 +52,11 @@ export const SCOPES =
 // 3- response_type
 // 4- redirect_uri
 // 5- scope
+const responseType = "token";
+const showDialog = "false";
+
 export const LOGIN_URL = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${
   secret.clientId
-}&response_type=code&redirect_uri=${encodeURIComponent(
+}&response_type=${responseType}&redirect_uri=${encodeURIComponent(
   SPOTIFY_REDIRECT_URI,
-)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=false`;
+)}&scope=${encodeURIComponent(SCOPES)}&show_dialog=${showDialog}`;

@@ -2,7 +2,7 @@ import React, { RefObject } from "react";
 import { Modal } from "react-native";
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { LOGIN_URL } from "../../utils/_constants";
-import GreenIndicator from "../common/GreenIndicator";
+import GreenIndicator from "../components/GreenIndicator";
 
 export type LoginModalType = {
   isVisible: boolean;

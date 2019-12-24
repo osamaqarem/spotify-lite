@@ -27,12 +27,12 @@ import {
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio, SPOTIFY_API_BASE, Routes } from "../../utils";
-import DetailsCover from "../common/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../common/DetailsHeader";
-import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import HorizontalCoverList from "../common/HorizontalCoverList";
-import PlaylistContent from "../common/PlaylistContent";
-import ShuffleButton from "../common/ShuffleButton";
+import DetailsCover from "../components/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../components/DetailsHeader";
+import usePlaylistAnim from "../../hooks/usePlaylistAnim";
+import HorizontalCoverList from "../components/HorizontalCoverList";
+import PlaylistContent from "../components/PlaylistContent";
+import ShuffleButton from "../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;

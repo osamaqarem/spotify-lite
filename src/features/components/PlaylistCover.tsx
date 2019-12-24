@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 
-export const PlaylistCover = ({ uri }: { uri: string }) => {
+const PlaylistCover = ({ uri }: { uri: string }) => {
   return (
     <FastImage
       source={{
@@ -19,3 +19,5 @@ const styles = StyleSheet.create({
     width: 50,
   },
 });
+
+export default PlaylistCover;

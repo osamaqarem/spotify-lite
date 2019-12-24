@@ -4,7 +4,7 @@ import { YellowBox } from "react-native";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import redux from "./src/redux/store";
-import GreenIndicator from "./src/features/common/GreenIndicator";
+import GreenIndicator from "./src/features/components/GreenIndicator";
 
 if (__DEV__) {
   import("./ReactotronConfig").then(() => console.log("Reactotron Configured"));
