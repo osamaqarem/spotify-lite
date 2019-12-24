@@ -7,16 +7,13 @@ import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { clearPlaylistDetails } from "../../redux/actions";
-import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
 import DetailsCover from "../common/DetailsCover";
 import DetailsHeader, { HEADER_HEIGHT } from "../common/DetailsHeader";
-import DownloadHeader from "../common/DownloadHeader";
-import ShuffleButton from "../common/ShuffleButton";
-import Track from "../common/Track";
 import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
 import PlaylistContent from "../common/PlaylistContent";
+import ShuffleButton from "../common/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;

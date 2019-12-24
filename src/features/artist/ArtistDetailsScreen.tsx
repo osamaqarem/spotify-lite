@@ -3,8 +3,8 @@ import {
   ActivityIndicator,
   ScrollView,
   StyleSheet,
-  View,
   Text,
+  View,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
@@ -20,19 +20,19 @@ import {
   ArtistTopTracksResponse,
   ErrorResponse,
 } from "../../data/models";
-import { refreshUserToken } from "../../redux/actions";
+import { refreshUserToken, setArtistId } from "../../redux/actions";
 import {
   PlaylistDetailsType,
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, height, ratio, SPOTIFY_API_BASE } from "../../utils";
+import { COLORS, height, ratio, SPOTIFY_API_BASE, Routes } from "../../utils";
 import DetailsCover from "../common/DetailsCover";
 import DetailsHeader, { HEADER_HEIGHT } from "../common/DetailsHeader";
-import ShuffleButton from "../common/ShuffleButton";
 import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import PlaylistContent from "../common/PlaylistContent";
 import HorizontalCoverList from "../common/HorizontalCoverList";
+import PlaylistContent from "../common/PlaylistContent";
+import ShuffleButton from "../common/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -58,6 +58,7 @@ type ArtistDetails = PlaylistDetailsType & { relatedArtists: AlbumType[] };
 
 const ArtistDetailsScreen = ({
   artistId,
+  setArtistId,
   navigation,
   token,
   refreshUserToken,
@@ -174,6 +175,11 @@ const ArtistDetailsScreen = ({
     };
   }, [refreshToken, token, artistId, refreshUserToken, artistDetails]);
 
+  const goToArtist = (id: string) => {
+    setArtistId(id);
+    navigation.push(Routes.DetailsStack.ArtistDetailsScreen);
+  };
+
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
       <DetailsHeader
@@ -244,15 +250,15 @@ const ArtistDetailsScreen = ({
                   paddingBottom: 30,
                 }}
                 showsVerticalScrollIndicator={false}>
-                {[1, 2, 3, 4, 5, 6].map((_, index) => (
+                {artistDetails.relatedArtists.map(artist => (
                   <HorizontalCoverList
                     coverShape="CIRCLE"
-                    key={index}
-                    onPress={() => {}}
+                    key={artist.name}
+                    onPress={() => goToArtist(artist.id)}
                     album={{
-                      id: "",
-                      name: "Example Artist",
-                      url: artistDetails?.imageUrl,
+                      id: artist.id,
+                      name: artist.name,
+                      url: artist.url,
                     }}
                   />
                 ))}
@@ -300,7 +306,7 @@ const mapStateToProps = (state: RootStoreType) => ({
   refreshToken: state.userReducer.refreshToken,
 });
 
-const mapDispatchToProps = { refreshUserToken };
+const mapDispatchToProps = { refreshUserToken, setArtistId };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
