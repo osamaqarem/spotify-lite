@@ -1,14 +1,16 @@
 import React from "react";
-import { View, Text } from "react-native";
-import DownloadHeader from "../details/DownloadHeader";
-import Track from "../details/Track";
-import { COLORS, ratio } from "../../../utils";
-import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
+import { View } from "react-native";
+import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
+import { COLORS, ratio } from "../../utils";
+import DownloadHeader from "./DownloadHeader";
+import Track from "./Track";
 
 const PlaylistContent = ({
   playlistDetails,
+  showDownload,
 }: {
   playlistDetails: PlaylistDetailsType;
+  showDownload: boolean;
 }) => (
   <View
     style={{
@@ -20,7 +22,7 @@ const PlaylistContent = ({
         flex: 1,
         marginHorizontal: 10,
       }}>
-      <DownloadHeader />
+      {showDownload && <DownloadHeader />}
       {playlistDetails.tracks.map((track, index) => (
         <Track key={index} title={track.name} artist={track.artistName} />
       ))}

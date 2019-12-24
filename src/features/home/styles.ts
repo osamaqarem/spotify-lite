@@ -1,6 +1,8 @@
 import { COLORS } from "../../utils";
 import { StyleSheet } from "react-native";
 
+const MARGIN_BOTTOM = 38;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -21,7 +23,7 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     justifyContent: "space-between",
     marginHorizontal: 15,
-    marginBottom: 38,
+    marginBottom: MARGIN_BOTTOM,
   },
   albumText: {
     width: "94%",
@@ -36,7 +38,7 @@ const styles = StyleSheet.create({
 
 const albumDimensions = {
   ROW_SCROLLVIEW_HEIGHT: 180,
-  ALBUM_DIMEN_RECENT: 180 - 38,
+  ALBUM_DIMEN_RECENT: 180 - MARGIN_BOTTOM,
   ALBUM_DIMEN_MADE: 172.5,
 };
 

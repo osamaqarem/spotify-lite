@@ -2,18 +2,20 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../utils";
 
 const DetailsCover = ({
   offsetY,
   artistName,
   name,
   imageUrl,
+  coverShape,
 }: {
   offsetY: Animated.Value<number>;
   name: string | undefined;
   artistName: string | undefined;
   imageUrl: string | undefined;
+  coverShape: "CIRCLE" | "SQUARE";
 }) => {
   const scaleAnim = offsetY.interpolate({
     inputRange: [0, 250],
@@ -36,7 +38,13 @@ const DetailsCover = ({
           transform: [{ scaleX: scaleAnim }, { scaleY: scaleAnim }],
         },
       ]}>
-      <FastImage style={styles.cover} source={{ uri: imageUrl }} />
+      <FastImage
+        style={[
+          styles.cover,
+          { borderRadius: coverShape === "CIRCLE" ? 83 : 0 },
+        ]}
+        source={{ uri: imageUrl }}
+      />
       <View style={styles.textContainer}>
         <Text
           numberOfLines={2}

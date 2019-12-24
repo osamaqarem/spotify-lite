@@ -1,12 +1,14 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { COLORS } from "../../utils";
-import DotsView from "./details/DotsView";
+import DotsView from "./DotsView";
 
 const Track = ({ title, artist }: { title: string; artist: string }) => (
   <View style={styles.container}>
     <View style={styles.trackContainer}>
-      <Text style={styles.title}>{title}</Text>
+      <Text style={styles.title} numberOfLines={1}>
+        {title}
+      </Text>
       <Text style={styles.artist}>{artist}</Text>
     </View>
     <DotsView containerStyle={{ marginRight: 10 }} />
@@ -27,6 +29,7 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontSize: 16,
     letterSpacing: 0.6,
+    marginRight: 15,
   },
   artist: { color: COLORS.grey, fontSize: 12.5, letterSpacing: 0.6 },
 });

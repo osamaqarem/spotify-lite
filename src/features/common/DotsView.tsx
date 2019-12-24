@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, ViewStyle } from "react-native";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../utils";
 import { Color } from "csstype";
 
 const DotsView = ({

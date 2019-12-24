@@ -7,7 +7,7 @@ import {
   Text,
 } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, ratio } from "../../../utils";
+import { COLORS, ratio } from "../../utils";
 import DotsView from "./DotsView";
 
 export const HEADER_HEIGHT = 90;

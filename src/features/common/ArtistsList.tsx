@@ -1,8 +1,8 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { COLORS } from "../../utils";
-import { PlaylistCover } from "./playlist/PlaylistCover";
-import PlaylistCoverBlank from "./playlist/PlaylistCoverBlank";
+import { PlaylistCover } from "./PlaylistCover";
+import PlaylistCoverBlank from "./PlaylistCoverBlank";
 import { AlbumType } from "../../data/models";
 
 const renderItem = ({ item }: any) => {

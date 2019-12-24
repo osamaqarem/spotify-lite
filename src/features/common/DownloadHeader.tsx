@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, ToastAndroid, Switch, StyleSheet } from "react-native";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../utils";
 
 const DownloadHeader = () => (
   <View style={styles.container}>

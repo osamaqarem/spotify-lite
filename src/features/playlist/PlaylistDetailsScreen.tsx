@@ -10,13 +10,13 @@ import { clearPlaylistDetails } from "../../redux/actions";
 import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
-import DetailsCover from "../common/details/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
-import DownloadHeader from "../common/details/DownloadHeader";
-import ShuffleButton from "../common/details/ShuffleButton";
-import Track from "../common/details/Track";
+import DetailsCover from "../common/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../common/DetailsHeader";
+import DownloadHeader from "../common/DownloadHeader";
+import ShuffleButton from "../common/ShuffleButton";
+import Track from "../common/Track";
 import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import PlaylistContent from "../common/playlist/PlaylistContent";
+import PlaylistContent from "../common/PlaylistContent";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -101,6 +101,7 @@ const PlaylistDetailsScreen = ({
           </Animated.View>
           <View style={styles.coverContainer}>
             <DetailsCover
+              coverShape="SQUARE"
               offsetY={offsetY}
               name={playlistDetails?.name}
               imageUrl={playlistDetails?.imageUrl}
@@ -126,7 +127,7 @@ const PlaylistDetailsScreen = ({
               },
             ]}>
             {playlistDetails && (
-              <PlaylistContent playlistDetails={playlistDetails} />
+              <PlaylistContent playlistDetails={playlistDetails} showDownload />
             )}
           </Animated.ScrollView>
         </>

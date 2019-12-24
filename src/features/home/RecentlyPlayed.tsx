@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { getAlbumById } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { Routes } from "../../utils";
-import AlbumRecentItem from "./AlbumRecentItem";
+import HorizontalCoverList from "../common/HorizontalCoverList";
 import { albumDimensions, styles } from "./styles";
 
 const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
@@ -36,7 +36,8 @@ const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
         <View style={styles.rowScrollContainer}>
           {recentlyPlayedAlbums &&
             recentlyPlayedAlbums.map((album, index: number) => (
-              <AlbumRecentItem
+              <HorizontalCoverList
+                coverShape="SQUARE"
                 key={index}
                 album={album}
                 onPress={onAlbumPressed}

@@ -1,5 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  ScrollView,
+  StyleSheet,
+  View,
+  Text,
+} from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
@@ -21,11 +27,12 @@ import {
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio, SPOTIFY_API_BASE } from "../../utils";
-import DetailsCover from "../common/details/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../common/details/DetailsHeader";
-import ShuffleButton from "../common/details/ShuffleButton";
+import DetailsCover from "../common/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../common/DetailsHeader";
+import ShuffleButton from "../common/ShuffleButton";
 import usePlaylistAnim from "../common/hooks/usePlaylistAnim";
-import PlaylistContent from "../common/playlist/PlaylistContent";
+import PlaylistContent from "../common/PlaylistContent";
+import HorizontalCoverList from "../common/HorizontalCoverList";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -195,6 +202,7 @@ const ArtistDetailsScreen = ({
           </Animated.View>
           <View style={styles.coverContainer}>
             <DetailsCover
+              coverShape="CIRCLE"
               offsetY={offsetY}
               name={artistDetails?.name}
               imageUrl={artistDetails?.imageUrl}
@@ -220,7 +228,35 @@ const ArtistDetailsScreen = ({
               },
             ]}>
             {artistDetails && (
-              <PlaylistContent playlistDetails={artistDetails} />
+              <PlaylistContent
+                playlistDetails={artistDetails}
+                showDownload={false}
+              />
+            )}
+            <Text style={[styles.relatedArtists]}>Related artists</Text>
+            {artistDetails && (
+              <ScrollView
+                horizontal
+                style={{
+                  marginTop: 12,
+                }}
+                contentContainerStyle={{
+                  paddingBottom: 30,
+                }}
+                showsVerticalScrollIndicator={false}>
+                {[1, 2, 3, 4, 5, 6].map((_, index) => (
+                  <HorizontalCoverList
+                    coverShape="CIRCLE"
+                    key={index}
+                    onPress={() => {}}
+                    album={{
+                      id: "",
+                      name: "Example Artist",
+                      url: artistDetails?.imageUrl,
+                    }}
+                  />
+                ))}
+              </ScrollView>
             )}
           </Animated.ScrollView>
         </>
@@ -248,6 +284,13 @@ const styles = StyleSheet.create({
   scrollContent: {
     marginTop: 290 * ratio,
     zIndex: 5,
+  },
+  relatedArtists: {
+    alignSelf: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18.5,
+    marginTop: 24,
   },
 });
 

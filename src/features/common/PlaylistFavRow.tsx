@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../utils";
 
 const PlaylistRowFav = ({ savedTracksCount }: { savedTracksCount: number }) => (
   <View style={styles.favRow}>
     <FastImage
-      source={require("../../../data/assets/savedTracks.jpg")}
+      source={require("../../data/assets/savedTracks.jpg")}
       style={styles.cover}
     />
     <View style={styles.favRowText}>
