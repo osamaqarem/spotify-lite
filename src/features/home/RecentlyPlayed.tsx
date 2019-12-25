@@ -5,7 +5,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { getAlbumById } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { Routes } from "../../utils";
-import HorizontalCoverList from "../components/HorizontalCoverList";
+import HorizontalCoverList from "../../components/HorizontalCoverList";
 import { albumDimensions, styles } from "./styles";
 
 const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {

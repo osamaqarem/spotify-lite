@@ -27,12 +27,12 @@ import {
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio, SPOTIFY_API_BASE, Routes } from "../../utils";
-import DetailsCover from "../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../components/DetailsHeader";
+import DetailsCover from "../../components/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import HorizontalCoverList from "../components/HorizontalCoverList";
-import PlaylistContent from "../components/PlaylistContent";
-import ShuffleButton from "../components/ShuffleButton";
+import HorizontalCoverList from "../../components/HorizontalCoverList";
+import PlaylistContent from "../../components/PlaylistContent";
+import ShuffleButton from "../../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -61,6 +61,7 @@ const ArtistDetailsScreen = ({
   setArtistId,
   navigation,
   token,
+  profile,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
@@ -88,7 +89,7 @@ const ArtistDetailsScreen = ({
 
         const topTracks$ = from(
           fetch(
-            `${SPOTIFY_API_BASE}/v1/artists/${artistId}/top-tracks?market=US`,
+            `${SPOTIFY_API_BASE}/v1/artists/${artistId}/top-tracks?market=${profile?.country}`,
             {
               method: "GET",
               headers: {
@@ -172,7 +173,7 @@ const ArtistDetailsScreen = ({
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, [token, artistId, artistDetails]);
+  }, [token, artistId, artistDetails, profile]);
 
   const goToArtist = (id: string) => {
     setArtistId(id);
@@ -302,6 +303,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: RootStoreType) => ({
   artistId: state.artistReducer.artistId,
   token: state.userReducer.token,
+  profile: state.userReducer.profile,
 });
 
 const mapDispatchToProps = { setArtistId };

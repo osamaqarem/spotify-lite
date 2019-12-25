@@ -9,8 +9,8 @@ import { debounceTime, filter, map, take } from "rxjs/operators";
 import { setToken, rehydrate } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
-import GreenIndicator from "../components/GreenIndicator";
-import TopBar from "../components/TopBar";
+import GreenIndicator from "../../components/GreenIndicator";
+import TopBar from "../../components/TopBar";
 const webViewSub$: Subject<string> = new Subject();
 
 const LoginScreen = ({

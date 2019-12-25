@@ -9,11 +9,11 @@ import { connect, ConnectedProps } from "react-redux";
 import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
-import DetailsCover from "../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../components/DetailsHeader";
+import DetailsCover from "../../components/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import PlaylistContent from "../components/PlaylistContent";
-import ShuffleButton from "../components/ShuffleButton";
+import PlaylistContent from "../../components/PlaylistContent";
+import ShuffleButton from "../../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;

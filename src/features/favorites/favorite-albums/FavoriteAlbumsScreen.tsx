@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import AlbumsList from "../components/AlbumsList";
-import { getCurrentUserSavedAlbums } from "../../redux/actions";
-import { SavedAlbumType } from "../../redux/reducers/libraryReducer";
-import { RootStoreType } from "../../redux/store";
+import AlbumsList from "../../../components/AlbumsList";
+import { getCurrentUserSavedAlbums } from "../../../redux/actions";
+import { SavedAlbumType } from "../../../redux/reducers/libraryReducer";
+import { RootStoreType } from "../../../redux/store";
 
 const FavoriteAlbumsScreen = ({
   getCurrentUserSavedAlbums,

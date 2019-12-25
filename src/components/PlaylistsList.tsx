@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import { COLORS } from "../../utils";
+import { COLORS } from "../utils";
 import PlaylistRowFav from "./PlaylistFavRow";
 import PlaylistCoverBlank from "./PlaylistCoverBlank";
 import PlaylistCover from "./PlaylistCover";

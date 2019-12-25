@@ -2,7 +2,7 @@ import React from "react";
 import { ScrollView, StatusBar, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
-import TopBar from "../components/TopBar";
+import TopBar from "../../components/TopBar";
 import FeaturedPlaylists from "./FeaturedPlaylists";
 import RecentlyPlayed from "./RecentlyPlayed";
 import { styles } from "./styles";

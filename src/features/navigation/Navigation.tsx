@@ -5,17 +5,17 @@ import { createMaterialBottomTabNavigator } from "react-navigation-material-bott
 import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
 import { COLORS } from "../../utils";
-import FavoriteAlbumsScreen from "../favorites/FavoriteAlbumsScreen";
-import FavoriteArtistsScreen from "../favorites/FavoriteArtistsScreen";
-import FavoritePlaylistsScreen from "../favorites/FavoritePlaylistsScreen";
+import FavoriteAlbumsScreen from "../favorites/favorite-albums/FavoriteAlbumsScreen";
+import FavoriteArtistsScreen from "../favorites/favorite-artists/FavoriteArtistsScreen";
+import FavoritePlaylistsScreen from "../favorites/favorite-playlists/FavoritePlaylistsScreen";
 import HomeScreen from "../home/HomeScreen";
-import PlaylistDetailsScreen from "../playlist/PlaylistDetailsScreen";
+import PlaylistDetailsScreen from "../playlist-details/PlaylistDetailsScreen";
 import SearchScreen from "../search/SearchScreen";
 import FavoritesIcon from "./FavoritesIcon";
 import HomeIcon from "./HomeIcon";
 import SearchIcon from "./SearchIcon";
-import ArtistDetailsScreen from "../artist/ArtistDetailsScreen";
-import LoginScreen from "../auth/LoginScreen";
+import ArtistDetailsScreen from "../artist-details/ArtistDetailsScreen";
+import LoginScreen from "../login/LoginScreen";
 
 const sharedStyles = {
   activeColor: COLORS.white,

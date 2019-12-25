@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
-import { PlaylistDetailsType } from "../../redux/reducers/playlistReducer";
-import { COLORS, ratio } from "../../utils";
+import { PlaylistDetailsType } from "../redux/reducers/playlistReducer";
+import { COLORS, ratio } from "../utils";
 import DownloadHeader from "./DownloadHeader";
 import Track from "./Track";
 

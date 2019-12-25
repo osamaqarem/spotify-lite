@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
-import { albumDimensions, styles } from "../home/styles";
-import { AlbumType } from "../../data/models";
+import { albumDimensions, styles } from "../features/home/styles";
+import { AlbumType } from "../data/models";
 
 const HorizontalCoverList = ({
   album: item,

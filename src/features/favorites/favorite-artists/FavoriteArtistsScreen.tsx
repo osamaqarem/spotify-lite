@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import ArtistsList from "../components/ArtistsList";
-import { getCurrentUserSavedArtists } from "../../redux/actions";
-import { RootStoreType } from "../../redux/store";
-import { AlbumType } from "../../data/models";
+import ArtistsList from "../../../components/ArtistsList";
+import { getCurrentUserSavedArtists } from "../../../redux/actions";
+import { RootStoreType } from "../../../redux/store";
+import { AlbumType } from "../../../data/models";
 
 const FavoriteArtistsScreen = ({
   getCurrentUserSavedArtists,
