@@ -10,8 +10,14 @@ import {
 } from "../../data/models";
 import { AlbumListResponse } from "../../data/models/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { albumActions, userActions, playlistActions } from "./actionTypes";
+import {
+  albumActions,
+  userActions,
+  playlistActions,
+  globalActions,
+} from "./actionTypes";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
+import { redoLogin } from "./userActions";
 
 export const getAlbumById = (id: string) => ({
   type: albumActions.GET_ALBUM,
@@ -62,20 +68,16 @@ export const getAlbumByIdEpic = (
           };
         }),
         catchError(err => {
-          //TODO:
-          // if (
-          //   typeof err === "string" &&
-          //   typeof err === "string" &&
-          //   err.includes("expired")
-          // ) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getAlbumById(id),
-          //     },
-          //   });
-          // }
+          if (
+            typeof err === "string" &&
+            typeof err === "string" &&
+            err.includes("expired")
+          ) {
+            return of(redoLogin(), {
+              type: globalActions.PUSH_ACTION_TO_RESTART,
+              payload: getAlbumById(id),
+            });
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({
@@ -135,16 +137,12 @@ export const getMultipleAlbumsEpic = (
           };
         }),
         catchError(err => {
-          // TODO:
-          // if (typeof err === "string" && err.includes("expired")) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getMultipleAlbums(commaList),
-          //     },
-          //   });
-          // }
+          if (typeof err === "string" && err.includes("expired")) {
+            return of(redoLogin(), {
+              type: globalActions.PUSH_ACTION_TO_RESTART,
+              payload: getMultipleAlbums(commaList),
+            });
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

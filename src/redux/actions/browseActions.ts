@@ -10,15 +10,16 @@ import {
   UserProfileResponse,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { userActions, browseActions } from "./actionTypes";
 import { RootStoreType } from "../store";
+import { browseActions, globalActions } from "./actionTypes";
+import { redoLogin } from "./userActions";
 
 export const getAllFeaturedPlaylistsEpic = (
   actions$: Observable<Action<any>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(userActions.REHYDRATE_FROM_API),
+    ofType(globalActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
@@ -49,16 +50,9 @@ export const getAllFeaturedPlaylistsEpic = (
           };
         }),
         catchError(err => {
-          // TODO:
-          // if (typeof err === "string" && err.includes("expired")) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getAllFeaturedPlaylists(),
-          //     },
-          //   });
-          // }
+          if (typeof err === "string" && err.includes("expired")) {
+            return of(redoLogin());
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({
@@ -120,16 +114,12 @@ export const getAllCategoriesForCountryEpic = (
           };
         }),
         catchError(err => {
-          // TODO:
-          // if (typeof err === "string" && err.includes("expired")) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getAllCategoriesForCountry(),
-          //     },
-          //   });
-          // }
+          if (typeof err === "string" && err.includes("expired")) {
+            return of(redoLogin(), {
+              type: globalActions.PUSH_ACTION_TO_RESTART,
+              payload: getAllCategoriesForCountry(),
+            });
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

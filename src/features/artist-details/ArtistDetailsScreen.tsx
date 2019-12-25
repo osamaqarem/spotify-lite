@@ -20,7 +20,7 @@ import {
   ArtistTopTracksResponse,
   ErrorResponse,
 } from "../../data/models";
-import { setArtistId } from "../../redux/actions";
+import { setArtistId, redoLogin } from "../../redux/actions";
 import {
   PlaylistDetailsType,
   TrackType,
@@ -62,6 +62,7 @@ const ArtistDetailsScreen = ({
   navigation,
   token,
   profile,
+  redoLogin,
 }: PropsFromRedux & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
@@ -155,13 +156,11 @@ const ArtistDetailsScreen = ({
           },
         );
       } catch (err) {
-        // handle error
-        // TODO:
-        //   if (typeof err === "string" && err.includes("expired")) {
-        //     refreshToken
-        //       ? refreshUserToken(refreshToken)
-        //       : console.error("ArtistDetailsScreen: Refresh token is null.");
-        //   }
+        if (typeof err === "string" && err.includes("expired")) {
+          redoLogin();
+        } else {
+          console.warn(JSON.stringify(err));
+        }
       }
     };
 
@@ -173,7 +172,7 @@ const ArtistDetailsScreen = ({
     return () => {
       if (subscription) subscription.unsubscribe();
     };
-  }, [token, artistId, artistDetails, profile]);
+  }, [token, artistId, artistDetails, profile, redoLogin]);
 
   const goToArtist = (id: string) => {
     setArtistId(id);
@@ -306,7 +305,7 @@ const mapStateToProps = (state: RootStoreType) => ({
   profile: state.userReducer.profile,
 });
 
-const mapDispatchToProps = { setArtistId };
+const mapDispatchToProps = { setArtistId, redoLogin };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

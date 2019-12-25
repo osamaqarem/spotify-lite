@@ -11,6 +11,7 @@ import {
   getCurrentUserSavedAlbumsEpic,
   getAllCategoriesForCountryEpic,
   getAlbumByIdEpic,
+  rehydrateAndRestartActionsEpic,
 } from "../actions";
 import { combineReducers } from "redux";
 import userReducer from "./userReducer";
@@ -36,6 +37,7 @@ export const rootEpic = combineEpics(
   getCurrentUserSavedArtistsEpic,
   getAllCategoriesForCountryEpic,
   getPlayListByIdEpic,
+  rehydrateAndRestartActionsEpic,
 );
 
 export default combineReducers({

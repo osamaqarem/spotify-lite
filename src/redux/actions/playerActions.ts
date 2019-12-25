@@ -17,15 +17,16 @@ import {
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { RootStoreType } from "../store";
-import { playerActions, userActions } from "./actionTypes";
+import { playerActions, globalActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
+import { redoLogin } from "./userActions";
 
 export const getRecentlyPlayedTracksEpic = (
   actions$: Observable<Action<undefined>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(userActions.REHYDRATE_FROM_API),
+    ofType(globalActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(state =>
       interval(180 * 1000).pipe(mapTo(state), startWith(state)),
@@ -65,16 +66,9 @@ export const getRecentlyPlayedTracksEpic = (
         }),
         mergeMap(a => a),
         catchError(err => {
-          // TODO:
-          // if (typeof err === "string" && err.includes("expired")) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getRecentlyPlayedTracks,
-          //     },
-          //   });
-          // }
+          if (typeof err === "string" && err.includes("expired")) {
+            return of(redoLogin());
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

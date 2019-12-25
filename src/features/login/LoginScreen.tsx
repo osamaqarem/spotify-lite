@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { WebView, WebViewNavigation } from "react-native-webview";
@@ -6,18 +6,18 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
-import { setToken, rehydrate } from "../../redux/actions";
-import { RootStoreType } from "../../redux/store";
-import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
 import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
+import { rehydrateAndRestartActions, setToken } from "../../redux/actions";
+import { RootStoreType } from "../../redux/store";
+import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
 const webViewSub$: Subject<string> = new Subject();
 
 const LoginScreen = ({
   setToken,
   authenticated,
   navigation,
-  rehydrate,
+  rehydrateAndRestartActions,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const webViewRef = useRef<WebView | null>(null);
   const [showBack, setShowBack] = useState(false);
@@ -50,10 +50,12 @@ const LoginScreen = ({
 
   useEffect(() => {
     if (authenticated) {
-      rehydrate();
+      rehydrateAndRestartActions();
+      //TODO: don't navigate to appstack if refreshing token,
+      // go back instead.
       navigation.navigate(Routes.AuthFlow.AppStack);
     }
-  }, [authenticated, navigation, rehydrate]);
+  }, [authenticated, navigation, rehydrateAndRestartActions]);
 
   /**
    *
@@ -115,7 +117,7 @@ const mapStateToProps = (state: RootStoreType) => ({
 
 const mapDispatchToProps = {
   setToken,
-  rehydrate,
+  rehydrateAndRestartActions,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

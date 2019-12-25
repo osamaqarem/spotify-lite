@@ -4,19 +4,20 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import {
   Action,
+  AlbumType,
   ErrorResponse,
   UserTopArtistsResponse,
-  AlbumType,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { userActions, personalizationActions } from "./actionTypes";
+import { globalActions, personalizationActions } from "./actionTypes";
+import { redoLogin } from "./userActions";
 
 export const getCurrentUserTopArtistsEpic = (
   actions$: Observable<Action<any>>,
   state$: Observable<any>,
 ) =>
   actions$.pipe(
-    ofType(userActions.REHYDRATE_FROM_API),
+    ofType(globalActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
     switchMap(([, state]) => {
       const { token } = state.userReducer;
@@ -50,16 +51,9 @@ export const getCurrentUserTopArtistsEpic = (
           };
         }),
         catchError(err => {
-          // TODO:
-          // if (typeof err === "string" && err.includes("expired")) {
-          //   return of({
-          //     type: userActions.REFRESH_TOKEN,
-          //     payload: {
-          //       refreshToken: state.userReducer.refreshToken,
-          //       actionToRestart: getCurrentUserTopArtists(),
-          //     },
-          //   });
-          // }
+          if (typeof err === "string" && err.includes("expired")) {
+            return of(redoLogin());
+          }
           // handle error
           reactotron.log(JSON.stringify(err));
           return of({

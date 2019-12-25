@@ -4,7 +4,7 @@ import FastImage from "react-native-fast-image";
 
 export const PlaylistCoverBlank = ({ styles }: { styles: ImageStyle[] }) => (
   <FastImage
-    source={require("../../data/assets/noPlaylistImage.jpg")}
+    source={require("../data/assets/noPlaylistImage.jpg")}
     style={styles}
   />
 );
