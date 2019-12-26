@@ -12,7 +12,7 @@ import { COLORS, height, ratio } from "../../utils";
 import DetailsCover from "../../components/DetailsCover";
 import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import PlaylistContent from "../../components/PlaylistContent";
+import ListOfTracks from "../../components/ListOfTracks";
 import ShuffleButton from "../../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
@@ -124,7 +124,7 @@ const PlaylistDetailsScreen = ({
               },
             ]}>
             {playlistDetails && (
-              <PlaylistContent playlistDetails={playlistDetails} showDownload />
+              <ListOfTracks playlistDetails={playlistDetails} showDownload />
             )}
           </Animated.ScrollView>
         </>

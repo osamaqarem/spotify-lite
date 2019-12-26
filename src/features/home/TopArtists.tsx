@@ -18,9 +18,7 @@ const TopArtists = ({
 
   const onArtistPressed = (id: string) => {
     setArtistId(id);
-    // requestAnimationFrame(() => {
     navigation.navigate(Routes.DetailsStack.ArtistDetails);
-    // });
   };
 
   return (
@@ -57,12 +55,11 @@ const TopArtists = ({
       </View>
       <View style={styles.content}>
         {userTopArtists &&
-          userTopArtists.map((album: any, index: number) => (
+          userTopArtists.map(album => (
             <AlbumItem
-              key={index}
+              key={album.id}
               {...{
                 album,
-                index,
                 onPress: onArtistPressed,
               }}
             />

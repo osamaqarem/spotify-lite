@@ -6,17 +6,15 @@ import { albumDimensions, styles } from "./styles";
 
 const AlbumItem = ({
   album,
-  index,
   onPress,
 }: {
   album: AlbumType;
-  index: number;
   onPress: (id: string) => void;
 }) => {
   return (
     <TouchableOpacity
       onPress={() => onPress(album.id)}
-      key={index}
+      key={album.id}
       style={[{ width: albumDimensions.ALBUM_DIMEN_MADE }]}>
       <FastImage
         source={{

@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { WebView, WebViewNavigation } from "react-native-webview";
@@ -8,16 +14,17 @@ import { Subject } from "rxjs";
 import { debounceTime, filter, map, take } from "rxjs/operators";
 import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
-import { rehydrateAndRestartActions, setToken } from "../../redux/actions";
+import { rehydrate, setToken } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
+
 const webViewSub$: Subject<string> = new Subject();
 
 const LoginScreen = ({
   setToken,
   authenticated,
   navigation,
-  rehydrateAndRestartActions,
+  rehydrate,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const webViewRef = useRef<WebView | null>(null);
   const [showBack, setShowBack] = useState(false);
@@ -48,17 +55,16 @@ const LoginScreen = ({
     };
   }, [handleToken]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (authenticated) {
-      rehydrateAndRestartActions();
+      rehydrate();
       //TODO: don't navigate to appstack if refreshing token,
       // go back instead.
       navigation.navigate(Routes.AuthFlow.AppStack);
     }
-  }, [authenticated, navigation, rehydrateAndRestartActions]);
+  }, [authenticated, navigation, rehydrate]);
 
   /**
-   *
    * Feed URL values to the stream on every URL change
    */
   const handleNavEvent = (e: WebViewNavigation) => {
@@ -117,7 +123,7 @@ const mapStateToProps = (state: RootStoreType) => ({
 
 const mapDispatchToProps = {
   setToken,
-  rehydrateAndRestartActions,
+  rehydrate,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

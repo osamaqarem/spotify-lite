@@ -31,7 +31,7 @@ const FeaturedPlaylists = ({
         {featuredPlaylists &&
           featuredPlaylists.map((album: AlbumType, index: number) => (
             <AlbumItem
-              key={index}
+              key={album.id}
               {...{
                 album,
                 index,

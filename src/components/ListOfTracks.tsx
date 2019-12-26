@@ -5,7 +5,7 @@ import { COLORS, ratio } from "../utils";
 import DownloadHeader from "./DownloadHeader";
 import Track from "./Track";
 
-const PlaylistContent = ({
+const ListOfTracks = ({
   playlistDetails,
   showDownload,
 }: {
@@ -23,11 +23,11 @@ const PlaylistContent = ({
         marginHorizontal: 10,
       }}>
       {showDownload && <DownloadHeader />}
-      {playlistDetails.tracks.map((track, index) => (
-        <Track key={index} title={track.name} artist={track.artistName} />
+      {playlistDetails.tracks.map(track => (
+        <Track key={track.name} title={track.name} artist={track.artistName} />
       ))}
     </View>
   </View>
 );
 
-export default PlaylistContent;
+export default ListOfTracks;

@@ -1,11 +1,11 @@
 import React from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
+import Cover from "./Cover";
+import PlaylistRowFav from "../features/favorites/favorite-playlists/PlaylistFavRow";
+import CoverBlank from "./CoverBlank";
 import { COLORS } from "../utils";
-import PlaylistRowFav from "./PlaylistFavRow";
-import PlaylistCoverBlank from "./PlaylistCoverBlank";
-import PlaylistCover from "./PlaylistCover";
 
-const PlaylistItem = ({
+const Playlist = ({
   item,
   index,
   username,
@@ -14,14 +14,14 @@ const PlaylistItem = ({
   item: any;
   index: number;
   username: string;
-  savedTracksCount: number;
+  savedTracksCount: number | null;
 }) => (
   <View style={styles.flatListContainer}>
     {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
     {item.url ? (
-      <PlaylistCover uri={item.url} />
+      <Cover uri={item.url} />
     ) : (
-      <PlaylistCoverBlank styles={[styles.cover]} />
+      <CoverBlank styles={[styles.cover]} />
     )}
     <View style={styles.rowText}>
       <Text style={styles.playlistTitle} numberOfLines={1}>
@@ -34,34 +34,7 @@ const PlaylistItem = ({
   </View>
 );
 
-const PlaylistsList = ({ data, username }: { data: any; username: string }) => {
-  return (
-    <View style={styles.container}>
-      <FlatList
-        data={data.currentUserPlaylists}
-        renderItem={({ item, index }) => (
-          <PlaylistItem
-            {...{
-              item,
-              index,
-              username,
-              savedTracksCount: data.savedTracksCount,
-            }}
-          />
-        )}
-        keyExtractor={(_, index) => {
-          return index + "";
-        }}
-      />
-    </View>
-  );
-};
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
   flatListContainer: {
     marginLeft: 15,
     marginVertical: 10,
@@ -89,4 +62,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PlaylistsList;
+export default Playlist;

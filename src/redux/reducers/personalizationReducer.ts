@@ -2,13 +2,13 @@ import { Action, AlbumType } from "../../data/models";
 import { personalizationActions } from "../actions";
 
 type PersonalizationReducerType = {
-  userTopArtists: [];
-  userTopArtistsHeader: Pick<AlbumType, "name" | "url">;
+  userTopArtists: AlbumType[];
+  userTopArtistsHeader: Pick<AlbumType, "name" | "url"> | null;
 };
 
 const initialState: PersonalizationReducerType = {
   userTopArtists: [],
-  userTopArtistsHeader: { name: null, url: null },
+  userTopArtistsHeader: null,
 };
 
 export default (

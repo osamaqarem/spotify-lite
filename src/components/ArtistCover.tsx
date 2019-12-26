@@ -4,7 +4,7 @@ import FastImage from "react-native-fast-image";
 import { albumDimensions, styles } from "../features/home/styles";
 import { AlbumType } from "../data/models";
 
-const HorizontalCoverList = ({
+const ArtistCover = ({
   album: item,
   onPress,
   coverShape,
@@ -49,4 +49,4 @@ const HorizontalCoverList = ({
   );
 };
 
-export default HorizontalCoverList;
+export default ArtistCover;

@@ -9,7 +9,7 @@ export const userActions = {
 export const globalActions = {
   REHYDRATE_FROM_API: "REHYDRATE_FROM_API",
   PUSH_ACTION_TO_RESTART: "PUSH_ACTION_TO_RESTART",
-  RESTART_ACTIONS: "RESTART_ACTIONS",
+  CLEAR_ACTIONS_TO_RESTART: "CLEAR_ACTIONS_TO_RESTART",
 };
 
 export const playlistActions = {

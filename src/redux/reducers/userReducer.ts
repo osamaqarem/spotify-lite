@@ -12,7 +12,7 @@ const initialState: UserReducerType = {
   token: null,
   profile: null,
   authenticated: false,
-  actionsToRestart: [{ type: globalActions.REHYDRATE_FROM_API }], // always rehydrate upon renewing token
+  actionsToRestart: [],
 };
 
 export default (
@@ -28,6 +28,11 @@ export default (
       return {
         ...state,
         actionsToRestart: [...state.actionsToRestart, payload],
+      };
+    case globalActions.CLEAR_ACTIONS_TO_RESTART:
+      return {
+        ...state,
+        actionsToRestart: initialState.actionsToRestart,
       };
     case userActions.REDO_LOGIN:
       return { ...state, authenticated: false };

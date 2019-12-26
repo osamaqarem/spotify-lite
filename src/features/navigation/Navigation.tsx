@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text } from "react-native";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
-import { createStackNavigator } from "react-navigation-stack";
+import {
+  createStackNavigator,
+  NavigationStackProp,
+} from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { COLORS } from "../../utils";
+import { COLORS, Routes } from "../../utils";
 import FavoriteAlbumsScreen from "../favorites/favorite-albums/FavoriteAlbumsScreen";
 import FavoriteArtistsScreen from "../favorites/favorite-artists/FavoriteArtistsScreen";
 import FavoritePlaylistsScreen from "../favorites/favorite-playlists/FavoritePlaylistsScreen";
@@ -16,6 +19,8 @@ import HomeIcon from "./HomeIcon";
 import SearchIcon from "./SearchIcon";
 import ArtistDetailsScreen from "../artist-details/ArtistDetailsScreen";
 import LoginScreen from "../login/LoginScreen";
+import { connect, ConnectedProps } from "react-redux";
+import { RootStoreType } from "../../redux/store";
 
 const sharedStyles = {
   activeColor: COLORS.white,
@@ -27,7 +32,9 @@ const HomeLabel = <Text style={{ fontSize: 10 }}>Home</Text>;
 const SearchLabel = <Text style={{ fontSize: 10 }}>Search</Text>;
 const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
 
-// Favorites tab
+/**
+ * Favorite tabs
+ */
 const NestedTopTabsNav = createMaterialTopTabNavigator(
   {
     Playlists: FavoritePlaylistsScreen,
@@ -60,7 +67,6 @@ const NestedTopTabsNav = createMaterialTopTabNavigator(
   },
 );
 
-// Stack
 const DetailsStack = createStackNavigator(
   {
     Home: { screen: HomeScreen },
@@ -77,7 +83,9 @@ const DetailsStack = createStackNavigator(
   },
 );
 
-// Main
+/**
+ * Bottom tabs (main)
+ */
 const BottomTabsNav = createMaterialBottomTabNavigator(
   {
     Home: {
@@ -113,10 +121,44 @@ const BottomTabsNav = createMaterialBottomTabNavigator(
   },
 );
 
+/**
+ * This navigator will observe `authenticated` from redux store, and navigate to
+ * login screen if it is false.
+ */
+const AuthAwareNav = (
+  props: ReduxProps & { navigation: NavigationStackProp },
+) => {
+  const { navigation, authenticated } = props;
+
+  useEffect(() => {
+    if (!authenticated) {
+      navigation.navigate(Routes.AuthFlow.AuthStack);
+    }
+  }, [authenticated, navigation]);
+
+  return <BottomTabsNav navigation={navigation} />;
+};
+
+AuthAwareNav.router = BottomTabsNav.router;
+
+const mapStateToProps = (state: RootStoreType) => ({
+  authenticated: state.userReducer.authenticated,
+});
+
+const connector = connect(mapStateToProps, {});
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+const AuthAwareWithRedux = connector(AuthAwareNav);
+
+/**
+ * App/Auth switch navigator
+ */
 const AppStack = createStackNavigator(
-  { BottomTabsNav },
+  { AuthAwareWithRedux },
   { headerMode: "none" },
 );
+
 const AuthStack = createStackNavigator({ LoginScreen }, { headerMode: "none" });
 
 const StackSwitcher = createSwitchNavigator(

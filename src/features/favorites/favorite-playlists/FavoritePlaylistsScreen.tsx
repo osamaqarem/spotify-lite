@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import PlaylistsList from "../../../components/PlaylistsList";
+import ListOfPlaylists from "../../../components/ListOfPlaylists";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
@@ -31,10 +31,11 @@ const FavoritePlaylistsScreen = ({
 
   const PlaylistsListProps = {
     username: (profile && profile.display_name) || "Error",
-    data: { currentUserPlaylists, savedTracksCount },
+    currentUserPlaylists,
+    savedTracksCount,
   };
 
-  return <PlaylistsList {...PlaylistsListProps} />;
+  return <ListOfPlaylists {...PlaylistsListProps} />;
 };
 
 const mapStateToProps = (state: RootStoreType) => ({

@@ -8,6 +8,10 @@ import { SPOTIFY_API_BASE } from "../../utils";
 import { RootStoreType } from "../store";
 import { globalActions, userActions } from "./actionTypes";
 
+/**
+ * Observed by:
+ * {@link getProfileEpic}
+ */
 export const setToken = (token: string): Action<string> => ({
   type: userActions.GET_TOKENS_SUCCESS,
   payload: token,
@@ -42,19 +46,33 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
     }),
   );
 
-export const rehydrateAndRestartActions = () => ({
-  type: globalActions.RESTART_ACTIONS,
-});
+/**
+ * Observed by:
+ * {@link getAllFeaturedPlaylistsEpic}
+ * {@link getCurrentUserTopArtistsEpic}
+ * {@link getRecentlyPlayedTracksEpic}
+ * {@link restartActionsEpic}
+ */
+export const rehydrate = () => ({ type: globalActions.REHYDRATE_FROM_API });
 
-export const rehydrateAndRestartActionsEpic = (
+/**
+ * After restarting actions, this epic will clear the actions to restart.
+ */
+export const restartActionsEpic = (
   actions$: Observable<Action<null>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(globalActions.RESTART_ACTIONS),
+    ofType(globalActions.REHYDRATE_FROM_API),
     withLatestFrom(state$),
-    switchMap(([, state]) => from(state.userReducer.actionsToRestart)),
+    switchMap(([, state]) =>
+      from([...state.userReducer.actionsToRestart, clearActionsToRestart()]),
+    ),
     map(action => action),
   );
+
+export const clearActionsToRestart = () => ({
+  type: globalActions.CLEAR_ACTIONS_TO_RESTART,
+});
 
 export const redoLogin = () => ({ type: userActions.REDO_LOGIN });

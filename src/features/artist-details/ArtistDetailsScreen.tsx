@@ -30,8 +30,8 @@ import { COLORS, height, ratio, SPOTIFY_API_BASE, Routes } from "../../utils";
 import DetailsCover from "../../components/DetailsCover";
 import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import HorizontalCoverList from "../../components/HorizontalCoverList";
-import PlaylistContent from "../../components/PlaylistContent";
+import ArtistCover from "../../components/ArtistCover";
+import ListOfTracks from "../../components/ListOfTracks";
 import ShuffleButton from "../../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
@@ -63,7 +63,7 @@ const ArtistDetailsScreen = ({
   token,
   profile,
   redoLogin,
-}: PropsFromRedux & { navigation: NavigationStackProp }) => {
+}: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
   const [dominantColor, setDominantColor] = useState(COLORS.background);
@@ -233,7 +233,7 @@ const ArtistDetailsScreen = ({
               },
             ]}>
             {artistDetails && (
-              <PlaylistContent
+              <ListOfTracks
                 playlistDetails={artistDetails}
                 showDownload={false}
               />
@@ -250,9 +250,9 @@ const ArtistDetailsScreen = ({
                 }}
                 showsVerticalScrollIndicator={false}>
                 {artistDetails.relatedArtists.map(artist => (
-                  <HorizontalCoverList
+                  <ArtistCover
                     coverShape="CIRCLE"
-                    key={artist.name}
+                    key={artist.id}
                     onPress={() => goToArtist(artist.id)}
                     album={{
                       id: artist.id,
@@ -309,6 +309,6 @@ const mapDispatchToProps = { setArtistId, redoLogin };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>;
 
 export default connector(ArtistDetailsScreen);

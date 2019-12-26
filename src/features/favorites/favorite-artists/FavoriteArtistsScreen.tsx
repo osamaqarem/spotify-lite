@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import ArtistsList from "../../../components/ArtistsList";
+import ListOfArtists from "../../../components/ListOfArtists";
 import { getCurrentUserSavedArtists } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/store";
 import { AlbumType } from "../../../data/models";
@@ -16,7 +16,7 @@ const FavoriteArtistsScreen = ({
     getCurrentUserSavedArtists();
   }, [getCurrentUserSavedArtists]);
 
-  return <ArtistsList currentUserArtists={currentUserArtists} />;
+  return <ListOfArtists currentUserArtists={currentUserArtists} />;
 };
 
 const mapStateToProps = (state: RootStoreType) => ({

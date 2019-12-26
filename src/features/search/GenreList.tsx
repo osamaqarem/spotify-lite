@@ -7,7 +7,7 @@ import { COLORS } from "../../utils";
 const renderCard = (item: { name: string; id: string }, index: number) => {
   return (
     <FastImage
-      key={index}
+      key={item.id}
       source={genreImgList[index].url}
       style={styles.genreCard}>
       <Text style={styles.genreText}>{item.name}</Text>
