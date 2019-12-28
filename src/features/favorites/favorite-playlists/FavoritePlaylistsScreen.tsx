@@ -1,21 +1,14 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { NavigationStackProp } from "react-navigation-stack";
+import { connect, ConnectedProps } from "react-redux";
 import ListOfPlaylists from "../../../components/ListOfPlaylists";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
+  getPlayListById,
 } from "../../../redux/actions";
-import { UserProfileResponse } from "../../../data/models";
 import { RootStoreType } from "../../../redux/store";
-import { SavedPlaylistsType } from "../../../redux/reducers/playlistReducer";
-
-type UserPlaylistsScreenType = {
-  profile: UserProfileResponse | null;
-  getCurrentUserPlaylists: () => void;
-  getCurrentUserSavedTracks: () => void;
-  currentUserPlaylists: SavedPlaylistsType[];
-  savedTracksCount: number | null;
-};
+import { Routes } from "../../../utils";
 
 const FavoritePlaylistsScreen = ({
   profile,
@@ -23,16 +16,24 @@ const FavoritePlaylistsScreen = ({
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
   savedTracksCount,
-}: UserPlaylistsScreenType) => {
+  navigation,
+  getPlayListById,
+}: ReduxProps & { navigation: NavigationStackProp }) => {
   useEffect(() => {
     getCurrentUserPlaylists();
     getCurrentUserSavedTracks();
   }, [getCurrentUserPlaylists, getCurrentUserSavedTracks]);
 
+  const onPlaylistPressed = (id: string) => {
+    getPlayListById(id);
+    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
+  };
+
   const PlaylistsListProps = {
     username: (profile && profile.display_name) || "Error",
     currentUserPlaylists,
     savedTracksCount,
+    onPlaylistPressed,
   };
 
   return <ListOfPlaylists {...PlaylistsListProps} />;
@@ -44,7 +45,14 @@ const mapStateToProps = (state: RootStoreType) => ({
   savedTracksCount: state.libraryReducer.currentUserSavedTracksCount,
 });
 
-export default connect(mapStateToProps, {
+const mapDispatchToProp = {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
-})(FavoritePlaylistsScreen);
+  getPlayListById,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProp);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export default connector(FavoritePlaylistsScreen);

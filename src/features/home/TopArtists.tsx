@@ -8,6 +8,7 @@ import { albumDimensions, styles } from "./styles";
 import { setArtistId } from "../../redux/actions";
 import { NavigationContext } from "react-navigation";
 import { Routes } from "../../utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const TopArtists = ({
   userTopArtistsHeader,
@@ -16,9 +17,11 @@ const TopArtists = ({
 }: ReduxProps) => {
   const navigation = useContext(NavigationContext);
 
-  const onArtistPressed = (id: string) => {
-    setArtistId(id);
-    navigation.navigate(Routes.DetailsStack.ArtistDetails);
+  const onArtistPressed = (id: string | undefined) => {
+    if (id) {
+      setArtistId(id);
+      navigation.navigate(Routes.DetailsRoutes.ArtistDetails);
+    }
   };
 
   return (
@@ -33,37 +36,39 @@ const TopArtists = ({
             alignSelf: "center",
           },
         ]}>
-        <FastImage
-          source={{
-            uri: (userTopArtistsHeader && userTopArtistsHeader.url) || "",
-          }}
-          style={{
-            height: albumDimensions.ALBUM_DIMEN_MADE + 70,
-            width: albumDimensions.ALBUM_DIMEN_MADE + 70,
-            marginTop: 20,
-          }}
-        />
-        <Text
-          numberOfLines={2}
-          style={[
-            styles.centeredText,
-            styles.albumText,
-            { marginBottom: 25, fontSize: 15 },
-          ]}>
-          {userTopArtistsHeader && userTopArtistsHeader.name}
-        </Text>
+        <TouchableOpacity
+          onPress={() => onArtistPressed(userTopArtistsHeader?.id)}>
+          <FastImage
+            source={{
+              uri: userTopArtistsHeader?.url ?? "",
+            }}
+            style={{
+              height: albumDimensions.ALBUM_DIMEN_MADE + 70,
+              width: albumDimensions.ALBUM_DIMEN_MADE + 70,
+              marginTop: 20,
+            }}
+          />
+          <Text
+            numberOfLines={2}
+            style={[
+              styles.centeredText,
+              styles.albumText,
+              { marginBottom: 25, fontSize: 15 },
+            ]}>
+            {userTopArtistsHeader?.name}
+          </Text>
+        </TouchableOpacity>
       </View>
       <View style={styles.content}>
-        {userTopArtists &&
-          userTopArtists.map(album => (
-            <AlbumItem
-              key={album.id}
-              {...{
-                album,
-                onPress: onArtistPressed,
-              }}
-            />
-          ))}
+        {userTopArtists?.map(album => (
+          <AlbumItem
+            key={album.id}
+            {...{
+              album,
+              onPress: onArtistPressed,
+            }}
+          />
+        ))}
       </View>
     </>
   );

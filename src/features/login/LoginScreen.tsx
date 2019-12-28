@@ -60,7 +60,7 @@ const LoginScreen = ({
       rehydrate();
       //TODO: don't navigate to appstack if refreshing token,
       // go back instead.
-      navigation.navigate(Routes.AuthFlow.AppStack);
+      navigation.navigate(Routes.AuthRoutes.AppStack);
     }
   }, [authenticated, navigation, rehydrate]);
 

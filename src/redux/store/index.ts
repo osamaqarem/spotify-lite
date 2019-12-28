@@ -10,7 +10,7 @@ import Reactotron from "../../../ReactotronConfig";
 const persistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["artistReducer"],
+  blacklist: ["artistReducer", "themeReducer"],
 };
 const persistedReducer = persistReducer(persistConfig, combinedReducers);
 

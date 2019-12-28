@@ -6,14 +6,14 @@ import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
+import DetailsCover from "../../components/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
+import ListOfTracks from "../../components/ListOfTracks";
+import ShuffleButton from "../../components/ShuffleButton";
+import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
 import { COLORS, height, ratio } from "../../utils";
-import DetailsCover from "../../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
-import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import ListOfTracks from "../../components/ListOfTracks";
-import ShuffleButton from "../../components/ShuffleButton";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -39,7 +39,7 @@ const PlaylistDetailsScreen = ({
   playlistDetails,
   clearPlaylistDetails,
   navigation,
-}: PropsFromRedux & { navigation: NavigationStackProp }) => {
+}: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
   const [dominantColor, setDominantColor] = useState(COLORS.background);
@@ -47,7 +47,7 @@ const PlaylistDetailsScreen = ({
 
   const goBack = useCallback(() => {
     clearPlaylistDetails();
-    navigation.goBack();
+      navigation.goBack();
     return true;
   }, [clearPlaylistDetails, navigation]);
 
@@ -165,6 +165,6 @@ const mapDispatchToProps = {
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
-type PropsFromRedux = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>;
 
 export default connector(PlaylistDetailsScreen);

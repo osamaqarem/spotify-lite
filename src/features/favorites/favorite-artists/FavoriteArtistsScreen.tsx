@@ -1,28 +1,52 @@
 import React, { useEffect } from "react";
-import { connect } from "react-redux";
+import { NavigationStackProp } from "react-navigation-stack";
+import { connect, ConnectedProps } from "react-redux";
 import ListOfArtists from "../../../components/ListOfArtists";
-import { getCurrentUserSavedArtists } from "../../../redux/actions";
+import {
+  getCurrentUserSavedArtists,
+  setArtistId,
+} from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/store";
-import { AlbumType } from "../../../data/models";
+import { Routes } from "../../../utils";
 
 const FavoriteArtistsScreen = ({
   getCurrentUserSavedArtists,
   currentUserArtists,
-}: {
-  getCurrentUserSavedArtists: () => void;
-  currentUserArtists: AlbumType[];
+  navigation,
+  setArtistId,
+}: ReduxProps & {
+  navigation: NavigationStackProp;
 }) => {
   useEffect(() => {
     getCurrentUserSavedArtists();
   }, [getCurrentUserSavedArtists]);
 
-  return <ListOfArtists currentUserArtists={currentUserArtists} />;
+  const onArtistPressed = (id: string | undefined) => {
+    if (id) {
+      setArtistId(id);
+      navigation.navigate(Routes.DetailsRoutes.ArtistDetails);
+    }
+  };
+
+  return (
+    <ListOfArtists
+      currentUserArtists={currentUserArtists}
+      onArtistPressed={onArtistPressed}
+    />
+  );
 };
 
 const mapStateToProps = (state: RootStoreType) => ({
   currentUserArtists: state.followRedcuer.currentUserSavedArtists,
 });
 
-export default connect(mapStateToProps, { getCurrentUserSavedArtists })(
-  FavoriteArtistsScreen,
-);
+const mapDispatchToProps = {
+  getCurrentUserSavedArtists,
+  setArtistId,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export default connector(FavoriteArtistsScreen);

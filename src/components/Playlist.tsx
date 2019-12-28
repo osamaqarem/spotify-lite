@@ -4,19 +4,25 @@ import Cover from "./Cover";
 import PlaylistRowFav from "../features/favorites/favorite-playlists/PlaylistFavRow";
 import CoverBlank from "./CoverBlank";
 import { COLORS } from "../utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { SavedPlaylistsType } from "../redux/reducers/playlistReducer";
 
 const Playlist = ({
   item,
   index,
   username,
   savedTracksCount,
+  onPlaylistPressed,
 }: {
-  item: any;
+  item: SavedPlaylistsType;
   index: number;
   username: string;
   savedTracksCount: number | null;
+  onPlaylistPressed: (id: string) => void;
 }) => (
-  <View style={styles.flatListContainer}>
+  <TouchableOpacity
+    onPress={() => onPlaylistPressed(item.id)}
+    style={styles.flatListContainer}>
     {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
     {item.url ? (
       <Cover uri={item.url} />
@@ -31,7 +37,7 @@ const Playlist = ({
         by {item.owner === username ? "you" : item.owner}
       </Text>
     </View>
-  </View>
+  </TouchableOpacity>
 );
 
 const styles = StyleSheet.create({

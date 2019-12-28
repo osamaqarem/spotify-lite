@@ -3,7 +3,7 @@ import { personalizationActions } from "../actions";
 
 type PersonalizationReducerType = {
   userTopArtists: AlbumType[];
-  userTopArtistsHeader: Pick<AlbumType, "name" | "url"> | null;
+  userTopArtistsHeader: AlbumType | null;
 };
 
 const initialState: PersonalizationReducerType = {

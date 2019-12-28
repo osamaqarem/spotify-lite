@@ -6,8 +6,10 @@ import Album from "./Album";
 
 const ListOfAlbums = ({
   currentUserAlbums,
+  onPlaylistPressed,
 }: {
   currentUserAlbums: SavedAlbumType[];
+  onPlaylistPressed: (id: string) => void;
 }) => {
   return (
     <View
@@ -17,7 +19,9 @@ const ListOfAlbums = ({
       }}>
       <FlatList
         data={currentUserAlbums}
-        renderItem={album => <Album album={album} />}
+        renderItem={({ item }) => (
+          <Album album={item} onPlaylistPressed={onPlaylistPressed} />
+        )}
         keyExtractor={(_, index) => index.toString()}
       />
     </View>

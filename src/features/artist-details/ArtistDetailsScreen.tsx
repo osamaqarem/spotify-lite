@@ -14,25 +14,25 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { from, Subscription, zip } from "rxjs";
 import { switchMap } from "rxjs/operators";
+import ArtistCover from "../../components/ArtistCover";
+import DetailsCover from "../../components/DetailsCover";
+import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
+import ListOfTracks from "../../components/ListOfTracks";
+import ShuffleButton from "../../components/ShuffleButton";
 import {
   AlbumType,
   Artist,
   ArtistTopTracksResponse,
   ErrorResponse,
 } from "../../data/models";
-import { setArtistId, redoLogin } from "../../redux/actions";
+import usePlaylistAnim from "../../hooks/usePlaylistAnim";
+import { redoLogin, setArtistId } from "../../redux/actions";
 import {
   PlaylistDetailsType,
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, height, ratio, SPOTIFY_API_BASE, Routes } from "../../utils";
-import DetailsCover from "../../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
-import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import ArtistCover from "../../components/ArtistCover";
-import ListOfTracks from "../../components/ListOfTracks";
-import ShuffleButton from "../../components/ShuffleButton";
+import { COLORS, height, ratio, Routes, SPOTIFY_API_BASE } from "../../utils";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -176,7 +176,7 @@ const ArtistDetailsScreen = ({
 
   const goToArtist = (id: string) => {
     setArtistId(id);
-    navigation.push(Routes.DetailsStack.ArtistDetails);
+    navigation.push(Routes.DetailsRoutes.ArtistDetails);
   };
 
   return (
@@ -305,7 +305,10 @@ const mapStateToProps = (state: RootStoreType) => ({
   profile: state.userReducer.profile,
 });
 
-const mapDispatchToProps = { setArtistId, redoLogin };
+const mapDispatchToProps = {
+  setArtistId,
+  redoLogin,
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

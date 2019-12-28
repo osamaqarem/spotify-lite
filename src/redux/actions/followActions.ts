@@ -4,6 +4,7 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import {
   Action,
+  AlbumType,
   CurrentUserSavedArtistsResponse,
   ErrorResponse,
 } from "../../data/models";
@@ -38,10 +39,11 @@ export const getCurrentUserSavedArtistsEpic = (
         map((res: CurrentUserSavedArtistsResponse | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
-          const data = res.artists.items.map(item => {
+          const data: AlbumType[] = res.artists.items.map(item => {
             return {
               url: (item.images[0] && item.images[0].url) || null,
               name: item.name,
+              id: item.id,
             };
           });
 

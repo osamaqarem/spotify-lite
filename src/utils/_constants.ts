@@ -13,17 +13,22 @@ export const COLORS = {
 
 // Route names
 export const Routes = {
-  DetailsStack: {
+  DetailsRoutes: {
     Home: "Home",
     PlaylistDetails: "PlaylistDetails",
     ArtistDetails: "ArtistDetails",
   },
-  AppStack: {
+  Tabs: {
+    Playlists: "Playlists",
+    Artists: "Artists",
+    Albums: "Albums",
+  },
+  AppRoutes: {
     Home: "Home",
     Search: "Search",
     Favorites: "Favorites",
   },
-  AuthFlow: {
+  AuthRoutes: {
     AuthStack: "AuthStack",
     AppStack: "AppStack",
   },

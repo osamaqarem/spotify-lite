@@ -10,6 +10,7 @@ import {
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
 import { libraryActions } from "./actionTypes";
+import { SavedAlbumType } from "../reducers/libraryReducer";
 
 export const getCurrentUserSavedTracks = () => ({
   type: libraryActions.GET_CURRENT_USER_SAVED_TRACKS,
@@ -87,11 +88,12 @@ export const getCurrentUserSavedAlbumsEpic = (
         map((res: CurrentUserSavedAlbums | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
-          const data = res.items.map(item => {
+          const data: SavedAlbumType[] = res.items.map(item => {
             return {
               owner: item.album.artists[0].name,
               url: (item.album.images[0] && item.album.images[0].url) || null,
               name: item.album.name,
+              id: item.album.id,
             };
           });
 

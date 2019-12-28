@@ -1,12 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
+import { SavedAlbumType } from "../redux/reducers/libraryReducer";
+import { COLORS } from "../utils";
 import Cover from "./Cover";
 import CoverBlank from "./CoverBlank";
-import { COLORS } from "../utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const Album = (album: any) => {
+const Album = ({
+  album,
+  onPlaylistPressed,
+}: {
+  album: SavedAlbumType;
+  onPlaylistPressed: (id: string) => void;
+}) => {
   return (
-    <View style={styles.flatListContainer}>
+    <TouchableOpacity
+      onPress={() => {
+        onPlaylistPressed(album.id);
+      }}
+      style={styles.flatListContainer}>
       {album.url ? (
         <Cover uri={album.url} />
       ) : (
@@ -18,7 +30,7 @@ const Album = (album: any) => {
         </Text>
         <Text style={styles.albumOwner}>by {album.owner}</Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

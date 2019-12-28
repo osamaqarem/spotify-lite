@@ -17,9 +17,7 @@ const FeaturedPlaylists = ({
 
   const onPlaylistPressed = (id: string) => {
     getPlayListById(id);
-    requestAnimationFrame(() => {
-      navigation.navigate(Routes.DetailsStack.PlaylistDetails);
-    });
+    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
   };
 
   return (

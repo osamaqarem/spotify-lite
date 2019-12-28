@@ -23,6 +23,7 @@ import followRedcuer from "./followReducer";
 import { getPlayListByIdEpic } from "../actions/playlistActions";
 import playlistReducer from "./playlistReducer";
 import artistReducer from "./artistReducer";
+import themeReducer from "./themeReducer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -49,4 +50,5 @@ export default combineReducers({
   followRedcuer,
   playlistReducer,
   artistReducer,
+  themeReducer,
 });

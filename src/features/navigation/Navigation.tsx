@@ -7,20 +7,23 @@ import {
   NavigationStackProp,
 } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
+import { connect, ConnectedProps } from "react-redux";
+import { RootStoreType } from "../../redux/store";
 import { COLORS, Routes } from "../../utils";
+import ArtistDetailsScreen from "../artist-details/ArtistDetailsScreen";
 import FavoriteAlbumsScreen from "../favorites/favorite-albums/FavoriteAlbumsScreen";
 import FavoriteArtistsScreen from "../favorites/favorite-artists/FavoriteArtistsScreen";
 import FavoritePlaylistsScreen from "../favorites/favorite-playlists/FavoritePlaylistsScreen";
 import HomeScreen from "../home/HomeScreen";
+import LoginScreen from "../login/LoginScreen";
 import PlaylistDetailsScreen from "../playlist-details/PlaylistDetailsScreen";
 import SearchScreen from "../search/SearchScreen";
 import FavoritesIcon from "./FavoritesIcon";
 import HomeIcon from "./HomeIcon";
+import MaterialTopTabBarWrapper from "./MaterialTopTabBarWrapper";
 import SearchIcon from "./SearchIcon";
-import ArtistDetailsScreen from "../artist-details/ArtistDetailsScreen";
-import LoginScreen from "../login/LoginScreen";
-import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../redux/store";
+import PlaylistDetailsScreenWrapper from "./PlaylistDetailsScreenWrapper";
+import ArtistDetailsScreenWrapper from "./ArtistDetailsScreenWrapper";
 
 const sharedStyles = {
   activeColor: COLORS.white,
@@ -31,18 +34,53 @@ const sharedStyles = {
 const HomeLabel = <Text style={{ fontSize: 10 }}>Home</Text>;
 const SearchLabel = <Text style={{ fontSize: 10 }}>Search</Text>;
 const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
+const PlaylistDetailsStack = createStackNavigator(
+  {
+    Playlists: { screen: FavoritePlaylistsScreen },
+    PlaylistDetails: {
+      screen: PlaylistDetailsScreenWrapper,
+    },
+  },
+  {
+    headerMode: "none",
+  },
+);
+const ArtistDetailsStack = createStackNavigator(
+  {
+    Artists: { screen: FavoriteArtistsScreen },
+    ArtistDetails: {
+      screen: ArtistDetailsScreenWrapper,
+    },
+  },
+  {
+    headerMode: "none",
+  },
+);
+
+const AlbumDetailsStack = createStackNavigator(
+  {
+    Albums: { screen: FavoriteAlbumsScreen },
+    PlaylistDetails: {
+      screen: PlaylistDetailsScreenWrapper,
+    },
+  },
+  {
+    headerMode: "none",
+  },
+);
 
 /**
  * Favorite tabs
  */
 const NestedTopTabsNav = createMaterialTopTabNavigator(
   {
-    Playlists: FavoritePlaylistsScreen,
-    Artists: FavoriteArtistsScreen,
-    Albums: FavoriteAlbumsScreen,
+    Playlists: PlaylistDetailsStack,
+    Artists: ArtistDetailsStack,
+    Albums: AlbumDetailsStack,
   },
   {
     initialRouteName: "Playlists",
+    tabBarComponent: MaterialTopTabBarWrapper,
     tabBarOptions: {
       upperCaseLabel: false,
       labelStyle: {
@@ -67,7 +105,7 @@ const NestedTopTabsNav = createMaterialTopTabNavigator(
   },
 );
 
-const DetailsStack = createStackNavigator(
+const HomeDetailsStack = createStackNavigator(
   {
     Home: { screen: HomeScreen },
     PlaylistDetails: {
@@ -89,7 +127,7 @@ const DetailsStack = createStackNavigator(
 const BottomTabsNav = createMaterialBottomTabNavigator(
   {
     Home: {
-      screen: DetailsStack,
+      screen: HomeDetailsStack,
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           HomeIcon(tintColor),
@@ -117,7 +155,9 @@ const BottomTabsNav = createMaterialBottomTabNavigator(
     },
   },
   {
-    initialRouteName: "Home",
+    // initialRouteName: "Home",
+    // initialRouteName: "Search",
+    initialRouteName: "Favorites",
   },
 );
 
@@ -132,7 +172,7 @@ const AuthAwareNav = (
 
   useEffect(() => {
     if (!authenticated) {
-      navigation.navigate(Routes.AuthFlow.AuthStack);
+      navigation.navigate(Routes.AuthRoutes.AuthStack);
     }
   }, [authenticated, navigation]);
 

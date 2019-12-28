@@ -5,7 +5,11 @@ import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, ErrorResponse, PlaylistResponse } from "../../data/models";
 import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlaylistsResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { PlaylistDetailsType, TrackType } from "../reducers/playlistReducer";
+import {
+  PlaylistDetailsType,
+  TrackType,
+  SavedPlaylistsType,
+} from "../reducers/playlistReducer";
 import { RootStoreType } from "../store";
 import { playlistActions } from "./actionTypes";
 
@@ -105,11 +109,12 @@ export const getCurrentUserPlaylistsEpic = (
         map((res: CurrentUserPlaylistsResponse | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
-          const data = res.items.map(item => {
+          const data: SavedPlaylistsType[] = res.items.map(item => {
             return {
               owner: item.owner.display_name,
               url: (item.images[0] && item.images[0].url) || null,
               name: item.name,
+              id: item.id,
             };
           });
 

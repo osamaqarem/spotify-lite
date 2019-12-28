@@ -12,6 +12,11 @@ export const globalActions = {
   CLEAR_ACTIONS_TO_RESTART: "CLEAR_ACTIONS_TO_RESTART",
 };
 
+export const themeActions = {
+  SHOW_TAB_BAR: "SHOW_TAB_BAR",
+  HIDE_TAB_BAR: "HIDE_TAB_BAR",
+};
+
 export const playlistActions = {
   CLEAR_PLAYLIST_DETAILS: "CLEAR_PLAYLIST_DETAILS",
   GET_PLAYLIST_BY_ID: "GET_PLAYLIST_BY_ID",

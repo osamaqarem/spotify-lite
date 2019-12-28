@@ -8,10 +8,12 @@ const ListOfPlaylists = ({
   currentUserPlaylists,
   savedTracksCount,
   username,
+  onPlaylistPressed,
 }: {
   currentUserPlaylists: SavedPlaylistsType[];
   savedTracksCount: number | null;
   username: string;
+  onPlaylistPressed: (id: string) => void;
 }) => {
   return (
     <View
@@ -28,6 +30,7 @@ const ListOfPlaylists = ({
               index,
               username,
               savedTracksCount: savedTracksCount,
+              onPlaylistPressed,
             }}
           />
         )}

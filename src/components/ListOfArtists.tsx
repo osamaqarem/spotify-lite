@@ -6,8 +6,10 @@ import Artist from "./Artist";
 
 const ListOfArtists = ({
   currentUserArtists,
+  onArtistPressed,
 }: {
   currentUserArtists: AlbumType[];
+  onArtistPressed: (id: string | undefined) => void;
 }) => {
   return (
     <View
@@ -17,7 +19,9 @@ const ListOfArtists = ({
       }}>
       <FlatList
         data={currentUserArtists}
-        renderItem={artist => <Artist artist={artist} />}
+        renderItem={({ item }) => (
+          <Artist artist={item} onArtistPressed={onArtistPressed} />
+        )}
         keyExtractor={(_, index) => index.toString()}
       />
     </View>

@@ -10,7 +10,12 @@ export type PlaylistDetailsType = {
   tracks: TrackType[];
 };
 
-export type SavedPlaylistsType = { name: string; url: string; owner: string };
+export type SavedPlaylistsType = {
+  name: string;
+  url: string | null;
+  owner: string;
+  id: string;
+};
 
 type PlaylistReducerType = {
   playlistDetails: PlaylistDetailsType | null;

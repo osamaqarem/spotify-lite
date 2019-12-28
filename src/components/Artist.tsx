@@ -3,10 +3,20 @@ import { View, Text, StyleSheet } from "react-native";
 import Cover from "./Cover";
 import CoverBlank from "./CoverBlank";
 import { COLORS } from "../utils";
+import { AlbumType } from "../data/models";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-const Artist = ({ item: artist }: any) => {
+const Artist = ({
+  artist,
+  onArtistPressed,
+}: {
+  artist: AlbumType;
+  onArtistPressed: (id: string | undefined) => void;
+}) => {
   return (
-    <View style={styles.flatListContainer}>
+    <TouchableOpacity
+      onPress={() => onArtistPressed(artist.id)}
+      style={styles.flatListContainer}>
       {artist.url ? (
         <Cover uri={artist.url} />
       ) : (
@@ -17,7 +27,7 @@ const Artist = ({ item: artist }: any) => {
           {artist.name}
         </Text>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

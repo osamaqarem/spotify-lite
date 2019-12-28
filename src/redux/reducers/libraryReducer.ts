@@ -1,7 +1,12 @@
 import { Action } from "../../data/models";
 import { libraryActions } from "../actions";
 
-export type SavedAlbumType = { name: string; url: string; owner: string };
+export type SavedAlbumType = {
+  name: string;
+  url: string | null;
+  owner: string;
+  id: string;
+};
 
 type LibraryReducerType = {
   currentUserSavedTracksCount: null | number;
