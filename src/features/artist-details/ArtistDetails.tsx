@@ -56,7 +56,7 @@ const LoadingView = () => (
 
 type ArtistDetails = PlaylistDetailsType & { relatedArtists: AlbumType[] };
 
-const ArtistDetailsScreen = ({
+const ArtistDetails = ({
   artistId,
   setArtistId,
   navigation,
@@ -176,7 +176,7 @@ const ArtistDetailsScreen = ({
 
   const goToArtist = (id: string) => {
     setArtistId(id);
-    navigation.push(Routes.DetailsRoutes.ArtistDetails);
+    navigation.push(Routes.AppTabs.HomeStack.ArtistDetails);
   };
 
   return (
@@ -314,4 +314,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(ArtistDetailsScreen);
+export default connector(ArtistDetails);

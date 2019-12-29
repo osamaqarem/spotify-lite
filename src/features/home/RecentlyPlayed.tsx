@@ -13,7 +13,7 @@ const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
 
   const onAlbumPressed = (id: string) => {
     getAlbumById(id);
-    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
+    navigation.navigate(Routes.AppTabs.HomeStack.PlaylistDetails);
   };
 
   return (

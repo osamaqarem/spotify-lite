@@ -2,10 +2,11 @@ import React from "react";
 import { NavigationEvents } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import { hideTabBar, showTabBar } from "../../redux/actions";
-import PlaylistDetailsScreen from "../playlist-details/PlaylistDetailsScreen";
+import { hideTabBar, showTabBar } from "../../../redux/actions";
+import PlaylistDetails from "../../playlist-details/PlaylistDetails";
 
-const PlaylistDetailsScreenWrapper = ({
+// Nav event logic for hiding and showing the material top tab bar.
+const PlaylistDetailsWithDynamicTabBar = ({
   navigation,
   showTabBar,
   hideTabBar,
@@ -13,7 +14,7 @@ const PlaylistDetailsScreenWrapper = ({
   return (
     <>
       <NavigationEvents onWillFocus={hideTabBar} onWillBlur={showTabBar} />
-      <PlaylistDetailsScreen navigation={navigation} />
+      <PlaylistDetails navigation={navigation} />
     </>
   );
 };
@@ -24,4 +25,4 @@ const connector = connect(() => ({}), mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(PlaylistDetailsScreenWrapper);
+export default connector(PlaylistDetailsWithDynamicTabBar);

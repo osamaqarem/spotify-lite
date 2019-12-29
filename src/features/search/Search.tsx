@@ -7,7 +7,7 @@ import TopBarSearch from "./TopBarSearch";
 import { CountryCategoryType } from "../../redux/reducers/browseReducer";
 import { RootStoreType } from "../../redux/store";
 
-const SearchScreen = ({
+const Search = ({
   categoriesForCountry,
   getAllCategoriesForCountry,
 }: {
@@ -34,6 +34,4 @@ const mapStateToProps = (state: RootStoreType) => ({
   categoriesForCountry: state.browseReducer.categoriesForCountry,
 });
 
-export default connect(mapStateToProps, { getAllCategoriesForCountry })(
-  SearchScreen,
-);
+export default connect(mapStateToProps, { getAllCategoriesForCountry })(Search);

@@ -9,7 +9,7 @@ import {
 import { RootStoreType } from "../../../redux/store";
 import { Routes } from "../../../utils";
 
-const FavoriteAlbumsScreen = ({
+const FavoriteAlbums = ({
   getCurrentUserSavedAlbums,
   currentUserAlbums,
   getAlbumById,
@@ -21,7 +21,9 @@ const FavoriteAlbumsScreen = ({
 
   const onPlaylistPressed = (id: string) => {
     getAlbumById(id);
-    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
+    navigation.navigate(
+      Routes.AppTabs.FavoritesTabs.FavoriteAlbumsStack.PlaylistDetails,
+    );
   };
 
   return (
@@ -45,4 +47,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(FavoriteAlbumsScreen);
+export default connector(FavoriteAlbums);

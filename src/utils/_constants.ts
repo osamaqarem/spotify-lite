@@ -13,24 +13,28 @@ export const COLORS = {
 
 // Route names
 export const Routes = {
-  DetailsRoutes: {
-    Home: "Home",
-    PlaylistDetails: "PlaylistDetails",
-    ArtistDetails: "ArtistDetails",
-  },
-  Tabs: {
-    Playlists: "Playlists",
-    Artists: "Artists",
-    Albums: "Albums",
-  },
-  AppRoutes: {
-    Home: "Home",
-    Search: "Search",
-    Favorites: "Favorites",
-  },
-  AuthRoutes: {
-    AuthStack: "AuthStack",
-    AppStack: "AppStack",
+  LoginStack: { Login: "Login" },
+  AppTabs: {
+    HomeStack: {
+      Home: "Home",
+      PlaylistDetails: "PlaylistDetails",
+      ArtistDetails: "ArtistDetails",
+    },
+    SearchStack: "Search",
+    FavoritesTabs: {
+      FavoritePlaylistsStack: {
+        FavoritePlaylists: "FavoritePlaylists",
+        PlaylistDetails: "PlaylistDetails",
+      },
+      FavoriteArtistsStack: {
+        FavoriteArtists: "FavoriteArtists",
+        ArtistDetails: "ArtistDetails",
+      },
+      FavoriteAlbumsStack: {
+        FavoriteAlbums: "FavoriteAlbums",
+        PlaylistDetails: "PlaylistDetails",
+      },
+    },
   },
 };
 

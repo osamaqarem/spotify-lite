@@ -10,7 +10,7 @@ import {
 import { RootStoreType } from "../../../redux/store";
 import { Routes } from "../../../utils";
 
-const FavoritePlaylistsScreen = ({
+const FavoritePlaylists = ({
   profile,
   currentUserPlaylists,
   getCurrentUserPlaylists,
@@ -26,7 +26,9 @@ const FavoritePlaylistsScreen = ({
 
   const onPlaylistPressed = (id: string) => {
     getPlayListById(id);
-    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
+    navigation.navigate(
+      Routes.AppTabs.FavoritesTabs.FavoritePlaylistsStack.PlaylistDetails,
+    );
   };
 
   const PlaylistsListProps = {
@@ -55,4 +57,4 @@ const connector = connect(mapStateToProps, mapDispatchToProp);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(FavoritePlaylistsScreen);
+export default connector(FavoritePlaylists);

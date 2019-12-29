@@ -1,14 +1,14 @@
 import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../utils";
+import { COLORS } from "../../../utils";
 
-const HomeIcon = (color: string) => {
+const FavoritesIcon = (color: string) => {
   if (color === COLORS.itemInactive) {
     return (
       <MaterialCommunityIcon
         style={{ bottom: 6 }}
-        name="home-outline"
-        size={24.5}
+        name="heart-outline"
+        size={22}
         color={color}
       />
     );
@@ -16,12 +16,12 @@ const HomeIcon = (color: string) => {
     return (
       <MaterialCommunityIcon
         style={{ bottom: 6 }}
-        name="home-variant"
-        size={24.5}
+        name="heart"
+        size={22}
         color={color}
       />
     );
   }
 };
 
-export default HomeIcon;
+export default FavoritesIcon;

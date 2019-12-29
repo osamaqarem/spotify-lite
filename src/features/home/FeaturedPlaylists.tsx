@@ -17,7 +17,7 @@ const FeaturedPlaylists = ({
 
   const onPlaylistPressed = (id: string) => {
     getPlayListById(id);
-    navigation.navigate(Routes.DetailsRoutes.PlaylistDetails);
+    navigation.navigate(Routes.AppTabs.HomeStack.PlaylistDetails);
   };
 
   return (

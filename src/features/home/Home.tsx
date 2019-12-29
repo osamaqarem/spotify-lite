@@ -8,7 +8,7 @@ import RecentlyPlayed from "./RecentlyPlayed";
 import { styles } from "./styles";
 import TopArtists from "./TopArtists";
 
-const HomeScreen = () => {
+const Home = () => {
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor={COLORS.background} />
@@ -31,4 +31,4 @@ const HomeScreen = () => {
   );
 };
 
-export default HomeScreen;
+export default Home;

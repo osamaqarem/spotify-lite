@@ -20,7 +20,7 @@ const TopArtists = ({
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
       setArtistId(id);
-      navigation.navigate(Routes.DetailsRoutes.ArtistDetails);
+      navigation.navigate(Routes.AppTabs.HomeStack.ArtistDetails);
     }
   };
 

@@ -20,7 +20,7 @@ import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
 
 const webViewSub$: Subject<string> = new Subject();
 
-const LoginScreen = ({
+const Login = ({
   setToken,
   authenticated,
   navigation,
@@ -60,7 +60,7 @@ const LoginScreen = ({
       rehydrate();
       //TODO: don't navigate to appstack if refreshing token,
       // go back instead.
-      navigation.navigate(Routes.AuthRoutes.AppStack);
+      navigation.navigate(Routes.AppTabs.HomeStack.Home);
     }
   }, [authenticated, navigation, rehydrate]);
 
@@ -130,4 +130,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(LoginScreen);
+export default connector(Login);

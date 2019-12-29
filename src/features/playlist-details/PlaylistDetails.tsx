@@ -35,7 +35,7 @@ const LoadingView = () => (
   />
 );
 
-const PlaylistDetailsScreen = ({
+const PlaylistDetails = ({
   playlistDetails,
   clearPlaylistDetails,
   navigation,
@@ -47,7 +47,7 @@ const PlaylistDetailsScreen = ({
 
   const goBack = useCallback(() => {
     clearPlaylistDetails();
-      navigation.goBack();
+    navigation.goBack();
     return true;
   }, [clearPlaylistDetails, navigation]);
 
@@ -167,4 +167,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(PlaylistDetailsScreen);
+export default connector(PlaylistDetails);

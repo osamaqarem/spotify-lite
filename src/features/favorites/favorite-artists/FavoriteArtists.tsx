@@ -9,7 +9,7 @@ import {
 import { RootStoreType } from "../../../redux/store";
 import { Routes } from "../../../utils";
 
-const FavoriteArtistsScreen = ({
+const FavoriteArtists = ({
   getCurrentUserSavedArtists,
   currentUserArtists,
   navigation,
@@ -24,7 +24,9 @@ const FavoriteArtistsScreen = ({
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
       setArtistId(id);
-      navigation.navigate(Routes.DetailsRoutes.ArtistDetails);
+      navigation.navigate(
+        Routes.AppTabs.FavoritesTabs.FavoriteArtistsStack.ArtistDetails,
+      );
     }
   };
 
@@ -49,4 +51,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(FavoriteArtistsScreen);
+export default connector(FavoriteArtists);

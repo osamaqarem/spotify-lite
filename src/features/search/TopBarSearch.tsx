@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { COLORS } from "../../utils";
-import SearchIcon from "../navigation/SearchIcon";
+import SearchIcon from "../navigation/icons/SearchIcon";
 
 const TopBarSearch = () => (
   <View style={styles.container}>

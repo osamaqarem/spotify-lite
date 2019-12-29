@@ -2,10 +2,11 @@ import React from "react";
 import { NavigationEvents } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import { hideTabBar, showTabBar } from "../../redux/actions";
-import ArtistDetailsScreen from "../artist-details/ArtistDetailsScreen";
+import { hideTabBar, showTabBar } from "../../../redux/actions";
+import ArtistDetails from "../../artist-details/ArtistDetails";
 
-const ArtistDetailsScreenWrapper = ({
+// Nav event logic for hiding and showing the material top tab bar.
+const ArtistDetailsWithDynamicTabBar = ({
   navigation,
   showTabBar,
   hideTabBar,
@@ -27,7 +28,7 @@ const ArtistDetailsScreenWrapper = ({
           }
         }}
       />
-      <ArtistDetailsScreen navigation={navigation} />
+      <ArtistDetails navigation={navigation} />
     </>
   );
 };
@@ -38,4 +39,4 @@ const connector = connect(() => ({}), mapDispatchToProps);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(ArtistDetailsScreenWrapper);
+export default connector(ArtistDetailsWithDynamicTabBar);
