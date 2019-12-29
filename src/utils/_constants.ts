@@ -1,16 +1,3 @@
-import { Dimensions } from "react-native";
-
-export const COLORS = {
-  tabBar: "#222326",
-  itemInactive: "#ADAEB3",
-  background: "#121212",
-  white: "#FFFFFF",
-  darkWhite: "#FDFDFD",
-  green: "#1DB954",
-  grey: "#B9B9B9",
-  darkGrey: "#5A5A5A",
-};
-
 // Route names
 export const Routes = {
   LoginStack: { Login: "Login" },
@@ -37,11 +24,6 @@ export const Routes = {
     },
   },
 };
-
-export const { height, width } = Dimensions.get("window");
-
-export const MAGIC_NUM = 1000;
-export const ratio = (width / 414 / height) * MAGIC_NUM;
 
 export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";
 

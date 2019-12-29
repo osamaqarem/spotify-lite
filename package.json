@@ -23,6 +23,7 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-webview": "^7.4.0",
     "react-navigation": "^4.0.10",
+    "react-navigation-animated-switch": "^0.4.1",
     "react-navigation-material-bottom-tabs": "^2.1.2",
     "react-navigation-stack": "^1.10.3",
     "react-navigation-tabs": "^2.5.6",

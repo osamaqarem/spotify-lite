@@ -1,14 +1,29 @@
-import { createAppContainer, createSwitchNavigator } from "react-navigation";
+import React from "react";
+import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
+import createAnimatedSwitchNavigator from "react-navigation-animated-switch";
 import Login from "../login/Login";
 import createConnectedBottomTabsNav from "./custom-navigators/createConnectedBottomTabsNav";
+import { Transition } from "react-native-reanimated";
 
 export default createAppContainer(
-  createSwitchNavigator(
+  createAnimatedSwitchNavigator(
     {
       AppTabs: createConnectedBottomTabsNav(),
       LoginStack: createStackNavigator({ Login }, { headerMode: "none" }),
     },
-    { initialRouteName: "LoginStack" },
+    {
+      initialRouteName: "LoginStack",
+      transition: (
+        <Transition.Together>
+          <Transition.Out
+            type="slide-left"
+            durationMs={450}
+            interpolation="easeIn"
+          />
+          <Transition.In type="slide-right" durationMs={500} />
+        </Transition.Together>
+      ),
+    },
   ),
 );

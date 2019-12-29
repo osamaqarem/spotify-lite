@@ -7,14 +7,16 @@ import AlbumItem from "./AlbumItem";
 import { albumDimensions, styles } from "./styles";
 import { setArtistId } from "../../redux/actions";
 import { NavigationContext } from "react-navigation";
-import { Routes } from "../../utils";
+import { Routes, btnScaleAnim } from "../../utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import Animated from "react-native-reanimated";
 
 const TopArtists = ({
   userTopArtistsHeader,
   userTopArtists,
   setArtistId,
 }: ReduxProps) => {
+  const scale = new Animated.Value(1);
   const navigation = useContext(NavigationContext);
 
   const onArtistPressed = (id: string | undefined) => {
@@ -29,14 +31,17 @@ const TopArtists = ({
       <Text style={[styles.centeredText, styles.headerText, { marginTop: 30 }]}>
         Your top artists
       </Text>
-      <View
+      <Animated.View
         style={[
           {
             width: albumDimensions.ALBUM_DIMEN_MADE + 70,
             alignSelf: "center",
+            transform: [{ scale }],
           },
         ]}>
         <TouchableOpacity
+          onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
+          onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
           onPress={() => onArtistPressed(userTopArtistsHeader?.id)}>
           <FastImage
             source={{
@@ -58,7 +63,7 @@ const TopArtists = ({
             {userTopArtistsHeader?.name}
           </Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
       <View style={styles.content}>
         {userTopArtists?.map(album => (
           <AlbumItem

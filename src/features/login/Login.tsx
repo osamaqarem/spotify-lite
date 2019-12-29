@@ -16,7 +16,7 @@ import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
 import { rehydrate, setToken } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, LOGIN_URL, Routes } from "../../utils/_constants";
+import { COLORS, LOGIN_URL, Routes } from "../../utils/";
 
 const webViewSub$: Subject<string> = new Subject();
 
