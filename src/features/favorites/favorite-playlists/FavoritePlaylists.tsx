@@ -9,6 +9,8 @@ import {
 } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/store";
 import { Routes } from "../../../utils";
+import { NavigationEvents } from "react-navigation";
+import { StatusBar } from "react-native";
 
 const FavoritePlaylists = ({
   profile,
@@ -38,7 +40,16 @@ const FavoritePlaylists = ({
     onPlaylistPressed,
   };
 
-  return <ListOfPlaylists {...PlaylistsListProps} />;
+  return (
+    <>
+      <NavigationEvents
+        onDidFocus={() => {
+          StatusBar.setBarStyle("light-content");
+        }}
+      />
+      <ListOfPlaylists {...PlaylistsListProps} />
+    </>
+  );
 };
 
 const mapStateToProps = (state: RootStoreType) => ({

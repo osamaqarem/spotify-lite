@@ -1,19 +1,27 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
-import { ActivityIndicator, BackHandler, StyleSheet, View } from "react-native";
+import {
+  ActivityIndicator,
+  BackHandler,
+  Platform,
+  StyleSheet,
+  View,
+} from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
+import { SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import DetailsCover from "../../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
 import ListOfTracks from "../../components/ListOfTracks";
+import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
+import PlaylistTitle from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, height, ratio } from "../../utils";
+import { COLORS } from "../../utils";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -44,6 +52,7 @@ const PlaylistDetails = ({
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
   const [dominantColor, setDominantColor] = useState(COLORS.background);
   const [isLoading, setIsLoading] = useState(true);
+  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
 
   const goBack = useCallback(() => {
     clearPlaylistDetails();
@@ -55,13 +64,18 @@ const PlaylistDetails = ({
     const didFocusSub = navigation.addListener("didFocus", () => {
       BackHandler.addEventListener("hardwareBackPress", goBack);
 
-      playlistDetails?.imageUrl &&
-        colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
-          if (!err) {
-            setDominantColor(colors.averageColor);
-            setIsLoading(false);
-          }
-        });
+      if (Platform.OS === "android") {
+        playlistDetails?.imageUrl &&
+          colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
+            if (!err) {
+              setDominantColor(colors.averageColor);
+              setIsLoading(false);
+            }
+          });
+      } else {
+        setDominantColor(COLORS.tabBar);
+        setIsLoading(false);
+      }
     });
 
     return () => {
@@ -71,12 +85,9 @@ const PlaylistDetails = ({
   }, [goBack, navigation, playlistDetails?.imageUrl]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <DetailsHeader
-        name={playlistDetails?.name}
-        goBack={goBack}
-        isLoading={isLoading}
-      />
+    <SafeAreaView style={{ backgroundColor: COLORS.background }}>
+      <PlaylistHeaderControl goBack={goBack} isLoading={isLoading} />
+      <PlaylistTitle name={playlistDetails?.name} />
       {isLoading ? (
         <LoadingView />
       ) : (
@@ -105,22 +116,27 @@ const PlaylistDetails = ({
               artistName={playlistDetails?.ownerName}
             />
           </View>
-          <ShuffleButton offsetY={offsetY} />
+          <ShuffleButton
+            offsetY={offsetY}
+            scrollViewHeight={scrollViewHeight}
+          />
           <Animated.ScrollView
+            onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"
             onScroll={onScroll({ y: offsetY })}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
-            style={[{ transform: [{ translateY: translateAnim }] }]}
+            style={[
+              {
+                transform: [{ translateY: translateAnim }],
+              },
+            ]}
             contentContainerStyle={[
               styles.scrollContent,
               {
-                paddingBottom:
-                  playlistDetails && playlistDetails.tracks.length > 8
-                    ? 364 * ratio
-                    : height,
+                paddingBottom: scrollViewHeight,
               },
             ]}>
             {playlistDetails && (
@@ -129,7 +145,7 @@ const PlaylistDetails = ({
           </Animated.ScrollView>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -146,11 +162,10 @@ const styles = StyleSheet.create({
   },
   coverContainer: {
     ...StyleSheet.absoluteFillObject,
-    height: "60%",
-    top: HEADER_HEIGHT,
+    marginTop: 100,
   },
   scrollContent: {
-    marginTop: 290 * ratio,
+    marginTop: 350,
     zIndex: 5,
   },
 });

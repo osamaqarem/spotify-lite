@@ -7,27 +7,38 @@ import FeaturedPlaylists from "./FeaturedPlaylists";
 import RecentlyPlayed from "./RecentlyPlayed";
 import { styles } from "./styles";
 import TopArtists from "./TopArtists";
+import { SafeAreaView, NavigationEvents } from "react-navigation";
 
 const Home = () => {
   return (
-    <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.background} />
-      <TopBar title="Home">
-        <MaterialCommunityIcon
-          name="settings-outline"
-          size={24}
-          color={COLORS.itemInactive}
-          style={{ position: "absolute", right: 10 }}
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.tabBar }}>
+      <NavigationEvents
+        onDidFocus={() => {
+          StatusBar.setBarStyle("light-content");
+        }}
+      />
+      <View style={styles.container}>
+        <StatusBar
+          backgroundColor={COLORS.background}
+          barStyle="light-content"
         />
-      </TopBar>
-      <ScrollView
-        style={{ width: "100%" }}
-        showsVerticalScrollIndicator={false}>
-        <RecentlyPlayed />
-        <FeaturedPlaylists />
-        <TopArtists />
-      </ScrollView>
-    </View>
+        <TopBar title="Home">
+          <MaterialCommunityIcon
+            name="settings-outline"
+            size={24}
+            color={COLORS.itemInactive}
+            style={{ position: "absolute", right: 10 }}
+          />
+        </TopBar>
+        <ScrollView
+          style={{ width: "100%" }}
+          showsVerticalScrollIndicator={false}>
+          <RecentlyPlayed />
+          <FeaturedPlaylists />
+          <TopArtists />
+        </ScrollView>
+      </View>
+    </SafeAreaView>
   );
 };
 

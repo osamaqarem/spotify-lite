@@ -25,26 +25,23 @@ export const Routes = {
   },
 };
 
-export const SPOTIFY_ACCOUNTS = "https://accounts.spotify.com";
-
+// API
 export const SPOTIFY_API_BASE = "https://api.spotify.com";
 
-export const SPOTIFY_REDIRECT_URI = "http://localhost:8000";
-
-export const SCOPES =
+// Web view login redirect
+const SPOTIFY_REDIRECT_URI = "http://localhost:8000";
+// Login token scopes
+const SCOPES =
   "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read user-follow-read";
-
-// WebView URL for obtaining auth code from Spotify.
-// Has:
+// Query params:
 // 1- client_id
-// 2- client_secret
-// 3- response_type
-// 4- redirect_uri
-// 5- scope
+// 2- response_type
+// 3- redirect_uri
+// 4- scope
 const clientId = "47417b69c3c0446e99d34e207a505b4e";
 const responseType = "token";
 const showDialog = "false";
 
-export const LOGIN_URL = `${SPOTIFY_ACCOUNTS}/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${encodeURIComponent(
+export const LOGIN_URL = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=${responseType}&redirect_uri=${encodeURIComponent(
   SPOTIFY_REDIRECT_URI,
 )}&scope=${encodeURIComponent(SCOPES)}&show_dialog=${showDialog}`;

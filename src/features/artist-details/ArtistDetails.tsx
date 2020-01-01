@@ -16,7 +16,7 @@ import { from, Subscription, zip } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import ArtistCover from "../../components/ArtistCover";
 import DetailsCover from "../../components/DetailsCover";
-import DetailsHeader, { HEADER_HEIGHT } from "../../components/DetailsHeader";
+import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ListOfTracks from "../../components/ListOfTracks";
 import ShuffleButton from "../../components/ShuffleButton";
 import {
@@ -181,11 +181,7 @@ const ArtistDetails = ({
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <DetailsHeader
-        name={artistDetails?.name}
-        goBack={() => navigation.goBack()}
-        isLoading={isLoading}
-      />
+      <PlaylistTitle name={artistDetails?.name} />
       {isLoading ? (
         <LoadingView />
       ) : (

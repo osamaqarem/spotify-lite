@@ -1,14 +1,21 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
-import { COLORS, ratio } from "../utils";
+import { COLORS, isIphoneX } from "../utils";
 
 export const BUTTON_HEIGHT = 50;
 
-const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
+const ShuffleButton = ({
+  offsetY,
+  scrollViewHeight,
+}: {
+  offsetY: Animated.Value<number>;
+  scrollViewHeight: number;
+}) => {
   const translateY = offsetY.interpolate({
-    inputRange: [0, 430],
-    outputRange: [0, -232 * ratio],
+    inputRange: [0, scrollViewHeight / 2],
+    outputRange: [0, -286 + (isIphoneX() ? 50 : 0)],
+    // outputRange: [0, -scrollViewHeight * 0.4 + (isIphoneX() ? 64 : -50)],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
   return (
@@ -24,7 +31,7 @@ const ShuffleButton = ({ offsetY }: { offsetY: Animated.Value<number> }) => {
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
-    marginTop: 288 * ratio,
+    marginTop: 350,
     marginBottom: 16,
     alignItems: "center",
     height: BUTTON_HEIGHT,

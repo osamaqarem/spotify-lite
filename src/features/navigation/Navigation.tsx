@@ -18,10 +18,10 @@ export default createAppContainer(
         <Transition.Together>
           <Transition.Out
             type="slide-left"
-            durationMs={450}
+            durationMs={400}
             interpolation="easeIn"
           />
-          <Transition.In type="slide-right" durationMs={500} />
+          <Transition.In type="slide-right" durationMs={400} />
         </Transition.Together>
       ),
     },

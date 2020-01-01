@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, ToastAndroid, Switch, StyleSheet } from "react-native";
+import { StyleSheet, Switch, Text, View } from "react-native";
 import { COLORS } from "../utils";
 
 const DownloadHeader = () => (
@@ -7,14 +7,10 @@ const DownloadHeader = () => (
     <Text style={styles.download}>Download</Text>
     <Switch
       value={false}
-      style={{ flex: 1 }}
-      onValueChange={() =>
-        ToastAndroid.showWithGravity(
-          "Not implemented",
-          ToastAndroid.SHORT,
-          ToastAndroid.CENTER,
-        )
-      }
+      style={{ marginRight: 10 }}
+      onValueChange={() => {
+        return;
+      }}
       thumbColor={COLORS.grey}
       trackColor={{ false: COLORS.darkGrey, true: "green" }}
     />
