@@ -29,7 +29,7 @@ const AlbumItem = ({
           style={{
             height: albumDimensions.ALBUM_DIMEN_MADE,
             width: albumDimensions.ALBUM_DIMEN_MADE,
-            marginTop: 20,
+            marginTop: 16,
           }}
         />
         <Text numberOfLines={2} style={[styles.centeredText, styles.albumText]}>

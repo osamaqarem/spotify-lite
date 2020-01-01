@@ -22,7 +22,7 @@ const FeaturedPlaylists = ({
 
   return (
     <>
-      <Text style={[styles.centeredText, styles.headerText, { marginTop: 50 }]}>
+      <Text style={[styles.centeredText, styles.headerText, { marginTop: 34 }]}>
         Featured playlists
       </Text>
       <View style={styles.content}>

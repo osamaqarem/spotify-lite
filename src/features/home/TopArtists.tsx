@@ -28,7 +28,7 @@ const TopArtists = ({
 
   return (
     <>
-      <Text style={[styles.centeredText, styles.headerText, { marginTop: 30 }]}>
+      <Text style={[styles.centeredText, styles.headerText, { marginTop: 22 }]}>
         Your top artists
       </Text>
       <Animated.View

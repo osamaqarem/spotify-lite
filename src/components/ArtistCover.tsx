@@ -35,7 +35,7 @@ const ArtistCover = ({
         />
         <View
           style={{
-            width: 140,
+            width: albumDimensions.ALBUM_DIMEN_RECENT,
             marginTop: 5,
             alignSelf: "center",
           }}>

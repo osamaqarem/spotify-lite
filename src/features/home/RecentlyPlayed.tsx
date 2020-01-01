@@ -22,7 +22,7 @@ const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
         style={[
           styles.centeredText,
           styles.headerText,
-          { fontSize: 18.5, marginTop: 20, marginBottom: 10 },
+          { fontSize: 18.5, marginTop: 22, marginBottom: 10 },
         ]}>
         Recently played
       </Text>

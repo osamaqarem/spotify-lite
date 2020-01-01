@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginHorizontal: 15,
+    marginHorizontal: 30,
     marginBottom: MARGIN_BOTTOM,
   },
   albumText: {
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
 
 const albumDimensions = {
   ROW_SCROLLVIEW_HEIGHT: 180,
-  ALBUM_DIMEN_RECENT: 180 - MARGIN_BOTTOM,
-  ALBUM_DIMEN_MADE: 172.5,
+  ALBUM_DIMEN_RECENT: 166 - MARGIN_BOTTOM,
+  ALBUM_DIMEN_MADE: 156,
 };
 
 export { styles, albumDimensions };

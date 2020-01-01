@@ -43,7 +43,7 @@ const Playlist = ({
 const styles = StyleSheet.create({
   flatListContainer: {
     marginLeft: 15,
-    marginVertical: 10,
+    marginVertical: 6.5,
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",

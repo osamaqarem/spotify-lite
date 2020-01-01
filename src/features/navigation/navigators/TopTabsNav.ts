@@ -70,7 +70,7 @@ const TopTabsNav = createMaterialTopTabNavigator(
       style: {
         backgroundColor: COLORS.tabBar,
         elevation: 0,
-        marginEnd: 130,
+        marginEnd: 100,
       },
       contentContainerStyle: {
         height: 55,

@@ -49,8 +49,8 @@ const GenreCard = ({
 const styles = StyleSheet.create({
   genreCard: {
     backgroundColor: "crimson",
-    height: 100,
-    width: 166,
+    height: 76,
+    width: 154,
     marginHorizontal: 10,
     borderRadius: 5,
     marginBottom: 15,
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   genreText: {
     fontSize: 16,
     color: COLORS.white,
-    top: 10,
+    top: 26,
     left: 10,
     fontWeight: "bold",
   },

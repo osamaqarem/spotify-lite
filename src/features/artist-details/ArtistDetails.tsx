@@ -1,24 +1,26 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
   View,
-  Platform,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
+import { SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { from, Subscription, zip } from "rxjs";
 import { switchMap } from "rxjs/operators";
 import ArtistCover from "../../components/ArtistCover";
 import DetailsCover from "../../components/DetailsCover";
-import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ListOfTracks from "../../components/ListOfTracks";
+import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
+import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import {
   AlbumType,
@@ -33,16 +35,7 @@ import {
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
-import {
-  COLORS,
-  height,
-  ratio,
-  Routes,
-  SPOTIFY_API_BASE,
-  isIphoneX,
-} from "../../utils";
-import { SafeAreaView } from "react-navigation";
-import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
+import { COLORS, isIphoneX, Routes, SPOTIFY_API_BASE } from "../../utils";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
