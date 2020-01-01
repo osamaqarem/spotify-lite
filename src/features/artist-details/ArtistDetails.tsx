@@ -5,6 +5,7 @@ import {
   StyleSheet,
   Text,
   View,
+  Platform,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
@@ -32,7 +33,16 @@ import {
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/store";
-import { COLORS, height, ratio, Routes, SPOTIFY_API_BASE } from "../../utils";
+import {
+  COLORS,
+  height,
+  ratio,
+  Routes,
+  SPOTIFY_API_BASE,
+  isIphoneX,
+} from "../../utils";
+import { SafeAreaView } from "react-navigation";
+import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
 
 const onScroll = (contentOffset: {
   x?: Animated.Node<number>;
@@ -68,7 +78,7 @@ const ArtistDetails = ({
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
   const [dominantColor, setDominantColor] = useState(COLORS.background);
   const [isLoading, setIsLoading] = useState(true);
-
+  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
   const [artistDetails, setArtistDetails] = useState<null | ArtistDetails>(
     null,
   );
@@ -147,19 +157,24 @@ const ArtistDetails = ({
               relatedArtists,
             });
 
-            colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
-              if (!err) {
-                setDominantColor(colors.averageColor);
-                setIsLoading(false);
-              }
-            });
+            if (Platform.OS === "android") {
+              colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
+                if (!err) {
+                  setDominantColor(colors.averageColor);
+                  setIsLoading(false);
+                }
+              });
+            } else {
+              setDominantColor(COLORS.tabBar);
+              setIsLoading(false);
+            }
           },
         );
       } catch (err) {
-        if (typeof err === "string" && err.includes("expired")) {
+        if (err.message.includes("expired")) {
           redoLogin();
         } else {
-          console.warn(JSON.stringify(err));
+          console.warn(err);
         }
       }
     };
@@ -180,12 +195,16 @@ const ArtistDetails = ({
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: COLORS.background }}>
-      <PlaylistTitle name={artistDetails?.name} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <PlaylistHeaderControl
+        goBack={() => navigation.goBack()}
+        isLoading={isLoading}
+      />
       {isLoading ? (
         <LoadingView />
       ) : (
         <>
+          <PlaylistTitle name={artistDetails?.name} />
           <Animated.View
             style={[
               styles.gradientContainer,
@@ -210,8 +229,12 @@ const ArtistDetails = ({
               artistName={artistDetails?.ownerName}
             />
           </View>
-          <ShuffleButton offsetY={offsetY} />
+          <ShuffleButton
+            offsetY={offsetY}
+            scrollViewHeight={scrollViewHeight}
+          />
           <Animated.ScrollView
+            onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"
@@ -222,10 +245,7 @@ const ArtistDetails = ({
             contentContainerStyle={[
               styles.scrollContent,
               {
-                paddingBottom:
-                  artistDetails && artistDetails.tracks.length > 8
-                    ? 364 * ratio
-                    : height,
+                paddingBottom: scrollViewHeight * 0.85,
               },
             ]}>
             {artistDetails && (
@@ -262,7 +282,7 @@ const ArtistDetails = ({
           </Animated.ScrollView>
         </>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -279,11 +299,11 @@ const styles = StyleSheet.create({
   },
   coverContainer: {
     ...StyleSheet.absoluteFillObject,
-    height: "60%",
+    marginTop: isIphoneX() ? -10 : -50,
     top: HEADER_HEIGHT,
   },
   scrollContent: {
-    marginTop: 290 * ratio,
+    marginTop: 350,
     zIndex: 5,
   },
   relatedArtists: {

@@ -85,13 +85,13 @@ const PlaylistDetails = ({
   }, [goBack, navigation, playlistDetails?.imageUrl]);
 
   return (
-    <SafeAreaView style={{ backgroundColor: COLORS.background }}>
+    <SafeAreaView style={{ backgroundColor: COLORS.background, flex: 1 }}>
       <PlaylistHeaderControl goBack={goBack} isLoading={isLoading} />
-      <PlaylistTitle name={playlistDetails?.name} />
       {isLoading ? (
         <LoadingView />
       ) : (
         <>
+          <PlaylistTitle name={playlistDetails?.name} />
           <Animated.View
             style={[
               styles.gradientContainer,

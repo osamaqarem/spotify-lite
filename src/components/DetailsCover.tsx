@@ -62,6 +62,7 @@ const DetailsCover = ({
 
 const styles = StyleSheet.create({
   container: {
+    // backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
   },
