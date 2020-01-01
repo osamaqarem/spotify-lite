@@ -62,12 +62,10 @@ const DetailsCover = ({
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: "red",
     justifyContent: "center",
     alignItems: "center",
   },
   cover: {
-    marginTop: 16,
     height: 165,
     width: 165,
   },

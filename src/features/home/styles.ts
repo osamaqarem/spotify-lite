@@ -8,7 +8,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.background,
   },
-  columnScrollContainer: {},
   rowScrollContainer: { flexDirection: "row", marginLeft: 9 },
   centeredText: {
     alignSelf: "center",
@@ -21,8 +20,8 @@ const styles = StyleSheet.create({
   content: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginHorizontal: 30,
+    justifyContent: "space-around",
+    marginHorizontal: 15,
     marginBottom: MARGIN_BOTTOM,
   },
   albumText: {
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
 const albumDimensions = {
   ROW_SCROLLVIEW_HEIGHT: 180,
   ALBUM_DIMEN_RECENT: 166 - MARGIN_BOTTOM,
-  ALBUM_DIMEN_MADE: 156,
+  ALBUM_DIMEN_FEATURED: 156,
 };
 
 export { styles, albumDimensions };

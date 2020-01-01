@@ -5,15 +5,11 @@ import GenreCard from "./GenreCard";
 
 const GenreList = ({
   categoriesForCountry,
+  onGenrePressed,
 }: {
   categoriesForCountry: { name: string; id: string }[];
+  onGenrePressed: (id: string) => void;
 }) => {
-  const onGenrePressed = (id: string) => {
-    // todo: get genre by id
-    // navigate to genre screen
-    console.log(id);
-  };
-
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollViewContent}>
@@ -22,7 +18,7 @@ const GenreList = ({
             item={item}
             index={index}
             key={item.name}
-            onPress={onGenrePressed}
+            onPress={() => onGenrePressed(item.id)}
           />
         ))}
       </ScrollView>

@@ -22,7 +22,7 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
     ofType(userActions.GET_TOKENS_SUCCESS),
     switchMap(({ payload: token }) => {
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me`, {
+        fetch(`${SPOTIFY_API_BASE}/me`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

@@ -23,7 +23,7 @@ export const getCurrentUserTopArtistsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(SPOTIFY_API_BASE + "/v1/me/top/artists?limit=19", {
+        fetch(SPOTIFY_API_BASE + "/me/top/artists?limit=19", {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

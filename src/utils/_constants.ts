@@ -26,7 +26,7 @@ export const Routes = {
 };
 
 // API
-export const SPOTIFY_API_BASE = "https://api.spotify.com";
+export const SPOTIFY_API_BASE = "https://api.spotify.com/v1";
 
 // Web view login redirect
 const SPOTIFY_REDIRECT_URI = "http://localhost:8000";

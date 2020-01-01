@@ -35,7 +35,7 @@ export const getRecentlyPlayedTracksEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/player/recently-played?limit=20`, {
+        fetch(`${SPOTIFY_API_BASE}/me/player/recently-played?limit=20`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

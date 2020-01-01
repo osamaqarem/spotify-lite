@@ -21,14 +21,14 @@ const AlbumItem = ({
         onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
         onPress={() => onPress(album.id)}
         key={album.id}
-        style={[{ width: albumDimensions.ALBUM_DIMEN_MADE }]}>
+        style={[{ width: albumDimensions.ALBUM_DIMEN_FEATURED }]}>
         <FastImage
           source={{
             uri: (album && album.url) || "",
           }}
           style={{
-            height: albumDimensions.ALBUM_DIMEN_MADE,
-            width: albumDimensions.ALBUM_DIMEN_MADE,
+            height: albumDimensions.ALBUM_DIMEN_FEATURED,
+            width: albumDimensions.ALBUM_DIMEN_FEATURED,
             marginTop: 16,
           }}
         />

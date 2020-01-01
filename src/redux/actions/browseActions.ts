@@ -1,15 +1,19 @@
 import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
-import { from, Observable, of } from "rxjs";
+import { from, Observable, of, zip } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import {
   Action,
   ErrorResponse,
   FeaturedPlaylistsResponse,
   GetAllCategoriesResponse,
+  GetCategoryResponse,
+  PlaylistResponse,
   UserProfileResponse,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
+import { GenrePlaylist } from "../reducers/browseReducer";
+import { TrackType } from "../reducers/playlistReducer";
 import { RootStoreType } from "../store";
 import { browseActions, globalActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
@@ -25,7 +29,7 @@ export const getAllFeaturedPlaylistsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(SPOTIFY_API_BASE + "/v1/browse/featured-playlists?limit=8", {
+        fetch(SPOTIFY_API_BASE + "/browse/featured-playlists?limit=8", {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -83,7 +87,7 @@ export const getAllCategoriesForCountryEpic = (
 
       const request$ = from(
         fetch(
-          SPOTIFY_API_BASE + `/v1/browse/categories?country=${profile.country}`,
+          SPOTIFY_API_BASE + `/browse/categories?country=${profile.country}`,
           {
             method: "GET",
             headers: {
@@ -128,5 +132,108 @@ export const getAllCategoriesForCountryEpic = (
           });
         }),
       );
+    }),
+  );
+
+export const getCategoryById = (id: string) => ({
+  type: browseActions.GET_CATEGORY_BY_ID,
+  payload: id,
+});
+
+export const getCategoryByIdEpic = (
+  actions$: Observable<Action<string>>,
+  state$: Observable<RootStoreType>,
+) =>
+  actions$.pipe(
+    ofType(browseActions.GET_CATEGORY_BY_ID),
+    withLatestFrom(state$),
+    switchMap(([{ payload: id }, { userReducer }]) => {
+      if (typeof id === "string") {
+        const { token } = userReducer;
+
+        const request$ = from(
+          fetch(
+            SPOTIFY_API_BASE + `/browse/categories/${id}/playlists?limit=4`,
+            {
+              method: "GET",
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            },
+          ),
+        );
+
+        return request$.pipe(
+          switchMap(res => res.json()),
+          map((res: GetCategoryResponse | ErrorResponse) => {
+            if ("error" in res) {
+              throw res.error.message;
+            }
+
+            // Get playlist by ID for each playlist
+            const request$Array = res.playlists.items.map(item => {
+              return from(
+                fetch(`${SPOTIFY_API_BASE}/playlists/${item.id}`, {
+                  method: "GET",
+                  headers: {
+                    authorization: `Bearer ${token}`,
+                  },
+                }),
+              ).pipe(switchMap(res => res.json()));
+            });
+
+            return zip(...request$Array);
+          }),
+          switchMap(responseArray => responseArray),
+          map(responseArray => {
+            const data: GenrePlaylist[] = responseArray.map(
+              (res: PlaylistResponse | ErrorResponse) => {
+                if ("error" in res) throw res.error.message;
+
+                const tracks: TrackType[] = res.tracks.items.map(item => ({
+                  artistName:
+                    item.track?.artists[0].name ??
+                    "No track returned by spotify :(",
+                  name: item.track?.name ?? "No track",
+                }));
+
+                const playlist: GenrePlaylist = {
+                  imageUrl: res.images[0].url,
+                  name: res.name,
+                  ownerName: res.owner.display_name,
+                  followerCount: res.followers.total,
+                  tracks,
+                };
+
+                return playlist;
+              },
+            );
+
+            return {
+              type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
+              payload: data,
+            };
+          }),
+          catchError(err => {
+            if (typeof err === "string" && err.includes("expired")) {
+              return of(redoLogin(), {
+                type: globalActions.PUSH_ACTION_TO_RESTART,
+                payload: getCategoryById(id),
+              });
+            }
+            // handle error
+            reactotron.log(JSON.stringify(err));
+            return of({
+              type: browseActions.GET_CATEGORY_BY_ID_ERROR,
+              payload: err,
+            });
+          }),
+        );
+      } else {
+        return of({
+          type: browseActions.GET_CATEGORY_BY_ID_ERROR,
+          payload: "Invalid ID",
+        });
+      }
     }),
   );

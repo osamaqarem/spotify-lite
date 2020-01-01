@@ -26,7 +26,7 @@ export const getCurrentUserSavedArtistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/following?type=artist`, {
+        fetch(`${SPOTIFY_API_BASE}/me/following?type=artist`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

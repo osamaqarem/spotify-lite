@@ -27,7 +27,7 @@ export const getCurrentUserSavedTracksEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/tracks`, {
+        fetch(`${SPOTIFY_API_BASE}/me/tracks`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export const getCurrentUserSavedAlbumsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/albums`, {
+        fetch(`${SPOTIFY_API_BASE}/me/albums`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

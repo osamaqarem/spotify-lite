@@ -1,24 +1,30 @@
 import React, { useEffect } from "react";
-import GenreList from "./GenreList";
-import { connect } from "react-redux";
-import { getAllCategoriesForCountry } from "../../redux/actions";
-import { View, StyleSheet, StatusBar } from "react-native";
-import TopBarSearch from "./TopBarSearch";
-import { CountryCategoryType } from "../../redux/reducers/browseReducer";
+import { StatusBar, StyleSheet, View } from "react-native";
+import { NavigationEvents, SafeAreaView } from "react-navigation";
+import { connect, ConnectedProps } from "react-redux";
+import {
+  getAllCategoriesForCountry,
+  getCategoryById,
+} from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
-import { SafeAreaView, NavigationEvents } from "react-navigation";
 import { COLORS } from "../../utils";
+import GenreList from "./GenreList";
+import TopBarSearch from "./TopBarSearch";
 
 const Search = ({
   categoriesForCountry,
   getAllCategoriesForCountry,
-}: {
-  categoriesForCountry: CountryCategoryType[];
-  getAllCategoriesForCountry: () => void;
-}) => {
+  getCategoryById,
+}: ReduxProps) => {
   useEffect(() => {
     getAllCategoriesForCountry();
   }, [getAllCategoriesForCountry]);
+
+  const onGenrePressed = (id: string) => {
+    //  get genre playlists by id
+    getCategoryById(id);
+    // navigate to genre screen
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
@@ -29,7 +35,10 @@ const Search = ({
       />
       <View style={styles.container}>
         <TopBarSearch />
-        <GenreList categoriesForCountry={categoriesForCountry} />
+        <GenreList
+          categoriesForCountry={categoriesForCountry}
+          onGenrePressed={onGenrePressed}
+        />
       </View>
     </SafeAreaView>
   );
@@ -43,4 +52,13 @@ const mapStateToProps = (state: RootStoreType) => ({
   categoriesForCountry: state.browseReducer.categoriesForCountry,
 });
 
-export default connect(mapStateToProps, { getAllCategoriesForCountry })(Search);
+const mapDispatchToPros = {
+  getAllCategoriesForCountry,
+  getCategoryById,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToPros);
+
+type ReduxProps = ConnectedProps<typeof connector>;
+
+export default connector(Search);

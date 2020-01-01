@@ -83,7 +83,7 @@ const ArtistDetails = ({
     const fetchData = async () => {
       try {
         const artist$ = from(
-          fetch(`${SPOTIFY_API_BASE}/v1/artists/${artistId}`, {
+          fetch(`${SPOTIFY_API_BASE}/artists/${artistId}`, {
             method: "GET",
             headers: {
               authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const ArtistDetails = ({
 
         const topTracks$ = from(
           fetch(
-            `${SPOTIFY_API_BASE}/v1/artists/${artistId}/top-tracks?market=${profile?.country}`,
+            `${SPOTIFY_API_BASE}/artists/${artistId}/top-tracks?market=${profile?.country}`,
             {
               method: "GET",
               headers: {
@@ -104,7 +104,7 @@ const ArtistDetails = ({
         ).pipe(switchMap(res => res.json()));
 
         const relatedArtists$ = from(
-          fetch(`${SPOTIFY_API_BASE}/v1/artists/${artistId}/related-artists`, {
+          fetch(`${SPOTIFY_API_BASE}/artists/${artistId}/related-artists`, {
             method: "GET",
             headers: {
               authorization: `Bearer ${token}`,

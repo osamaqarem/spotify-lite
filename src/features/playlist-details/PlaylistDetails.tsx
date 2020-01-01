@@ -16,7 +16,7 @@ import { connect, ConnectedProps } from "react-redux";
 import DetailsCover from "../../components/DetailsCover";
 import ListOfTracks from "../../components/ListOfTracks";
 import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
-import PlaylistTitle from "../../components/PlaylistTitle";
+import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   coverContainer: {
     ...StyleSheet.absoluteFillObject,
-    marginTop: 100,
+    marginTop: 90,
   },
   scrollContent: {
     marginTop: 350,

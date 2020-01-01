@@ -96,7 +96,7 @@ export const getCurrentUserPlaylistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/me/playlists`, {
+        fetch(`${SPOTIFY_API_BASE}/me/playlists`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

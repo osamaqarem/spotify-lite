@@ -4,19 +4,14 @@ import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
 import {
   Action,
-  ErrorResponse,
   AlbumDetailsResponse,
   AlbumType,
+  ErrorResponse,
 } from "../../data/models";
 import { AlbumListResponse } from "../../data/models/AlbumListResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import {
-  albumActions,
-  userActions,
-  playlistActions,
-  globalActions,
-} from "./actionTypes";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
+import { albumActions, globalActions, playlistActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
 export const getAlbumById = (id: string) => ({
@@ -35,7 +30,7 @@ export const getAlbumByIdEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/albums/${id}`, {
+        fetch(`${SPOTIFY_API_BASE}/albums/${id}`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -105,7 +100,7 @@ export const getMultipleAlbumsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/v1/albums?ids=${commaList}`, {
+        fetch(`${SPOTIFY_API_BASE}/albums?ids=${commaList}`, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

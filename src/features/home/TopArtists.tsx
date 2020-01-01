@@ -34,7 +34,7 @@ const TopArtists = ({
       <Animated.View
         style={[
           {
-            width: albumDimensions.ALBUM_DIMEN_MADE + 70,
+            width: albumDimensions.ALBUM_DIMEN_FEATURED + 70,
             alignSelf: "center",
             transform: [{ scale }],
           },
@@ -48,8 +48,8 @@ const TopArtists = ({
               uri: userTopArtistsHeader?.url ?? "",
             }}
             style={{
-              height: albumDimensions.ALBUM_DIMEN_MADE + 70,
-              width: albumDimensions.ALBUM_DIMEN_MADE + 70,
+              height: albumDimensions.ALBUM_DIMEN_FEATURED + 70,
+              width: albumDimensions.ALBUM_DIMEN_FEATURED + 70,
               marginTop: 20,
             }}
           />
