@@ -43,7 +43,7 @@ const FavoritePlaylists = ({
   return (
     <>
       <NavigationEvents
-        onDidFocus={() => {
+        onWillFocus={() => {
           StatusBar.setBarStyle("light-content");
         }}
       />

@@ -13,7 +13,7 @@ const Home = () => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.tabBar }}>
       <NavigationEvents
-        onDidFocus={() => {
+        onWillFocus={() => {
           StatusBar.setBarStyle("light-content");
         }}
       />

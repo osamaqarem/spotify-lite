@@ -16,7 +16,7 @@ import { connect, ConnectedProps } from "react-redux";
 import DetailsCover from "../../components/DetailsCover";
 import ListOfTracks from "../../components/ListOfTracks";
 import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
-import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
+import PlaylistTitle from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
@@ -82,7 +82,7 @@ const PlaylistDetails = ({
       BackHandler.removeEventListener("hardwareBackPress", goBack);
       didFocusSub.remove();
     };
-  }, [goBack, navigation, playlistDetails?.imageUrl]);
+  }, [goBack, navigation, playlistDetails]);
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.background, flex: 1 }}>

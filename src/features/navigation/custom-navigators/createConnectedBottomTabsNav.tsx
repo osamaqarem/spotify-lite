@@ -15,6 +15,7 @@ import ProtectedRoute from "../hoc/ProtectedRoute";
 import { COLORS } from "../../../utils";
 import { Text } from "react-native";
 import TopTabsNav from "../navigators/TopTabsNav";
+import Genre from "../../search/category/Genre";
 
 const createConnectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
@@ -37,7 +38,15 @@ const createConnectedBottomTabsNav = () => {
       },
     },
     Search: {
-      screen: Search,
+      screen: createStackNavigator(
+        {
+          Search,
+          Category: Genre,
+        },
+        {
+          headerMode: "none",
+        },
+      ),
       navigationOptions: {
         tabBarIcon: ({ tintColor }: { tintColor: string }) =>
           SearchIcon(tintColor),

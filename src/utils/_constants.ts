@@ -7,7 +7,10 @@ export const Routes = {
       PlaylistDetails: "PlaylistDetails",
       ArtistDetails: "ArtistDetails",
     },
-    SearchStack: "Search",
+    SearchStack: {
+      Search: "Search",
+      Category: "Category",
+    },
     FavoritesTabs: {
       FavoritePlaylistsStack: {
         FavoritePlaylists: "FavoritePlaylists",

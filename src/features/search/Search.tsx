@@ -7,29 +7,30 @@ import {
   getCategoryById,
 } from "../../redux/actions";
 import { RootStoreType } from "../../redux/store";
-import { COLORS } from "../../utils";
+import { COLORS, Routes } from "../../utils";
 import GenreList from "./GenreList";
 import TopBarSearch from "./TopBarSearch";
+import { NavigationStackProp } from "react-navigation-stack";
 
 const Search = ({
   categoriesForCountry,
   getAllCategoriesForCountry,
   getCategoryById,
-}: ReduxProps) => {
+  navigation,
+}: ReduxProps & { navigation: NavigationStackProp }) => {
   useEffect(() => {
     getAllCategoriesForCountry();
   }, [getAllCategoriesForCountry]);
 
   const onGenrePressed = (id: string) => {
-    //  get genre playlists by id
     getCategoryById(id);
-    // navigate to genre screen
+    navigation.navigate(Routes.AppTabs.SearchStack.Category);
   };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <NavigationEvents
-        onDidFocus={() => {
+        onWillFocus={() => {
           StatusBar.setBarStyle("dark-content");
         }}
       />
