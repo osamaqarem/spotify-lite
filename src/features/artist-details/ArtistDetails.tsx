@@ -138,7 +138,7 @@ const ArtistDetails = ({
             const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
               artist => ({
                 name: artist.name,
-                url: artist.images[0].url,
+                url: artist.images[0]?.url,
                 id: artist.id,
               }),
             );
@@ -212,7 +212,8 @@ const ArtistDetails = ({
             ]}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
-              end={{ x: 0, y: 0.9 }}
+              // end={{ x: 0, y: 0.9 }}
+              end={{ x: 0, y: 0.7 }}
               colors={[dominantColor, COLORS.background]}
               style={styles.gradient}
             />

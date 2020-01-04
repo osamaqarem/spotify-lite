@@ -22,8 +22,8 @@ const Search = ({
     getAllCategoriesForCountry();
   }, [getAllCategoriesForCountry]);
 
-  const onGenrePressed = (id: string) => {
-    getCategoryById(id);
+  const onGenrePressed = (id: string, title: string) => {
+    getCategoryById({ id, title, getRestOfItems: false });
     navigation.navigate(Routes.AppTabs.SearchStack.Genre);
   };
 

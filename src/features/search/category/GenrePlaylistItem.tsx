@@ -20,7 +20,13 @@ const GenrePlaylistItem = ({
 }) => {
   const scale = new Animated.Value(1);
   return (
-    <Animated.View style={{ transform: [{ scale }] }}>
+    <Animated.View
+      style={{
+        transform: [{ scale }],
+        justifyContent: "space-around",
+        marginHorizontal: 15,
+        marginBottom: 38,
+      }}>
       <TouchableOpacity
         onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
         onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}

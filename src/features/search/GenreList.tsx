@@ -8,17 +8,19 @@ const GenreList = ({
   onGenrePressed,
 }: {
   categoriesForCountry: { name: string; id: string }[];
-  onGenrePressed: (id: string) => void;
+  onGenrePressed: (id: string, title: string) => void;
 }) => {
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollViewContent}>
+      <ScrollView
+        overScrollMode="never"
+        contentContainerStyle={styles.scrollViewContent}>
         {categoriesForCountry.map((item, index) => (
           <GenreCard
             item={item}
             index={index}
             key={item.name}
-            onPress={() => onGenrePressed(item.id)}
+            onPress={() => onGenrePressed(item.id, item.name)}
           />
         ))}
       </ScrollView>

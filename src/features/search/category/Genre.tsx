@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useReducer } from "react";
+import React, { useLayoutEffect, useReducer, useState } from "react";
 import { BackHandler, Platform, StatusBar, Text, View } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
-import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
+import { FlatList, NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import BackBtn from "../../../components/BackBtn";
@@ -11,6 +11,7 @@ import LoadingView from "../../../components/LoadingView";
 import {
   clearCategoryPlaylists,
   setPlaylistDetails,
+  getCategoryById,
 } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/reducers";
 import { COLORS, Routes } from "../../../utils";
@@ -24,10 +25,14 @@ const initialState = {
 
 const Genre = ({
   navigation,
-  genrePlaylists,
+  genreDetails,
   clearCategoryPlaylists,
   setPlaylistDetails,
+  getCategoryById,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
+  const { genrePlaylists, title, id } = genreDetails;
+  const [seeMoreVisible, setSeeMoreVisible] = useState(true);
+
   const [state, setState] = useReducer(
     // eslint-disable-next-line
     (state = initialState, payload: typeof initialState) => ({ ...payload }),
@@ -40,7 +45,7 @@ const Genre = ({
         colorsFromUrl(genrePlaylists[0].imageUrl, (err: any, colors: any) => {
           if (!err) {
             setState({
-              dominantColor: colors.averageColor,
+              dominantColor: colors.dominantColor,
               loading: false,
             });
           }
@@ -102,7 +107,7 @@ const Genre = ({
               fontSize: 40,
               fontWeight: "bold",
             }}>
-            Pop
+            {title}
           </Text>
           <View
             style={{
@@ -110,39 +115,56 @@ const Genre = ({
               width: "100%",
               flex: 1,
             }}>
-            <ScrollView>
-              <Text
-                style={{
-                  alignSelf: "center",
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: 18.5,
-                }}>
-                Popular Playlists
-              </Text>
-              <View
-                style={{
-                  flexDirection: "row",
-                  flexWrap: "wrap",
-                  justifyContent: "space-around",
-                  marginHorizontal: 15,
-                  marginBottom: 38,
-                }}>
-                {genrePlaylists.map(playlist => (
-                  <GenrePlaylistItem
-                    key={playlist.name}
-                    playlist={playlist}
+            <FlatList
+              overScrollMode="never"
+              ListHeaderComponent={
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    color: "white",
+                    fontWeight: "bold",
+                    fontSize: 18.5,
+                  }}>
+                  Popular Playlists
+                </Text>
+              }
+              ListFooterComponent={
+                seeMoreVisible ? (
+                  <SeeMoreBtn
                     onPress={() => {
-                      setPlaylistDetails(playlist);
-                      navigation.navigate(
-                        Routes.AppTabs.SearchStack.PlaylistDetails,
-                      );
+                      setSeeMoreVisible(false);
+                      getCategoryById({
+                        title: title!,
+                        id: id!,
+                        getRestOfItems: true,
+                      });
                     }}
                   />
-                ))}
-              </View>
-              <SeeMoreBtn />
-            </ScrollView>
+                ) : null
+              }
+              contentContainerStyle={{
+                alignItems: "center",
+              }}
+              style={{
+                marginHorizontal: 15,
+                marginBottom: 38,
+              }}
+              numColumns={2}
+              data={genrePlaylists}
+              keyExtractor={playlist => playlist.name}
+              renderItem={({ item: playlist }) => (
+                <GenrePlaylistItem
+                  key={playlist.name}
+                  playlist={playlist}
+                  onPress={() => {
+                    setPlaylistDetails(playlist);
+                    navigation.navigate(
+                      Routes.AppTabs.SearchStack.PlaylistDetails,
+                    );
+                  }}
+                />
+              )}
+            />
           </View>
         </>
       )}
@@ -151,12 +173,13 @@ const Genre = ({
 };
 
 const mapStateToProps = (state: RootStoreType) => ({
-  genrePlaylists: state.browseReducer.genrePlaylists,
+  genreDetails: state.browseReducer.genreDetails,
 });
 
 const mapDispatchToProps = {
   clearCategoryPlaylists,
   setPlaylistDetails,
+  getCategoryById,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

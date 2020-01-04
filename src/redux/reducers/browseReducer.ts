@@ -10,13 +10,17 @@ export type GenrePlaylist = PlaylistDetailsType & {
 type BorwserReducerType = {
   featuredPlaylists: AlbumType[];
   categoriesForCountry: CountryCategoryType[];
-  genrePlaylists: GenrePlaylist[];
+  genreDetails: {
+    genrePlaylists: GenrePlaylist[];
+    title: string | null;
+    id: string | null;
+  };
 };
 
 const initialState: BorwserReducerType = {
   featuredPlaylists: [],
   categoriesForCountry: [],
-  genrePlaylists: [],
+  genreDetails: { genrePlaylists: [], title: null, id: null },
 };
 
 export default (
@@ -29,16 +33,29 @@ export default (
     case browseActions.GET_ALL_CATEGORIES_FOR_COUNTRY_SUCCESS:
       return { ...state, categoriesForCountry: payload };
     case browseActions.GET_CATEGORY_BY_ID_SUCCESS:
-      return { ...state, genrePlaylists: payload };
-    case browseActions.GET_MORE_CATEGORY_BY_ID:
       return {
         ...state,
-        genrePlaylists: [...state.genrePlaylists, ...payload],
+        genreDetails: {
+          genrePlaylists: payload.data,
+          title: payload.title,
+          id: payload.id,
+        },
+      };
+    case browseActions.GET_MORE_CATEGORY_BY_ID_SUCCESS:
+      return {
+        ...state,
+        genreDetails: {
+          ...state.genreDetails,
+          genrePlaylists: [
+            ...state.genreDetails.genrePlaylists,
+            ...payload.data,
+          ],
+        },
       };
     case browseActions.CLEAR_CATEGORY_PLAYLISTS:
       return {
         ...state,
-        genrePlaylists: initialState.genrePlaylists,
+        genreDetails: initialState.genreDetails,
       };
     default:
       return state;

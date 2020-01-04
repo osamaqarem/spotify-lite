@@ -4,10 +4,10 @@ import { COLORS } from "../../../utils";
 
 export const BUTTON_HEIGHT = 32;
 
-const SeeMoreBtn = () => {
+const SeeMoreBtn = ({ onPress }: { onPress: () => void }) => {
   return (
     <View style={[styles.container]}>
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.btnText}>SEE MORE</Text>
       </TouchableOpacity>
     </View>

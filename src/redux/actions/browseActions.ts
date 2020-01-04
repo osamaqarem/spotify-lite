@@ -135,25 +135,38 @@ export const getAllCategoriesForCountryEpic = (
     }),
   );
 
-export const getCategoryById = (id: string) => ({
+export const getCategoryById = ({
+  id,
+  title,
+  getRestOfItems,
+}: {
+  id: string;
+  title: string;
+  getRestOfItems: boolean;
+}) => ({
   type: browseActions.GET_CATEGORY_BY_ID,
-  payload: id,
+  payload: { id, title, getRestOfItems },
 });
 
 export const getCategoryByIdEpic = (
-  actions$: Observable<Action<string>>,
+  actions$: Observable<Action<ReturnType<typeof getCategoryById>["payload"]>>,
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
     ofType(browseActions.GET_CATEGORY_BY_ID),
     withLatestFrom(state$),
-    switchMap(([{ payload: id }, { userReducer }]) => {
+    switchMap(([{ payload }, { userReducer }]) => {
+      const { id, title, getRestOfItems } = payload!;
+
       if (typeof id === "string") {
         const { token } = userReducer;
 
+        const urlQueryString = getRestOfItems ? "offset=4" : "limit=4";
+
         const request$ = from(
           fetch(
-            SPOTIFY_API_BASE + `/browse/categories/${id}/playlists?limit=4`,
+            SPOTIFY_API_BASE +
+              `/browse/categories/${id}/playlists?${urlQueryString}`,
             {
               method: "GET",
               headers: {
@@ -209,16 +222,23 @@ export const getCategoryByIdEpic = (
               },
             );
 
-            return {
-              type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
-              payload: data,
-            };
+            if (!getRestOfItems) {
+              return {
+                type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
+                payload: { data, title, id },
+              };
+            } else {
+              return {
+                type: browseActions.GET_MORE_CATEGORY_BY_ID_SUCCESS,
+                payload: { data },
+              };
+            }
           }),
           catchError(err => {
             if (typeof err === "string" && err.includes("expired")) {
               return of(redoLogin(), {
                 type: globalActions.PUSH_ACTION_TO_RESTART,
-                payload: getCategoryById(id),
+                payload: getCategoryById({ id, title, getRestOfItems }),
               });
             }
             // handle error
