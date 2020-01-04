@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
   },
   button: {
-    width: 136,
+    width: 144,
     height: BUTTON_HEIGHT,
     backgroundColor: COLORS.background,
     borderColor: COLORS.grey,
@@ -32,8 +32,8 @@ const styles = StyleSheet.create({
   },
   btnText: {
     color: COLORS.white,
-    fontSize: 14,
-    letterSpacing: 2,
+    fontSize: 16,
+    letterSpacing: 1.8,
     fontWeight: "bold",
   },
 });

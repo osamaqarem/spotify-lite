@@ -15,7 +15,7 @@ import { debounceTime, filter, map, take } from "rxjs/operators";
 import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
 import { rehydrate, setToken } from "../../redux/actions";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import { COLORS, LOGIN_URL, Routes } from "../../utils/";
 import { StatusBar } from "react-native";
 

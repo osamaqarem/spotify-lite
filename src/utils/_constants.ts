@@ -9,7 +9,8 @@ export const Routes = {
     },
     SearchStack: {
       Search: "Search",
-      Category: "Category",
+      Genre: "Genre",
+      PlaylistDetails: "PlaylistDetails",
     },
     FavoritesTabs: {
       FavoritePlaylistsStack: {

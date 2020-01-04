@@ -1,26 +1,27 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
 import {
-  ActivityIndicator,
   BackHandler,
   Platform,
   StyleSheet,
   View,
+  StatusBar,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
-import { SafeAreaView } from "react-navigation";
+import { SafeAreaView, NavigationEvents } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import DetailsCover from "../../components/DetailsCover";
 import ListOfTracks from "../../components/ListOfTracks";
+import LoadingView from "../../components/LoadingView";
 import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
 import PlaylistTitle from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import { COLORS } from "../../utils";
 
 const onScroll = (contentOffset: {
@@ -34,14 +35,6 @@ const onScroll = (contentOffset: {
       },
     },
   ]);
-
-const LoadingView = () => (
-  <ActivityIndicator
-    size={50}
-    color={COLORS.green}
-    style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-  />
-);
 
 const PlaylistDetails = ({
   playlistDetails,
@@ -64,17 +57,18 @@ const PlaylistDetails = ({
     const didFocusSub = navigation.addListener("didFocus", () => {
       BackHandler.addEventListener("hardwareBackPress", goBack);
 
-      if (Platform.OS === "android") {
-        playlistDetails?.imageUrl &&
+      if (playlistDetails?.imageUrl) {
+        if (Platform.OS === "android") {
           colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
             if (!err) {
               setDominantColor(colors.averageColor);
               setIsLoading(false);
             }
           });
-      } else {
-        setDominantColor(COLORS.tabBar);
-        setIsLoading(false);
+        } else {
+          setDominantColor(COLORS.tabBar);
+          setIsLoading(false);
+        }
       }
     });
 
@@ -86,6 +80,9 @@ const PlaylistDetails = ({
 
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.background, flex: 1 }}>
+      <NavigationEvents
+        onWillFocus={() => StatusBar.setBarStyle("light-content")}
+      />
       <PlaylistHeaderControl goBack={goBack} isLoading={isLoading} />
       {isLoading ? (
         <LoadingView />

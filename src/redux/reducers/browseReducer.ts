@@ -35,6 +35,11 @@ export default (
         ...state,
         genrePlaylists: [...state.genrePlaylists, ...payload],
       };
+    case browseActions.CLEAR_CATEGORY_PLAYLISTS:
+      return {
+        ...state,
+        genrePlaylists: initialState.genrePlaylists,
+      };
     default:
       return state;
   }

@@ -6,7 +6,7 @@ import {
   getCurrentUserSavedAlbums,
   getAlbumById,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/store";
+import { RootStoreType } from "../../../redux/reducers";
 import { Routes } from "../../../utils";
 
 const FavoriteAlbums = ({

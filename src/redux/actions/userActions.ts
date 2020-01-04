@@ -5,7 +5,7 @@ import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, ErrorResponse } from "../../data/models";
 import { UserProfileResponse } from "../../data/models/UserProfileResponse";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { RootStoreType } from "../store";
+import { RootStoreType } from "../reducers";
 import { globalActions, userActions } from "./actionTypes";
 
 /**

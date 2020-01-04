@@ -6,7 +6,7 @@ import {
   getAllCategoriesForCountry,
   getCategoryById,
 } from "../../redux/actions";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import { COLORS, Routes } from "../../utils";
 import GenreList from "./GenreList";
 import TopBarSearch from "./TopBarSearch";
@@ -24,7 +24,7 @@ const Search = ({
 
   const onGenrePressed = (id: string) => {
     getCategoryById(id);
-    navigation.navigate(Routes.AppTabs.SearchStack.Category);
+    navigation.navigate(Routes.AppTabs.SearchStack.Genre);
   };
 
   return (

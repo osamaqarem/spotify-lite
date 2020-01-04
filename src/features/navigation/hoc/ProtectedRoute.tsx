@@ -1,5 +1,5 @@
 import React from "react";
-import { RootStoreType } from "../../../redux/store";
+import { RootStoreType } from "../../../redux/reducers";
 import { connect, ConnectedProps } from "react-redux";
 import { NavigationStackProp } from "react-navigation-stack";
 import { useEffect, ReactNode } from "react";

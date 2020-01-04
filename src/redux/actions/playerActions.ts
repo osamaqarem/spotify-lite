@@ -16,7 +16,7 @@ import {
   RecentlyPlayedResponse,
 } from "../../data/models";
 import { SPOTIFY_API_BASE } from "../../utils";
-import { RootStoreType } from "../store";
+import { RootStoreType } from "../reducers";
 import { playerActions, globalActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 import { redoLogin } from "./userActions";

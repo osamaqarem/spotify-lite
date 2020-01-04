@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import { Routes } from "../../utils";
 import AlbumItem from "./AlbumItem";
 import { styles } from "./styles";

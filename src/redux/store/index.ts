@@ -1,18 +1,9 @@
-import AsyncStorage from "@react-native-community/async-storage";
-import { createStore, compose, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
+import { applyMiddleware, compose, createStore } from "redux";
 import { createEpicMiddleware } from "redux-observable";
-import combinedReducers, { rootEpic } from "../reducers";
-import { persistStore, persistReducer } from "redux-persist";
+import { persistStore } from "redux-persist";
+import thunk from "redux-thunk";
 import Reactotron from "../../../ReactotronConfig";
-
-// Redux persist
-const persistConfig = {
-  key: "root",
-  storage: AsyncStorage,
-  blacklist: ["artistReducer", "themeReducer"],
-};
-const persistedReducer = persistReducer(persistConfig, combinedReducers);
+import { persistedReducer, rootEpic } from "../reducers";
 
 // Redux observable
 const epicMiddleware = createEpicMiddleware();
@@ -29,8 +20,4 @@ epicMiddleware.run(rootEpic);
 // Redux persist
 const persistor = persistStore(store);
 
-const redux = { store, persistor };
-
-export type RootStoreType = ReturnType<typeof combinedReducers>;
-
-export default redux;
+export { store, persistor };

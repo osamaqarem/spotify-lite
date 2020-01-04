@@ -6,12 +6,13 @@ import {
   StyleSheet,
   Text,
   View,
+  StatusBar,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
-import { SafeAreaView } from "react-navigation";
+import { SafeAreaView, NavigationEvents } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { from, Subscription, zip } from "rxjs";
@@ -34,7 +35,7 @@ import {
   PlaylistDetailsType,
   TrackType,
 } from "../../redux/reducers/playlistReducer";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import { COLORS, isIphoneX, Routes, SPOTIFY_API_BASE } from "../../utils";
 
 const onScroll = (contentOffset: {
@@ -189,6 +190,9 @@ const ArtistDetails = ({
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+      <NavigationEvents
+        onWillFocus={() => StatusBar.setBarStyle("light-content")}
+      />
       <PlaylistHeaderControl
         goBack={() => navigation.goBack()}
         isLoading={isLoading}

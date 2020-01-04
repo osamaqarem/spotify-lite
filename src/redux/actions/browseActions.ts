@@ -14,7 +14,7 @@ import {
 import { SPOTIFY_API_BASE } from "../../utils";
 import { GenrePlaylist } from "../reducers/browseReducer";
 import { TrackType } from "../reducers/playlistReducer";
-import { RootStoreType } from "../store";
+import { RootStoreType } from "../reducers";
 import { browseActions, globalActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
@@ -237,3 +237,7 @@ export const getCategoryByIdEpic = (
       }
     }),
   );
+
+export const clearCategoryPlaylists = () => ({
+  type: browseActions.CLEAR_CATEGORY_PLAYLISTS,
+});

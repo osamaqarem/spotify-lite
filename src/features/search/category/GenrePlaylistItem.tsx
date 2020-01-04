@@ -67,9 +67,6 @@ const GenrePlaylistItem = ({
           {playlist.followerCount.toLocaleString()} FOLLOWERS
         </Text>
       </TouchableOpacity>
-      {
-        // TODO: SEE MORE
-      }
     </Animated.View>
   );
 };

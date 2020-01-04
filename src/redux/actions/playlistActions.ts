@@ -10,12 +10,20 @@ import {
   TrackType,
   SavedPlaylistsType,
 } from "../reducers/playlistReducer";
-import { RootStoreType } from "../store";
+import { RootStoreType } from "../reducers";
 import { playlistActions } from "./actionTypes";
+import { GenrePlaylist } from "../reducers/browseReducer";
 
 export const clearPlaylistDetails = () => ({
   type: playlistActions.CLEAR_PLAYLIST_DETAILS,
 });
+
+export const setPlaylistDetails = (
+  data: GenrePlaylist,
+): Action<PlaylistDetailsType> => {
+  return { type: playlistActions.GET_PLAYLIST_DETAILS_SUCCESS, payload: data };
+};
+
 export const getPlayListById = (playListId: string) => ({
   type: playlistActions.GET_PLAYLIST_BY_ID,
   payload: playListId,

@@ -7,7 +7,7 @@ import {
   getCurrentUserSavedTracks,
   getPlayListById,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/store";
+import { RootStoreType } from "../../../redux/reducers";
 import { Routes } from "../../../utils";
 import { NavigationEvents } from "react-navigation";
 import { StatusBar } from "react-native";

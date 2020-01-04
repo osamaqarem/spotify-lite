@@ -41,7 +41,8 @@ const createConnectedBottomTabsNav = () => {
       screen: createStackNavigator(
         {
           Search,
-          Category: Genre,
+          Genre,
+          PlaylistDetails,
         },
         {
           headerMode: "none",

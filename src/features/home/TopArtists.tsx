@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../redux/store";
+import { RootStoreType } from "../../redux/reducers";
 import AlbumItem from "./AlbumItem";
 import { albumDimensions, styles } from "./styles";
 import { setArtistId } from "../../redux/actions";

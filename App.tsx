@@ -5,7 +5,7 @@ import reactotron from "reactotron-react-native";
 import { PersistGate } from "redux-persist/integration/react";
 import GreenIndicator from "./src/components/GreenIndicator";
 import AppWithNavigation from "./src/features/navigation/Navigation";
-import redux from "./src/redux/store";
+import { persistor, store } from "./src/redux/store";
 
 if (__DEV__) {
   import("./ReactotronConfig").then(() => console.log("Reactotron Configured"));
@@ -30,8 +30,8 @@ YellowBox.ignoreWarnings([
 ]);
 
 const AppWithStore = () => (
-  <Provider store={redux.store}>
-    <PersistGate loading={<GreenIndicator />} persistor={redux.persistor}>
+  <Provider store={store}>
+    <PersistGate loading={<GreenIndicator />} persistor={persistor}>
       <AppWithNavigation />
     </PersistGate>
   </Provider>
