@@ -1,22 +1,28 @@
-import React, { useLayoutEffect, useReducer, useState } from "react";
-import { BackHandler, Platform, StatusBar, Text, View } from "react-native";
+import React, {
+  useLayoutEffect,
+  useReducer,
+  useState,
+  useMemo,
+  useCallback,
+} from "react";
+import { BackHandler, Platform, StatusBar, Text } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
-import { FlatList, NavigationEvents, SafeAreaView } from "react-navigation";
+import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import BackBtn from "../../../components/BackBtn";
 import LoadingView from "../../../components/LoadingView";
 import {
   clearCategoryPlaylists,
-  setPlaylistDetails,
   getCategoryById,
+  setPlaylistDetails,
 } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/reducers";
+import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
 import { COLORS, Routes } from "../../../utils";
-import GenrePlaylistItem from "./GenrePlaylistItem";
-import SeeMoreBtn from "./SeeMoreBtn";
+import ListOfGenrePlaylists from "./ListOfGenrePlaylists";
 
 const initialState = {
   dominantColor: COLORS.tabBar,
@@ -70,6 +76,37 @@ const Genre = ({
     return true;
   }
 
+  const handleSeeMore = useCallback(() => {
+    setSeeMoreVisible(false);
+    getCategoryById({
+      title: title!,
+      id: id!,
+      getRestOfItems: true,
+    });
+  }, [getCategoryById, id, title]);
+
+  const handlePlaylistPress = useCallback(
+    (playlist: GenrePlaylist) => {
+      setPlaylistDetails(playlist);
+      navigation.navigate(Routes.AppTabs.SearchStack.PlaylistDetails);
+    },
+    [navigation, setPlaylistDetails],
+  );
+
+  const memoizedList = useMemo(
+    () => (
+      <ListOfGenrePlaylists
+        {...{
+          handlePlaylistPress,
+          handleSeeMore,
+          genrePlaylists,
+          seeMoreVisible,
+        }}
+      />
+    ),
+    [handlePlaylistPress, handleSeeMore, genrePlaylists, seeMoreVisible],
+  );
+
   return (
     <SafeAreaView
       style={{
@@ -109,63 +146,7 @@ const Genre = ({
             }}>
             {title}
           </Text>
-          <View
-            style={{
-              backgroundColor: COLORS.background,
-              width: "100%",
-              flex: 1,
-            }}>
-            <FlatList
-              overScrollMode="never"
-              ListHeaderComponent={
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    color: "white",
-                    fontWeight: "bold",
-                    fontSize: 18.5,
-                  }}>
-                  Popular Playlists
-                </Text>
-              }
-              ListFooterComponent={
-                seeMoreVisible ? (
-                  <SeeMoreBtn
-                    onPress={() => {
-                      setSeeMoreVisible(false);
-                      getCategoryById({
-                        title: title!,
-                        id: id!,
-                        getRestOfItems: true,
-                      });
-                    }}
-                  />
-                ) : null
-              }
-              contentContainerStyle={{
-                alignItems: "center",
-              }}
-              style={{
-                marginHorizontal: 15,
-                marginBottom: 38,
-              }}
-              numColumns={2}
-              data={genrePlaylists}
-              keyExtractor={playlist => playlist.name}
-              renderItem={({ item: playlist }) => (
-                <GenrePlaylistItem
-                  key={playlist.name}
-                  playlist={playlist}
-                  onPress={() => {
-                    setPlaylistDetails(playlist);
-                    navigation.navigate(
-                      Routes.AppTabs.SearchStack.PlaylistDetails,
-                    );
-                  }}
-                />
-              )}
-            />
-          </View>
+          {memoizedList}
         </>
       )}
     </SafeAreaView>
