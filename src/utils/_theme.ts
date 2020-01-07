@@ -1,4 +1,4 @@
-import { Easing } from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 import { Dimensions, Platform } from "react-native";
 
 export const { height, width } = Dimensions.get("window");
@@ -35,3 +35,15 @@ export function isIphoneX() {
     (height === 812 || width === 812 || height === 896 || width === 896)
   );
 }
+
+export const onScroll = (contentOffset: {
+  x?: Animated.Node<number>;
+  y?: Animated.Node<number>;
+}) =>
+  Animated.event([
+    {
+      nativeEvent: {
+        contentOffset,
+      },
+    },
+  ]);

@@ -22,19 +22,7 @@ import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../redux/reducers";
-import { COLORS } from "../../utils";
-
-const onScroll = (contentOffset: {
-  x?: Animated.Node<number>;
-  y?: Animated.Node<number>;
-}) =>
-  Animated.event([
-    {
-      nativeEvent: {
-        contentOffset,
-      },
-    },
-  ]);
+import { COLORS, onScroll } from "../../utils";
 
 const PlaylistDetails = ({
   playlistDetails,

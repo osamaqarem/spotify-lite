@@ -36,19 +36,13 @@ import {
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/reducers";
-import { COLORS, isIphoneX, Routes, SPOTIFY_API_BASE } from "../../utils";
-
-const onScroll = (contentOffset: {
-  x?: Animated.Node<number>;
-  y?: Animated.Node<number>;
-}) =>
-  Animated.event([
-    {
-      nativeEvent: {
-        contentOffset,
-      },
-    },
-  ]);
+import {
+  COLORS,
+  isIphoneX,
+  Routes,
+  SPOTIFY_API_BASE,
+  onScroll,
+} from "../../utils";
 
 const LoadingView = () => (
   <ActivityIndicator

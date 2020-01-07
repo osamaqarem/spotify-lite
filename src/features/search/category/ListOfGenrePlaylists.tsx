@@ -16,7 +16,6 @@ const ListOfGenrePlaylists = ({
   handleSeeMore: () => void;
   handlePlaylistPress: (playlist: GenrePlaylist) => void;
 }) => {
-  console.log("LIST RERENDER");
   return (
     <View
       style={{
