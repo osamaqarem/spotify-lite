@@ -1,62 +1,76 @@
 import React from "react";
-import { View, Text, FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
+import Animated from "react-native-reanimated";
+import { BACKBTN_HEIGHT } from "../../../components/BackBtn";
 import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
-import { COLORS } from "../../../utils";
-import SeeMoreBtn from "./SeeMoreBtn";
+import { COLORS, onScroll, width } from "../../../utils";
 import GenrePlaylistItem from "./GenrePlaylistItem";
+import SeeMoreBtn from "./SeeMoreBtn";
+
+const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
+  FlatList,
+);
 
 const ListOfGenrePlaylists = ({
-  genrePlaylists,
+  offsetY,
   seeMoreVisible,
+  genrePlaylists,
   handleSeeMore,
-  handlePlaylistPress,
+  onPlaylistPressed,
 }: {
-  genrePlaylists: GenrePlaylist[];
+  offsetY: Animated.Node<number>;
   seeMoreVisible: boolean;
   handleSeeMore: () => void;
-  handlePlaylistPress: (playlist: GenrePlaylist) => void;
+  genrePlaylists: GenrePlaylist[];
+  onPlaylistPressed: (playlist: GenrePlaylist) => void;
 }) => {
   return (
-    <View
-      style={{
-        backgroundColor: COLORS.background,
+    <AnimatedFlatList
+      scrollEventThrottle={1}
+      onScroll={onScroll({ y: offsetY })}
+      overScrollMode="never"
+      ListHeaderComponent={
+        <Text
+          style={{
+            alignSelf: "center",
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 18.5,
+            width: width,
+            textAlign: "center",
+            marginBottom: 20,
+          }}>
+          Popular Playlists
+        </Text>
+      }
+      ListFooterComponent={
+        seeMoreVisible ? <SeeMoreBtn onPress={handleSeeMore} /> : null
+      }
+      contentContainerStyle={{
+        alignItems: "center",
+        marginTop: "40%",
+        paddingBottom: "100%",
         width: "100%",
-        flex: 1,
-      }}>
-      <FlatList
-        overScrollMode="never"
-        ListHeaderComponent={
-          <Text
-            style={{
-              alignSelf: "center",
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 18.5,
-            }}>
-            Popular Playlists
-          </Text>
-        }
-        ListFooterComponent={
-          seeMoreVisible ? <SeeMoreBtn onPress={handleSeeMore} /> : null
-        }
-        contentContainerStyle={{
-          alignItems: "center",
-        }}
-        style={{
-          marginHorizontal: 15,
-          marginBottom: 38,
-        }}
-        numColumns={2}
-        data={genrePlaylists}
-        keyExtractor={playlist => playlist.name}
-        renderItem={({ item: playlist }) => (
-          <GenrePlaylistItem
-            playlist={playlist}
-            onPress={() => handlePlaylistPress(playlist)}
-          />
-        )}
-      />
-    </View>
+        backgroundColor: COLORS.background,
+      }}
+      // @ts-ignore
+      style={{
+        marginHorizontal: 15,
+        zIndex: 10,
+        width: "100%",
+        marginTop: BACKBTN_HEIGHT,
+      }}
+      numColumns={2}
+      data={genrePlaylists}
+      keyExtractor={playlist => playlist.name}
+      renderItem={({ item: playlist }) => (
+        <GenrePlaylistItem
+          key={playlist.name}
+          playlist={playlist}
+          onPress={() => onPlaylistPressed(playlist)}
+        />
+      )}
+    />
   );
 };
 

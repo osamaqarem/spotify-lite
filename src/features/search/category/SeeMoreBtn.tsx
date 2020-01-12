@@ -16,7 +16,7 @@ const SeeMoreBtn = ({ onPress }: { onPress: () => void }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 16,
+    marginBottom: 52,
     alignItems: "center",
     height: BUTTON_HEIGHT,
   },

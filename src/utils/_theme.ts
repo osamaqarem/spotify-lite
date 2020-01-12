@@ -3,8 +3,9 @@ import { Dimensions, Platform } from "react-native";
 
 export const { height, width } = Dimensions.get("window");
 
-export const MAGIC_NUM = 1000;
-export const ratio = (width / 414 / height) * MAGIC_NUM;
+export const ratio = (width / 414 / height) * 1000;
+
+export const widthRatio = width / 500;
 
 export const COLORS = {
   tabBar: "#222326",

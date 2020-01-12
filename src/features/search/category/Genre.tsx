@@ -1,14 +1,15 @@
-import React, {
-  useLayoutEffect,
-  useReducer,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
-import { BackHandler, Platform, StatusBar, Text } from "react-native";
+import React, { useLayoutEffect, useReducer, useRef, useState } from "react";
+import {
+  BackHandler,
+  Platform,
+  StatusBar,
+  StyleSheet,
+  Text,
+} from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
+import Animated from "react-native-reanimated";
 import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
@@ -24,6 +25,10 @@ import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
 import { COLORS, Routes } from "../../../utils";
 import ListOfGenrePlaylists from "./ListOfGenrePlaylists";
 
+const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedComponent(
+  LinearGradient,
+);
+
 const initialState = {
   dominantColor: COLORS.tabBar,
   loading: true,
@@ -36,10 +41,18 @@ const Genre = ({
   setPlaylistDetails,
   getCategoryById,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
+  const offsetY = useRef(new Animated.Value(0)).current;
+
+  const heightAnim = offsetY.interpolate({
+    inputRange: [0, 150],
+    outputRange: [40, 0],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  });
+
   const { genrePlaylists, title, id } = genreDetails;
   const [seeMoreVisible, setSeeMoreVisible] = useState(true);
 
-  const [state, setState] = useReducer(
+  const [{ loading, dominantColor }, setState] = useReducer(
     // eslint-disable-next-line
     (state = initialState, payload: typeof initialState) => ({ ...payload }),
     initialState,
@@ -76,36 +89,19 @@ const Genre = ({
     return true;
   }
 
-  const handleSeeMore = useCallback(() => {
+  const handleSeeMore = () => {
     setSeeMoreVisible(false);
     getCategoryById({
       title: title!,
       id: id!,
       getRestOfItems: true,
     });
-  }, [getCategoryById, id, title]);
+  };
 
-  const handlePlaylistPress = useCallback(
-    (playlist: GenrePlaylist) => {
-      setPlaylistDetails(playlist);
-      navigation.navigate(Routes.AppTabs.SearchStack.PlaylistDetails);
-    },
-    [navigation, setPlaylistDetails],
-  );
-
-  const memoizedList = useMemo(
-    () => (
-      <ListOfGenrePlaylists
-        {...{
-          handlePlaylistPress,
-          handleSeeMore,
-          genrePlaylists,
-          seeMoreVisible,
-        }}
-      />
-    ),
-    [handlePlaylistPress, handleSeeMore, genrePlaylists, seeMoreVisible],
-  );
+  const onPlaylistPressed = (playlist: GenrePlaylist) => {
+    setPlaylistDetails(playlist);
+    navigation.navigate(Routes.AppTabs.SearchStack.PlaylistDetails);
+  };
 
   return (
     <SafeAreaView
@@ -113,8 +109,7 @@ const Genre = ({
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor:
-          (state.loading && COLORS.background) || state.dominantColor,
+        backgroundColor: COLORS.background,
       }}>
       <NavigationEvents
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
@@ -123,17 +118,19 @@ const Genre = ({
         }
       />
       <BackBtn goBack={handleBack} />
-      {(state.loading && <LoadingView viewStyle={{ marginTop: 50 }} />) || (
+      {(loading && <LoadingView viewStyle={{ marginTop: 50 }} />) || (
         <>
-          <LinearGradient
+          <AnimatedLinearGradient
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 0.9 }}
-            colors={[state.dominantColor, COLORS.background]}
+            colors={[dominantColor, COLORS.background]}
+            // @ts-ignore
             style={{
-              height: "40%",
+              height: Animated.concat(heightAnim, "%"),
               width: "100%",
               top: 0,
               opacity: 1,
+              ...StyleSheet.absoluteFillObject,
             }}
           />
           <Text
@@ -146,7 +143,13 @@ const Genre = ({
             }}>
             {title}
           </Text>
-          {memoizedList}
+          <ListOfGenrePlaylists
+            genrePlaylists={genrePlaylists}
+            handleSeeMore={handleSeeMore}
+            offsetY={offsetY}
+            onPlaylistPressed={onPlaylistPressed}
+            seeMoreVisible={seeMoreVisible}
+          />
         </>
       )}
     </SafeAreaView>
