@@ -11,10 +11,10 @@ import {
   PlaylistResponse,
   UserProfileResponse,
 } from "../../data/models";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
+import { RootStoreType } from "../reducers";
 import { GenrePlaylist } from "../reducers/browseReducer";
 import { TrackType } from "../reducers/playlistReducer";
-import { RootStoreType } from "../reducers";
 import { browseActions, globalActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
@@ -29,7 +29,7 @@ export const getAllFeaturedPlaylistsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(SPOTIFY_API_BASE + "/browse/featured-playlists?limit=8", {
+        fetch(API.getAllFeaturedPlaylists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -86,15 +86,12 @@ export const getAllCategoriesForCountryEpic = (
       }: { token: string; profile: UserProfileResponse } = state.userReducer;
 
       const request$ = from(
-        fetch(
-          SPOTIFY_API_BASE + `/browse/categories?country=${profile.country}`,
-          {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
+        fetch(getAllCategoriesForCountry + profile.country, {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
           },
-        ),
+        }),
       );
 
       return request$.pipe(
@@ -164,16 +161,12 @@ export const getCategoryByIdEpic = (
         const urlQueryString = getRestOfItems ? "offset=4" : "limit=4";
 
         const request$ = from(
-          fetch(
-            SPOTIFY_API_BASE +
-              `/browse/categories/${id}/playlists?${urlQueryString}`,
-            {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
+          fetch(API.getCategoryById(id, urlQueryString), {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
             },
-          ),
+          }),
         );
 
         return request$.pipe(
@@ -186,7 +179,7 @@ export const getCategoryByIdEpic = (
             // Get playlist by ID for each playlist
             const request$Array = res.playlists.items.map(item => {
               return from(
-                fetch(`${SPOTIFY_API_BASE}/playlists/${item.id}`, {
+                fetch(API.getPlaylistById + item.id, {
                   method: "GET",
                   headers: {
                     authorization: `Bearer ${token}`,

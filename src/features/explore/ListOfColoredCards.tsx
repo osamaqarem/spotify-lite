@@ -1,9 +1,9 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { COLORS } from "../../utils";
-import GenreCard from "./GenreCard";
+import ColoredCard from "./ColoredCard";
 
-const GenreList = ({
+const ListOfColoredCards = ({
   categoriesForCountry,
   onGenrePressed,
 }: {
@@ -16,7 +16,7 @@ const GenreList = ({
         overScrollMode="never"
         contentContainerStyle={styles.scrollViewContent}>
         {categoriesForCountry.map((item, index) => (
-          <GenreCard
+          <ColoredCard
             item={item}
             index={index}
             key={item.name}
@@ -43,4 +43,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GenreList;
+export default ListOfColoredCards;

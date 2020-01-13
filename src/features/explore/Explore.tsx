@@ -8,11 +8,11 @@ import {
 } from "../../redux/actions";
 import { RootStoreType } from "../../redux/reducers";
 import { COLORS, Routes } from "../../utils";
-import GenreList from "./GenreList";
+import ListOfColoredCards from "./ListOfColoredCards";
 import TopBarSearch from "./TopBarSearch";
 import { NavigationStackProp } from "react-navigation-stack";
 
-const Search = ({
+const Explore = ({
   categoriesForCountry,
   getAllCategoriesForCountry,
   getCategoryById,
@@ -24,7 +24,11 @@ const Search = ({
 
   const onGenrePressed = (id: string, title: string) => {
     getCategoryById({ id, title, getRestOfItems: false });
-    navigation.navigate(Routes.AppTabs.SearchStack.Genre);
+    navigation.navigate(Routes.AppTabs.ExploreStack.Genre);
+  };
+
+  const onSearchPressed = () => {
+    navigation.navigate(Routes.AppTabs.ExploreStack.Search);
   };
 
   return (
@@ -35,8 +39,8 @@ const Search = ({
         }}
       />
       <View style={styles.container}>
-        <TopBarSearch />
-        <GenreList
+        <TopBarSearch onSearchPressed={onSearchPressed} />
+        <ListOfColoredCards
           categoriesForCountry={categoriesForCountry}
           onGenrePressed={onGenrePressed}
         />
@@ -62,4 +66,4 @@ const connector = connect(mapStateToProps, mapDispatchToPros);
 
 type ReduxProps = ConnectedProps<typeof connector>;
 
-export default connector(Search);
+export default connector(Explore);

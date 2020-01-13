@@ -4,7 +4,7 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, ErrorResponse } from "../../data/models";
 import { UserProfileResponse } from "../../data/models/UserProfileResponse";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
 import { RootStoreType } from "../reducers";
 import { globalActions, userActions } from "./actionTypes";
 
@@ -22,7 +22,7 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
     ofType(userActions.GET_TOKENS_SUCCESS),
     switchMap(({ payload: token }) => {
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me`, {
+        fetch(API.myProfile, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

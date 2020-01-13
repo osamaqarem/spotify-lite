@@ -4,15 +4,15 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, ErrorResponse, PlaylistResponse } from "../../data/models";
 import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlaylistsResponse";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
+import { RootStoreType } from "../reducers";
+import { GenrePlaylist } from "../reducers/browseReducer";
 import {
   PlaylistDetailsType,
-  TrackType,
   SavedPlaylistsType,
+  TrackType,
 } from "../reducers/playlistReducer";
-import { RootStoreType } from "../reducers";
 import { playlistActions } from "./actionTypes";
-import { GenrePlaylist } from "../reducers/browseReducer";
 
 export const clearPlaylistDetails = () => ({
   type: playlistActions.CLEAR_PLAYLIST_DETAILS,
@@ -41,7 +41,7 @@ export const getPlayListByIdEpic = (
         const { token } = state.userReducer;
 
         const request$ = from(
-          fetch(`https://api.spotify.com/v1/playlists/${playListId}`, {
+          fetch(API.getPlaylistById + playListId, {
             method: "GET",
             headers: {
               authorization: `Bearer ${token}`,
@@ -104,7 +104,7 @@ export const getCurrentUserPlaylistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me/playlists`, {
+        fetch(API.getCurrentUserPlaylists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

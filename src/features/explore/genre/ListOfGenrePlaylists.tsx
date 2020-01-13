@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { BACKBTN_HEIGHT } from "../../../components/BackBtn";
 import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
 import { COLORS, onScroll, width } from "../../../utils";
-import GenrePlaylistItem from "./GenrePlaylistItem";
+import PlaylistWithFollowers from "./PlaylistWithFollowers";
 import SeeMoreBtn from "./SeeMoreBtn";
 
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
@@ -64,7 +64,7 @@ const ListOfGenrePlaylists = ({
       data={genrePlaylists}
       keyExtractor={playlist => playlist.name}
       renderItem={({ item: playlist }) => (
-        <GenrePlaylistItem
+        <PlaylistWithFollowers
           key={playlist.name}
           playlist={playlist}
           onPress={() => onPlaylistPressed(playlist)}

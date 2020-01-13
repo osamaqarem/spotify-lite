@@ -11,7 +11,7 @@ const albumDimensions = {
   ALBUM_DIMEN_FEATURED: 156,
 };
 
-const GenrePlaylistItem = ({
+const PlaylistWithFollowers = ({
   playlist,
   onPress,
 }: {
@@ -79,4 +79,4 @@ const GenrePlaylistItem = ({
   );
 };
 
-export default GenrePlaylistItem;
+export default PlaylistWithFollowers;

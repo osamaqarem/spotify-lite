@@ -9,7 +9,7 @@ import {
   ErrorResponse,
 } from "../../data/models";
 import { AlbumListResponse } from "../../data/models/AlbumListResponse";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
 import { albumActions, globalActions, playlistActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
@@ -30,7 +30,7 @@ export const getAlbumByIdEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/albums/${id}`, {
+        fetch(API.getAlbumById + id, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ export const getMultipleAlbumsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/albums?ids=${commaList}`, {
+        fetch(API.getMultipleAlbums + commaList, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

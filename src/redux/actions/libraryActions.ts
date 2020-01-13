@@ -8,7 +8,7 @@ import {
   CurrentUserSavedTracks,
   ErrorResponse,
 } from "../../data/models";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { SPOTIFY_API_BASE, API } from "../../utils";
 import { libraryActions } from "./actionTypes";
 import { SavedAlbumType } from "../reducers/libraryReducer";
 
@@ -27,7 +27,7 @@ export const getCurrentUserSavedTracksEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me/tracks`, {
+        fetch(API.getCurrentUserSavedTracks, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export const getCurrentUserSavedAlbumsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me/albums`, {
+        fetch(API.getCurrentUserSavedAlbums, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

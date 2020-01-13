@@ -8,7 +8,7 @@ import {
   CurrentUserSavedArtistsResponse,
   ErrorResponse,
 } from "../../data/models";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
 import { followActions } from "./actionTypes";
 
 export const getCurrentUserSavedArtists = () => ({
@@ -26,7 +26,7 @@ export const getCurrentUserSavedArtistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me/following?type=artist`, {
+        fetch(API.getCurrentUserSavedArtists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

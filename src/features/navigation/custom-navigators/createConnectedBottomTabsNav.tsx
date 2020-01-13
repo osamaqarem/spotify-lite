@@ -7,7 +7,7 @@ import {
 import ArtistDetails from "../../artist-details/ArtistDetails";
 import Home from "../../home/Home";
 import PlaylistDetails from "../../playlist-details/PlaylistDetails";
-import Search from "../../search/Search";
+import Explore from "../../explore/Explore";
 import FavoritesIcon from "../icons/FavoritesIcon";
 import HomeIcon from "../icons/HomeIcon";
 import SearchIcon from "../icons/SearchIcon";
@@ -15,7 +15,8 @@ import ProtectedRoute from "../hoc/ProtectedRoute";
 import { COLORS } from "../../../utils";
 import { Text } from "react-native";
 import TopTabsNav from "../navigators/TopTabsNav";
-import Genre from "../../search/category/Genre";
+import Genre from "../../explore/genre/Genre";
+import Search from "../../explore/search/Search";
 
 const createConnectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
@@ -31,15 +32,15 @@ const createConnectedBottomTabsNav = () => {
         },
       ),
       navigationOptions: {
-        tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          HomeIcon(tintColor),
+        tabBarIcon: HomeIcon,
         ...sharedStyles,
-        tabBarLabel: HomeLabel,
+        tabBarLabel: <HomeLabel />,
       },
     },
     Search: {
       screen: createStackNavigator(
         {
+          Explore,
           Search,
           Genre,
           PlaylistDetails,
@@ -49,19 +50,17 @@ const createConnectedBottomTabsNav = () => {
         },
       ),
       navigationOptions: {
-        tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          SearchIcon(tintColor),
+        tabBarIcon: SearchIcon,
         ...sharedStyles,
-        tabBarLabel: SearchLabel,
+        tabBarLabel: <SearchLabel />,
       },
     },
     Favorites: {
       screen: TopTabsNav,
       navigationOptions: {
-        tabBarIcon: ({ tintColor }: { tintColor: string }) =>
-          FavoritesIcon(tintColor),
+        tabBarIcon: FavoritesIcon,
         ...sharedStyles,
-        tabBarLabel: FavoritesLabel,
+        tabBarLabel: <FavoritesLabel />,
       },
     },
   });
@@ -93,8 +92,8 @@ const sharedStyles = {
   barStyle: { backgroundColor: COLORS.tabBar, padding: 2 },
 };
 
-const HomeLabel = <Text style={{ fontSize: 10 }}>Home</Text>;
-const SearchLabel = <Text style={{ fontSize: 10 }}>Search</Text>;
-const FavoritesLabel = <Text style={{ fontSize: 10 }}>Favorites</Text>;
+const HomeLabel = () => <Text style={{ fontSize: 10 }}>Home</Text>;
+const SearchLabel = () => <Text style={{ fontSize: 10 }}>Search</Text>;
+const FavoritesLabel = () => <Text style={{ fontSize: 10 }}>Favorites</Text>;
 
 export default createConnectedBottomTabsNav;

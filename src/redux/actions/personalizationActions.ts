@@ -8,7 +8,7 @@ import {
   ErrorResponse,
   UserTopArtistsResponse,
 } from "../../data/models";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
 import { globalActions, personalizationActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
@@ -23,7 +23,7 @@ export const getCurrentUserTopArtistsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(SPOTIFY_API_BASE + "/me/top/artists?limit=19", {
+        fetch(API.getCurrentUserTopArtists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

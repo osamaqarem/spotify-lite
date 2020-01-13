@@ -5,7 +5,7 @@ import Animated, { Easing } from "react-native-reanimated";
 import { genreImgList } from "../../data/assets/genres/genreImgList";
 import { COLORS } from "../../utils";
 
-const GenreCard = ({
+const ColoredCard = ({
   item,
   index,
   onPress,
@@ -64,4 +64,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default GenreCard;
+export default ColoredCard;

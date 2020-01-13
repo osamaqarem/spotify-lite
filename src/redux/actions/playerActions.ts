@@ -15,9 +15,9 @@ import {
   ErrorResponse,
   RecentlyPlayedResponse,
 } from "../../data/models";
-import { SPOTIFY_API_BASE } from "../../utils";
+import { API } from "../../utils";
 import { RootStoreType } from "../reducers";
-import { playerActions, globalActions } from "./actionTypes";
+import { globalActions, playerActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 import { redoLogin } from "./userActions";
 
@@ -35,7 +35,7 @@ export const getRecentlyPlayedTracksEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(`${SPOTIFY_API_BASE}/me/player/recently-played?limit=20`, {
+        fetch(API.getRecentlyPlayedTracks, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

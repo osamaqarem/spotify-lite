@@ -47,7 +47,7 @@ export interface Copyright {
 
 export interface Playlists {
   href: string;
-  items: PlaylistItem[];
+  items: CommonPlaylistItem[];
   limit: number;
   next?: any;
   offset: number;
@@ -65,7 +65,7 @@ export interface Tracks {
   total: number;
 }
 
-export interface PlaylistItem {
+export interface CommonPlaylistItem {
   collaborative: boolean;
   external_urls: ExternalUrls;
   href: string;

@@ -100,7 +100,7 @@ const Genre = ({
 
   const onPlaylistPressed = (playlist: GenrePlaylist) => {
     setPlaylistDetails(playlist);
-    navigation.navigate(Routes.AppTabs.SearchStack.PlaylistDetails);
+    navigation.navigate(Routes.AppTabs.ExploreStack.PlaylistDetails);
   };
 
   return (
