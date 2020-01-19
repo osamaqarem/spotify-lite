@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { COLORS } from "../../utils";
 import SearchIcon from "../navigation/icons/SearchIcon";
 
+export const SEARCH_BAR_HEIGHT = 58;
+
 const TopBarSearch = ({ onSearchPressed }: { onSearchPressed: () => void }) => (
   <TouchableWithoutFeedback onPress={onSearchPressed}>
     <View style={styles.container}>
@@ -26,7 +28,7 @@ const styles = StyleSheet.create({
   container: {
     top: 0,
     left: 0,
-    height: 58,
+    height: SEARCH_BAR_HEIGHT,
     backgroundColor: COLORS.white,
     width: "100%",
     justifyContent: "center",

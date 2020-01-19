@@ -12,7 +12,7 @@ const DownloadHeader = () => (
         return;
       }}
       thumbColor={COLORS.grey}
-      trackColor={{ false: COLORS.darkGrey, true: "green" }}
+      trackColor={{ false: COLORS.darkerGrey, true: "green" }}
     />
   </View>
 );

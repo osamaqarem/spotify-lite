@@ -19,7 +19,7 @@ import { RootStoreType } from "../../redux/reducers";
 import { COLORS, LOGIN_URL, Routes } from "../../utils/";
 import { StatusBar } from "react-native";
 
-const webViewSub$: Subject<string> = new Subject();
+const webViewSub$ = new Subject<string>();
 
 const Login = ({
   setToken,

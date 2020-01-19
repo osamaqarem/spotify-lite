@@ -84,3 +84,9 @@ export const playerActions = {
 export const artistActions = {
   SET_ARTIST_ID: "SET_ARTIST_ID",
 };
+
+export const searchActions = {
+  SEARCH_FOR_QUERY: "SEARCH_FOR_QUERY",
+  SEARCH_FOR_QUERY_SUCCESS: "SEARCH_FOR_QUERY_SUCCESS",
+  SEARCH_FOR_QUERY_ERROR: "SEARCH_FOR_QUERY_ERROR",
+};

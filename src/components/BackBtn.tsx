@@ -1,21 +1,32 @@
 import React from "react";
+import { TextStyle, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SafeAreaView } from "react-navigation";
-import { COLORS, widthRatio, isIphoneX } from "../utils";
+import { COLORS, widthRatio } from "../utils";
 
 export const BACKBTN_HEIGHT = 80 * widthRatio;
 
-const BackBtn = ({ goBack }: { goBack: () => void }) => {
+const BackBtn = ({
+  goBack,
+  viewStyle,
+  textStyle,
+}: {
+  goBack: () => void;
+  viewStyle?: ViewStyle;
+  textStyle?: TextStyle;
+}) => {
   return (
     <SafeAreaView
-      style={{
-        width: "100%",
-        height: BACKBTN_HEIGHT,
-        zIndex: 1,
-        padding: 10,
-        position: "absolute",
-        top: 0,
-      }}>
+      style={[
+        {
+          width: "100%",
+          height: BACKBTN_HEIGHT,
+          zIndex: 1,
+          position: "absolute",
+          top: 0,
+        },
+        viewStyle,
+      ]}>
       <Icon
         onPress={goBack}
         name="arrow-left"
@@ -24,8 +35,10 @@ const BackBtn = ({ goBack }: { goBack: () => void }) => {
           {
             color: COLORS.white,
             textAlignVertical: "center",
-            marginTop: isIphoneX() ? 18 : 10,
+            padding: 10,
+            marginTop: 10,
           },
+          textStyle,
         ]}
       />
     </SafeAreaView>

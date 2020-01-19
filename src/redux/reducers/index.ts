@@ -16,6 +16,7 @@ import {
   getProfileEpic,
   getRecentlyPlayedTracksEpic,
   restartActionsEpic,
+  searchForQueryEpic,
 } from "../actions";
 import { getPlayListByIdEpic } from "../actions/playlistActions";
 import albumReducer from "./albumReducer";
@@ -27,6 +28,7 @@ import personalizationReducer from "./personalizationReducer";
 import playlistReducer from "./playlistReducer";
 import themeReducer from "./themeReducer";
 import userReducer from "./userReducer";
+import searchReducer from "./searchReducer";
 
 export const rootEpic = combineEpics(
   getProfileEpic,
@@ -43,6 +45,7 @@ export const rootEpic = combineEpics(
   getPlayListByIdEpic,
   restartActionsEpic,
   getCategoryByIdEpic,
+  searchForQueryEpic,
 );
 
 // Redux persist
@@ -91,6 +94,7 @@ const combinedReducers = combineReducers({
   playlistReducer: persistedPlaylistReducer,
   artistReducer,
   themeReducer,
+  searchReducer,
 });
 
 export const persistedReducer = persistReducer(

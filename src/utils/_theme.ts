@@ -1,5 +1,10 @@
 import Animated, { Easing } from "react-native-reanimated";
-import { Dimensions, Platform } from "react-native";
+import {
+  Dimensions,
+  Platform,
+  Animated as AnimatedRN,
+  Easing as EasingRN,
+} from "react-native";
 
 export const { height, width } = Dimensions.get("window");
 
@@ -14,8 +19,10 @@ export const COLORS = {
   white: "#FFFFFF",
   darkWhite: "#FDFDFD",
   green: "#1DB954",
+  lightGrey: "#CBCBCC",
   grey: "#B9B9B9",
-  darkGrey: "#5A5A5A",
+  darkGrey: "#A8A8A9",
+  darkerGrey: "#505153",
 };
 
 export const btnScaleAnim = {
@@ -27,7 +34,9 @@ export const btnScaleAnim = {
   },
 };
 
-// Forked from: https://github.com/ptelad/react-native-iphone-x-helper/blob/master/index.js
+// Forked from: react-native-iphone-x-helper
+// https://github.com/ptelad/react-native-iphone-x-helper
+// TODO: better approach?
 export function isIphoneX() {
   return (
     Platform.OS === "ios" &&
@@ -48,3 +57,26 @@ export const onScroll = (contentOffset: {
       },
     },
   ]);
+
+// Forked from react-navigation-transitions
+// https://github.com/plmok61/react-navigation-transitions
+export function fadeIn(duration = 300) {
+  return {
+    transitionSpec: {
+      duration,
+      easing: EasingRN.out(EasingRN.poly(4)),
+      timing: AnimatedRN.timing,
+      useNativeDriver: true,
+    },
+    screenInterpolator: ({ position, scene }: any) => {
+      const { index } = scene;
+
+      const opacity = position.interpolate({
+        inputRange: [index - 1, index],
+        outputRange: [0, 1],
+      });
+
+      return { opacity };
+    },
+  };
+}

@@ -17,7 +17,7 @@ import { Text } from "react-native";
 import TopTabsNav from "../navigators/TopTabsNav";
 import Genre from "../../explore/genre/Genre";
 import Search from "../../explore/search/Search";
-
+import { fadeIn } from "../../../utils";
 const createConnectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
     Home: {
@@ -47,6 +47,7 @@ const createConnectedBottomTabsNav = () => {
         },
         {
           headerMode: "none",
+          transitionConfig: () => fadeIn(),
         },
       ),
       navigationOptions: {
