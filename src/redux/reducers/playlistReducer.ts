@@ -1,5 +1,5 @@
 import { playlistActions } from "../actions";
-import { Action } from "../../data/models";
+import { Action } from "../types";
 
 export type TrackType = { name: string; artistName: string };
 

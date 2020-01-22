@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import ListOfPlaylists from "../../../components/ListOfPlaylists";
+import ListOfPlaylists from "../../../../components/ListOfPlaylists";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
   getPlayListById,
-} from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/reducers";
-import { Routes } from "../../../utils";
+} from "../../../../redux/actions";
+import { RootStoreType } from "../../../../redux/types";
+import { Routes } from "../../../../utils";
 import { NavigationEvents } from "react-navigation";
 import { StatusBar } from "react-native";
 

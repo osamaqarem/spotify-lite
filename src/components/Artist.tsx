@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import Cover from "./Cover";
 import CoverBlank from "./CoverBlank";
 import { COLORS } from "../utils";
-import { AlbumType } from "../data/models";
+import { AlbumType } from "../data/models/spotify";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const Artist = ({

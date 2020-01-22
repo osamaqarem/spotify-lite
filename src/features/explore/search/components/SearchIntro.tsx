@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "react-native";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../../utils";
 
 const SearchIntro = () => {
   return (

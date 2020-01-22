@@ -1,4 +1,6 @@
-import { Action, AlbumType } from "../../data/models";
+import { Action } from "../types";
+
+import { AlbumType } from "../../data/models/spotify";
 import { browseActions } from "../actions";
 import { PlaylistDetailsType } from "./playlistReducer";
 

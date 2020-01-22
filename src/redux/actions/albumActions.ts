@@ -3,16 +3,16 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
 import {
-  Action,
   AlbumDetailsResponse,
   AlbumType,
   ErrorResponse,
-} from "../../data/models";
-import { AlbumListResponse } from "../../data/models/AlbumListResponse";
-import { API } from "../../utils";
+} from "../../data/models/spotify";
+import { AlbumListResponse } from "../../data/models/spotify/AlbumListResponse";
+import { REST_API } from "../../utils";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
 import { albumActions, globalActions, playlistActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
+import { Action } from "../types";
 
 export const getAlbumById = (id: string) => ({
   type: albumActions.GET_ALBUM,
@@ -30,7 +30,7 @@ export const getAlbumByIdEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(API.getAlbumById + id, {
+        fetch(REST_API.getAlbumById + id, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ export const getMultipleAlbumsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(API.getMultipleAlbums + commaList, {
+        fetch(REST_API.getMultipleAlbums + commaList, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

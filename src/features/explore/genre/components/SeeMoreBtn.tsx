@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../../utils";
 
 export const BUTTON_HEIGHT = 32;
 

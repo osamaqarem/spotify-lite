@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../redux/reducers";
-import { Routes } from "../../utils";
+import { RootStoreType } from "../../../redux/types";
+import { Routes } from "../../../utils";
 import AlbumItem from "./AlbumItem";
-import { styles } from "./styles";
-import { getPlayListById } from "../../redux/actions/playlistActions";
-import { AlbumType } from "../../data/models";
+import { styles } from "../styles";
+import { getPlayListById } from "../../../redux/actions/playlistActions";
+import { AlbumType } from "../../../data/models/spotify";
 
 const FeaturedPlaylists = ({
   featuredPlaylists,

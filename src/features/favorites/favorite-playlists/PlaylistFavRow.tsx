@@ -10,7 +10,7 @@ const PlaylistRowFav = ({
 }) => (
   <View style={styles.favRow}>
     <FastImage
-      source={require("../../../data/assets/savedTracks.jpg")}
+      source={require("../../../data/assets/cover/savedTracks.jpg")}
       style={styles.cover}
     />
     <View style={styles.favRowText}>

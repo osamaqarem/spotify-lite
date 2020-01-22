@@ -3,7 +3,7 @@ import { createEpicMiddleware } from "redux-observable";
 import { persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import Reactotron from "../../../ReactotronConfig";
-import { persistedReducer, rootEpic } from "../reducers";
+import persistedReducer, { rootEpic } from "../reducers";
 
 // Redux observable
 const epicMiddleware = createEpicMiddleware();

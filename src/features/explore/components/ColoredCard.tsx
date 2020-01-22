@@ -2,8 +2,8 @@ import React from "react";
 import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated, { Easing } from "react-native-reanimated";
-import { genreImgList } from "../../data/assets/genres/genreImgList";
-import { COLORS } from "../../utils";
+import { genreImgList } from "../../../data/assets/genre/genreImgList";
+import { COLORS } from "../../../utils";
 
 const ColoredCard = ({
   item,

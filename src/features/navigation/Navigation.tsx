@@ -3,7 +3,7 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import createAnimatedSwitchNavigator from "react-navigation-animated-switch";
 import Login from "../login/Login";
-import createConnectedBottomTabsNav from "./custom-navigators/createConnectedBottomTabsNav";
+import createConnectedBottomTabsNav from "./components/custom-navigators/createConnectedBottomTabsNav";
 import { Transition } from "react-native-reanimated";
 
 export default createAppContainer(

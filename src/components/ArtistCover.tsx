@@ -2,7 +2,7 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { AlbumType } from "../data/models";
+import { AlbumType } from "../data/models/spotify";
 import { albumDimensions, styles } from "../features/home/styles";
 import { btnScaleAnim } from "../utils";
 

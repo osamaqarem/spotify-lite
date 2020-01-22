@@ -1,9 +1,9 @@
 import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { COLORS } from "../../../utils";
-import FavoriteAlbums from "../../favorites/favorite-albums/FavoriteAlbums";
-import FavoriteArtists from "../../favorites/favorite-artists/FavoriteArtists";
-import FavoritePlaylists from "../../favorites/favorite-playlists/FavoritePlaylists";
+import { COLORS } from "../../../../utils";
+import FavoriteAlbums from "../../../favorites/favorite-albums/FavoriteAlbums";
+import FavoriteArtists from "../../../favorites/favorite-artists/FavoriteArtists";
+import FavoritePlaylists from "../../../favorites/favorite-playlists/components/FavoritePlaylists";
 import ArtistDetailsWithDynamicTabBar from "../hoc/ArtistDetailsWithDynamicTabBar";
 import HideableMaterialTopTabBar from "../hoc/HideableMaterialTopTabBar";
 import PlaylistDetailsWithDynamicTabBar from "../hoc/PlaylistDetailsWithDynamicTabBar";

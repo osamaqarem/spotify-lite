@@ -3,10 +3,10 @@ import { ScrollView, StatusBar, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { COLORS } from "../../utils";
 import TopBar from "../../components/TopBar";
-import FeaturedPlaylists from "./FeaturedPlaylists";
-import RecentlyPlayed from "./RecentlyPlayed";
+import FeaturedPlaylists from "./components/FeaturedPlaylists";
+import RecentlyPlayed from "./components/RecentlyPlayed";
 import { styles } from "./styles";
-import TopArtists from "./TopArtists";
+import TopArtists from "./components/TopArtists";
 import { SafeAreaView, NavigationEvents } from "react-navigation";
 
 const Home = () => {

@@ -97,3 +97,5 @@ export interface AlbumItem {
   type: string;
   uri: string;
 }
+
+export type AlbumType = { name: string; url: string | null; id: string };

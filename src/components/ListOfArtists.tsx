@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, View } from "react-native";
-import { AlbumType } from "../data/models";
+import { AlbumType } from "../data/models/spotify";
 import { COLORS } from "../utils";
 import Artist from "./Artist";
 

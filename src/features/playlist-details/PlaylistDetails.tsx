@@ -21,7 +21,7 @@ import PlaylistTitle from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
-import { RootStoreType } from "../../redux/reducers";
+import { RootStoreType } from "../../redux/types";
 import { COLORS, onScroll } from "../../utils";
 
 const PlaylistDetails = ({

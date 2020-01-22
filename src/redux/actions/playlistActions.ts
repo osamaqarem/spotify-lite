@@ -2,10 +2,12 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action, ErrorResponse, PlaylistResponse } from "../../data/models";
-import { CurrentUserPlaylistsResponse } from "../../data/models/CurrentUserPlaylistsResponse";
-import { API } from "../../utils";
-import { RootStoreType } from "../reducers";
+import { Action } from "../types";
+
+import { ErrorResponse, PlaylistResponse } from "../../data/models/spotify";
+import { CurrentUserPlaylistsResponse } from "../../data/models/spotify/CurrentUserPlaylistsResponse";
+import { REST_API } from "../../utils";
+import { RootStoreType } from "../types";
 import { GenrePlaylist } from "../reducers/browseReducer";
 import {
   PlaylistDetailsType,
@@ -41,7 +43,7 @@ export const getPlayListByIdEpic = (
         const { token } = state.userReducer;
 
         const request$ = from(
-          fetch(API.getPlaylistById + playListId, {
+          fetch(REST_API.getPlaylistById + playListId, {
             method: "GET",
             headers: {
               authorization: `Bearer ${token}`,
@@ -104,7 +106,7 @@ export const getCurrentUserPlaylistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(API.getCurrentUserPlaylists, {
+        fetch(REST_API.getCurrentUserPlaylists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

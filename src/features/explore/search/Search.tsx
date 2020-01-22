@@ -12,12 +12,12 @@ import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { searchForQuery } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/reducers";
+import { RootStoreType } from "../../../redux/types";
 import { COLORS } from "../../../utils";
-import SearchIcon from "../../navigation/icons/SearchIcon";
-import { SEARCH_BAR_HEIGHT } from "../TopBarSearch";
-import BackBtnSearch from "./BackBtnSearch";
-import SearchIntro from "./SearchIntro";
+import SearchIcon from "../../navigation/components/SearchIcon";
+import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
+import BackBtnSearch from "./components/BackBtnSearch";
+import SearchIntro from "./components/SearchIntro";
 
 /**
  *

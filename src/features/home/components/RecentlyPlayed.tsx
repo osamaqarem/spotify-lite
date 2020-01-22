@@ -2,11 +2,11 @@ import React, { useContext } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
-import { getAlbumById } from "../../redux/actions";
-import { RootStoreType } from "../../redux/reducers";
-import { Routes } from "../../utils";
-import ArtistCover from "../../components/ArtistCover";
-import { albumDimensions, styles } from "./styles";
+import { getAlbumById } from "../../../redux/actions";
+import { RootStoreType } from "../../../redux/types";
+import { Routes } from "../../../utils";
+import ArtistCover from "../../../components/ArtistCover";
+import { albumDimensions, styles } from "../styles";
 
 const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
   const navigation = useContext(NavigationContext);

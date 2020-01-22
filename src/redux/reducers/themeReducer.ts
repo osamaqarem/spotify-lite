@@ -1,5 +1,5 @@
 import { themeActions } from "../actions";
-import { Action } from "../../data/models";
+import { Action } from "../types";
 
 type ThemeReducerType = {
   showTabBar: boolean;

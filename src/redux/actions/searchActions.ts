@@ -1,9 +1,9 @@
 import { searchActions } from "./actionTypes";
 import { Observable, of } from "rxjs";
-import { RootStoreType } from "../reducers";
+import { RootStoreType } from "../types";
 import { ofType } from "redux-observable";
 import { withLatestFrom, switchMap, debounceTime } from "rxjs/operators";
-import { Action } from "../../data/models";
+import { Action } from "../types";
 
 export const searchForQuery = (query: string) => ({
   type: searchActions.SEARCH_FOR_QUERY,

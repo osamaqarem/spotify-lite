@@ -2,9 +2,9 @@ import React from "react";
 import { Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { AlbumType } from "../../data/models";
-import { btnScaleAnim } from "../../utils";
-import { albumDimensions, styles } from "./styles";
+import { AlbumType } from "../../../data/models/spotify";
+import { btnScaleAnim } from "../../../utils";
+import { albumDimensions, styles } from "../styles";
 
 const AlbumItem = ({
   album,

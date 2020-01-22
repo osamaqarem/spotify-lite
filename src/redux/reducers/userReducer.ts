@@ -1,4 +1,6 @@
-import { Action, UserProfileResponse } from "../../data/models";
+import { Action } from "../types";
+
+import { UserProfileResponse } from "../../data/models/spotify";
 import { userActions, globalActions } from "../actions";
 
 type UserReducerType = {

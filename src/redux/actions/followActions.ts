@@ -2,13 +2,14 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Action } from "../types";
+
 import {
-  Action,
   AlbumType,
   CurrentUserSavedArtistsResponse,
   ErrorResponse,
-} from "../../data/models";
-import { API } from "../../utils";
+} from "../../data/models/spotify";
+import { REST_API } from "../../utils";
 import { followActions } from "./actionTypes";
 
 export const getCurrentUserSavedArtists = () => ({
@@ -26,7 +27,7 @@ export const getCurrentUserSavedArtistsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(API.getCurrentUserSavedArtists, {
+        fetch(REST_API.getCurrentUserSavedArtists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

@@ -2,7 +2,7 @@ import React from "react";
 import { SafeAreaView } from "react-navigation";
 import { MaterialTopTabBar } from "react-navigation-tabs";
 import { connect } from "react-redux";
-import { RootStoreType } from "../../../redux/reducers";
+import { RootStoreType } from "../../../../redux/types";
 
 const HideableMaterialTopTabBar = (props: any) => {
   const { showTabBar } = props;

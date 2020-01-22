@@ -20,10 +20,10 @@ import {
   getCategoryById,
   setPlaylistDetails,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/reducers";
+import { RootStoreType } from "../../../redux/types";
 import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
 import { COLORS, Routes } from "../../../utils";
-import ListOfGenrePlaylists from "./ListOfGenrePlaylists";
+import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists";
 
 const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedComponent(
   LinearGradient,

@@ -2,15 +2,15 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Action } from "../types";
 import {
-  Action,
   CurrentUserSavedAlbums,
   CurrentUserSavedTracks,
   ErrorResponse,
-} from "../../data/models";
-import { SPOTIFY_API_BASE, API } from "../../utils";
-import { libraryActions } from "./actionTypes";
+} from "../../data/models/spotify";
+import { REST_API } from "../../utils";
 import { SavedAlbumType } from "../reducers/libraryReducer";
+import { libraryActions } from "./actionTypes";
 
 export const getCurrentUserSavedTracks = () => ({
   type: libraryActions.GET_CURRENT_USER_SAVED_TRACKS,
@@ -27,7 +27,7 @@ export const getCurrentUserSavedTracksEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(API.getCurrentUserSavedTracks, {
+        fetch(REST_API.getCurrentUserSavedTracks, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export const getCurrentUserSavedAlbumsEpic = (
       const { token } = userReducer;
 
       const request$ = from(
-        fetch(API.getCurrentUserSavedAlbums, {
+        fetch(REST_API.getCurrentUserSavedAlbums, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

@@ -28,21 +28,15 @@ import {
   Artist,
   ArtistTopTracksResponse,
   ErrorResponse,
-} from "../../data/models";
+} from "../../data/models/spotify";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { redoLogin, setArtistId } from "../../redux/actions";
 import {
   PlaylistDetailsType,
   TrackType,
 } from "../../redux/reducers/playlistReducer";
-import { RootStoreType } from "../../redux/reducers";
-import {
-  COLORS,
-  isIphoneX,
-  Routes,
-  SPOTIFY_API_BASE,
-  onScroll,
-} from "../../utils";
+import { RootStoreType } from "../../redux/types";
+import { COLORS, isIphoneX, Routes, onScroll, REST_API } from "../../utils";
 
 const LoadingView = () => (
   <ActivityIndicator
@@ -77,87 +71,86 @@ const ArtistDetails = ({
 
     const fetchData = async () => {
       try {
-        const artist$ = from(
-          fetch(`${SPOTIFY_API_BASE}/artists/${artistId}`, {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }),
-        ).pipe(switchMap(res => res.json()));
-
-        const topTracks$ = from(
-          fetch(
-            `${SPOTIFY_API_BASE}/artists/${artistId}/top-tracks?market=${profile?.country}`,
-            {
+        if (artistId) {
+          const artist$ = from(
+            fetch(REST_API.getArtistById(artistId), {
               method: "GET",
               headers: {
                 authorization: `Bearer ${token}`,
               },
-            },
-          ),
-        ).pipe(switchMap(res => res.json()));
+            }),
+          ).pipe(switchMap(res => res.json()));
 
-        const relatedArtists$ = from(
-          fetch(`${SPOTIFY_API_BASE}/artists/${artistId}/related-artists`, {
-            method: "GET",
-            headers: {
-              authorization: `Bearer ${token}`,
-            },
-          }),
-        ).pipe(switchMap(res => res.json()));
+          const topTracks$ = from(
+            fetch(REST_API.getArtistTopTracks(artistId, profile!.country), {
+              method: "GET",
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }),
+          ).pipe(switchMap(res => res.json()));
 
-        subscription = zip(artist$, topTracks$, relatedArtists$).subscribe(
-          ([artist, topTracks, relatedArtistsList]: [
-            Artist | ErrorResponse,
-            ArtistTopTracksResponse | ErrorResponse,
-            { artists: Artist[] } | ErrorResponse,
-          ]) => {
-            if ("error" in artist) {
-              throw artist.error.message;
-            }
-            if ("error" in topTracks) {
-              throw topTracks.error.message;
-            }
-            if ("error" in relatedArtistsList) {
-              throw relatedArtistsList.error.message;
-            }
+          const relatedArtists$ = from(
+            fetch(REST_API.getRelatedArtistsById(artistId), {
+              method: "GET",
+              headers: {
+                authorization: `Bearer ${token}`,
+              },
+            }),
+          ).pipe(switchMap(res => res.json()));
 
-            const tracks: TrackType[] = topTracks.tracks.map(item => ({
-              artistName:
-                item.artists[0].name ?? "No track returned by spotify :(",
-              name: item.name ?? "No track",
-            }));
+          subscription = zip(artist$, topTracks$, relatedArtists$).subscribe(
+            ([artist, topTracks, relatedArtistsList]: [
+              Artist | ErrorResponse,
+              ArtistTopTracksResponse | ErrorResponse,
+              { artists: Artist[] } | ErrorResponse,
+            ]) => {
+              if ("error" in artist) {
+                throw artist.error.message;
+              }
+              if ("error" in topTracks) {
+                throw topTracks.error.message;
+              }
+              if ("error" in relatedArtistsList) {
+                throw relatedArtistsList.error.message;
+              }
 
-            const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
-              artist => ({
+              const tracks: TrackType[] = topTracks.tracks.map(item => ({
+                artistName:
+                  item.artists[0].name ?? "No track returned by spotify :(",
+                name: item.name ?? "No track",
+              }));
+
+              const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
+                artist => ({
+                  name: artist.name,
+                  url: artist.images[0]?.url,
+                  id: artist.id,
+                }),
+              );
+
+              setArtistDetails({
+                imageUrl: artist.images[0].url,
                 name: artist.name,
-                url: artist.images[0]?.url,
-                id: artist.id,
-              }),
-            );
-
-            setArtistDetails({
-              imageUrl: artist.images[0].url,
-              name: artist.name,
-              ownerName: artist.name,
-              tracks,
-              relatedArtists,
-            });
-
-            if (Platform.OS === "android") {
-              colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
-                if (!err) {
-                  setDominantColor(colors.averageColor);
-                  setIsLoading(false);
-                }
+                ownerName: artist.name,
+                tracks,
+                relatedArtists,
               });
-            } else {
-              setDominantColor(COLORS.tabBar);
-              setIsLoading(false);
-            }
-          },
-        );
+
+              if (Platform.OS === "android") {
+                colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
+                  if (!err) {
+                    setDominantColor(colors.averageColor);
+                    setIsLoading(false);
+                  }
+                });
+              } else {
+                setDominantColor(COLORS.tabBar);
+                setIsLoading(false);
+              }
+            },
+          );
+        }
       } catch (err) {
         if (err.message.includes("expired")) {
           redoLogin();

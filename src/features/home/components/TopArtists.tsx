@@ -2,12 +2,12 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../redux/reducers";
+import { RootStoreType } from "../../../redux/types";
 import AlbumItem from "./AlbumItem";
-import { albumDimensions, styles } from "./styles";
-import { setArtistId } from "../../redux/actions";
+import { albumDimensions, styles } from "../styles";
+import { setArtistId } from "../../../redux/actions";
 import { NavigationContext } from "react-navigation";
-import { Routes, btnScaleAnim } from "../../utils";
+import { Routes, btnScaleAnim } from "../../../utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Animated from "react-native-reanimated";
 

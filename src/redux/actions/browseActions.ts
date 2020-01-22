@@ -2,17 +2,18 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of, zip } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Action } from "../types";
+
 import {
-  Action,
   ErrorResponse,
   FeaturedPlaylistsResponse,
   GetAllCategoriesResponse,
   GetCategoryResponse,
   PlaylistResponse,
   UserProfileResponse,
-} from "../../data/models";
-import { API } from "../../utils";
-import { RootStoreType } from "../reducers";
+} from "../../data/models/spotify";
+import { REST_API } from "../../utils";
+import { RootStoreType } from "../types";
 import { GenrePlaylist } from "../reducers/browseReducer";
 import { TrackType } from "../reducers/playlistReducer";
 import { browseActions, globalActions } from "./actionTypes";
@@ -29,7 +30,7 @@ export const getAllFeaturedPlaylistsEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(API.getAllFeaturedPlaylists, {
+        fetch(REST_API.getAllFeaturedPlaylists, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -86,7 +87,7 @@ export const getAllCategoriesForCountryEpic = (
       }: { token: string; profile: UserProfileResponse } = state.userReducer;
 
       const request$ = from(
-        fetch(getAllCategoriesForCountry + profile.country, {
+        fetch(REST_API.getAllCategoriesForCountry(profile.country), {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,
@@ -161,7 +162,7 @@ export const getCategoryByIdEpic = (
         const urlQueryString = getRestOfItems ? "offset=4" : "limit=4";
 
         const request$ = from(
-          fetch(API.getCategoryById(id, urlQueryString), {
+          fetch(REST_API.getCategoryById(id, urlQueryString), {
             method: "GET",
             headers: {
               authorization: `Bearer ${token}`,
@@ -179,7 +180,7 @@ export const getCategoryByIdEpic = (
             // Get playlist by ID for each playlist
             const request$Array = res.playlists.items.map(item => {
               return from(
-                fetch(API.getPlaylistById + item.id, {
+                fetch(REST_API.getPlaylistById + item.id, {
                   method: "GET",
                   headers: {
                     authorization: `Bearer ${token}`,

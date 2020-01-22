@@ -6,7 +6,7 @@ import {
   getCurrentUserSavedArtists,
   setArtistId,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/reducers";
+import { RootStoreType } from "../../../redux/types";
 import { Routes } from "../../../utils";
 
 const FavoriteArtists = ({

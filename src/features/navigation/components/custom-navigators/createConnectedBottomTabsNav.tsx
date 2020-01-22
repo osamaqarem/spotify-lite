@@ -4,20 +4,21 @@ import {
   createStackNavigator,
   NavigationStackProp,
 } from "react-navigation-stack";
-import ArtistDetails from "../../artist-details/ArtistDetails";
-import Home from "../../home/Home";
-import PlaylistDetails from "../../playlist-details/PlaylistDetails";
-import Explore from "../../explore/Explore";
-import FavoritesIcon from "../icons/FavoritesIcon";
-import HomeIcon from "../icons/HomeIcon";
-import SearchIcon from "../icons/SearchIcon";
+import ArtistDetails from "../../../artist-details/ArtistDetails";
+import Home from "../../../home/Home";
+import PlaylistDetails from "../../../playlist-details/PlaylistDetails";
+import Explore from "../../../explore/Explore";
+import FavoritesIcon from "../FavoritesIcon";
+import HomeIcon from "../HomeIcon";
+import SearchIcon from "../SearchIcon";
 import ProtectedRoute from "../hoc/ProtectedRoute";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../../utils";
 import { Text } from "react-native";
 import TopTabsNav from "../navigators/TopTabsNav";
-import Genre from "../../explore/genre/Genre";
-import Search from "../../explore/search/Search";
-import { fadeIn } from "../../../utils";
+import Genre from "../../../explore/genre/Genre";
+import Search from "../../../explore/search/Search";
+import { fadeIn } from "../../../../utils";
+
 const createConnectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
     Home: {

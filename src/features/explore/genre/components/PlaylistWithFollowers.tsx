@@ -2,8 +2,8 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
-import { btnScaleAnim, COLORS } from "../../../utils";
+import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
+import { btnScaleAnim, COLORS } from "../../../../utils";
 
 const albumDimensions = {
   ROW_SCROLLVIEW_HEIGHT: 180,

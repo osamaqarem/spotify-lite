@@ -2,10 +2,12 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action, ErrorResponse } from "../../data/models";
-import { UserProfileResponse } from "../../data/models/UserProfileResponse";
-import { API } from "../../utils";
-import { RootStoreType } from "../reducers";
+import { Action } from "../types";
+
+import { ErrorResponse } from "../../data/models/spotify";
+import { UserProfileResponse } from "../../data/models/spotify/UserProfileResponse";
+import { REST_API } from "../../utils";
+import { RootStoreType } from "../types";
 import { globalActions, userActions } from "./actionTypes";
 
 /**
@@ -22,7 +24,7 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
     ofType(userActions.GET_TOKENS_SUCCESS),
     switchMap(({ payload: token }) => {
       const request$ = from(
-        fetch(API.myProfile, {
+        fetch(REST_API.myProfile, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

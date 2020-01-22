@@ -1,5 +1,5 @@
 import { searchActions } from "../actions";
-import { Action } from "../../data/models";
+import { Action } from "../types";
 
 const initialState = {};
 

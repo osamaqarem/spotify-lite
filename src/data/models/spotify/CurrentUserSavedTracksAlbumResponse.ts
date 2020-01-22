@@ -10,7 +10,7 @@ export interface CurrentUserSavedTracks {
   total: number;
 }
 
-export interface CurrentUserSavedTracksAlbum {
+export interface CurrentUserSavedTracksAlbumResponse {
   album_type: string;
   artists: Artist[];
   available_markets: string[];
@@ -27,7 +27,7 @@ export interface CurrentUserSavedTracksAlbum {
 }
 
 export interface CurrentUserSavedTracksTrack {
-  album: CurrentUserSavedTracksAlbum;
+  album: CurrentUserSavedTracksAlbumResponse;
   artists: Artist[];
   available_markets: string[];
   disc_number: number;

@@ -10,13 +10,14 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
+import { Action } from "../types";
+
 import {
-  Action,
   ErrorResponse,
   RecentlyPlayedResponse,
-} from "../../data/models";
-import { API } from "../../utils";
-import { RootStoreType } from "../reducers";
+} from "../../data/models/spotify";
+import { REST_API } from "../../utils";
+import { RootStoreType } from "../types";
 import { globalActions, playerActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 import { redoLogin } from "./userActions";
@@ -35,7 +36,7 @@ export const getRecentlyPlayedTracksEpic = (
       const { token } = state.userReducer;
 
       const request$ = from(
-        fetch(API.getRecentlyPlayedTracks, {
+        fetch(REST_API.getRecentlyPlayedTracks, {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

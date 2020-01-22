@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, Text } from "react-native";
 import Animated from "react-native-reanimated";
-import { BACKBTN_HEIGHT } from "../../../components/BackBtn";
-import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
-import { COLORS, onScroll, width } from "../../../utils";
+import { BACKBTN_HEIGHT } from "../../../../components/BackBtn";
+import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
+import { COLORS, onScroll, width } from "../../../../utils";
 import PlaylistWithFollowers from "./PlaylistWithFollowers";
 import SeeMoreBtn from "./SeeMoreBtn";
 

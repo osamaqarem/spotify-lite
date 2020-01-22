@@ -5,6 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
+import { StatusBar } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { WebView, WebViewNavigation } from "react-native-webview";
 import { SafeAreaView } from "react-navigation";
@@ -15,9 +16,8 @@ import { debounceTime, filter, map, take } from "rxjs/operators";
 import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
 import { rehydrate, setToken } from "../../redux/actions";
-import { RootStoreType } from "../../redux/reducers";
-import { COLORS, LOGIN_URL, Routes } from "../../utils/";
-import { StatusBar } from "react-native";
+import { RootStoreType } from "../../redux/types";
+import { REST_API, COLORS, Routes } from "../../utils/";
 
 const webViewSub$ = new Subject<string>();
 
@@ -111,7 +111,7 @@ const Login = ({
         ref={webViewRef}
         onNavigationStateChange={handleNavEvent}
         source={{
-          uri: LOGIN_URL,
+          uri: REST_API.login,
         }}
         renderError={() => <GreenIndicator />}
       />

@@ -97,9 +97,6 @@ const combinedReducers = combineReducers({
   searchReducer,
 });
 
-export const persistedReducer = persistReducer(
-  rootPersistConfig,
-  combinedReducers,
-);
-
 export type RootStoreType = ReturnType<typeof combinedReducers>;
+
+export default persistReducer(rootPersistConfig, combinedReducers);

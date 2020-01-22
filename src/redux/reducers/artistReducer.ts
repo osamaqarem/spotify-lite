@@ -1,4 +1,4 @@
-import { Action } from "../../data/models";
+import { Action } from "../types";
 import { artistActions } from "../actions";
 
 type ArtistReducerType = {
