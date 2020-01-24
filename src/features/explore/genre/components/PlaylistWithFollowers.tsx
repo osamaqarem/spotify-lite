@@ -5,10 +5,9 @@ import Animated from "react-native-reanimated";
 import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
 import { btnScaleAnim, COLORS } from "../../../../utils";
 
-const albumDimensions = {
-  ROW_SCROLLVIEW_HEIGHT: 180,
-  ALBUM_DIMEN_RECENT: 166 - 38,
-  ALBUM_DIMEN_FEATURED: 156,
+export const ITEM_DIMENSIONS = {
+  MARGIN: 46,
+  WIDTH: 156,
 };
 
 const PlaylistWithFollowers = ({
@@ -25,22 +24,23 @@ const PlaylistWithFollowers = ({
         transform: [{ scale }],
         justifyContent: "space-around",
         marginHorizontal: 15,
-        marginBottom: 38,
+        marginVertical: ITEM_DIMENSIONS.MARGIN,
+        height: ITEM_DIMENSIONS.WIDTH,
+        width: ITEM_DIMENSIONS.WIDTH,
       }}>
       <TouchableOpacity
         onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
         onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
         onPress={onPress}
         key={playlist.name}
-        style={[{ width: albumDimensions.ALBUM_DIMEN_FEATURED }]}>
+        style={[{ width: ITEM_DIMENSIONS.WIDTH }]}>
         <FastImage
           source={{
             uri: playlist.imageUrl ?? "",
           }}
           style={{
-            height: albumDimensions.ALBUM_DIMEN_FEATURED,
-            width: albumDimensions.ALBUM_DIMEN_FEATURED,
-            marginTop: 16,
+            height: ITEM_DIMENSIONS.WIDTH,
+            width: ITEM_DIMENSIONS.WIDTH,
           }}
         />
         <View style={{ height: 50 }}>

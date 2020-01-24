@@ -2,11 +2,15 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { COLORS } from "../../../../utils";
 
-export const BUTTON_HEIGHT = 32;
-
-const SeeMoreBtn = ({ onPress }: { onPress: () => void }) => {
+const SeeMoreBtn = ({
+  onPress,
+  isVisible,
+}: {
+  onPress: () => void;
+  isVisible: boolean;
+}) => {
   return (
-    <View style={[styles.container]}>
+    <View style={[styles.container, { opacity: isVisible ? 1 : 0 }]}>
       <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.btnText}>SEE MORE</Text>
       </TouchableOpacity>
@@ -16,13 +20,13 @@ const SeeMoreBtn = ({ onPress }: { onPress: () => void }) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 52,
+    marginTop: 30,
     alignItems: "center",
-    height: BUTTON_HEIGHT,
+    height: 32,
   },
   button: {
     width: 144,
-    height: BUTTON_HEIGHT,
+    height: 32,
     backgroundColor: COLORS.background,
     borderColor: COLORS.grey,
     borderWidth: 1,

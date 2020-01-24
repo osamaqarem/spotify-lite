@@ -4,7 +4,9 @@ import Animated from "react-native-reanimated";
 import { BACKBTN_HEIGHT } from "../../../../components/BackBtn";
 import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
 import { COLORS, onScroll, width } from "../../../../utils";
-import PlaylistWithFollowers from "./PlaylistWithFollowers";
+import PlaylistWithFollowers, {
+  ITEM_DIMENSIONS,
+} from "./PlaylistWithFollowers";
 import SeeMoreBtn from "./SeeMoreBtn";
 
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
@@ -29,6 +31,7 @@ const ListOfGenrePlaylists = ({
       scrollEventThrottle={1}
       onScroll={onScroll({ y: offsetY })}
       overScrollMode="never"
+      showsVerticalScrollIndicator={false}
       ListHeaderComponent={
         <Text
           style={{
@@ -44,12 +47,12 @@ const ListOfGenrePlaylists = ({
         </Text>
       }
       ListFooterComponent={
-        seeMoreVisible ? <SeeMoreBtn onPress={handleSeeMore} /> : null
+        <SeeMoreBtn onPress={handleSeeMore} isVisible={seeMoreVisible} />
       }
       contentContainerStyle={{
         alignItems: "center",
         marginTop: "40%",
-        paddingBottom: "100%",
+        paddingBottom: "60%",
         width: "100%",
         backgroundColor: COLORS.background,
       }}
@@ -70,6 +73,11 @@ const ListOfGenrePlaylists = ({
           onPress={() => onPlaylistPressed(playlist)}
         />
       )}
+      getItemLayout={(data, index) => ({
+        length: ITEM_DIMENSIONS.WIDTH,
+        offset: (ITEM_DIMENSIONS.WIDTH + ITEM_DIMENSIONS.MARGIN) * index,
+        index,
+      })}
     />
   );
 };
