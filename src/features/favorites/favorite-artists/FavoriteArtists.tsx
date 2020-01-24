@@ -24,9 +24,7 @@ const FavoriteArtists = ({
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
       setArtistId(id);
-      navigation.navigate(
-        Routes.AppTabs.FavoritesTabs.FavoriteArtistsStack.ArtistDetails,
-      );
+      navigation.navigate(Routes.AppTabs.FavoritesStack.ArtistDetails);
     }
   };
 

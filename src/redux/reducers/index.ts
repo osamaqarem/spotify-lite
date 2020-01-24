@@ -26,7 +26,6 @@ import followRedcuer from "./followReducer";
 import libraryReducer from "./libraryReducer";
 import personalizationReducer from "./personalizationReducer";
 import playlistReducer from "./playlistReducer";
-import themeReducer from "./themeReducer";
 import userReducer from "./userReducer";
 import searchReducer from "./searchReducer";
 
@@ -52,19 +51,14 @@ export const rootEpic = combineEpics(
 const rootPersistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: [
-    "artistReducer",
-    "themeReducer",
-    "browseReducer",
-    "playlistReducer",
-  ],
+  blacklist: ["artistReducer", "browseReducer", "playlistReducer"],
 };
 
-// Persist browse reducer state, except genrePlaylists
+// Persist browse reducer state, except genrePlaylists, genreDetails
 const browseReducerPersistConfig = {
   key: "browseReducer",
   storage: AsyncStorage,
-  blacklist: ["genrePlaylists"],
+  blacklist: ["genrePlaylists", "genreDetails"],
 };
 
 const persistedBrowseReducer = persistReducer(
@@ -93,7 +87,6 @@ const combinedReducers = combineReducers({
   followRedcuer,
   playlistReducer: persistedPlaylistReducer,
   artistReducer,
-  themeReducer,
   searchReducer,
 });
 

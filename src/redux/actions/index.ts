@@ -9,5 +9,4 @@ export * from "./followActions";
 export * from "./browseActions";
 export * from "./playlistActions";
 export * from "./artistActions";
-export * from "./themeActions";
 export * from "./searchActions";

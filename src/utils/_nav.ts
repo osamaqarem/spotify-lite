@@ -13,19 +13,14 @@ export const Routes = {
       Genre: "Genre",
       PlaylistDetails: "PlaylistDetails",
     },
-    FavoritesTabs: {
-      FavoritePlaylistsStack: {
+    FavoritesStack: {
+      TopTabsNav: {
         FavoritePlaylists: "FavoritePlaylists",
-        PlaylistDetails: "PlaylistDetails",
-      },
-      FavoriteArtistsStack: {
         FavoriteArtists: "FavoriteArtists",
-        ArtistDetails: "ArtistDetails",
-      },
-      FavoriteAlbumsStack: {
         FavoriteAlbums: "FavoriteAlbums",
-        PlaylistDetails: "PlaylistDetails",
       },
+      PlaylistDetails: "PlaylistDetails",
+      ArtistDetails: "ArtistDetails",
     },
   },
 };

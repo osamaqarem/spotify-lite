@@ -1,25 +1,24 @@
 import React from "react";
+import { Text } from "react-native";
 import { createMaterialBottomTabNavigator } from "react-navigation-material-bottom-tabs";
 import {
   createStackNavigator,
   NavigationStackProp,
 } from "react-navigation-stack";
-import ArtistDetails from "../../../artist-details/ArtistDetails";
-import Home from "../../../home/Home";
-import PlaylistDetails from "../../../playlist-details/PlaylistDetails";
-import Explore from "../../../explore/Explore";
-import FavoritesIcon from "../FavoritesIcon";
-import HomeIcon from "../HomeIcon";
-import SearchIcon from "../SearchIcon";
-import ProtectedRoute from "../hoc/ProtectedRoute";
-import { COLORS } from "../../../../utils";
-import { Text } from "react-native";
-import TopTabsNav from "../navigators/TopTabsNav";
-import Genre from "../../../explore/genre/Genre";
-import Search from "../../../explore/search/Search";
-import { fadeIn } from "../../../../utils";
+import { COLORS, fadeIn } from "../../../../../utils";
+import ArtistDetails from "../../../../artist-details/ArtistDetails";
+import Explore from "../../../../explore/Explore";
+import Genre from "../../../../explore/genre/Genre";
+import Search from "../../../../explore/search/Search";
+import Home from "../../../../home/Home";
+import PlaylistDetails from "../../../../playlist-details/PlaylistDetails";
+import FavoritesIcon from "./icons/FavoritesIcon";
+import ProtectedRoute from "../../ProtectedRoute";
+import HomeIcon from "./icons/HomeIcon";
+import SearchIcon from "./icons/SearchIcon";
+import TopTabsStack from "../top-tabs/TopTabsStack";
 
-const createConnectedBottomTabsNav = () => {
+const createProtectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
     Home: {
       screen: createStackNavigator(
@@ -58,7 +57,7 @@ const createConnectedBottomTabsNav = () => {
       },
     },
     Favorites: {
-      screen: TopTabsNav,
+      screen: TopTabsStack,
       navigationOptions: {
         tabBarIcon: FavoritesIcon,
         ...sharedStyles,
@@ -68,8 +67,7 @@ const createConnectedBottomTabsNav = () => {
   });
 
   /**
-   * This navigator will observe `authenticated` from redux store, and navigate to
-   * login screen if it is false.
+   * This navigator will observe `authenticated` from redux store, and navigate to login screen if it is false.
    */
   const ConnectedBottomTabsNav = ({
     navigation,
@@ -98,4 +96,4 @@ const HomeLabel = () => <Text style={{ fontSize: 10 }}>Home</Text>;
 const SearchLabel = () => <Text style={{ fontSize: 10 }}>Search</Text>;
 const FavoritesLabel = () => <Text style={{ fontSize: 10 }}>Favorites</Text>;
 
-export default createConnectedBottomTabsNav;
+export default createProtectedBottomTabsNav;

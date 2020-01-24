@@ -3,13 +3,13 @@ import { createAppContainer } from "react-navigation";
 import { createStackNavigator } from "react-navigation-stack";
 import createAnimatedSwitchNavigator from "react-navigation-animated-switch";
 import Login from "../login/Login";
-import createConnectedBottomTabsNav from "./components/custom-navigators/createConnectedBottomTabsNav";
+import createProtectedBottomTabsNav from "./components/navigators/bottom-tabs/createProtectedBottomTabsNav";
 import { Transition } from "react-native-reanimated";
 
 export default createAppContainer(
   createAnimatedSwitchNavigator(
     {
-      AppTabs: createConnectedBottomTabsNav(),
+      AppTabs: createProtectedBottomTabsNav(),
       LoginStack: createStackNavigator({ Login }, { headerMode: "none" }),
     },
     {

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StatusBar, StyleSheet, View } from "react-native";
+import { StatusBar, StyleSheet, View, Platform } from "react-native";
 import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
 import {
@@ -35,7 +35,10 @@ const Explore = ({
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <NavigationEvents
         onWillFocus={() => {
-          StatusBar.setBarStyle("dark-content");
+          Platform.select({
+            ios: StatusBar.setBarStyle("dark-content"),
+            android: StatusBar.setBarStyle("default"),
+          });
         }}
       />
       <View style={styles.container}>

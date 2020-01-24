@@ -11,7 +11,7 @@ const usePlaylistAnim = (offsetY: Animated.Value<number>) => {
 
   const heightAnim = offsetY.interpolate({
     inputRange: [0, 300],
-    outputRange: [60, 16],
+    outputRange: [60, 14],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 

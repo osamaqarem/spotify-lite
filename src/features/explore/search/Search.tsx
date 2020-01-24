@@ -14,7 +14,7 @@ import { connect, ConnectedProps } from "react-redux";
 import { searchForQuery } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
 import { COLORS } from "../../../utils";
-import SearchIcon from "../../navigation/components/SearchIcon";
+import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
 import SearchIntro from "./components/SearchIntro";

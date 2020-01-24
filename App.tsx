@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import reactotron from "reactotron-react-native";
 import { PersistGate } from "redux-persist/integration/react";
 import GreenIndicator from "./src/components/GreenIndicator";
-import AppWithNavigation from "./src/features/navigation/Navigation";
+import AppWithNavigation from "./src/features/navigation";
 import { persistor, store } from "./src/redux/store";
 
 if (__DEV__) {

@@ -14,7 +14,8 @@ const ShuffleButton = ({
 }) => {
   const translateY = offsetY.interpolate({
     inputRange: [0, scrollViewHeight / 2],
-    outputRange: [0, -286 + (isIphoneX() ? 50 : 0)],
+    // outputRange: [0, -286 + (isIphoneX() ? 50 : 0)],
+    outputRange: [0, -286 + (isIphoneX() ? 50 : -8)],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
   return (

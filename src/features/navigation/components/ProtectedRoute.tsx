@@ -1,9 +1,9 @@
 import React from "react";
-import { RootStoreType } from "../../../../redux/types";
+import { RootStoreType } from "../../../redux/types";
 import { connect, ConnectedProps } from "react-redux";
 import { NavigationStackProp } from "react-navigation-stack";
 import { useEffect, ReactNode } from "react";
-import { Routes } from "../../../../utils";
+import { Routes } from "../../../utils";
 
 const ProtectedRoute = ({
   authenticated,

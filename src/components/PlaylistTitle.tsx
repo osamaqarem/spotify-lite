@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
     zIndex: -5,
-    // backgroundColor: "red",
   },
   content: {
     alignItems: "center",

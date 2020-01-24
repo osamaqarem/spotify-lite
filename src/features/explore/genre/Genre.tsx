@@ -128,7 +128,6 @@ const Genre = ({
             style={{
               height: Animated.concat(heightAnim, "%"),
               width: "100%",
-              top: 0,
               opacity: 1,
               ...StyleSheet.absoluteFillObject,
             }}

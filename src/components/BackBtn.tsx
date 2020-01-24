@@ -19,11 +19,11 @@ const BackBtn = ({
     <SafeAreaView
       style={[
         {
-          width: "100%",
           height: BACKBTN_HEIGHT,
           zIndex: 1,
           position: "absolute",
           top: 0,
+          left: 10,
         },
         viewStyle,
       ]}>

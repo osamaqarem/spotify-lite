@@ -21,9 +21,7 @@ const FavoriteAlbums = ({
 
   const onPlaylistPressed = (id: string) => {
     getAlbumById(id);
-    navigation.navigate(
-      Routes.AppTabs.FavoritesTabs.FavoriteAlbumsStack.PlaylistDetails,
-    );
+    navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
   };
 
   return (

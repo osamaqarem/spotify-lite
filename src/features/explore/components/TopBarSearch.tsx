@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { COLORS } from "../../../utils";
-import SearchIcon from "../../navigation/components/SearchIcon";
+import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 
 export const SEARCH_BAR_HEIGHT = 58;
 

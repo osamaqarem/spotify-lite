@@ -87,7 +87,6 @@ const PlaylistDetails = ({
             ]}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
-              // end={{ x: 0, y: 0.9 }}
               end={{ x: 0, y: 0.7 }}
               colors={[dominantColor, COLORS.background]}
               style={styles.gradient}
