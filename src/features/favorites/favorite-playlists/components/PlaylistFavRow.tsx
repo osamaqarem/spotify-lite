@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../../utils";
+import { playlistStyle } from "../../../../components/Playlist";
 
 const PlaylistRowFav = ({
   savedTracksCount,
@@ -10,7 +11,7 @@ const PlaylistRowFav = ({
 }) => (
   <View style={styles.favRow}>
     <FastImage
-      source={require("../../../data/assets/cover/savedTracks.jpg")}
+      source={require("../../../../data/assets/cover/savedTracks.jpg")}
       style={styles.cover}
     />
     <View style={styles.favRowText}>
@@ -33,13 +34,13 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   favRowText: {
-    marginLeft: 10,
+    marginLeft: playlistStyle.rowTextLeft,
     justifyContent: "center",
   },
   playlistTitle: {
     color: COLORS.white,
     textAlignVertical: "center",
-    fontSize: 16,
+    fontSize: playlistStyle.titleFontSize,
   },
   playlistOwner: {
     color: COLORS.grey,

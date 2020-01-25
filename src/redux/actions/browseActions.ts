@@ -2,8 +2,6 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of, zip } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action } from "../types";
-
 import {
   ErrorResponse,
   FeaturedPlaylistsResponse,
@@ -13,9 +11,8 @@ import {
   UserProfileResponse,
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils";
-import { RootStoreType } from "../types";
-import { GenrePlaylist } from "../reducers/browseReducer";
-import { TrackType } from "../reducers/playlistReducer";
+import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
+import { Action, RootStoreType } from "../types";
 import { browseActions, globalActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
@@ -177,6 +174,13 @@ export const getCategoryByIdEpic = (
               throw res.error.message;
             }
 
+            if (res.playlists.items.length === 0) {
+              return of({
+                type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
+                payload: { data: [], title, id },
+              });
+            }
+
             // Get playlist by ID for each playlist
             const request$Array = res.playlists.items.map(item => {
               return from(
@@ -191,9 +195,13 @@ export const getCategoryByIdEpic = (
 
             return zip(...request$Array);
           }),
-          switchMap(responseArray => responseArray),
-          map(responseArray => {
-            const data: GenrePlaylist[] = responseArray.map(
+          switchMap(data$ => data$),
+          map(result => {
+            if (!Array.isArray(result)) {
+              return result;
+            }
+
+            const data: PlaylistDetailsType[] = result.map(
               (res: PlaylistResponse | ErrorResponse) => {
                 if ("error" in res) throw res.error.message;
 
@@ -204,7 +212,7 @@ export const getCategoryByIdEpic = (
                   name: item.track?.name ?? "No track",
                 }));
 
-                const playlist: GenrePlaylist = {
+                const playlist: PlaylistDetailsType = {
                   imageUrl: res.images[0].url,
                   name: res.name,
                   ownerName: res.owner.display_name,
@@ -252,6 +260,20 @@ export const getCategoryByIdEpic = (
     }),
   );
 
-export const clearCategoryPlaylists = () => ({
-  type: browseActions.CLEAR_CATEGORY_PLAYLISTS,
-});
+export const browseActionLoadingEpic = (actions$: Observable<Action<any>>) =>
+  actions$.pipe(
+    ofType(
+      browseActions.GET_CATEGORY_BY_ID,
+      browseActions.GET_CATEGORY_BY_ID_SUCCESS,
+      browseActions.GET_CATEGORY_BY_ID_ERROR,
+    ),
+    map(({ type }) => {
+      switch (type) {
+        case browseActions.GET_CATEGORY_BY_ID:
+          return { type: browseActions.IS_LOADING };
+        case browseActions.GET_CATEGORY_BY_ID_SUCCESS ||
+          browseActions.GET_CATEGORY_BY_ID_ERROR:
+          return { type: browseActions.IS_NOT_LOADING };
+      }
+    }),
+  );

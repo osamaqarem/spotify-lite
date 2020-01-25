@@ -17,6 +17,7 @@ import {
   getRecentlyPlayedTracksEpic,
   restartActionsEpic,
   searchForQueryEpic,
+  browseActionLoadingEpic,
 } from "../actions";
 import { getPlayListByIdEpic } from "../actions/playlistActions";
 import albumReducer from "./albumReducer";
@@ -45,6 +46,7 @@ export const rootEpic = combineEpics(
   restartActionsEpic,
   getCategoryByIdEpic,
   searchForQueryEpic,
+  browseActionLoadingEpic,
 );
 
 // Redux persist

@@ -1,19 +1,22 @@
 import React from "react";
-import Octicon from "react-native-vector-icons/Octicons";
 import { TextStyle } from "react-native";
+import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const SearchIcon = ({
   tintColor,
   textStyle,
+  onPress,
 }: {
   tintColor: string;
   textStyle?: TextStyle;
+  onPress?: () => void;
 }) => {
   return (
-    <Octicon
-      style={[{ bottom: 2.5 }, textStyle]}
-      name="search"
-      size={22}
+    <MaterialIcon
+      onPress={onPress}
+      style={[{ bottom: 6 }, textStyle]}
+      name="magnify"
+      size={26}
       color={tintColor}
     />
   );

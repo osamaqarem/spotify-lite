@@ -5,9 +5,8 @@ import {
   StatusBar,
   TextInput,
   View,
-  KeyboardAvoidingView,
 } from "react-native";
-import Octicon from "react-native-vector-icons/Octicons";
+import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
@@ -59,7 +58,6 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
       />
       <View
         style={{
-          width: "100%",
           backgroundColor: COLORS.darkerGrey,
           height: SEARCH_BAR_HEIGHT,
           flexDirection: "row",
@@ -71,9 +69,11 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
             <SearchIcon
               tintColor={COLORS.lightGrey}
               textStyle={{
-                marginLeft: 20,
                 bottom: 0,
+                marginLeft: 20,
                 padding: 14,
+                height: "100%",
+                textAlignVertical: "center",
               }}
             />
           )) || (
@@ -82,18 +82,21 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
               tintColor={COLORS.lightGrey}
               textStyle={{
                 marginLeft: 20,
-                padding: 11.5,
+                padding: 14,
+                height: "100%",
+                textAlignVertical: "center",
               }}
             />
           )}
         </>
         <TextInput
+          autoFocus
+          numberOfLines={1}
           value={query}
           onChangeText={text => {
             setQuery(text);
             searchForQuery(`"${text}"`);
           }}
-          autoFocus
           onFocus={() => setShowBack(true)}
           placeholder="Search artists, songs and playlists"
           placeholderTextColor={COLORS.darkGrey}
@@ -101,13 +104,14 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
           style={{
             fontSize: 16,
             color: COLORS.white,
-            marginLeft: 16,
-            letterSpacing: 0.3,
-            maxWidth: 260,
+            height: "100%",
+            marginLeft: 4,
+            width: "70%",
+            letterSpacing: 0.4,
           }}
         />
         {showBack && (
-          <Octicon
+          <MaterialIcon
             onPress={() => {
               setQuery("");
               setShowBack(false);
@@ -115,14 +119,14 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
             }}
             style={{
               position: "absolute",
-              padding: 10,
-              top: 0,
-              bottom: 0,
-              marginTop: 5,
-              right: 12,
+              padding: 11.5,
+              height: "100%",
+              textAlignVertical: "center",
+              right: 0,
+              paddingRight: 16,
             }}
-            name="x"
-            size={24}
+            name="close"
+            size={28}
             color={COLORS.lightGrey}
           />
         )}
@@ -134,9 +138,7 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
           alignItems: "center",
           backgroundColor: COLORS.background,
         }}>
-        <KeyboardAvoidingView keyboardVerticalOffset={400} behavior="position">
-          {true && <SearchIntro />}
-        </KeyboardAvoidingView>
+        <SearchIntro />
       </ScrollView>
     </SafeAreaView>
   );

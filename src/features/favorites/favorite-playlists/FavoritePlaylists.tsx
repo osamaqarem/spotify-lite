@@ -1,25 +1,29 @@
 import React, { useEffect } from "react";
+import { StatusBar } from "react-native";
+import { NavigationEvents } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import ListOfPlaylists from "../../../../components/ListOfPlaylists";
+import ListOfPlaylists from "../../../components/ListOfPlaylists";
 import {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
   getPlayListById,
-} from "../../../../redux/actions";
-import { RootStoreType } from "../../../../redux/types";
-import { Routes } from "../../../../utils";
-import { NavigationEvents } from "react-navigation";
-import { StatusBar } from "react-native";
+  setPlaylistDetails,
+} from "../../../redux/actions";
+import { RootStoreType } from "../../../redux/types";
+import { Routes } from "../../../utils";
+import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
 
 const FavoritePlaylists = ({
   profile,
   currentUserPlaylists,
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
+  currentUserSavedTracks,
   savedTracksCount,
   navigation,
   getPlayListById,
+  setPlaylistDetails,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   useEffect(() => {
     getCurrentUserPlaylists();
@@ -31,13 +35,10 @@ const FavoritePlaylists = ({
     navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
   };
 
-  const PlaylistsListProps = {
-    username: (profile && profile.display_name) || "Error",
-    currentUserPlaylists,
-    savedTracksCount,
-    onPlaylistPressed,
+  const onFavSongsPressed = () => {
+    currentUserSavedTracks && setPlaylistDetails(currentUserSavedTracks);
+    navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
   };
-
   return (
     <>
       <NavigationEvents
@@ -45,7 +46,14 @@ const FavoritePlaylists = ({
           StatusBar.setBarStyle("light-content");
         }}
       />
-      <ListOfPlaylists {...PlaylistsListProps} />
+
+      <ListOfPlaylists
+        username={(profile && profile.display_name) || "Error"}
+        currentUserPlaylists={currentUserPlaylists}
+        savedTracksCount={savedTracksCount}
+        onPlaylistPressed={onPlaylistPressed}
+        onFavSongsPressed={onFavSongsPressed}
+      />
     </>
   );
 };
@@ -54,12 +62,14 @@ const mapStateToProps = (state: RootStoreType) => ({
   profile: state.userReducer.profile,
   currentUserPlaylists: state.playlistReducer.currentUserPlaylists,
   savedTracksCount: state.libraryReducer.currentUserSavedTracksCount,
+  currentUserSavedTracks: state.libraryReducer.currentUserSavedTracks,
 });
 
 const mapDispatchToProp = {
   getCurrentUserPlaylists,
   getCurrentUserSavedTracks,
   getPlayListById,
+  setPlaylistDetails,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProp);

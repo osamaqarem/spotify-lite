@@ -9,7 +9,7 @@ const BackBtnSearch = ({
 }: {
   tintColor: string;
   textStyle?: TextStyle;
-  onPress: () => void;
+  onPress?: () => void;
 }) => {
   return (
     <Icon

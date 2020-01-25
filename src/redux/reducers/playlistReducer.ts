@@ -5,9 +5,10 @@ export type TrackType = { name: string; artistName: string };
 
 export type PlaylistDetailsType = {
   name: string;
-  ownerName: string;
+  ownerName: string | null;
   imageUrl: string;
   tracks: TrackType[];
+  followerCount?: number;
 };
 
 export type SavedPlaylistsType = {

@@ -5,24 +5,23 @@ import { browseActions } from "../actions";
 import { PlaylistDetailsType } from "./playlistReducer";
 
 export type CountryCategoryType = { name: string; id: string };
-export type GenrePlaylist = PlaylistDetailsType & {
-  followerCount: number;
-};
 
 type BorwserReducerType = {
   featuredPlaylists: AlbumType[];
   categoriesForCountry: CountryCategoryType[];
   genreDetails: {
-    genrePlaylists: GenrePlaylist[];
+    genrePlaylists: PlaylistDetailsType[];
     title: string | null;
     id: string | null;
   };
+  isLoading: boolean;
 };
 
 const initialState: BorwserReducerType = {
   featuredPlaylists: [],
   categoriesForCountry: [],
   genreDetails: { genrePlaylists: [], title: null, id: null },
+  isLoading: false,
 };
 
 export default (
@@ -54,10 +53,15 @@ export default (
           ],
         },
       };
-    case browseActions.CLEAR_CATEGORY_PLAYLISTS:
+    case browseActions.IS_LOADING:
       return {
         ...state,
-        genreDetails: initialState.genreDetails,
+        isLoading: true,
+      };
+    case browseActions.IS_NOT_LOADING:
+      return {
+        ...state,
+        isLoading: false,
       };
     default:
       return state;

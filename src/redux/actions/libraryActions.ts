@@ -2,7 +2,6 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action } from "../types";
 import {
   CurrentUserSavedAlbums,
   CurrentUserSavedTracks,
@@ -10,6 +9,8 @@ import {
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils";
 import { SavedAlbumType } from "../reducers/libraryReducer";
+import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
+import { Action } from "../types";
 import { libraryActions } from "./actionTypes";
 
 export const getCurrentUserSavedTracks = () => ({
@@ -40,9 +41,21 @@ export const getCurrentUserSavedTracksEpic = (
         map((res: CurrentUserSavedTracks | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
+          const tracks: TrackType[] = res.items.map(item => ({
+            artistName: item.track.artists[0].name,
+            name: item.track.name,
+          }));
+
+          const data: PlaylistDetailsType = {
+            imageUrl: "https://i.imgur.com/N1uXnyS.jpg",
+            tracks,
+            name: "Favorite Songs",
+            ownerName: null,
+          };
+
           return {
             type: libraryActions.GET_CURRENT_USER_SAVED_TRACKS_SUCCESS,
-            payload: res.total,
+            payload: { count: res.total, data },
           };
         }),
         catchError(err => {

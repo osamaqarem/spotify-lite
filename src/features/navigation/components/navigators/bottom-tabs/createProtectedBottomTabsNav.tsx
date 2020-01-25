@@ -53,6 +53,10 @@ const createProtectedBottomTabsNav = () => {
       navigationOptions: {
         tabBarIcon: SearchIcon,
         ...sharedStyles,
+        // tabBarOnPress: a => {
+        //   console.log(a.navigation.state);
+        //   a.navigation.navigate("Explore");
+        // },
         tabBarLabel: <SearchLabel />,
       },
     },

@@ -2,12 +2,12 @@ import React from "react";
 import { FlatList, Text } from "react-native";
 import Animated from "react-native-reanimated";
 import { BACKBTN_HEIGHT } from "../../../../components/BackBtn";
-import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
 import { COLORS, onScroll, width } from "../../../../utils";
 import PlaylistWithFollowers, {
   ITEM_DIMENSIONS,
 } from "./PlaylistWithFollowers";
 import SeeMoreBtn from "./SeeMoreBtn";
+import { PlaylistDetailsType } from "../../../../redux/reducers/playlistReducer";
 
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
   FlatList,
@@ -23,8 +23,8 @@ const ListOfGenrePlaylists = ({
   offsetY: Animated.Node<number>;
   seeMoreVisible: boolean;
   handleSeeMore: () => void;
-  genrePlaylists: GenrePlaylist[];
-  onPlaylistPressed: (playlist: GenrePlaylist) => void;
+  genrePlaylists: PlaylistDetailsType[];
+  onPlaylistPressed: (playlist: PlaylistDetailsType) => void;
 }) => {
   return (
     <AnimatedFlatList

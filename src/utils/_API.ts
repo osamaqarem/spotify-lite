@@ -21,7 +21,7 @@ export const REST_API = {
     `${SPOTIFY_API_BASE}/browse/categories/${id}/playlists?${urlQueryString}`,
   getPlaylistById: `${SPOTIFY_API_BASE}/playlists/`,
   getCurrentUserSavedArtists: `${SPOTIFY_API_BASE}/me/following?type=artist`,
-  getCurrentUserSavedTracks: `${SPOTIFY_API_BASE}/me/tracks`,
+  getCurrentUserSavedTracks: `${SPOTIFY_API_BASE}/me/tracks?limit=50`,
   getCurrentUserSavedAlbums: `${SPOTIFY_API_BASE}/me/albums`,
   getCurrentUserTopArtists: `${SPOTIFY_API_BASE}/me/top/artists?limit=19`,
   getRecentlyPlayedTracks: `${SPOTIFY_API_BASE}/me/player/recently-played?limit=20`,

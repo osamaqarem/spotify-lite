@@ -28,6 +28,7 @@ const PlaylistDetails = ({
   playlistDetails,
   clearPlaylistDetails,
   navigation,
+  username,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
@@ -45,18 +46,16 @@ const PlaylistDetails = ({
     const didFocusSub = navigation.addListener("didFocus", () => {
       BackHandler.addEventListener("hardwareBackPress", goBack);
 
-      if (playlistDetails?.imageUrl) {
-        if (Platform.OS === "android") {
-          colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
-            if (!err) {
-              setDominantColor(colors.averageColor);
-              setIsLoading(false);
-            }
-          });
-        } else {
-          setDominantColor(COLORS.tabBar);
-          setIsLoading(false);
-        }
+      if (playlistDetails?.imageUrl && Platform.OS === "android") {
+        colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
+          if (!err) {
+            setDominantColor(colors.averageColor);
+            setIsLoading(false);
+          }
+        });
+      } else {
+        setDominantColor(COLORS.tabBar);
+        setIsLoading(false);
       }
     });
 
@@ -99,6 +98,7 @@ const PlaylistDetails = ({
               name={playlistDetails?.name}
               imageUrl={playlistDetails?.imageUrl}
               artistName={playlistDetails?.ownerName}
+              username={username}
             />
           </View>
           <ShuffleButton
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: RootStoreType) => ({
   playlistDetails: state.playlistReducer.playlistDetails,
+  username: state.userReducer.profile?.display_name,
 });
 
 const mapDispatchToProps = {

@@ -20,6 +20,7 @@ const SearchIntro = () => {
           fontSize: 16,
           color: COLORS.grey,
           marginTop: 10,
+          textAlign: "center",
         }}>
         from millions of artists, songs and playlists
       </Text>

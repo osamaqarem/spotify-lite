@@ -10,12 +10,14 @@ const DetailsCover = ({
   name,
   imageUrl,
   coverShape,
+  username,
 }: {
   offsetY: Animated.Value<number>;
   name: string | undefined;
-  artistName: string | undefined;
+  artistName: string | null | undefined;
   imageUrl: string | undefined;
   coverShape: "CIRCLE" | "SQUARE";
+  username: string | undefined;
 }) => {
   const scaleAnim = offsetY.interpolate({
     inputRange: [0, 250],
@@ -50,11 +52,18 @@ const DetailsCover = ({
           numberOfLines={2}
           style={[
             styles.title,
-            { fontSize: name && name.length > 36 ? 12 : 18 },
+            {
+              fontSize: name && name.length > 36 ? 12 : 18,
+              marginTop: coverShape === "SQUARE" ? 0 : 10,
+            },
           ]}>
           {name}
         </Text>
-        <Text style={styles.artist}>{artistName}</Text>
+        {artistName && coverShape === "SQUARE" && (
+          <Text style={styles.artist}>
+            by {artistName === username ? "you" : artistName}
+          </Text>
+        )}
       </View>
     </Animated.View>
   );

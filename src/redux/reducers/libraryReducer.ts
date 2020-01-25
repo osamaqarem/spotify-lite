@@ -1,5 +1,6 @@
-import { Action } from "../types";
 import { libraryActions } from "../actions";
+import { Action } from "../types";
+import { TrackType, PlaylistDetailsType } from "./playlistReducer";
 
 export type SavedAlbumType = {
   name: string;
@@ -10,11 +11,13 @@ export type SavedAlbumType = {
 
 type LibraryReducerType = {
   currentUserSavedTracksCount: null | number;
+  currentUserSavedTracks: PlaylistDetailsType | null;
   currentUserSavedAlbums: SavedAlbumType[];
 };
 
 const initialState: LibraryReducerType = {
   currentUserSavedTracksCount: null,
+  currentUserSavedTracks: null,
   currentUserSavedAlbums: [],
 };
 
@@ -26,7 +29,8 @@ export default (
     case libraryActions.GET_CURRENT_USER_SAVED_TRACKS_SUCCESS:
       return {
         ...state,
-        currentUserSavedTracksCount: payload,
+        currentUserSavedTracksCount: payload.count,
+        currentUserSavedTracks: payload.data,
       };
     case libraryActions.GET_CURRENT_USER_SAVED_ALBUMS_SUCCESS:
       return {

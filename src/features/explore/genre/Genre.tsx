@@ -1,11 +1,5 @@
 import React, { useLayoutEffect, useReducer, useRef, useState } from "react";
-import {
-  BackHandler,
-  Platform,
-  StatusBar,
-  StyleSheet,
-  Text,
-} from "react-native";
+import { Platform, StatusBar, StyleSheet, Text } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
@@ -15,15 +9,11 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import BackBtn from "../../../components/BackBtn";
 import LoadingView from "../../../components/LoadingView";
-import {
-  clearCategoryPlaylists,
-  getCategoryById,
-  setPlaylistDetails,
-} from "../../../redux/actions";
+import { getCategoryById, setPlaylistDetails } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
-import { GenrePlaylist } from "../../../redux/reducers/browseReducer";
 import { COLORS, Routes } from "../../../utils";
 import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists";
+import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
 
 const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedComponent(
   LinearGradient,
@@ -31,15 +21,15 @@ const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedCom
 
 const initialState = {
   dominantColor: COLORS.tabBar,
-  loading: true,
+  loadingColor: true,
 };
 
 const Genre = ({
   navigation,
   genreDetails,
-  clearCategoryPlaylists,
   setPlaylistDetails,
   getCategoryById,
+  loadingData,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
 
@@ -52,42 +42,29 @@ const Genre = ({
   const { genrePlaylists, title, id } = genreDetails;
   const [seeMoreVisible, setSeeMoreVisible] = useState(true);
 
-  const [{ loading, dominantColor }, setState] = useReducer(
+  const [{ loadingColor, dominantColor }, setState] = useReducer(
     // eslint-disable-next-line
     (state = initialState, payload: typeof initialState) => ({ ...payload }),
     initialState,
   );
 
   useLayoutEffect(() => {
-    if (genrePlaylists[0]?.imageUrl) {
-      if (Platform.OS === "android") {
-        colorsFromUrl(genrePlaylists[0].imageUrl, (err: any, colors: any) => {
-          if (!err) {
-            setState({
-              dominantColor: colors.dominantColor,
-              loading: false,
-            });
-          }
-        });
-      } else {
-        setState({
-          dominantColor: COLORS.tabBar,
-          loading: false,
-        });
-      }
+    if (genrePlaylists[0]?.imageUrl && Platform.OS === "android") {
+      colorsFromUrl(genrePlaylists[0].imageUrl, (err: any, colors: any) => {
+        if (!err) {
+          setState({
+            dominantColor: colors.dominantColor,
+            loadingColor: false,
+          });
+        }
+      });
+    } else {
+      setState({
+        dominantColor: COLORS.tabBar,
+        loadingColor: false,
+      });
     }
   }, [genrePlaylists]);
-
-  function handleBack() {
-    setTimeout(() => {
-      clearCategoryPlaylists();
-    }, 500);
-
-    navigation.goBack();
-    BackHandler.removeEventListener("hardwareBackPress", handleBack);
-    // This function is also the backhandler for android. So we return true.
-    return true;
-  }
 
   const handleSeeMore = () => {
     setSeeMoreVisible(false);
@@ -98,7 +75,7 @@ const Genre = ({
     });
   };
 
-  const onPlaylistPressed = (playlist: GenrePlaylist) => {
+  const onPlaylistPressed = (playlist: PlaylistDetailsType) => {
     setPlaylistDetails(playlist);
     navigation.navigate(Routes.AppTabs.ExploreStack.PlaylistDetails);
   };
@@ -113,12 +90,11 @@ const Genre = ({
       }}>
       <NavigationEvents
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
-        onDidFocus={() =>
-          BackHandler.addEventListener("hardwareBackPress", handleBack)
-        }
       />
-      <BackBtn goBack={handleBack} />
-      {(loading && <LoadingView viewStyle={{ marginTop: 50 }} />) || (
+      <BackBtn goBack={() => navigation.goBack()} />
+      {((loadingData || loadingColor) && (
+        <LoadingView viewStyle={{ marginTop: 50 }} />
+      )) || (
         <>
           <AnimatedLinearGradient
             start={{ x: 0, y: 0 }}
@@ -157,10 +133,10 @@ const Genre = ({
 
 const mapStateToProps = (state: RootStoreType) => ({
   genreDetails: state.browseReducer.genreDetails,
+  loadingData: state.browseReducer.isLoading,
 });
 
 const mapDispatchToProps = {
-  clearCategoryPlaylists,
   setPlaylistDetails,
   getCategoryById,
 };

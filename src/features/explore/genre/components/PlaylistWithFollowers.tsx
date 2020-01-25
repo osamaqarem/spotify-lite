@@ -2,8 +2,8 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { GenrePlaylist } from "../../../../redux/reducers/browseReducer";
 import { btnScaleAnim, COLORS } from "../../../../utils";
+import { PlaylistDetailsType } from "../../../../redux/reducers/playlistReducer";
 
 export const ITEM_DIMENSIONS = {
   MARGIN: 46,
@@ -14,7 +14,7 @@ const PlaylistWithFollowers = ({
   playlist,
   onPress,
 }: {
-  playlist: GenrePlaylist;
+  playlist: PlaylistDetailsType;
   onPress: () => void;
 }) => {
   const scale = new Animated.Value(1);
@@ -71,7 +71,7 @@ const PlaylistWithFollowers = ({
               fontSize: 10,
               letterSpacing: 0.4,
             }}>
-            {playlist.followerCount.toLocaleString()} FOLLOWERS
+            {playlist.followerCount?.toLocaleString()} FOLLOWERS
           </Text>
         </View>
       </TouchableOpacity>

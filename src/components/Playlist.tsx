@@ -1,29 +1,30 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Cover from "./Cover";
-import PlaylistRowFav from "../features/favorites/favorite-playlists/PlaylistFavRow";
 import CoverBlank from "./CoverBlank";
 import { COLORS } from "../utils";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SavedPlaylistsType } from "../redux/reducers/playlistReducer";
 
+export const playlistStyle = {
+  vertical: 6.5,
+  left: 15,
+  rowTextLeft: 10,
+  titleFontSize: 16,
+};
+
 const Playlist = ({
   item,
-  index,
   username,
-  savedTracksCount,
   onPlaylistPressed,
 }: {
   item: SavedPlaylistsType;
-  index: number;
   username: string;
-  savedTracksCount: number | null;
   onPlaylistPressed: (id: string) => void;
 }) => (
   <TouchableOpacity
     onPress={() => onPlaylistPressed(item.id)}
-    style={styles.flatListContainer}>
-    {index === 0 && <PlaylistRowFav savedTracksCount={savedTracksCount} />}
+    style={styles.item}>
     {item.url ? (
       <Cover uri={item.url} />
     ) : (
@@ -41,9 +42,9 @@ const Playlist = ({
 );
 
 const styles = StyleSheet.create({
-  flatListContainer: {
-    marginLeft: 15,
-    marginVertical: 6.5,
+  item: {
+    marginLeft: playlistStyle.left,
+    marginVertical: playlistStyle.vertical,
     flex: 1,
     flexDirection: "row",
     flexWrap: "wrap",
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
   playlistTitle: {
     color: COLORS.white,
     textAlignVertical: "center",
-    fontSize: 16,
+    fontSize: playlistStyle.titleFontSize,
   },
   playlistOwner: {
     color: COLORS.grey,
@@ -63,7 +64,7 @@ const styles = StyleSheet.create({
     width: 50,
   },
   rowText: {
-    marginLeft: 10,
+    marginLeft: playlistStyle.rowTextLeft,
     justifyContent: "center",
   },
 });

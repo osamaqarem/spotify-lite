@@ -4,7 +4,7 @@ import { COLORS } from "../../../../../utils";
 import ArtistDetails from "../../../../artist-details/ArtistDetails";
 import FavoriteAlbums from "../../../../favorites/favorite-albums/FavoriteAlbums";
 import FavoriteArtists from "../../../../favorites/favorite-artists/FavoriteArtists";
-import FavoritePlaylists from "../../../../favorites/favorite-playlists/components/FavoritePlaylists";
+import FavoritePlaylists from "../../../../favorites/favorite-playlists/FavoritePlaylists";
 import PlaylistDetails from "../../../../playlist-details/PlaylistDetails";
 import SafeMaterialTopTabBar from "../../SafeMaterialTopTabBar";
 

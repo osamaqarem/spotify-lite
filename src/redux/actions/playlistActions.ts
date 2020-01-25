@@ -2,18 +2,15 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action } from "../types";
-
 import { ErrorResponse, PlaylistResponse } from "../../data/models/spotify";
 import { CurrentUserPlaylistsResponse } from "../../data/models/spotify/CurrentUserPlaylistsResponse";
 import { REST_API } from "../../utils";
-import { RootStoreType } from "../types";
-import { GenrePlaylist } from "../reducers/browseReducer";
 import {
   PlaylistDetailsType,
   SavedPlaylistsType,
   TrackType,
 } from "../reducers/playlistReducer";
+import { Action, RootStoreType } from "../types";
 import { playlistActions } from "./actionTypes";
 
 export const clearPlaylistDetails = () => ({
@@ -21,7 +18,7 @@ export const clearPlaylistDetails = () => ({
 });
 
 export const setPlaylistDetails = (
-  data: GenrePlaylist,
+  data: PlaylistDetailsType,
 ): Action<PlaylistDetailsType> => {
   return { type: playlistActions.GET_PLAYLIST_DETAILS_SUCCESS, payload: data };
 };
