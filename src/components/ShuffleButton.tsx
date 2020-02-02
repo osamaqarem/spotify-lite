@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import Animated from "react-native-reanimated";
-import { COLORS, isIphoneX } from "../utils";
+import { COLORS } from "../utils/constants";
+import UIHelper from "../utils/helpers/UIHelper";
 
 export const BUTTON_HEIGHT = 50;
 
@@ -15,7 +16,7 @@ const ShuffleButton = ({
   const translateY = offsetY.interpolate({
     inputRange: [0, scrollViewHeight / 2],
     // outputRange: [0, -286 + (isIphoneX() ? 50 : 0)],
-    outputRange: [0, -286 + (isIphoneX() ? 50 : -8)],
+    outputRange: [0, -286 + (UIHelper.isIphoneX() ? 50 : -8)],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
   return (

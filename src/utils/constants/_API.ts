@@ -32,4 +32,6 @@ export const REST_API = {
     `${SPOTIFY_API_BASE}/artists/${artistId}/related-artists`,
   getArtistTopTracks: (artistId: string, country: string) =>
     `${SPOTIFY_API_BASE}/artists/${artistId}/top-tracks?market=${country}`,
+  search: (query: string) =>
+    `${SPOTIFY_API_BASE}/search?market=MY&type=album,artist,playlist,track&q=${query}`,
 };

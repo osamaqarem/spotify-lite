@@ -12,7 +12,7 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { searchForQuery } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
@@ -108,6 +108,7 @@ const Search = ({ navigation, searchForQuery }: SearchType) => {
             marginLeft: 4,
             width: "70%",
             letterSpacing: 0.4,
+            marginTop: 2,
           }}
         />
         {showBack && (

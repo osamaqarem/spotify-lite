@@ -8,7 +8,7 @@ import {
   ErrorResponse,
 } from "../../data/models/spotify";
 import { AlbumListResponse } from "../../data/models/spotify/AlbumListResponse";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
 import { albumActions, globalActions, playlistActions } from "./actionTypes";
 import { redoLogin } from "./userActions";

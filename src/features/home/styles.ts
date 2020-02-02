@@ -1,4 +1,4 @@
-import { COLORS } from "../../utils";
+import { COLORS } from "../../utils/constants";
 import { StyleSheet } from "react-native";
 
 const MARGIN_BOTTOM = 38;

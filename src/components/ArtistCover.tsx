@@ -4,7 +4,7 @@ import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../data/models/spotify";
 import { albumDimensions, styles } from "../features/home/styles";
-import { btnScaleAnim } from "../utils";
+import UIHelper from "../utils/helpers/UIHelper";
 
 const ArtistCover = ({
   album: item,
@@ -19,8 +19,12 @@ const ArtistCover = ({
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
       <TouchableOpacity
-        onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
-        onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
+        onPressIn={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
+        }
+        onPressOut={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
+        }
         onPress={() => onPress(item.id)}
         style={{ marginHorizontal: 8, flexDirection: "column" }}>
         <FastImage

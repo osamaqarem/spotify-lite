@@ -7,7 +7,7 @@ import {
   CurrentUserSavedTracks,
   ErrorResponse,
 } from "../../data/models/spotify";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { SavedAlbumType } from "../reducers/libraryReducer";
 import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
 import { Action } from "../types";

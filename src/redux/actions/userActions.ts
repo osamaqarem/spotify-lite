@@ -6,7 +6,7 @@ import { Action } from "../types";
 
 import { ErrorResponse } from "../../data/models/spotify";
 import { UserProfileResponse } from "../../data/models/spotify/UserProfileResponse";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { RootStoreType } from "../types";
 import { globalActions, userActions } from "./actionTypes";
 

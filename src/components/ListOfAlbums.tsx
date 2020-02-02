@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 import { SavedAlbumType } from "../redux/reducers/libraryReducer";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import Album from "./Album";
 
 const ListOfAlbums = ({

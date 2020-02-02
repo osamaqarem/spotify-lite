@@ -3,7 +3,7 @@ import { FlatList, View } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import PlaylistRowFav from "../features/favorites/favorite-playlists/components/PlaylistFavRow";
 import { SavedPlaylistsType } from "../redux/reducers/playlistReducer";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import Playlist, { playlistStyle } from "./Playlist";
 
 const ListOfPlaylists = ({

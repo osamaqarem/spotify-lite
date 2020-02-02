@@ -4,7 +4,7 @@ import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { ErrorResponse, PlaylistResponse } from "../../data/models/spotify";
 import { CurrentUserPlaylistsResponse } from "../../data/models/spotify/CurrentUserPlaylistsResponse";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import {
   PlaylistDetailsType,
   SavedPlaylistsType,

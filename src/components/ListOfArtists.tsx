@@ -1,7 +1,7 @@
 import React from "react";
 import { FlatList, View } from "react-native";
 import { AlbumType } from "../data/models/spotify";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import Artist from "./Artist";
 
 const ListOfArtists = ({

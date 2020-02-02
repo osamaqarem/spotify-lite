@@ -4,7 +4,7 @@ import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
 import { getAlbumById } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
-import { Routes } from "../../../utils";
+import { Routes } from "../../../utils/constants";
 import ArtistCover from "../../../components/ArtistCover";
 import { albumDimensions, styles } from "../styles";
 

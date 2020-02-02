@@ -7,7 +7,7 @@ import {
   getCategoryById,
 } from "../../redux/actions";
 import { RootStoreType } from "../../redux/types";
-import { COLORS, Routes } from "../../utils";
+import { COLORS, Routes } from "../../utils/constants";
 import ListOfColoredCards from "./components/ListOfColoredCards";
 import TopBarSearch from "./components/TopBarSearch";
 import { NavigationStackProp } from "react-navigation-stack";

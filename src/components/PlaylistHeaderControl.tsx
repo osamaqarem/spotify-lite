@@ -2,9 +2,10 @@ import React from "react";
 import { ToastAndroid, View } from "react-native";
 import { TouchableWithoutFeedback } from "react-native-gesture-handler";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS, isIphoneX } from "../utils";
+import { COLORS } from "../utils/constants";
 import DotsView from "./DotsView";
 import BackBtn from "./BackBtn";
+import UIHelper from "../utils/helpers/UIHelper";
 
 const PlaylistHeaderControl = ({
   goBack,
@@ -28,7 +29,7 @@ const PlaylistHeaderControl = ({
               {
                 color: COLORS.green,
                 position: "absolute",
-                top: isIphoneX() ? 50 : 10,
+                top: UIHelper.isIphoneX() ? 50 : 10,
                 padding: 12,
                 right: 34,
                 zIndex: 1,
@@ -41,7 +42,7 @@ const PlaylistHeaderControl = ({
           <View
             style={{
               position: "absolute",
-              top: isIphoneX() ? 50 : 10,
+              top: UIHelper.isIphoneX() ? 50 : 10,
               right: 0,
               paddingTop: 10,
               zIndex: 1,

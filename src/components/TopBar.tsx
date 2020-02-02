@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 import { Text, View } from "react-native";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 
 const TopBar = ({
   title,

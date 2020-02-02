@@ -2,7 +2,7 @@ import React from "react";
 import { TextStyle, ViewStyle } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { SafeAreaView } from "react-navigation";
-import { COLORS, widthRatio } from "../utils";
+import { COLORS, widthRatio } from "../utils/constants";
 
 export const BACKBTN_HEIGHT = 80 * widthRatio;
 

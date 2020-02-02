@@ -1,6 +1,6 @@
 import Animated from "react-native-reanimated";
 import { HEADER_HEIGHT } from "../components/PlaylistTitle";
-import { isIphoneX } from "../utils";
+import UIHelper from "../utils/helpers/UIHelper";
 
 const usePlaylistAnim = (offsetY: Animated.Value<number>) => {
   const opacityAnim = offsetY.interpolate({
@@ -17,7 +17,7 @@ const usePlaylistAnim = (offsetY: Animated.Value<number>) => {
 
   const translateAnim = offsetY.interpolate({
     inputRange: [0, 300],
-    outputRange: [0, HEADER_HEIGHT + (isIphoneX() ? 0 : -50)],
+    outputRange: [0, HEADER_HEIGHT + (UIHelper.isIphoneX() ? 0 : -50)],
     extrapolate: Animated.Extrapolate.CLAMP,
   });
 

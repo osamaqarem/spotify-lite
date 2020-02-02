@@ -1,6 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { COLORS } from "../../../utils";
+import { COLORS } from "../../../utils/constants";
 import ColoredCard from "./ColoredCard";
 
 const ListOfColoredCards = ({

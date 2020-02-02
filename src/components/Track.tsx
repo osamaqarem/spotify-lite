@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import DotsView from "./DotsView";
 
 const Track = ({ title, artist }: { title: string; artist: string }) => (

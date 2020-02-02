@@ -11,7 +11,7 @@ import BackBtn from "../../../components/BackBtn";
 import LoadingView from "../../../components/LoadingView";
 import { getCategoryById, setPlaylistDetails } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
-import { COLORS, Routes } from "../../../utils";
+import { COLORS, Routes } from "../../../utils/constants";
 import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists";
 import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
 

@@ -36,7 +36,8 @@ import {
   TrackType,
 } from "../../redux/reducers/playlistReducer";
 import { RootStoreType } from "../../redux/types";
-import { COLORS, isIphoneX, Routes, onScroll, REST_API } from "../../utils";
+import { COLORS, REST_API, Routes } from "../../utils/constants";
+import UIHelper from "../../utils/helpers/UIHelper";
 
 const LoadingView = () => (
   <ActivityIndicator
@@ -212,6 +213,7 @@ const ArtistDetails = ({
               name={artistDetails?.name}
               imageUrl={artistDetails?.imageUrl}
               artistName={artistDetails?.ownerName}
+              username={profile?.display_name}
             />
           </View>
           <ShuffleButton
@@ -223,7 +225,7 @@ const ArtistDetails = ({
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"
-            onScroll={onScroll({ y: offsetY })}
+            onScroll={UIHelper.onScroll({ y: offsetY })}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
             style={[{ transform: [{ translateY: translateAnim }] }]}
@@ -284,7 +286,7 @@ const styles = StyleSheet.create({
   },
   coverContainer: {
     ...StyleSheet.absoluteFillObject,
-    marginTop: isIphoneX() ? -10 : -50,
+    marginTop: UIHelper.isIphoneX() ? -10 : -50,
     top: HEADER_HEIGHT,
   },
   scrollContent: {

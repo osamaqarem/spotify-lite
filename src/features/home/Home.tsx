@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StatusBar, View } from "react-native";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../utils";
+import { COLORS } from "../../utils/constants";
 import TopBar from "../../components/TopBar";
 import FeaturedPlaylists from "./components/FeaturedPlaylists";
 import RecentlyPlayed from "./components/RecentlyPlayed";

@@ -16,7 +16,7 @@ import {
   ErrorResponse,
   RecentlyPlayedResponse,
 } from "../../data/models/spotify";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { RootStoreType } from "../types";
 import { globalActions, playerActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";

@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SavedAlbumType } from "../redux/reducers/libraryReducer";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import Cover from "./Cover";
 import CoverBlank from "./CoverBlank";
 import { TouchableOpacity } from "react-native-gesture-handler";

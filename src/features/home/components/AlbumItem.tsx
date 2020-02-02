@@ -3,8 +3,8 @@ import { Text, TouchableOpacity } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../data/models/spotify";
-import { btnScaleAnim } from "../../../utils";
 import { albumDimensions, styles } from "../styles";
+import UIHelper from "../../../utils/helpers/UIHelper";
 
 const AlbumItem = ({
   album,
@@ -17,8 +17,12 @@ const AlbumItem = ({
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
       <TouchableOpacity
-        onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
-        onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
+        onPressIn={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
+        }
+        onPressOut={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
+        }
         onPress={() => onPress(album.id)}
         key={album.id}
         style={[{ width: albumDimensions.ALBUM_DIMEN_FEATURED }]}>

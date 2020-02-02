@@ -1,9 +1,18 @@
-import { searchActions } from "./actionTypes";
-import { Observable, of } from "rxjs";
-import { RootStoreType } from "../types";
+import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
-import { withLatestFrom, switchMap, debounceTime } from "rxjs/operators";
-import { Action } from "../types";
+import { from, Observable, of } from "rxjs";
+import {
+  catchError,
+  debounceTime,
+  map,
+  switchMap,
+  withLatestFrom,
+} from "rxjs/operators";
+import { RecentlyPlayedResponse } from "../../data/models/spotify";
+import { REST_API } from "../../utils/constants";
+import APIHelper from "../../utils/helpers/APIHelper";
+import { Action, RootStoreType } from "../types";
+import { searchActions } from "./actionTypes";
 
 export const searchForQuery = (query: string) => ({
   type: searchActions.SEARCH_FOR_QUERY,
@@ -22,8 +31,30 @@ export const searchForQueryEpic = (
       const { payload: query } = action;
       const { token } = userReducer;
 
-      console.log(query);
+      const request$ = from(
+        fetch(REST_API.search(query!), {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        }),
+      );
 
-      return of({ type: "" });
+      return request$.pipe(
+        APIHelper.handleCommonResponse<RecentlyPlayedResponse>(),
+        map(data => {
+          return {
+            type: searchActions.SEARCH_FOR_QUERY_SUCCESS,
+            payload: "success",
+          };
+        }),
+        catchError((err: Error) => {
+          reactotron.log(err.message);
+          return of({
+            type: searchActions.SEARCH_FOR_QUERY_ERROR,
+            payload: err.message,
+          });
+        }),
+      );
     }),
   );

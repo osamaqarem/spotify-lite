@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
-import { COLORS } from "../../../../utils";
+import { COLORS } from "../../../../utils/constants";
 import { playlistStyle } from "../../../../components/Playlist";
 
 const PlaylistRowFav = ({

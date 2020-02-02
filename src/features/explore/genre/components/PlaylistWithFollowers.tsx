@@ -2,8 +2,9 @@ import React from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
-import { btnScaleAnim, COLORS } from "../../../../utils";
+import { COLORS } from "../../../../utils/constants";
 import { PlaylistDetailsType } from "../../../../redux/reducers/playlistReducer";
+import UIHelper from "../../../../utils/helpers/UIHelper";
 
 export const ITEM_DIMENSIONS = {
   MARGIN: 46,
@@ -29,8 +30,12 @@ const PlaylistWithFollowers = ({
         width: ITEM_DIMENSIONS.WIDTH,
       }}>
       <TouchableOpacity
-        onPressIn={() => Animated.timing(scale, btnScaleAnim.in).start()}
-        onPressOut={() => Animated.timing(scale, btnScaleAnim.out).start()}
+        onPressIn={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
+        }
+        onPressOut={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
+        }
         onPress={onPress}
         key={playlist.name}
         style={[{ width: ITEM_DIMENSIONS.WIDTH }]}>

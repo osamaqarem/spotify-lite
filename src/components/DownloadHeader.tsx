@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Switch, Text, View } from "react-native";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 
 const DownloadHeader = () => (
   <View style={styles.container}>

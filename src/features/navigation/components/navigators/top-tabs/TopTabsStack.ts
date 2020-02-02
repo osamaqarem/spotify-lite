@@ -1,6 +1,6 @@
 import { createStackNavigator } from "react-navigation-stack";
 import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { COLORS } from "../../../../../utils";
+import { COLORS } from "../../../../../utils/constants";
 import ArtistDetails from "../../../../artist-details/ArtistDetails";
 import FavoriteAlbums from "../../../../favorites/favorite-albums/FavoriteAlbums";
 import FavoriteArtists from "../../../../favorites/favorite-artists/FavoriteArtists";

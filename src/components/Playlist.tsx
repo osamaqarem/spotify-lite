@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Cover from "./Cover";
 import CoverBlank from "./CoverBlank";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { SavedPlaylistsType } from "../redux/reducers/playlistReducer";
 

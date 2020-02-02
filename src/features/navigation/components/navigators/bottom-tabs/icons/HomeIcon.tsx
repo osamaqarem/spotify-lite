@@ -1,6 +1,6 @@
 import React from "react";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../../../../../utils";
+import { COLORS } from "../../../../../../utils/constants";
 
 const HomeIcon = ({ tintColor }: { tintColor: string }) => {
   if (tintColor === COLORS.itemInactive) {

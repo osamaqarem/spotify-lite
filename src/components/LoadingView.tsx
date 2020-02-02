@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityIndicator, ViewStyle } from "react-native";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 
 export const LoadingView = ({ viewStyle }: { viewStyle?: ViewStyle }) => (
   <ActivityIndicator

@@ -9,7 +9,7 @@ import {
   ErrorResponse,
   UserTopArtistsResponse,
 } from "../../data/models/spotify";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { globalActions, personalizationActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 

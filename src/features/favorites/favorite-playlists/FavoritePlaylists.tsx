@@ -11,8 +11,7 @@ import {
   setPlaylistDetails,
 } from "../../../redux/actions";
 import { RootStoreType } from "../../../redux/types";
-import { Routes } from "../../../utils";
-import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
+import { Routes } from "../../../utils/constants";
 
 const FavoritePlaylists = ({
   profile,

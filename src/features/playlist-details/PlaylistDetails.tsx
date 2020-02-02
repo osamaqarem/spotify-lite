@@ -22,7 +22,8 @@ import ShuffleButton from "../../components/ShuffleButton";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../redux/types";
-import { COLORS, onScroll } from "../../utils";
+import { COLORS } from "../../utils/constants";
+import UIHelper from "../../utils/helpers/UIHelper";
 
 const PlaylistDetails = ({
   playlistDetails,
@@ -110,7 +111,7 @@ const PlaylistDetails = ({
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"
-            onScroll={onScroll({ y: offsetY })}
+            onScroll={UIHelper.onScroll({ y: offsetY })}
             showsVerticalScrollIndicator={false}
             scrollEventThrottle={1}
             style={[

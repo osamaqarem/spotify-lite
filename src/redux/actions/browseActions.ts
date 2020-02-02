@@ -10,7 +10,7 @@ import {
   PlaylistResponse,
   UserProfileResponse,
 } from "../../data/models/spotify";
-import { REST_API } from "../../utils";
+import { REST_API } from "../../utils/constants";
 import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
 import { Action, RootStoreType } from "../types";
 import { browseActions, globalActions } from "./actionTypes";

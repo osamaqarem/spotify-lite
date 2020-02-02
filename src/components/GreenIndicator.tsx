@@ -1,6 +1,6 @@
 import React from "react";
 import { ActivityIndicator, View } from "react-native";
-import { COLORS } from "../utils";
+import { COLORS } from "../utils/constants";
 
 const GreenIndicator = () => {
   return (

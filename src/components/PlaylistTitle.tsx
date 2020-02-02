@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { COLORS, ratio } from "../utils";
+import { COLORS, ratio } from "../utils/constants";
 import { SafeAreaView } from "react-navigation";
 
 export const HEADER_HEIGHT = 90 * ratio;

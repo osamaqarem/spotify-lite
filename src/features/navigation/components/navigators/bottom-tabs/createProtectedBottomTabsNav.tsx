@@ -5,7 +5,7 @@ import {
   createStackNavigator,
   NavigationStackProp,
 } from "react-navigation-stack";
-import { COLORS, fadeIn } from "../../../../../utils";
+import { COLORS } from "../../../../../utils/constants";
 import ArtistDetails from "../../../../artist-details/ArtistDetails";
 import Explore from "../../../../explore/Explore";
 import Genre from "../../../../explore/genre/Genre";
@@ -17,6 +17,7 @@ import ProtectedRoute from "../../ProtectedRoute";
 import HomeIcon from "./icons/HomeIcon";
 import SearchIcon from "./icons/SearchIcon";
 import TopTabsStack from "../top-tabs/TopTabsStack";
+import UIHelper from "../../../../../utils/helpers/UIHelper";
 
 const createProtectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator({
@@ -47,7 +48,7 @@ const createProtectedBottomTabsNav = () => {
         },
         {
           headerMode: "none",
-          transitionConfig: () => fadeIn(),
+          transitionConfig: () => UIHelper.fadeIn(),
         },
       ),
       navigationOptions: {

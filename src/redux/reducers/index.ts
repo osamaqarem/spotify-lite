@@ -53,7 +53,12 @@ export const rootEpic = combineEpics(
 const rootPersistConfig = {
   key: "root",
   storage: AsyncStorage,
-  blacklist: ["artistReducer", "browseReducer", "playlistReducer"],
+  blacklist: [
+    "artistReducer",
+    "browseReducer",
+    "playlistReducer",
+    "searchReducer",
+  ],
 };
 
 // Persist browse reducer state, except genrePlaylists, genreDetails
