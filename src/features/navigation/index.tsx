@@ -9,7 +9,7 @@ import { Transition } from "react-native-reanimated";
 export default createAppContainer(
   createAnimatedSwitchNavigator(
     {
-      AppTabs: createProtectedBottomTabsNav(),
+      BottomTabs: createProtectedBottomTabsNav(),
       LoginStack: createStackNavigator({ Login }, { headerMode: "none" }),
     },
     {

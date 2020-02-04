@@ -1,5 +1,5 @@
 import { playlistActions } from "../actions";
-import { Action } from "../types";
+import { Action } from "../../data/models/redux";
 
 export type TrackType = { name: string; artistName: string };
 

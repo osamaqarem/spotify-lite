@@ -2,17 +2,18 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of, zip } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Action, RootStoreType } from "../../data/models/redux";
 import {
+  AllCategoriesResponse,
+  Category,
   ErrorResponse,
-  FeaturedPlaylistsResponse,
-  GetAllCategoriesResponse,
-  GetCategoryResponse,
-  PlaylistResponse,
-  UserProfileResponse,
+  Playlist,
+  SpotifyPager,
+  ProfileResponse,
+  AlbumType,
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
-import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
-import { Action, RootStoreType } from "../types";
+import { PlaylistDetailsType, TrackType } from "../reducers/playlistReducer";
 import { browseActions, globalActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
 
@@ -37,15 +38,19 @@ export const getAllFeaturedPlaylistsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: FeaturedPlaylistsResponse | ErrorResponse) => {
+        map((res: { playlists: SpotifyPager<Playlist> } | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }
 
-          const data = res.playlists.items.map(item => {
-            return { name: item.name, url: item.images[0].url, id: item.id };
+          const data: AlbumType[] = res.playlists.items.map(item => {
+            return {
+              name: item.name,
+              imageURL: item.images[0].url,
+              id: item.id,
+            };
           });
-
+          debugger;
           return {
             type: browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
             payload: data,
@@ -81,7 +86,7 @@ export const getAllCategoriesForCountryEpic = (
       const {
         token,
         profile,
-      }: { token: string; profile: UserProfileResponse } = state.userReducer;
+      }: { token: string; profile: ProfileResponse } = state.userReducer;
 
       const request$ = from(
         fetch(REST_API.getAllCategoriesForCountry(profile.country), {
@@ -94,7 +99,7 @@ export const getAllCategoriesForCountryEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: GetAllCategoriesResponse | ErrorResponse) => {
+        map((res: AllCategoriesResponse | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }
@@ -169,7 +174,7 @@ export const getCategoryByIdEpic = (
 
         return request$.pipe(
           switchMap(res => res.json()),
-          map((res: GetCategoryResponse | ErrorResponse) => {
+          map((res: { playlists: SpotifyPager<Category> } | ErrorResponse) => {
             if ("error" in res) {
               throw res.error.message;
             }
@@ -202,7 +207,7 @@ export const getCategoryByIdEpic = (
             }
 
             const data: PlaylistDetailsType[] = result.map(
-              (res: PlaylistResponse | ErrorResponse) => {
+              (res: Playlist | ErrorResponse) => {
                 if ("error" in res) throw res.error.message;
 
                 const tracks: TrackType[] = res.tracks.items.map(item => ({

@@ -2,15 +2,16 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import { Action } from "../../data/models/redux";
 import {
-  CurrentUserSavedAlbums,
-  CurrentUserSavedTracks,
   ErrorResponse,
+  PlaylistTrackObject,
+  SavedAlbumObject,
+  SpotifyPager,
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
 import { SavedAlbumType } from "../reducers/libraryReducer";
-import { TrackType, PlaylistDetailsType } from "../reducers/playlistReducer";
-import { Action } from "../types";
+import { PlaylistDetailsType, TrackType } from "../reducers/playlistReducer";
 import { libraryActions } from "./actionTypes";
 
 export const getCurrentUserSavedTracks = () => ({
@@ -38,7 +39,7 @@ export const getCurrentUserSavedTracksEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: CurrentUserSavedTracks | ErrorResponse) => {
+        map((res: SpotifyPager<PlaylistTrackObject> | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
           const tracks: TrackType[] = res.items.map(item => ({
@@ -98,7 +99,7 @@ export const getCurrentUserSavedAlbumsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: CurrentUserSavedAlbums | ErrorResponse) => {
+        map((res: SpotifyPager<SavedAlbumObject> | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
           const data: SavedAlbumType[] = res.items.map(item => {

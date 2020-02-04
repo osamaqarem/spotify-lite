@@ -2,14 +2,14 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action } from "../types";
-
 import {
   AlbumType,
-  CurrentUserSavedArtistsResponse,
+  Artist,
   ErrorResponse,
+  SpotifyPager,
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
+import { Action } from "../../data/models/redux";
 import { followActions } from "./actionTypes";
 
 export const getCurrentUserSavedArtists = () => ({
@@ -37,12 +37,12 @@ export const getCurrentUserSavedArtistsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: CurrentUserSavedArtistsResponse | ErrorResponse) => {
+        map((res: { artists: SpotifyPager<Artist> } | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
           const data: AlbumType[] = res.artists.items.map(item => {
             return {
-              url: (item.images[0] && item.images[0].url) || null,
+              imageURL: (item.images[0] && item.images[0].url) || null,
               name: item.name,
               id: item.id,
             };

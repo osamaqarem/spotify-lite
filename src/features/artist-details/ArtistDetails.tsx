@@ -3,16 +3,16 @@ import {
   ActivityIndicator,
   Platform,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
-  StatusBar,
 } from "react-native";
 // @ts-ignore
 import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
-import { SafeAreaView, NavigationEvents } from "react-navigation";
+import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { from, Subscription, zip } from "rxjs";
@@ -23,11 +23,12 @@ import ListOfTracks from "../../components/ListOfTracks";
 import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
 import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
+import { RootStoreType } from "../../data/models/redux";
 import {
   AlbumType,
   Artist,
-  ArtistTopTracksResponse,
   ErrorResponse,
+  Track,
 } from "../../data/models/spotify";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { redoLogin, setArtistId } from "../../redux/actions";
@@ -35,7 +36,6 @@ import {
   PlaylistDetailsType,
   TrackType,
 } from "../../redux/reducers/playlistReducer";
-import { RootStoreType } from "../../redux/types";
 import { COLORS, REST_API, Routes } from "../../utils/constants";
 import UIHelper from "../../utils/helpers/UIHelper";
 
@@ -103,7 +103,7 @@ const ArtistDetails = ({
           subscription = zip(artist$, topTracks$, relatedArtists$).subscribe(
             ([artist, topTracks, relatedArtistsList]: [
               Artist | ErrorResponse,
-              ArtistTopTracksResponse | ErrorResponse,
+              { tracks: Track[] } | ErrorResponse,
               { artists: Artist[] } | ErrorResponse,
             ]) => {
               if ("error" in artist) {
@@ -125,7 +125,7 @@ const ArtistDetails = ({
               const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
                 artist => ({
                   name: artist.name,
-                  url: artist.images[0]?.url,
+                  imageURL: artist.images[0]?.url,
                   id: artist.id,
                 }),
               );
@@ -173,7 +173,7 @@ const ArtistDetails = ({
 
   const goToArtist = (id: string) => {
     setArtistId(id);
-    navigation.push(Routes.AppTabs.HomeStack.ArtistDetails);
+    navigation.push(Routes.BottomTabs.HomeStack.ArtistDetails);
   };
 
   return (
@@ -260,7 +260,7 @@ const ArtistDetails = ({
                     album={{
                       id: artist.id,
                       name: artist.name,
-                      url: artist.url,
+                      imageURL: artist.imageURL,
                     }}
                   />
                 ))}

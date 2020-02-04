@@ -10,14 +10,13 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
-import { Action } from "../types";
-
+import { Action, RootStoreType } from "../../data/models/redux";
 import {
   ErrorResponse,
-  RecentlyPlayedResponse,
+  SavedTrackObject,
+  SpotifyPager,
 } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
-import { RootStoreType } from "../types";
 import { globalActions, playerActions } from "./actionTypes";
 import { getMultipleAlbums } from "./albumActions";
 import { redoLogin } from "./userActions";
@@ -46,7 +45,7 @@ export const getRecentlyPlayedTracksEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: RecentlyPlayedResponse | ErrorResponse) => {
+        map((res: SpotifyPager<SavedTrackObject> | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }

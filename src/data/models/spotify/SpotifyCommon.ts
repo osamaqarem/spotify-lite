@@ -17,21 +17,24 @@ export interface ErrorResponse {
   error: { status: string; message: string };
 }
 
-export interface ExternalIds {
+interface ExternalIds {
   isrc: string;
 }
 
 export interface Artist {
   external_urls: ExternalUrls;
+  followers: Followers;
+  genres: string[];
   href: string;
   id: string;
+  images: Image[];
   name: string;
+  popularity: number;
   type: string;
   uri: string;
-  images: Image[];
 }
 
-export interface Owner {
+interface Owner {
   display_name: string;
   external_urls: ExternalUrls;
   href: string;
@@ -40,14 +43,14 @@ export interface Owner {
   uri: string;
 }
 
-export interface Copyright {
+interface Copyright {
   text: string;
   type: string;
 }
 
 export interface Playlists {
   href: string;
-  items: CommonPlaylistItem[];
+  items: PlaylistTrackObject[];
   limit: number;
   next?: any;
   offset: number;
@@ -57,7 +60,7 @@ export interface Playlists {
 
 export interface Tracks {
   href: string;
-  items: AlbumItem[];
+  items: Album[];
   limit: number;
   next?: any;
   offset: number;
@@ -65,7 +68,7 @@ export interface Tracks {
   total: number;
 }
 
-export interface CommonPlaylistItem {
+export interface Playlist {
   collaborative: boolean;
   external_urls: ExternalUrls;
   href: string;
@@ -76,26 +79,88 @@ export interface CommonPlaylistItem {
   primary_color?: any;
   public?: any;
   snapshot_id: string;
-  tracks: NonNullable<Followers>;
+  tracks: Playlists;
   type: string;
   uri: string;
+  description: string;
+  followers: Followers;
 }
 
-export interface AlbumItem {
+export interface Album {
   artists: Artist[];
   available_markets: string[];
   disc_number: number;
   duration_ms: number;
   explicit: boolean;
+  is_local: boolean;
+  owner: Owner;
+  preview_url: string;
+  track_number: number;
+  album_type: string;
+  external_urls: ExternalUrls;
+  href: string;
+  id: string;
+  images: Image[];
+  name: string;
+  release_date: string;
+  release_date_precision: string;
+  total_tracks: number;
+  type: string;
+  uri: string;
+  copyrights: Copyright[];
+  external_ids: ExternalIds;
+  genres: any[];
+  label: string;
+  popularity: number;
+  tracks: Tracks;
+}
+
+export interface Track {
+  album: Album;
+  artists: Artist[];
+  disc_number: number;
+  duration_ms: number;
+  explicit: boolean;
+  external_ids: ExternalIds;
   external_urls: ExternalUrls;
   href: string;
   id: string;
   is_local: boolean;
+  is_playable: boolean;
   name: string;
+  popularity: number;
   preview_url: string;
   track_number: number;
   type: string;
   uri: string;
 }
 
-export type AlbumType = { name: string; url: string | null; id: string };
+interface Cursors {
+  after: string;
+  before: string;
+}
+
+export interface SpotifyPager<T> {
+  items: T[];
+  next: string;
+  cursors?: Cursors;
+  limit: number;
+  href: string;
+  offset: number;
+  previous: any;
+  total: number;
+}
+
+export interface SavedAlbumObject {
+  album: Album;
+}
+
+export interface SavedTrackObject {
+  track: Track;
+}
+
+export interface PlaylistTrackObject {
+  track: Track;
+}
+
+export type AlbumType = { name: string; imageURL: string | null; id: string };

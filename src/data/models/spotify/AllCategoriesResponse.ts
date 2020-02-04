@@ -1,23 +1,23 @@
-export interface GetAllCategoriesResponse {
+export interface AllCategoriesResponse {
   categories: Categories;
 }
 
-export interface Icon {
+interface Icon {
   height?: number;
   url: string;
   width?: number;
 }
 
-export interface GetAllCategoriesResponseItem {
+export interface Category {
   href: string;
   icons: Icon[];
   id: string;
   name: string;
 }
 
-export interface Categories {
+interface Categories {
   href: string;
-  items: GetAllCategoriesResponseItem[];
+  items: Category[];
   limit: number;
   next: string;
   offset: number;

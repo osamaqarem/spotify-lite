@@ -17,8 +17,8 @@ const Artist = ({
     <TouchableOpacity
       onPress={() => onArtistPressed(artist.id)}
       style={styles.flatListContainer}>
-      {artist.url ? (
-        <Cover uri={artist.url} />
+      {artist.imageURL ? (
+        <Cover uri={artist.imageURL} />
       ) : (
         <CoverBlank styles={[styles.cover]} />
       )}

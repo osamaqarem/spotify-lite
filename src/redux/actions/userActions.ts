@@ -2,12 +2,12 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { Action } from "../types";
+import { Action } from "../../data/models/redux";
 
 import { ErrorResponse } from "../../data/models/spotify";
-import { UserProfileResponse } from "../../data/models/spotify/UserProfileResponse";
+import { ProfileResponse } from "../../data/models/spotify/ProfileResponse";
 import { REST_API } from "../../utils/constants";
-import { RootStoreType } from "../types";
+import { RootStoreType } from "../../data/models/redux";
 import { globalActions, userActions } from "./actionTypes";
 
 /**
@@ -33,7 +33,7 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
       );
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: UserProfileResponse | ErrorResponse) => {
+        map((res: ProfileResponse | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
           return {
             type: userActions.GET_PROFILE_SUCCESS,

@@ -2,17 +2,12 @@ import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import reactotron from "../../../ReactotronConfig";
-import {
-  AlbumDetailsResponse,
-  AlbumType,
-  ErrorResponse,
-} from "../../data/models/spotify";
-import { AlbumListResponse } from "../../data/models/spotify/AlbumListResponse";
+import { Action } from "../../data/models/redux";
+import { Album, AlbumType, ErrorResponse } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
 import { PlaylistDetailsType } from "../reducers/playlistReducer";
 import { albumActions, globalActions, playlistActions } from "./actionTypes";
 import { redoLogin } from "./userActions";
-import { Action } from "../types";
 
 export const getAlbumById = (id: string) => ({
   type: albumActions.GET_ALBUM,
@@ -40,7 +35,7 @@ export const getAlbumByIdEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: AlbumDetailsResponse | ErrorResponse) => {
+        map((res: Album | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }
@@ -110,7 +105,7 @@ export const getMultipleAlbumsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: AlbumListResponse | ErrorResponse) => {
+        map((res: { albums: Album[] } | ErrorResponse) => {
           if ("error" in res) {
             throw res.error.message;
           }
@@ -121,7 +116,7 @@ export const getMultipleAlbumsEpic = (
             // [0] is highest quality
             album => ({
               name: album.name,
-              url: album.images[0].url,
+              imageURL: album.images[0].url,
               id: album.id,
             }),
           );

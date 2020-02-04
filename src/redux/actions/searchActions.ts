@@ -8,14 +8,15 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators";
-import { RecentlyPlayedResponse } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
 import APIHelper from "../../utils/helpers/APIHelper";
-import { Action, RootStoreType } from "../types";
+import { Action, RootStoreType } from "../../data/models/redux";
 import { searchActions } from "./actionTypes";
+import { SearchResponse, AlbumType } from "../../data/models/spotify";
+import { SearchResult, ResultKey } from "../reducers/searchReducer";
 
 export const searchForQuery = (query: string) => ({
-  type: searchActions.SEARCH_FOR_QUERY,
+  type: searchActions.QUERY,
   payload: query,
 });
 
@@ -24,7 +25,7 @@ export const searchForQueryEpic = (
   state$: Observable<RootStoreType>,
 ) =>
   actions$.pipe(
-    ofType(searchActions.SEARCH_FOR_QUERY),
+    ofType(searchActions.QUERY),
     debounceTime(500),
     withLatestFrom(state$),
     switchMap(([action, { userReducer }]) => {
@@ -41,17 +42,68 @@ export const searchForQueryEpic = (
       );
 
       return request$.pipe(
-        APIHelper.handleCommonResponse<RecentlyPlayedResponse>(),
+        APIHelper.handleCommonResponse<SearchResponse>(),
         map(data => {
+          // select up to 7 items
+          const results: SearchResult = {
+            albums: data.albums.items.map(item => ({
+              name: item.name,
+              imageURL: item.images[0]?.url,
+              id: item.id,
+            })),
+            tracks: data.tracks.items.map(item => ({
+              name: item.name,
+              imageURL: item.album.images[0]?.url,
+              id: item.id,
+            })),
+            artists: data.artists.items.map(item => ({
+              name: item.name,
+              imageURL: item.images[0]?.url,
+              id: item.id,
+            })),
+            playlists: data.playlists.items.map(item => ({
+              name: item.name,
+              imageURL: item.images[0]?.url,
+              id: item.id,
+            })),
+            random: [],
+          };
+
+          const resultsHave = {
+            havePlaylists: data.playlists.items.length > 0,
+            haveAlbums: data.albums.items.length > 0,
+            haveTracks: data.tracks.items.length > 0,
+            haveArtists: data.artists.items.length > 0,
+          };
+
+          const keyList = Object.keys(results);
+          let randomItemsArray: AlbumType[] = [];
+
+          // Get random item from a random array, until we have 7 items.
+          for (let i = 0; i < 7; i++) {
+            const randomKey = keyList[
+              Math.floor(Math.random() * keyList.length)
+            ] as ResultKey;
+
+            const randomArray = results[randomKey];
+
+            const randomItem =
+              randomArray[Math.floor(Math.random() * randomArray.length)];
+
+            randomItemsArray.push(randomItem);
+          }
+
+          results.random = randomItemsArray;
+
           return {
-            type: searchActions.SEARCH_FOR_QUERY_SUCCESS,
-            payload: "success",
+            type: searchActions.QUERY_SUCCESS,
+            payload: { results, resultsHave },
           };
         }),
         catchError((err: Error) => {
           reactotron.log(err.message);
           return of({
-            type: searchActions.SEARCH_FOR_QUERY_ERROR,
+            type: searchActions.QUERY_ERROR,
             payload: err.message,
           });
         }),

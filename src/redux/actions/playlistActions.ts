@@ -2,15 +2,14 @@ import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
-import { ErrorResponse, PlaylistResponse } from "../../data/models/spotify";
-import { CurrentUserPlaylistsResponse } from "../../data/models/spotify/CurrentUserPlaylistsResponse";
+import { ErrorResponse, Playlist, Tracks } from "../../data/models/spotify";
 import { REST_API } from "../../utils/constants";
 import {
   PlaylistDetailsType,
   SavedPlaylistsType,
   TrackType,
 } from "../reducers/playlistReducer";
-import { Action, RootStoreType } from "../types";
+import { Action, RootStoreType } from "../../data/models/redux";
 import { playlistActions } from "./actionTypes";
 
 export const clearPlaylistDetails = () => ({
@@ -50,7 +49,7 @@ export const getPlayListByIdEpic = (
 
         return request$.pipe(
           switchMap(res => res.json()),
-          map((res: PlaylistResponse | ErrorResponse) => {
+          map((res: Playlist | ErrorResponse) => {
             if ("error" in res) throw res.error.message;
 
             const tracks: TrackType[] = res.tracks.items.map(item => ({
@@ -113,7 +112,7 @@ export const getCurrentUserPlaylistsEpic = (
 
       return request$.pipe(
         switchMap(res => res.json()),
-        map((res: CurrentUserPlaylistsResponse | ErrorResponse) => {
+        map((res: Tracks | ErrorResponse) => {
           if ("error" in res) throw res.error.message;
 
           const data: SavedPlaylistsType[] = res.items.map(item => {

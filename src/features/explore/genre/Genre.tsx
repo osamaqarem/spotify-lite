@@ -10,7 +10,7 @@ import { connect, ConnectedProps } from "react-redux";
 import BackBtn from "../../../components/BackBtn";
 import LoadingView from "../../../components/LoadingView";
 import { getCategoryById, setPlaylistDetails } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { COLORS, Routes } from "../../../utils/constants";
 import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists";
 import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
@@ -77,7 +77,7 @@ const Genre = ({
 
   const onPlaylistPressed = (playlist: PlaylistDetailsType) => {
     setPlaylistDetails(playlist);
-    navigation.navigate(Routes.AppTabs.ExploreStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
   };
 
   return (

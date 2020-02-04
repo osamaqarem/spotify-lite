@@ -6,7 +6,7 @@ import {
   getAllCategoriesForCountry,
   getCategoryById,
 } from "../../redux/actions";
-import { RootStoreType } from "../../redux/types";
+import { RootStoreType } from "../../data/models/redux";
 import { COLORS, Routes } from "../../utils/constants";
 import ListOfColoredCards from "./components/ListOfColoredCards";
 import TopBarSearch from "./components/TopBarSearch";
@@ -24,11 +24,11 @@ const Explore = ({
 
   const onGenrePressed = (id: string, title: string) => {
     getCategoryById({ id, title, getRestOfItems: false });
-    navigation.navigate(Routes.AppTabs.ExploreStack.Genre);
+    navigation.navigate(Routes.BottomTabs.ExploreStack.Genre);
   };
 
   const onSearchPressed = () => {
-    navigation.navigate(Routes.AppTabs.ExploreStack.Search);
+    navigation.navigate(Routes.BottomTabs.ExploreStack.Search);
   };
 
   return (

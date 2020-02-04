@@ -20,56 +20,58 @@ import TopTabsStack from "../top-tabs/TopTabsStack";
 import UIHelper from "../../../../../utils/helpers/UIHelper";
 
 const createProtectedBottomTabsNav = () => {
-  const BottomTabsNav = createMaterialBottomTabNavigator({
-    Home: {
-      screen: createStackNavigator(
-        {
-          Home,
-          PlaylistDetails,
-          ArtistDetails,
+  const BottomTabsNav = createMaterialBottomTabNavigator(
+    {
+      HomeStack: {
+        screen: createStackNavigator(
+          {
+            Home,
+            PlaylistDetails,
+            ArtistDetails,
+          },
+          {
+            headerMode: "none",
+          },
+        ),
+        navigationOptions: {
+          tabBarIcon: HomeIcon,
+          ...sharedStyles,
+          tabBarLabel: <HomeLabel />,
         },
-        {
-          headerMode: "none",
+      },
+      ExploreStack: {
+        screen: createStackNavigator(
+          {
+            Explore,
+            Search,
+            Genre,
+            PlaylistDetails,
+          },
+          {
+            initialRouteName: "Search",
+            headerMode: "none",
+            transitionConfig: () => UIHelper.fadeIn(),
+          },
+        ),
+        navigationOptions: {
+          tabBarIcon: SearchIcon,
+          ...sharedStyles,
+          tabBarLabel: <SearchLabel />,
         },
-      ),
-      navigationOptions: {
-        tabBarIcon: HomeIcon,
-        ...sharedStyles,
-        tabBarLabel: <HomeLabel />,
+      },
+      FavoritesStack: {
+        screen: TopTabsStack,
+        navigationOptions: {
+          tabBarIcon: FavoritesIcon,
+          ...sharedStyles,
+          tabBarLabel: <FavoritesLabel />,
+        },
       },
     },
-    Search: {
-      screen: createStackNavigator(
-        {
-          Explore,
-          Search,
-          Genre,
-          PlaylistDetails,
-        },
-        {
-          headerMode: "none",
-          transitionConfig: () => UIHelper.fadeIn(),
-        },
-      ),
-      navigationOptions: {
-        tabBarIcon: SearchIcon,
-        ...sharedStyles,
-        // tabBarOnPress: a => {
-        //   console.log(a.navigation.state);
-        //   a.navigation.navigate("Explore");
-        // },
-        tabBarLabel: <SearchLabel />,
-      },
+    {
+      initialRouteName: "ExploreStack",
     },
-    Favorites: {
-      screen: TopTabsStack,
-      navigationOptions: {
-        tabBarIcon: FavoritesIcon,
-        ...sharedStyles,
-        tabBarLabel: <FavoritesLabel />,
-      },
-    },
-  });
+  );
 
   /**
    * This navigator will observe `authenticated` from redux store, and navigate to login screen if it is false.

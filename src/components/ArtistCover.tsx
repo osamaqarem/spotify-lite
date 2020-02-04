@@ -29,7 +29,7 @@ const ArtistCover = ({
         style={{ marginHorizontal: 8, flexDirection: "column" }}>
         <FastImage
           source={{
-            uri: (item && item.url) || "",
+            uri: (item && item.imageURL) || "",
           }}
           style={{
             height: albumDimensions.ALBUM_DIMEN_RECENT,

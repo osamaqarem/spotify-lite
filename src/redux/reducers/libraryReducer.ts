@@ -1,6 +1,6 @@
+import { Action } from "../../data/models/redux";
 import { libraryActions } from "../actions";
-import { Action } from "../types";
-import { TrackType, PlaylistDetailsType } from "./playlistReducer";
+import { PlaylistDetailsType } from "./playlistReducer";
 
 export type SavedAlbumType = {
   name: string;

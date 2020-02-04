@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import AlbumItem from "./AlbumItem";
 import { albumDimensions, styles } from "../styles";
 import { setArtistId } from "../../../redux/actions";
@@ -23,7 +23,7 @@ const TopArtists = ({
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
       setArtistId(id);
-      navigation.navigate(Routes.AppTabs.HomeStack.ArtistDetails);
+      navigation.navigate(Routes.BottomTabs.HomeStack.ArtistDetails);
     }
   };
 
@@ -50,7 +50,7 @@ const TopArtists = ({
           onPress={() => onArtistPressed(userTopArtistsHeader?.id)}>
           <FastImage
             source={{
-              uri: userTopArtistsHeader?.url ?? "",
+              uri: userTopArtistsHeader?.imageURL ?? "",
             }}
             style={{
               height: albumDimensions.ALBUM_DIMEN_FEATURED + 70,

@@ -1,11 +1,11 @@
-import { Action } from "../types";
+import { Action } from "../../data/models/redux";
 
-import { UserProfileResponse } from "../../data/models/spotify";
+import { ProfileResponse } from "../../data/models/spotify";
 import { userActions, globalActions } from "../actions";
 
 type UserReducerType = {
   token: null | string;
-  profile: null | UserProfileResponse;
+  profile: null | ProfileResponse;
   authenticated: boolean;
   actionsToRestart: Action<any>[];
 };

@@ -6,7 +6,7 @@ import {
   getCurrentUserSavedAlbums,
   getAlbumById,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { Routes } from "../../../utils/constants";
 
 const FavoriteAlbums = ({
@@ -21,7 +21,7 @@ const FavoriteAlbums = ({
 
   const onPlaylistPressed = (id: string) => {
     getAlbumById(id);
-    navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.FavoritesStack.PlaylistDetails);
   };
 
   return (

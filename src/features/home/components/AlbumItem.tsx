@@ -28,7 +28,7 @@ const AlbumItem = ({
         style={[{ width: albumDimensions.ALBUM_DIMEN_FEATURED }]}>
         <FastImage
           source={{
-            uri: (album && album.url) || "",
+            uri: (album && album.imageURL) || "",
           }}
           style={{
             height: albumDimensions.ALBUM_DIMEN_FEATURED,

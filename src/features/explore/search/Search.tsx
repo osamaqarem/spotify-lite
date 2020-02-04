@@ -11,26 +11,12 @@ import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { searchForQuery } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { COLORS } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
 import SearchIntro from "./components/SearchIntro";
-
-/**
- *
- * TODO:
- * 1- Each results has up to 20 items. Show maximum of 7 items.
- * 2- At the bottom, if more artists exist show 'Show all artists'
- * 3- Do #2 for playlists, tracks and albums.
- * 4- Create an array randomly from results
- *
- * 5- Render a list that contains items. each item will have
- * a type (album, artist, playlist, track) to determine where
- * to navigate onClick.
- *
- */
 
 type SearchType = { navigation: NavigationStackProp } & ReduxProps;
 

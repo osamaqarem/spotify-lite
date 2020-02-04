@@ -1,20 +1,27 @@
 // Route names
 export const Routes = {
-  LoginStack: { Login: "Login" },
-  AppTabs: {
+  LoginStack: {
+    navigator: "LoginStack",
+    Login: "Login",
+  },
+  BottomTabs: {
+    navigator: "BottomTabs",
     HomeStack: {
       Home: "Home",
       PlaylistDetails: "PlaylistDetails",
       ArtistDetails: "ArtistDetails",
     },
     ExploreStack: {
+      navigator: "ExploreStack",
       Explore: "Explore",
       Search: "Search",
       Genre: "Genre",
       PlaylistDetails: "PlaylistDetails",
     },
     FavoritesStack: {
+      navigator: "FavoritesStack",
       TopTabsNav: {
+        navigator: "TopTabsNav",
         FavoritePlaylists: "FavoritePlaylists",
         FavoriteArtists: "FavoriteArtists",
         FavoriteAlbums: "FavoriteAlbums",

@@ -1,4 +1,4 @@
-import { Action } from "../types";
+import { Action } from "../../data/models/redux";
 
 import { AlbumType } from "../../data/models/spotify";
 import { albumActions } from "../actions";

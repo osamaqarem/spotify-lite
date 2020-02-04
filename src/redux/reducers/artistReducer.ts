@@ -1,4 +1,4 @@
-import { Action } from "../types";
+import { Action } from "../../data/models/redux";
 import { artistActions } from "../actions";
 
 type ArtistReducerType = {

@@ -16,7 +16,7 @@ import { debounceTime, filter, map, take } from "rxjs/operators";
 import GreenIndicator from "../../components/GreenIndicator";
 import TopBar from "../../components/TopBar";
 import { rehydrate, setToken } from "../../redux/actions";
-import { RootStoreType } from "../../redux/types";
+import { RootStoreType } from "../../data/models/redux";
 import { REST_API, COLORS, Routes } from "../../utils/constants";
 
 const webViewSub$ = new Subject<string>();
@@ -59,9 +59,9 @@ const Login = ({
   useLayoutEffect(() => {
     if (authenticated) {
       rehydrate();
-      //TODO: don't navigate to appstack if refreshing token,
+      //TODO: don't navigate to bottomtabs if refreshing token,
       // go back instead.
-      navigation.navigate(Routes.AppTabs.HomeStack.Home);
+      navigation.navigate(Routes.BottomTabs.navigator);
     }
   }, [authenticated, navigation, rehydrate]);
 

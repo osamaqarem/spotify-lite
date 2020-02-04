@@ -10,7 +10,7 @@ import {
   getPlayListById,
   setPlaylistDetails,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { Routes } from "../../../utils/constants";
 
 const FavoritePlaylists = ({
@@ -31,12 +31,12 @@ const FavoritePlaylists = ({
 
   const onPlaylistPressed = (id: string) => {
     getPlayListById(id);
-    navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.FavoritesStack.PlaylistDetails);
   };
 
   const onFavSongsPressed = () => {
     currentUserSavedTracks && setPlaylistDetails(currentUserSavedTracks);
-    navigation.navigate(Routes.AppTabs.FavoritesStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.FavoritesStack.PlaylistDetails);
   };
   return (
     <>

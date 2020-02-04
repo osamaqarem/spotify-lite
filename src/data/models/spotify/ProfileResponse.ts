@@ -1,6 +1,6 @@
 import { ExternalUrls, Image, Followers } from "./SpotifyCommon";
 
-export interface UserProfileResponse {
+export interface ProfileResponse {
   country: string;
   display_name: string;
   explicit_content: ExplicitContent;
@@ -14,7 +14,7 @@ export interface UserProfileResponse {
   uri: string;
 }
 
-export interface ExplicitContent {
+interface ExplicitContent {
   filter_enabled: boolean;
   filter_locked: boolean;
 }

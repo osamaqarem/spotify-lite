@@ -3,7 +3,7 @@ import { ScrollView, Text, View } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
 import { getAlbumById } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { Routes } from "../../../utils/constants";
 import ArtistCover from "../../../components/ArtistCover";
 import { albumDimensions, styles } from "../styles";
@@ -13,7 +13,7 @@ const RecentlyPlayed = ({ getAlbumById, recentlyPlayedAlbums }: ReduxProps) => {
 
   const onAlbumPressed = (id: string) => {
     getAlbumById(id);
-    navigation.navigate(Routes.AppTabs.HomeStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.HomeStack.PlaylistDetails);
   };
 
   return (

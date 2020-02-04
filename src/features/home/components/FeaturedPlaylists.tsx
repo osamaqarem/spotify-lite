@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Text, View } from "react-native";
 import { NavigationContext } from "react-navigation";
 import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { Routes } from "../../../utils/constants";
 import AlbumItem from "./AlbumItem";
 import { styles } from "../styles";
@@ -17,7 +17,7 @@ const FeaturedPlaylists = ({
 
   const onPlaylistPressed = (id: string) => {
     getPlayListById(id);
-    navigation.navigate(Routes.AppTabs.HomeStack.PlaylistDetails);
+    navigation.navigate(Routes.BottomTabs.HomeStack.PlaylistDetails);
   };
 
   return (

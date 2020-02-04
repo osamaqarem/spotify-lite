@@ -6,7 +6,7 @@ import {
   getCurrentUserSavedArtists,
   setArtistId,
 } from "../../../redux/actions";
-import { RootStoreType } from "../../../redux/types";
+import { RootStoreType } from "../../../data/models/redux";
 import { Routes } from "../../../utils/constants";
 
 const FavoriteArtists = ({
@@ -24,7 +24,7 @@ const FavoriteArtists = ({
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
       setArtistId(id);
-      navigation.navigate(Routes.AppTabs.FavoritesStack.ArtistDetails);
+      navigation.navigate(Routes.BottomTabs.FavoritesStack.ArtistDetails);
     }
   };
 
