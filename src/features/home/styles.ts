@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   rowScrollContainer: { flexDirection: "row", marginLeft: 9 },
   centeredText: {
     alignSelf: "center",
-    color: "white",
+    color: COLORS.white,
     fontWeight: "bold",
   },
   headerText: {

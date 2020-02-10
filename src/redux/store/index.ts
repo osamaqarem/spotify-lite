@@ -4,12 +4,13 @@ import { persistStore } from "redux-persist";
 import thunk from "redux-thunk";
 import Reactotron from "../../../ReactotronConfig";
 import persistedReducer, { rootEpic } from "../reducers";
+import { enableBatching } from "redux-batched-actions";
 
 // Redux observable
 const epicMiddleware = createEpicMiddleware();
 
 const store = createStore(
-  persistedReducer,
+  enableBatching(persistedReducer),
   {},
   compose(applyMiddleware(thunk, epicMiddleware), Reactotron.createEnhancer()),
 );

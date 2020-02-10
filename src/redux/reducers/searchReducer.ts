@@ -18,6 +18,9 @@ type SearchReducerType = {
     haveTracks: boolean;
     haveArtists: boolean;
   };
+  queryLoading: boolean;
+  queryEmpty: boolean;
+  lastQuery: string;
 };
 
 const initialState: SearchReducerType = {
@@ -34,6 +37,9 @@ const initialState: SearchReducerType = {
     haveTracks: false,
     haveArtists: false,
   },
+  queryLoading: false,
+  queryEmpty: false,
+  lastQuery: "",
 };
 
 export default (
@@ -46,6 +52,30 @@ export default (
         ...state,
         results: payload.results,
         resultsHave: payload.resultsHave,
+        queryLoading: false,
+        lastQuery: "",
+      };
+    case searchActions.QUERY_ERROR:
+      return {
+        ...state,
+        lastQuery: "",
+        queryLoading: false,
+      };
+    case searchActions.QUERY_LOADING:
+      return {
+        ...state,
+        queryLoading: true,
+        queryEmpty: false,
+        lastQuery: "",
+        results: initialState.results,
+        resultsHave: initialState.resultsHave,
+      };
+    case searchActions.QUERY_EMPTY:
+      return {
+        ...state,
+        queryLoading: false,
+        queryEmpty: true,
+        lastQuery: payload,
       };
     default:
       return state;

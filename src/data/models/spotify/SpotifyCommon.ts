@@ -163,4 +163,10 @@ export interface PlaylistTrackObject {
   track: Track;
 }
 
-export type AlbumType = { name: string; imageURL: string | null; id: string };
+export type AlbumType = {
+  name: string;
+  imageURL: string | null;
+  id: string;
+  type?: string;
+  owner?: string;
+};

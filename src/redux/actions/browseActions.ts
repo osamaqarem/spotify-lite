@@ -1,6 +1,6 @@
 import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
-import { from, Observable, of, zip } from "rxjs";
+import { from, Observable, of, zip, concat } from "rxjs";
 import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
 import { Action, RootStoreType } from "../../data/models/redux";
 import {
@@ -50,7 +50,7 @@ export const getAllFeaturedPlaylistsEpic = (
               id: item.id,
             };
           });
-          debugger;
+
           return {
             type: browseActions.GET_ALL_FEATURED_PLAYLISTS_SUCCESS,
             payload: data,
@@ -170,9 +170,7 @@ export const getCategoryByIdEpic = (
               authorization: `Bearer ${token}`,
             },
           }),
-        );
-
-        return request$.pipe(
+        ).pipe(
           switchMap(res => res.json()),
           map((res: { playlists: SpotifyPager<Category> } | ErrorResponse) => {
             if ("error" in res) {
@@ -250,35 +248,29 @@ export const getCategoryByIdEpic = (
             }
             // handle error
             reactotron.log(JSON.stringify(err));
-            return of({
-              type: browseActions.GET_CATEGORY_BY_ID_ERROR,
-              payload: err,
-            });
+            return of(
+              {
+                type: browseActions.GET_CATEGORY_BY_ID_ERROR,
+                payload: err,
+              },
+              {
+                type: browseActions.IS_NOT_LOADING,
+              },
+            );
           }),
+        );
+
+        return concat(
+          of({
+            type: browseActions.IS_LOADING,
+          }),
+          request$,
         );
       } else {
         return of({
           type: browseActions.GET_CATEGORY_BY_ID_ERROR,
           payload: "Invalid ID",
         });
-      }
-    }),
-  );
-
-export const browseActionLoadingEpic = (actions$: Observable<Action<any>>) =>
-  actions$.pipe(
-    ofType(
-      browseActions.GET_CATEGORY_BY_ID,
-      browseActions.GET_CATEGORY_BY_ID_SUCCESS,
-      browseActions.GET_CATEGORY_BY_ID_ERROR,
-    ),
-    map(({ type }) => {
-      switch (type) {
-        case browseActions.GET_CATEGORY_BY_ID:
-          return { type: browseActions.IS_LOADING };
-        case browseActions.GET_CATEGORY_BY_ID_SUCCESS ||
-          browseActions.GET_CATEGORY_BY_ID_ERROR:
-          return { type: browseActions.IS_NOT_LOADING };
       }
     }),
   );

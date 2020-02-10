@@ -13,7 +13,7 @@ const GreenIndicator = () => {
         left: 0,
         backgroundColor: COLORS.background,
       }}>
-      <ActivityIndicator size={60} color="darkgreen" />
+      <ActivityIndicator size={60} color={COLORS.green} />
     </View>
   );
 };
