@@ -168,5 +168,6 @@ export type AlbumType = {
   imageURL: string | null;
   id: string;
   type?: string;
-  owner?: string;
+  artist?: string;
+  popularity?: number;
 };

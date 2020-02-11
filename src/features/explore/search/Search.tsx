@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
+  ActivityIndicator,
   EmitterSubscription,
   Keyboard,
   StatusBar,
+  StyleSheet,
   Text,
   TextInput,
   View,
-  ActivityIndicator,
-  StyleSheet,
 } from "react-native";
+import FastImage from "react-native-fast-image";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { RootStoreType } from "../../../data/models/redux";
+import { AlbumType } from "../../../data/models/spotify";
 import { searchForQuery } from "../../../redux/actions";
 import { COLORS } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
+import NoResults from "./components/NoResults";
 import SearchIntro from "./components/SearchIntro";
-import FastImage from "react-native-fast-image";
-import { AlbumType } from "../../../data/models/spotify";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
 type SearchType = { navigation: NavigationStackProp } & ReduxProps;
 
@@ -73,7 +73,7 @@ const ResultRow = ({ result }: { result: AlbumType }) => {
             fontSize: 14,
           }}>
           {result.type}
-          {result.type === "Song" ? " • " + result.owner : null}
+          {result.type === "Song" ? " • " + result.artist : null}
         </Text>
       </View>
     </View>
@@ -100,7 +100,7 @@ const Search = ({
 
   const showLoading = query.length > 0 && loading;
   const showResults = results.random.length > 0;
-  const showIntro = !showResults && !loading;
+  const showIntro = !showResults && !loading && query.length === 0;
   const showNoResults =
     !showIntro && !showResults && queryEmpty && lastQuery.length > 0;
 
@@ -221,49 +221,6 @@ const Search = ({
         {showNoResults && <NoResults queryToShow={lastQuery} />}
       </ScrollView>
     </SafeAreaView>
-  );
-};
-
-const NoResults = ({ queryToShow }: { queryToShow: string }) => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
-      <MaterialCommunityIcon
-        style={{
-          marginBottom: 26,
-        }}
-        name="flag-outline"
-        size={64}
-        color={COLORS.white}
-      />
-      <Text
-        style={{
-          fontWeight: "bold",
-          fontSize: 18,
-          color: COLORS.white,
-          letterSpacing: 0.3,
-          textAlign: "center",
-          lineHeight: 22,
-          maxWidth: "70%",
-        }}>
-        No results found for {`\'${queryToShow}\'`}
-      </Text>
-      <Text
-        style={{
-          fontSize: 14,
-          color: COLORS.grey,
-          marginTop: 22,
-          textAlign: "center",
-          maxWidth: "70%",
-          lineHeight: 20,
-        }}>
-        Please check you have the right spelling, or try different keywords.
-      </Text>
-    </View>
   );
 };
 

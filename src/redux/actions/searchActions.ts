@@ -15,6 +15,7 @@ import { REST_API } from "../../utils/constants";
 import APIHelper from "../../utils/helpers/APIHelper";
 import { ResultKey, SearchResult } from "../reducers/searchReducer";
 import { searchActions } from "./actionTypes";
+import SearchHelper from "../../utils/helpers/SearchHelper";
 
 export const searchForQuery = (query: string) => ({
   type: searchActions.QUERY,
@@ -43,78 +44,16 @@ export const searchForQueryEpic = (
       ).pipe(
         APIHelper.handleCommonResponse<SearchResponse>(),
         map(data => {
-          const albumsEmpty = data.albums.items.length === 0;
-          const tracksEmpty = data.tracks.items.length === 0;
-          const playlistsEmpty = data.playlists.items.length === 0;
-          const artistsEmpty = data.artists.items.length === 0;
-
-          if (albumsEmpty && tracksEmpty && playlistsEmpty && artistsEmpty) {
+          if (SearchHelper.queryResponseIsEmpty(data)) {
             return of({ type: searchActions.QUERY_EMPTY, payload: query });
           }
 
-          // select up to 7 items
-          const results: SearchResult = {
-            albums: data.albums.items.map(item => ({
-              name: item.name,
-              imageURL: item.images[0]?.url,
-              id: item.id,
-              type: "Album",
-            })),
-            tracks: data.tracks.items.map(item => ({
-              name: item.name,
-              imageURL: item.album.images[0]?.url,
-              id: item.id,
-              type: "Song",
-              artist: item.artists[0].name,
-            })),
-            artists: data.artists.items.map(item => ({
-              name: item.name,
-              imageURL: item.images[0]?.url,
-              id: item.id,
-              type: "Artist",
-            })),
-            playlists: data.playlists.items.map(item => ({
-              name: item.name,
-              imageURL: item.images[0]?.url,
-              id: item.id,
-              type: "Playlist",
-            })),
-            random: [],
-          };
+          const results = SearchHelper.prepareSearchResult(data);
+          const resultsHave = SearchHelper.getResultsHave(data);
+          const topSearchResults = SearchHelper.sortByMostPopular(results);
 
-          const resultsHave = {
-            havePlaylists: data.playlists.items.length > 0,
-            haveAlbums: data.albums.items.length > 0,
-            haveTracks: data.tracks.items.length > 0,
-            haveArtists: data.artists.items.length > 0,
-          };
-
-          const keyList: ResultKey[] = [
-            "albums",
-            "artists",
-            "playlists",
-            "tracks",
-          ];
-
-          let randomItemsArray: AlbumType[] = [];
-
-          // Get random item from a random array, until we have 7 items.
-          for (let i = 0; i < 7; i++) {
-            const randomKey =
-              keyList[Math.floor(Math.random() * keyList.length)];
-
-            const randomArray = results[randomKey];
-
-            const randomItem =
-              randomArray[Math.floor(Math.random() * randomArray.length)];
-
-            randomItemsArray.push(randomItem);
-          }
-
-          // 1- If some response data is empty, randomItem could be undefined.
-          // 2- Create a Set to get rid of duplicates.
-          results.random = [...new Set(randomItemsArray)].filter(
-            item => typeof item != "undefined",
+          results.random = SearchHelper.sortBySongAndArtistFirst(
+            topSearchResults,
           );
 
           return of({
