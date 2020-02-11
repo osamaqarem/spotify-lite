@@ -62,11 +62,54 @@ const fadeIn = (duration = 300) => {
   };
 };
 
+const {
+  Value,
+  timing,
+  clockRunning,
+  startClock,
+  block,
+  cond,
+  set,
+  stopClock,
+} = Animated;
+
+const opacityTiming = (
+  clock: Animated.Clock,
+  start: number,
+  end: number,
+  duration: number,
+) => {
+  const state = {
+    finished: new Value(0),
+    position: new Value(0),
+    time: new Value(0),
+    frameTime: new Value(0),
+  };
+
+  const config = {
+    duration,
+    toValue: new Value(0),
+    easing: Easing.out(Easing.exp),
+  };
+
+  return block([
+    cond(
+      clockRunning(clock),
+      [],
+      [set(state.position, start), set(config.toValue, end), startClock(clock)],
+    ),
+    timing(clock, state, config),
+    cond(state.finished, stopClock(clock)),
+    state.position,
+  ]);
+};
+
 const UIHelper = {
   btnScaleAnim,
   isIphoneX,
   onScroll,
   fadeIn,
+  opacityTiming,
 };
 
 export default UIHelper;

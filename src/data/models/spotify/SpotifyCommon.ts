@@ -167,7 +167,7 @@ export type AlbumType = {
   name: string;
   imageURL: string | null;
   id: string;
-  type?: string;
+  type?: "Album" | "Song" | "Artist" | "Playlist";
   artist?: string;
   popularity?: number;
 };

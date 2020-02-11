@@ -1,14 +1,20 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { Text } from "react-native";
+import Animated from "react-native-reanimated";
 import { COLORS } from "../../../../utils/constants";
+import UIHelper from "../../../../utils/helpers/UIHelper";
 
-const SearchIntro = () => {
+const SearchIntro = React.memo(() => {
+  const clock = new Animated.Clock();
+  const opacityAnim = UIHelper.opacityTiming(clock, 0.5, 1, 250);
+
   return (
-    <View
+    <Animated.View
       style={{
         flex: 1,
         alignItems: "center",
         justifyContent: "center",
+        opacity: opacityAnim,
       }}>
       <Text
         style={{
@@ -29,8 +35,10 @@ const SearchIntro = () => {
         }}>
         from millions of artists, songs and playlists
       </Text>
-    </View>
+    </Animated.View>
   );
-};
+});
+
+SearchIntro.displayName = "SearchIntro";
 
 export default SearchIntro;

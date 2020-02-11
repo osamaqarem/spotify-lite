@@ -5,80 +5,27 @@ import {
   Keyboard,
   StatusBar,
   StyleSheet,
-  Text,
   TextInput,
   View,
 } from "react-native";
-import FastImage from "react-native-fast-image";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { RootStoreType } from "../../../data/models/redux";
-import { AlbumType } from "../../../data/models/spotify";
 import { searchForQuery } from "../../../redux/actions";
 import { COLORS } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
 import NoResults from "./components/NoResults";
+import ResultRow from "./components/ResultRow";
 import SearchIntro from "./components/SearchIntro";
+import SeeAllBtn from "./components/SeeAllBtn";
 
 type SearchType = { navigation: NavigationStackProp } & ReduxProps;
 
 let keyboardWillHideListener: EmitterSubscription;
-
-const ResultRow = ({ result }: { result: AlbumType }) => {
-  return (
-    <View
-      style={{
-        alignItems: "center",
-        flexDirection: "row",
-        marginTop: 10,
-        marginBottom: 3,
-      }}>
-      <FastImage
-        source={{
-          uri: result.imageURL || "",
-        }}
-        style={{
-          height: 54,
-          width: 54,
-        }}
-      />
-      <View
-        style={{
-          flexDirection: "column",
-          marginHorizontal: 12,
-          maxWidth: "80%",
-          marginTop: 2,
-        }}>
-        <Text
-          numberOfLines={1}
-          style={{
-            flex: 1,
-            color: COLORS.darkWhite,
-            letterSpacing: 0.8,
-            fontSize: 16,
-          }}>
-          {result.name}
-        </Text>
-        <Text
-          numberOfLines={1}
-          style={{
-            flex: 1,
-            fontWeight: "normal",
-            color: COLORS.grey,
-            letterSpacing: 0.8,
-            fontSize: 14,
-          }}>
-          {result.type}
-          {result.type === "Song" ? " • " + result.artist : null}
-        </Text>
-      </View>
-    </View>
-  );
-};
 
 const Search = ({
   navigation,
@@ -100,9 +47,8 @@ const Search = ({
 
   const showLoading = query.length > 0 && loading;
   const showResults = results.random.length > 0;
-  const showIntro = !showResults && !loading && query.length === 0;
-  const showNoResults =
-    !showIntro && !showResults && queryEmpty && lastQuery.length > 0;
+  const showNoResults = queryEmpty && lastQuery.length > 0;
+  const showIntro = !showResults && !loading && !showNoResults;
 
   return (
     <SafeAreaView
@@ -175,10 +121,13 @@ const Search = ({
             marginTop: 2,
           }}
         />
-        {showBack && (
+        {showBack && query.length > 0 && (
           <MaterialIcon
             onPress={() => {
+              // if (query.length > 0) {
+              searchForQuery("");
               setQuery("");
+              // }
               setShowBack(false);
               Keyboard.dismiss();
             }}
@@ -197,12 +146,9 @@ const Search = ({
         )}
       </View>
       <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
         style={{
           backgroundColor: COLORS.background,
-        }}
-        contentContainerStyle={{
-          flex: 1,
-          marginHorizontal: 14,
         }}>
         {(showIntro && <SearchIntro />) ||
           (showLoading && (
@@ -218,6 +164,14 @@ const Search = ({
           results.random.map(result => (
             <ResultRow key={result.id} result={result} />
           ))}
+        {showResults && (
+          <>
+            {resultsHave.haveArtists && <SeeAllBtn type="Artist" />}
+            {resultsHave.haveTracks && <SeeAllBtn type="Song" />}
+            {resultsHave.havePlaylists && <SeeAllBtn type="Playlist" />}
+            {resultsHave.haveAlbums && <SeeAllBtn type="Album" />}
+          </>
+        )}
         {showNoResults && <NoResults queryToShow={lastQuery} />}
       </ScrollView>
     </SafeAreaView>
