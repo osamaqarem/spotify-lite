@@ -21,6 +21,7 @@ type SearchReducerType = {
   queryLoading: boolean;
   queryEmpty: boolean;
   lastQuery: string;
+  queryHistory: AlbumType[];
 };
 
 const initialState: SearchReducerType = {
@@ -40,6 +41,7 @@ const initialState: SearchReducerType = {
   queryLoading: false,
   queryEmpty: false,
   lastQuery: "",
+  queryHistory: [],
 };
 
 export default (
@@ -76,6 +78,21 @@ export default (
         queryLoading: false,
         queryEmpty: true,
         lastQuery: payload,
+      };
+    case searchActions.QUERY_SAVE:
+      if (state.queryHistory.findIndex(item => item.id === payload.id) === -1) {
+        return {
+          ...state,
+          queryHistory: [payload, ...state.queryHistory],
+        };
+      }
+    case searchActions.QUERY_DELETE:
+      const historyCopy = [...state.queryHistory];
+      const deleteIndex = historyCopy.findIndex(item => item.id === payload.id);
+      historyCopy.splice(deleteIndex, 1);
+      return {
+        ...state,
+        queryHistory: historyCopy,
       };
     default:
       return state;

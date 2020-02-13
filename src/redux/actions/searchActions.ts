@@ -73,6 +73,16 @@ export const searchForQueryEpic = (
     }),
   );
 
+export const saveQuery = (item: AlbumType) => ({
+  type: searchActions.QUERY_SAVE,
+  payload: item,
+});
+
+export const deleteQuery = (item: AlbumType) => ({
+  type: searchActions.QUERY_DELETE,
+  payload: item,
+});
+
 const queryResponseIsEmpty = (data: SearchResponse) => {
   const albumsEmpty = data.albums.items.length === 0;
   const tracksEmpty = data.tracks.items.length === 0;

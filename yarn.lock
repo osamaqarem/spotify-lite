@@ -947,6 +947,11 @@
     wcwidth "^1.0.1"
     ws "^1.1.0"
 
+"@react-native-community/netinfo@^5.3.3":
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/@react-native-community/netinfo/-/netinfo-5.3.3.tgz#2e627456d83c1d75d4c43ab6cef70fe125b9691d"
+  integrity sha512-L4BsdIEEuG5rKkVNzjESdJ1wvusn0kflj/FrwctaW+xkLxiFs1+mdBg/mvqqfXvVFuBEphbyXJTFT4aG4Okkow==
+
 "@react-navigation/core@^3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@react-navigation/core/-/core-3.5.1.tgz#7a2339fca3496979305fb3a8ab88c2ca8d8c214d"
@@ -5647,11 +5652,6 @@ realpath-native@^1.1.0:
   integrity sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==
   dependencies:
     util.promisify "^1.0.0"
-
-redux-batched-actions@^0.4.1:
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/redux-batched-actions/-/redux-batched-actions-0.4.1.tgz#a8de8cef50a1db4f009d5222820c836515597e22"
-  integrity sha512-r6tLDyBP3U9cXNLEHs0n1mX5TQfmk6xE0Y9uinYZ5HOyAWDgIJxYqRRkU/bC6XrJ4nS7tasNbxaHJHVmf9UdkA==
 
 redux-observable@^1.2.0:
   version "1.2.0"

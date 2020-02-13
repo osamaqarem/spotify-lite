@@ -5,23 +5,29 @@ import {
   Keyboard,
   StatusBar,
   StyleSheet,
+  Text,
   TextInput,
   View,
 } from "react-native";
-import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Animated from "react-native-reanimated";
 import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { RootStoreType } from "../../../data/models/redux";
-import { searchForQuery } from "../../../redux/actions";
+import { AlbumType } from "../../../data/models/spotify";
+import { deleteQuery, saveQuery, searchForQuery } from "../../../redux/actions";
 import { COLORS } from "../../../utils/constants";
+import UIHelper from "../../../utils/helpers/UIHelper";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
+import CancelBtn from "./components/CancelBtn";
+import HistoryRow from "./components/HistoryRow";
 import NoResults from "./components/NoResults";
 import ResultRow from "./components/ResultRow";
 import SearchIntro from "./components/SearchIntro";
 import SeeAllBtn from "./components/SeeAllBtn";
+import SearchHistory from "./components/SearchHistory";
 
 type SearchType = { navigation: NavigationStackProp } & ReduxProps;
 
@@ -30,9 +36,12 @@ let keyboardWillHideListener: EmitterSubscription;
 const Search = ({
   navigation,
   searchForQuery,
+  saveQuery,
+  deleteQuery,
   loading,
   queryEmpty,
   lastQuery,
+  queryHistory,
   results,
   resultsHave,
 }: SearchType) => {
@@ -45,10 +54,20 @@ const Search = ({
     }
   }, [loading, results]);
 
+  const handleResultPress = (item: AlbumType) => {
+    saveQuery(item);
+  };
+
+  const handleRemove = (item: AlbumType) => {
+    deleteQuery(item);
+  };
+
   const showLoading = query.length > 0 && loading;
   const showResults = results.random.length > 0;
-  const showNoResults = queryEmpty && lastQuery.length > 0;
-  const showIntro = !showResults && !loading && !showNoResults;
+  const showEmptyResult = queryEmpty && lastQuery.length > 0;
+  const normalState = !showResults && !loading && !showEmptyResult;
+  const showHistory = queryHistory.length > 0 && normalState;
+  const showIntro = !showHistory && normalState;
 
   return (
     <SafeAreaView
@@ -122,16 +141,16 @@ const Search = ({
           }}
         />
         {showBack && query.length > 0 && (
-          <MaterialIcon
-            onPress={() => {
-              // if (query.length > 0) {
+          <CancelBtn
+            size={28}
+            color={COLORS.lightGrey}
+            handlePress={() => {
               searchForQuery("");
               setQuery("");
-              // }
               setShowBack(false);
               Keyboard.dismiss();
             }}
-            style={{
+            iconStyle={{
               position: "absolute",
               padding: 11.5,
               height: "100%",
@@ -139,9 +158,6 @@ const Search = ({
               right: 0,
               paddingRight: 16,
             }}
-            name="close"
-            size={28}
-            color={COLORS.lightGrey}
           />
         )}
       </View>
@@ -150,6 +166,12 @@ const Search = ({
         style={{
           backgroundColor: COLORS.background,
         }}>
+        {showHistory && (
+          <SearchHistory
+            queryHistory={queryHistory}
+            handleRemove={handleRemove}
+          />
+        )}
         {(showIntro && <SearchIntro />) ||
           (showLoading && (
             <ActivityIndicator
@@ -162,7 +184,11 @@ const Search = ({
           ))}
         {showResults &&
           results.random.map(result => (
-            <ResultRow key={result.id} result={result} />
+            <ResultRow
+              key={result.id}
+              result={result}
+              handleResultPress={handleResultPress}
+            />
           ))}
         {showResults && (
           <>
@@ -172,7 +198,7 @@ const Search = ({
             {resultsHave.haveAlbums && <SeeAllBtn type="Album" />}
           </>
         )}
-        {showNoResults && <NoResults queryToShow={lastQuery} />}
+        {showEmptyResult && <NoResults queryToShow={lastQuery} />}
       </ScrollView>
     </SafeAreaView>
   );
@@ -184,10 +210,13 @@ const mapStateToProps = (state: RootStoreType) => ({
   resultsHave: state.searchReducer.resultsHave,
   queryEmpty: state.searchReducer.queryEmpty,
   lastQuery: state.searchReducer.lastQuery,
+  queryHistory: state.searchReducer.queryHistory,
 });
 
 const mapDispatchToProps = {
   searchForQuery,
+  saveQuery,
+  deleteQuery,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

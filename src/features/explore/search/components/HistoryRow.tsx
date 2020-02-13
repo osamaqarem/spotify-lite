@@ -3,26 +3,31 @@ import { Text, TouchableOpacity, View } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
-import UIHelper from "../../../../utils/helpers/UIHelper";
 import { COLORS } from "../../../../utils/constants";
+import UIHelper from "../../../../utils/helpers/UIHelper";
+import CancelBtn from "./CancelBtn";
+import { MARGIN_HORIZONTAL } from "./ResultRow";
 
-export const MARGIN_HORIZONTAL = 14;
+const HistoryRow = ({
+  item,
+  handleRemove,
+}: {
+  item: AlbumType;
+  handleRemove: (item: AlbumType) => void;
+}) => {
+  const scale = new Animated.Value(1);
 
-const clock = new Animated.Clock();
-const opacityAnim = UIHelper.opacityTiming(clock, 0, 1, 500);
-
-const ResultRow = React.memo(
-  ({
-    result,
-    handleResultPress,
-  }: {
-    result: AlbumType;
-    handleResultPress: (item: AlbumType) => void;
-  }) => {
-    const scale = new Animated.Value(1);
-
-    return (
+  return (
+    <View
+      style={{
+        width: "100%",
+        flexDirection: "row",
+      }}>
       <TouchableOpacity
+        style={{
+          width: "86%",
+          alignSelf: "flex-start",
+        }}
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
         }
@@ -30,26 +35,26 @@ const ResultRow = React.memo(
           Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
         }
         onPress={() => {
-          handleResultPress(result);
+          return;
         }}>
         <Animated.View
           style={{
-            opacity: opacityAnim,
             transform: [{ scale }],
             marginHorizontal: MARGIN_HORIZONTAL,
             alignItems: "center",
             flexDirection: "row",
             marginTop: 10,
             marginBottom: 3,
+            width: "100%",
           }}>
           <FastImage
             source={{
-              uri: result.imageURL || "",
+              uri: item.imageURL || "",
             }}
             style={{
               height: 54,
               width: 54,
-              borderRadius: result.type === "Artist" ? 27 : 0,
+              borderRadius: item.type === "Artist" ? 27 : 0,
             }}
           />
           <View
@@ -67,7 +72,7 @@ const ResultRow = React.memo(
                 letterSpacing: 0.8,
                 fontSize: 16,
               }}>
-              {result.name}
+              {item.name}
             </Text>
             <Text
               numberOfLines={1}
@@ -78,16 +83,27 @@ const ResultRow = React.memo(
                 letterSpacing: 0.8,
                 fontSize: 14,
               }}>
-              {result.type}
-              {result.type === "Song" ? " • " + result.artist : null}
+              {item.type}
+              {item.type === "Song" ? " • " + item.artist : null}
             </Text>
           </View>
         </Animated.View>
       </TouchableOpacity>
-    );
-  },
-);
+      <CancelBtn
+        size={30}
+        color={COLORS.darkerGrey}
+        handlePress={() => {
+          handleRemove(item);
+        }}
+        iconStyle={{
+          padding: 11.5,
+          textAlignVertical: "center",
+          top: 4,
+          left: 2,
+        }}
+      />
+    </View>
+  );
+};
 
-ResultRow.displayName = "ResultRow";
-
-export default ResultRow;
+export default HistoryRow;
