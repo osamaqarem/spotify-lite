@@ -10,13 +10,7 @@ const TopBarSearch = ({ onSearchPressed }: { onSearchPressed: () => void }) => (
     <View style={styles.container}>
       <SearchIcon tintColor="#000" textStyle={styles.searchIcon} />
       <View>
-        <Text
-          style={{
-            fontSize: 16,
-            fontWeight: "600",
-          }}>
-          Search artists, songs and playlists
-        </Text>
+        <Text style={styles.text}>Search artists, songs and playlists</Text>
       </View>
     </View>
   </TouchableWithoutFeedback>
@@ -34,6 +28,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   searchIcon: { marginRight: 15, marginTop: 10 },
+  text: {
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });
 
 export default TopBarSearch;

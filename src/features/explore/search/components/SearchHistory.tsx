@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
 import { COLORS } from "../../../../utils/constants";
@@ -18,25 +18,8 @@ const SearchHistory = React.memo(
     handleRemove: (item: AlbumType) => void;
   }) => {
     return (
-      <Animated.View
-        style={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "flex-start",
-          opacity: opacityAnim,
-        }}>
-        <Text
-          style={{
-            marginTop: 20,
-            marginBottom: 8,
-            fontWeight: "bold",
-            fontSize: 18,
-            color: COLORS.white,
-            letterSpacing: 0.6,
-            textAlign: "center",
-          }}>
-          Recent searches
-        </Text>
+      <Animated.View style={[styles.container, { opacity: opacityAnim }]}>
+        <Text style={styles.title}>Recent searches</Text>
         {queryHistory.map(item => (
           <HistoryRow item={item} key={item.id} handleRemove={handleRemove} />
         ))}
@@ -46,5 +29,22 @@ const SearchHistory = React.memo(
 );
 
 SearchHistory.displayName = "SearchHistory";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+  },
+  title: {
+    marginTop: 20,
+    marginBottom: 8,
+    fontWeight: "bold",
+    fontSize: 18,
+    color: COLORS.white,
+    letterSpacing: 0.6,
+    textAlign: "center",
+  },
+});
 
 export default SearchHistory;

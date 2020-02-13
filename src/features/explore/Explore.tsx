@@ -22,6 +22,13 @@ const Explore = ({
     getAllCategoriesForCountry();
   }, [getAllCategoriesForCountry]);
 
+  const handleWillFocus = () => {
+    Platform.select({
+      ios: StatusBar.setBarStyle("dark-content"),
+      android: StatusBar.setBarStyle("default"),
+    });
+  };
+
   const onGenrePressed = (id: string, title: string) => {
     getCategoryById({ id, title, getRestOfItems: false });
     navigation.navigate(Routes.BottomTabs.ExploreStack.Genre);
@@ -32,15 +39,8 @@ const Explore = ({
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
-      <NavigationEvents
-        onWillFocus={() => {
-          Platform.select({
-            ios: StatusBar.setBarStyle("dark-content"),
-            android: StatusBar.setBarStyle("default"),
-          });
-        }}
-      />
+    <SafeAreaView style={styles.safeContainer}>
+      <NavigationEvents onWillFocus={handleWillFocus} />
       <View style={styles.container}>
         <TopBarSearch onSearchPressed={onSearchPressed} />
         <ListOfColoredCards
@@ -53,6 +53,7 @@ const Explore = ({
 };
 
 const styles = StyleSheet.create({
+  safeContainer: { flex: 1, backgroundColor: COLORS.white },
   container: { flex: 1, justifyContent: "center", alignItems: "center" },
 });
 

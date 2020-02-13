@@ -80,20 +80,20 @@ const Genre = ({
     navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
   };
 
+  const handleWillFocus = () => {
+    StatusBar.setBarStyle("light-content");
+  };
+
+  const handleBack = () => {
+    navigation.goBack();
+  };
+
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        backgroundColor: COLORS.background,
-      }}>
-      <NavigationEvents
-        onWillFocus={() => StatusBar.setBarStyle("light-content")}
-      />
-      <BackBtn goBack={() => navigation.goBack()} />
+    <SafeAreaView style={styles.container}>
+      <NavigationEvents onWillFocus={handleWillFocus} />
+      <BackBtn goBack={handleBack} />
       {((loadingData || loadingColor) && (
-        <LoadingView viewStyle={{ marginTop: 50 }} />
+        <LoadingView viewStyle={styles.loading} />
       )) || (
         <>
           <AnimatedLinearGradient
@@ -101,23 +101,14 @@ const Genre = ({
             end={{ x: 0, y: 0.9 }}
             colors={[dominantColor, COLORS.background]}
             // @ts-ignore
-            style={{
-              height: Animated.concat(heightAnim, "%"),
-              width: "100%",
-              opacity: 1,
-              ...StyleSheet.absoluteFillObject,
-            }}
+            style={[
+              {
+                height: Animated.concat(heightAnim, "%"),
+              },
+              styles.gradient,
+            ]}
           />
-          <Text
-            style={{
-              position: "absolute",
-              top: "25%",
-              color: COLORS.white,
-              fontSize: 40,
-              fontWeight: "bold",
-            }}>
-            {title}
-          </Text>
+          <Text style={styles.title}>{title}</Text>
           <ListOfGenrePlaylists
             genrePlaylists={genrePlaylists}
             handleSeeMore={handleSeeMore}
@@ -130,6 +121,24 @@ const Genre = ({
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: COLORS.background,
+  },
+  gradient: { width: "100%", opacity: 1, ...StyleSheet.absoluteFillObject },
+  title: {
+    position: "absolute",
+    top: "25%",
+    color: COLORS.white,
+    fontSize: 40,
+    fontWeight: "bold",
+  },
+  loading: { marginTop: 50 },
+});
 
 const mapStateToProps = (state: RootStoreType) => ({
   genreDetails: state.browseReducer.genreDetails,

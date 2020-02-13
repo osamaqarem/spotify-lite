@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
@@ -17,17 +17,14 @@ const HistoryRow = ({
 }) => {
   const scale = new Animated.Value(1);
 
+  const onRemove = () => {
+    handleRemove(item);
+  };
+
   return (
-    <View
-      style={{
-        width: "100%",
-        flexDirection: "row",
-      }}>
+    <View style={styles.container}>
       <TouchableOpacity
-        style={{
-          width: "86%",
-          alignSelf: "flex-start",
-        }}
+        style={styles.itemBtn}
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
         }
@@ -38,51 +35,26 @@ const HistoryRow = ({
           return;
         }}>
         <Animated.View
-          style={{
-            transform: [{ scale }],
-            marginHorizontal: MARGIN_HORIZONTAL,
-            alignItems: "center",
-            flexDirection: "row",
-            marginTop: 10,
-            marginBottom: 3,
-            width: "100%",
-          }}>
+          style={[
+            styles.item,
+            {
+              transform: [{ scale }],
+            },
+          ]}>
           <FastImage
             source={{
               uri: item.imageURL || "",
             }}
-            style={{
-              height: 54,
-              width: 54,
-              borderRadius: item.type === "Artist" ? 27 : 0,
-            }}
+            style={[
+              styles.cover,
+              { borderRadius: item.type === "Artist" ? 27 : 0 },
+            ]}
           />
-          <View
-            style={{
-              flexDirection: "column",
-              marginHorizontal: 12,
-              maxWidth: "80%",
-              marginTop: 2,
-            }}>
-            <Text
-              numberOfLines={1}
-              style={{
-                flex: 1,
-                color: COLORS.darkWhite,
-                letterSpacing: 0.8,
-                fontSize: 16,
-              }}>
+          <View style={styles.itemInfoContainer}>
+            <Text numberOfLines={1} style={styles.name}>
               {item.name}
             </Text>
-            <Text
-              numberOfLines={1}
-              style={{
-                flex: 1,
-                fontWeight: "normal",
-                color: COLORS.grey,
-                letterSpacing: 0.8,
-                fontSize: 14,
-              }}>
+            <Text numberOfLines={1} style={styles.type}>
               {item.type}
               {item.type === "Song" ? " • " + item.artist : null}
             </Text>
@@ -92,18 +64,59 @@ const HistoryRow = ({
       <CancelBtn
         size={30}
         color={COLORS.darkerGrey}
-        handlePress={() => {
-          handleRemove(item);
-        }}
-        iconStyle={{
-          padding: 11.5,
-          textAlignVertical: "center",
-          top: 4,
-          left: 2,
-        }}
+        handlePress={onRemove}
+        iconStyle={styles.removeIcon}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    flexDirection: "row",
+  },
+  itemBtn: {
+    width: "86%",
+    alignSelf: "flex-start",
+  },
+  item: {
+    marginHorizontal: MARGIN_HORIZONTAL,
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 3,
+    width: "100%",
+  },
+  cover: {
+    height: 54,
+    width: 54,
+  },
+  itemInfoContainer: {
+    flexDirection: "column",
+    marginHorizontal: 12,
+    maxWidth: "80%",
+    marginTop: 2,
+  },
+  name: {
+    flex: 1,
+    color: COLORS.darkWhite,
+    letterSpacing: 0.8,
+    fontSize: 16,
+  },
+  type: {
+    flex: 1,
+    fontWeight: "normal",
+    color: COLORS.grey,
+    letterSpacing: 0.8,
+    fontSize: 14,
+  },
+  removeIcon: {
+    padding: 11.5,
+    textAlignVertical: "center",
+    top: 4,
+    left: 2,
+  },
+});
 
 export default HistoryRow;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { COLORS } from "../../../../utils/constants";
 import UIHelper from "../../../../utils/helpers/UIHelper";
@@ -10,33 +10,39 @@ const SearchIntro = React.memo(() => {
 
   return (
     <Animated.View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        opacity: opacityAnim,
-      }}>
-      <Text
-        style={{
-          fontWeight: "600",
-          fontSize: 16,
-          color: COLORS.white,
-          letterSpacing: 0.3,
-          textAlign: "center",
-        }}>
-        Find the music you love
-      </Text>
-      <Text
-        style={{
-          fontSize: 14,
-          color: COLORS.grey,
-          marginTop: 10,
-          textAlign: "center",
-        }}>
+      style={[
+        styles.container,
+        {
+          opacity: opacityAnim,
+        },
+      ]}>
+      <Text style={styles.header}>Find the music you love</Text>
+      <Text style={styles.subheader}>
         from millions of artists, songs and playlists
       </Text>
     </Animated.View>
   );
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  header: {
+    fontWeight: "600",
+    fontSize: 16,
+    color: COLORS.white,
+    letterSpacing: 0.3,
+    textAlign: "center",
+  },
+  subheader: {
+    fontSize: 14,
+    color: COLORS.grey,
+    marginTop: 10,
+    textAlign: "center",
+  },
 });
 
 SearchIntro.displayName = "SearchIntro";

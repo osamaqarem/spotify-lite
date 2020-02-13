@@ -1,5 +1,5 @@
 import React from "react";
-import { Text } from "react-native";
+import { Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { AlbumType } from "../../../../data/models/spotify";
 import { COLORS } from "../../../../utils/constants";
@@ -19,25 +19,33 @@ const SeeAllBtn = React.memo(({ type }: { type: AlbumType["type"] }) => {
       onPress={() => {
         return;
       }}
-      style={{
-        marginVertical: 14,
-      }}>
+      style={styles.btnContainer}>
       <Animated.View
-        style={{
-          marginHorizontal: MARGIN_HORIZONTAL,
-          transform: [{ scale }],
-        }}>
-        <Text
-          style={{
-            color: COLORS.darkWhite,
-            letterSpacing: 0.8,
-            fontSize: 16,
-          }}>
-          See all {type?.toLowerCase()}s
-        </Text>
+        style={[
+          {
+            transform: [{ scale }],
+          },
+          styles.container,
+        ]}>
+        <Text style={styles.seeAll}>See all {type?.toLowerCase()}s</Text>
       </Animated.View>
     </TouchableOpacity>
   );
+});
+
+const styles = StyleSheet.create({
+  btnContainer: {
+    marginVertical: 14,
+  },
+
+  container: {
+    marginHorizontal: MARGIN_HORIZONTAL,
+  },
+  seeAll: {
+    color: COLORS.darkWhite,
+    letterSpacing: 0.8,
+    fontSize: 16,
+  },
 });
 
 SeeAllBtn.displayName = "SeeAllBtn";

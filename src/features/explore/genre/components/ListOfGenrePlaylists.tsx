@@ -1,5 +1,5 @@
 import React from "react";
-import { FlatList, Text } from "react-native";
+import { FlatList, Text, StyleSheet } from "react-native";
 import Animated from "react-native-reanimated";
 import { BACKBTN_HEIGHT } from "../../../../components/BackBtn";
 import { COLORS, width } from "../../../../utils/constants";
@@ -27,53 +27,31 @@ const ListOfGenrePlaylists = ({
   genrePlaylists: PlaylistDetailsType[];
   onPlaylistPressed: (playlist: PlaylistDetailsType) => void;
 }) => {
+  const handleRender = ({ item: playlist }: { item: PlaylistDetailsType }) => (
+    <PlaylistWithFollowers
+      key={playlist.name}
+      playlist={playlist}
+      onPress={() => onPlaylistPressed(playlist)}
+    />
+  );
+
   return (
     <AnimatedFlatList
       scrollEventThrottle={1}
       onScroll={UIHelper.onScroll({ y: offsetY })}
       overScrollMode="never"
       showsVerticalScrollIndicator={false}
-      ListHeaderComponent={
-        <Text
-          style={{
-            alignSelf: "center",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: 18.5,
-            width: width,
-            textAlign: "center",
-            marginBottom: 20,
-          }}>
-          Popular Playlists
-        </Text>
-      }
+      ListHeaderComponent={<Text style={styles.title}>Popular Playlists</Text>}
       ListFooterComponent={
         <SeeMoreBtn onPress={handleSeeMore} isVisible={seeMoreVisible} />
       }
-      contentContainerStyle={{
-        alignItems: "center",
-        marginTop: "40%",
-        paddingBottom: "60%",
-        width: "100%",
-        backgroundColor: COLORS.background,
-      }}
+      contentContainerStyle={styles.content}
       // @ts-ignore
-      style={{
-        marginHorizontal: 15,
-        zIndex: 10,
-        width: "100%",
-        marginTop: BACKBTN_HEIGHT,
-      }}
+      style={styles.list}
       numColumns={2}
       data={genrePlaylists}
       keyExtractor={playlist => playlist.name}
-      renderItem={({ item: playlist }) => (
-        <PlaylistWithFollowers
-          key={playlist.name}
-          playlist={playlist}
-          onPress={() => onPlaylistPressed(playlist)}
-        />
-      )}
+      renderItem={handleRender}
       getItemLayout={(data, index) => ({
         length: ITEM_DIMENSIONS.WIDTH,
         offset: (ITEM_DIMENSIONS.WIDTH + ITEM_DIMENSIONS.MARGIN) * index,
@@ -82,5 +60,30 @@ const ListOfGenrePlaylists = ({
     />
   );
 };
+
+const styles = StyleSheet.create({
+  title: {
+    alignSelf: "center",
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 18.5,
+    width: width,
+    textAlign: "center",
+    marginBottom: 20,
+  },
+  content: {
+    alignItems: "center",
+    marginTop: "40%",
+    paddingBottom: "60%",
+    width: "100%",
+    backgroundColor: COLORS.background,
+  },
+  list: {
+    marginHorizontal: 15,
+    zIndex: 10,
+    width: "100%",
+    marginTop: BACKBTN_HEIGHT,
+  },
+});
 
 export default ListOfGenrePlaylists;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
@@ -33,51 +33,29 @@ const ResultRow = React.memo(
           handleResultPress(result);
         }}>
         <Animated.View
-          style={{
-            opacity: opacityAnim,
-            transform: [{ scale }],
-            marginHorizontal: MARGIN_HORIZONTAL,
-            alignItems: "center",
-            flexDirection: "row",
-            marginTop: 10,
-            marginBottom: 3,
-          }}>
+          style={[
+            styles.container,
+            {
+              opacity: opacityAnim,
+              transform: [{ scale }],
+            },
+          ]}>
           <FastImage
             source={{
               uri: result.imageURL || "",
             }}
-            style={{
-              height: 54,
-              width: 54,
-              borderRadius: result.type === "Artist" ? 27 : 0,
-            }}
+            style={[
+              styles.cover,
+              {
+                borderRadius: result.type === "Artist" ? 27 : 0,
+              },
+            ]}
           />
-          <View
-            style={{
-              flexDirection: "column",
-              marginHorizontal: 12,
-              maxWidth: "80%",
-              marginTop: 2,
-            }}>
-            <Text
-              numberOfLines={1}
-              style={{
-                flex: 1,
-                color: COLORS.darkWhite,
-                letterSpacing: 0.8,
-                fontSize: 16,
-              }}>
+          <View style={styles.itemInfoContainer}>
+            <Text numberOfLines={1} style={styles.name}>
               {result.name}
             </Text>
-            <Text
-              numberOfLines={1}
-              style={{
-                flex: 1,
-                fontWeight: "normal",
-                color: COLORS.grey,
-                letterSpacing: 0.8,
-                fontSize: 14,
-              }}>
+            <Text numberOfLines={1} style={styles.type}>
               {result.type}
               {result.type === "Song" ? " • " + result.artist : null}
             </Text>
@@ -89,5 +67,38 @@ const ResultRow = React.memo(
 );
 
 ResultRow.displayName = "ResultRow";
+
+const styles = StyleSheet.create({
+  container: {
+    marginHorizontal: MARGIN_HORIZONTAL,
+    alignItems: "center",
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 3,
+  },
+  cover: {
+    height: 54,
+    width: 54,
+  },
+  itemInfoContainer: {
+    flexDirection: "column",
+    marginHorizontal: 12,
+    maxWidth: "80%",
+    marginTop: 2,
+  },
+  name: {
+    flex: 1,
+    color: COLORS.darkWhite,
+    letterSpacing: 0.8,
+    fontSize: 16,
+  },
+  type: {
+    flex: 1,
+    fontWeight: "normal",
+    color: COLORS.grey,
+    letterSpacing: 0.8,
+    fontSize: 14,
+  },
+});
 
 export default ResultRow;

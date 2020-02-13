@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 import FastImage from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { COLORS } from "../../../../utils/constants";
@@ -21,14 +21,12 @@ const PlaylistWithFollowers = ({
   const scale = new Animated.Value(1);
   return (
     <Animated.View
-      style={{
-        transform: [{ scale }],
-        justifyContent: "space-around",
-        marginHorizontal: 15,
-        marginVertical: ITEM_DIMENSIONS.MARGIN,
-        height: ITEM_DIMENSIONS.WIDTH,
-        width: ITEM_DIMENSIONS.WIDTH,
-      }}>
+      style={[
+        {
+          transform: [{ scale }],
+        },
+        styles.container,
+      ]}>
       <TouchableOpacity
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
@@ -43,39 +41,13 @@ const PlaylistWithFollowers = ({
           source={{
             uri: playlist.imageUrl ?? "",
           }}
-          style={{
-            height: ITEM_DIMENSIONS.WIDTH,
-            width: ITEM_DIMENSIONS.WIDTH,
-          }}
+          style={styles.cover}
         />
         <View style={{ height: 50 }}>
-          <Text
-            numberOfLines={2}
-            style={[
-              {
-                alignSelf: "center",
-                color: "white",
-                fontWeight: "bold",
-              },
-              {
-                width: "94%",
-                marginBottom: 10,
-                textAlign: "center",
-                color: COLORS.white,
-                top: 10,
-                fontSize: 13,
-              },
-            ]}>
+          <Text numberOfLines={2} style={styles.name}>
             {playlist.name}
           </Text>
-          <Text
-            style={{
-              color: COLORS.grey,
-              textAlign: "center",
-              marginTop: 6,
-              fontSize: 10,
-              letterSpacing: 0.4,
-            }}>
+          <Text style={styles.followers}>
             {playlist.followerCount?.toLocaleString()} FOLLOWERS
           </Text>
         </View>
@@ -83,5 +55,36 @@ const PlaylistWithFollowers = ({
     </Animated.View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    justifyContent: "space-around",
+    marginHorizontal: 15,
+    marginVertical: ITEM_DIMENSIONS.MARGIN,
+    height: ITEM_DIMENSIONS.WIDTH,
+    width: ITEM_DIMENSIONS.WIDTH,
+  },
+  cover: {
+    height: ITEM_DIMENSIONS.WIDTH,
+    width: ITEM_DIMENSIONS.WIDTH,
+  },
+  name: {
+    fontWeight: "bold",
+    alignSelf: "center",
+    width: "94%",
+    marginBottom: 10,
+    textAlign: "center",
+    color: COLORS.white,
+    top: 10,
+    fontSize: 13,
+  },
+  followers: {
+    color: COLORS.grey,
+    textAlign: "center",
+    marginTop: 6,
+    fontSize: 10,
+    letterSpacing: 0.4,
+  },
+});
 
 export default PlaylistWithFollowers;
