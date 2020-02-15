@@ -1,6 +1,12 @@
 import React from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import FastImage from "react-native-fast-image";
+import {
+  Text,
+  TouchableOpacity,
+  View,
+  StyleSheet,
+  ViewStyle,
+} from "react-native";
+import FastImage, { ImageStyle } from "react-native-fast-image";
 import Animated from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
 import UIHelper from "../../../../utils/helpers/UIHelper";
@@ -15,9 +21,13 @@ const ResultRow = React.memo(
   ({
     result,
     handleResultPress,
+    coverStyle,
+    containerStyle,
   }: {
     result: AlbumType;
     handleResultPress: (item: AlbumType) => void;
+    coverStyle?: ImageStyle;
+    containerStyle?: ViewStyle;
   }) => {
     const scale = new Animated.Value(1);
 
@@ -39,6 +49,7 @@ const ResultRow = React.memo(
               opacity: opacityAnim,
               transform: [{ scale }],
             },
+            containerStyle,
           ]}>
           <FastImage
             source={{
@@ -49,6 +60,7 @@ const ResultRow = React.memo(
               {
                 borderRadius: result.type === "Artist" ? 27 : 0,
               },
+              coverStyle,
             ]}
           />
           <View style={styles.itemInfoContainer}>

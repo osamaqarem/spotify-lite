@@ -49,7 +49,11 @@ const Genre = ({
   );
 
   useLayoutEffect(() => {
-    if (genrePlaylists[0]?.imageUrl && Platform.OS === "android") {
+    if (
+      loadingColor &&
+      genrePlaylists[0]?.imageUrl &&
+      Platform.OS === "android"
+    ) {
       colorsFromUrl(genrePlaylists[0].imageUrl, (err: any, colors: any) => {
         if (!err) {
           setState({
@@ -64,7 +68,7 @@ const Genre = ({
         loadingColor: false,
       });
     }
-  }, [genrePlaylists]);
+  }, [genrePlaylists, loadingColor]);
 
   const handleSeeMore = () => {
     setSeeMoreVisible(false);

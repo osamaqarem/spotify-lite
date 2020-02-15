@@ -2,13 +2,6 @@ import { Action } from "../../data/models/redux";
 import { AlbumType } from "../../data/models/spotify";
 import { searchActions } from "../actions";
 
-export const ResultKeyMap = {
-  Album: "albums",
-  Song: "tracks",
-  Artist: "artists",
-  Playlist: "playlists",
-};
-
 export type ResultKey =
   | "albums"
   | "tracks"
@@ -29,7 +22,7 @@ type SearchReducerType = {
   queryEmpty: boolean;
   lastQuery: string;
   queryHistory: AlbumType[];
-  seeAllType: AlbumType["type"] | null;
+  seeAll: { data: AlbumType[]; type: AlbumType["type"] | null };
 };
 
 const initialState: SearchReducerType = {
@@ -50,7 +43,7 @@ const initialState: SearchReducerType = {
   queryEmpty: false,
   lastQuery: "",
   queryHistory: [],
-  seeAllType: null,
+  seeAll: { data: [], type: null },
 };
 
 export default (
@@ -112,10 +105,10 @@ export default (
         queryHistory: [],
       };
     }
-    case searchActions.SET_SEE_ALL_TYPE: {
+    case searchActions.SET_SEE_ALL: {
       return {
         ...state,
-        seeAllType: payload,
+        seeAll: { data: payload.data, type: payload.type },
       };
     }
     default:

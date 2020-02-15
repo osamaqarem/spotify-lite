@@ -6,7 +6,10 @@ const reactotron = Reactotron.setAsyncStorageHandler(AsyncStorage) // AsyncStora
   .configure() // controls connection & communication settings
   .use(overlay()) // Image overlay
   .use(reactotronRedux())
-  .useReactNative() // add all built-in react native plugins
-  .connect(); // let's connect!
+  .useReactNative(); // add all built-in react native plugins
+
+if (__DEV__) {
+  reactotron.connect();
+}
 
 export default reactotron;

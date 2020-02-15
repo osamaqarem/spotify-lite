@@ -87,10 +87,32 @@ export const clearAllSearches = () => ({
   type: searchActions.QUERY_DELETE_ALL,
 });
 
-export const setSeeAllType = (seeAllType: AlbumType["type"]) => ({
-  type: searchActions.SET_SEE_ALL_TYPE,
-  payload: seeAllType,
-});
+export const setSeeAll = (data: AlbumType[]) => {
+  switch (data[0].type) {
+    case "Album":
+      return {
+        type: searchActions.SET_SEE_ALL,
+        payload: { data, type: "Albums" },
+      };
+    case "Artist":
+      return {
+        type: searchActions.SET_SEE_ALL,
+        payload: { data, type: "Artists" },
+      };
+    case "Playlist":
+      return {
+        type: searchActions.SET_SEE_ALL,
+        payload: { data, type: "Playlists" },
+      };
+    case "Song":
+      return {
+        type: searchActions.SET_SEE_ALL,
+        payload: { data, type: "Songs" },
+      };
+    default:
+      throw new Error("setSeeAll: Unexpected data type.");
+  }
+};
 
 const queryResponseIsEmpty = (data: SearchResponse) => {
   const albumsEmpty = data.albums.items.length === 0;

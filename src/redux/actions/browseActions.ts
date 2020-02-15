@@ -1,7 +1,13 @@
 import reactotron from "reactotron-react-native";
 import { ofType } from "redux-observable";
 import { from, Observable, of, zip, concat } from "rxjs";
-import { catchError, map, switchMap, withLatestFrom } from "rxjs/operators";
+import {
+  catchError,
+  map,
+  switchMap,
+  withLatestFrom,
+  mergeMap,
+} from "rxjs/operators";
 import { Action, RootStoreType } from "../../data/models/redux";
 import {
   AllCategoriesResponse,
@@ -201,7 +207,7 @@ export const getCategoryByIdEpic = (
           switchMap(data$ => data$),
           map(result => {
             if (!Array.isArray(result)) {
-              return result;
+              return of(result as Action<any>);
             }
 
             const data: PlaylistDetailsType[] = result.map(
@@ -228,17 +234,28 @@ export const getCategoryByIdEpic = (
             );
 
             if (!getRestOfItems) {
-              return {
-                type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
-                payload: { data, title, id },
-              };
+              return of(
+                {
+                  type: browseActions.GET_CATEGORY_BY_ID_SUCCESS,
+                  payload: { data, title, id },
+                },
+                {
+                  type: browseActions.IS_NOT_LOADING,
+                },
+              );
             } else {
-              return {
-                type: browseActions.GET_MORE_CATEGORY_BY_ID_SUCCESS,
-                payload: { data },
-              };
+              return of(
+                {
+                  type: browseActions.GET_MORE_CATEGORY_BY_ID_SUCCESS,
+                  payload: { data },
+                },
+                {
+                  type: browseActions.IS_NOT_LOADING,
+                },
+              );
             }
           }),
+          mergeMap(a => a),
           catchError(err => {
             if (typeof err === "string" && err.includes("expired")) {
               return of(redoLogin(), {

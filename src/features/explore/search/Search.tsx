@@ -18,6 +18,7 @@ import {
   deleteQuery,
   saveQuery,
   searchForQuery,
+  setSeeAll,
 } from "../../../redux/actions";
 import { COLORS, Routes } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
@@ -46,6 +47,7 @@ const Search = ({
   results,
   resultsHave,
   clearAllSearches,
+  setSeeAllType,
 }: SearchType) => {
   const [showBack, setShowBack] = useState(false);
   const [query, setQuery] = useState("");
@@ -100,8 +102,8 @@ const Search = ({
     searchInput.current?.focus();
   };
 
-  const handleSeeAll = (type: AlbumType["type"]) => {
-    // set data to show
+  const handleSeeAll = (data: AlbumType[]) => {
+    setSeeAllType(data);
     navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll);
   };
 
@@ -184,16 +186,32 @@ const Search = ({
         {showResults && (
           <>
             {resultsHave.haveArtists && (
-              <SeeAllBtn type="Artist" handleSeeAll={handleSeeAll} />
+              <SeeAllBtn
+                type="Artist"
+                data={results.artists}
+                handleSeeAll={handleSeeAll}
+              />
             )}
             {resultsHave.haveTracks && (
-              <SeeAllBtn type="Song" handleSeeAll={handleSeeAll} />
+              <SeeAllBtn
+                type="Song"
+                data={results.tracks}
+                handleSeeAll={handleSeeAll}
+              />
             )}
             {resultsHave.havePlaylists && (
-              <SeeAllBtn type="Playlist" handleSeeAll={handleSeeAll} />
+              <SeeAllBtn
+                type="Playlist"
+                data={results.playlists}
+                handleSeeAll={handleSeeAll}
+              />
             )}
             {resultsHave.haveAlbums && (
-              <SeeAllBtn type="Album" handleSeeAll={handleSeeAll} />
+              <SeeAllBtn
+                type="Album"
+                data={results.albums}
+                handleSeeAll={handleSeeAll}
+              />
             )}
           </>
         )}
@@ -202,26 +220,6 @@ const Search = ({
     </SafeAreaView>
   );
 };
-
-const mapStateToProps = (state: RootStoreType) => ({
-  loading: state.searchReducer.queryLoading,
-  results: state.searchReducer.results,
-  resultsHave: state.searchReducer.resultsHave,
-  queryEmpty: state.searchReducer.queryEmpty,
-  lastQuery: state.searchReducer.lastQuery,
-  queryHistory: state.searchReducer.queryHistory,
-});
-
-const mapDispatchToProps = {
-  searchForQuery,
-  saveQuery,
-  deleteQuery,
-  clearAllSearches,
-};
-
-const connector = connect(mapStateToProps, mapDispatchToProps);
-
-type ReduxProps = ConnectedProps<typeof connector>;
 
 const styles = StyleSheet.create({
   container: {
@@ -273,5 +271,26 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject,
   },
 });
+
+const mapStateToProps = (state: RootStoreType) => ({
+  loading: state.searchReducer.queryLoading,
+  results: state.searchReducer.results,
+  resultsHave: state.searchReducer.resultsHave,
+  queryEmpty: state.searchReducer.queryEmpty,
+  lastQuery: state.searchReducer.lastQuery,
+  queryHistory: state.searchReducer.queryHistory,
+});
+
+const mapDispatchToProps = {
+  searchForQuery,
+  saveQuery,
+  deleteQuery,
+  clearAllSearches,
+  setSeeAllType: setSeeAll,
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+type ReduxProps = ConnectedProps<typeof connector>;
 
 export default connector(Search);

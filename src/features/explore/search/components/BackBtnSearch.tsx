@@ -6,9 +6,11 @@ const BackBtnSearch = ({
   tintColor,
   textStyle,
   onPress,
+  size,
 }: {
   tintColor: string;
   textStyle?: TextStyle;
+  size?: number;
   onPress?: () => void;
 }) => {
   return (
@@ -16,7 +18,7 @@ const BackBtnSearch = ({
       onPress={onPress}
       style={[textStyle]}
       name="arrow-left"
-      size={26}
+      size={size || 26}
       color={tintColor}
     />
   );

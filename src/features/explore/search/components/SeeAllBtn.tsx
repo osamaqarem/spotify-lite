@@ -10,17 +10,19 @@ import UIHelper from "../../../../utils/helpers/UIHelper";
 const SeeAllBtn = React.memo(
   ({
     type,
+    data,
     handleSeeAll,
   }: {
     type: AlbumType["type"];
-    handleSeeAll: (type: AlbumType["type"]) => void;
+    data: AlbumType[];
+    handleSeeAll: (type: AlbumType[]) => void;
   }) => {
     const scale = new Animated.Value(1);
 
     return (
       <TouchableOpacity
         onPress={() => {
-          handleSeeAll(type);
+          handleSeeAll(data);
         }}
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
