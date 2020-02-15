@@ -17,6 +17,8 @@ export const Routes = {
       Search: "Search",
       Genre: "Genre",
       PlaylistDetails: "PlaylistDetails",
+      ArtistDetails: "ArtistDetails",
+      SeeAll: "SeeAll",
     },
     FavoritesStack: {
       navigator: "FavoritesStack",

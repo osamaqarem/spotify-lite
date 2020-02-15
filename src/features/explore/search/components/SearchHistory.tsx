@@ -5,17 +5,20 @@ import { AlbumType } from "../../../../data/models/spotify";
 import { COLORS } from "../../../../utils/constants";
 import UIHelper from "../../../../utils/helpers/UIHelper";
 import HistoryRow from "./HistoryRow";
+import { MARGIN_HORIZONTAL } from "./ResultRow";
 
 const clock = new Animated.Clock();
-const opacityAnim = UIHelper.opacityTiming(clock, 0.5, 1, 250);
+const opacityAnim = UIHelper.runTiming(clock, 0.5, 1, 250);
 
 const SearchHistory = React.memo(
   ({
     queryHistory,
     handleRemove,
+    clearAll,
   }: {
     queryHistory: AlbumType[];
     handleRemove: (item: AlbumType) => void;
+    clearAll: () => void;
   }) => {
     return (
       <Animated.View style={[styles.container, { opacity: opacityAnim }]}>
@@ -23,6 +26,9 @@ const SearchHistory = React.memo(
         {queryHistory.map(item => (
           <HistoryRow item={item} key={item.id} handleRemove={handleRemove} />
         ))}
+        <Text onPress={clearAll} style={styles.clear}>
+          Clear all
+        </Text>
       </Animated.View>
     );
   },
@@ -44,6 +50,15 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     letterSpacing: 0.6,
     textAlign: "center",
+  },
+  clear: {
+    marginTop: 16,
+    fontSize: 16,
+    color: COLORS.white,
+    letterSpacing: 0.8,
+    marginLeft: MARGIN_HORIZONTAL,
+    alignSelf: "flex-start",
+    padding: 4,
   },
 });
 

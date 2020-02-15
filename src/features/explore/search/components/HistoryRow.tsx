@@ -1,12 +1,20 @@
 import React from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import {
+  LayoutAnimation,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import FastImage from "react-native-fast-image";
-import Animated from "react-native-reanimated";
+import Animated, { Easing } from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
 import { COLORS } from "../../../../utils/constants";
 import UIHelper from "../../../../utils/helpers/UIHelper";
 import CancelBtn from "./CancelBtn";
 import { MARGIN_HORIZONTAL } from "./ResultRow";
+
+export const ROW_HEIGHT = 67;
 
 const HistoryRow = ({
   item,
@@ -16,13 +24,28 @@ const HistoryRow = ({
   handleRemove: (item: AlbumType) => void;
 }) => {
   const scale = new Animated.Value(1);
+  const opacity = new Animated.Value(1);
 
   const onRemove = () => {
-    handleRemove(item);
+    Animated.timing(opacity, {
+      toValue: 0,
+      duration: 65,
+      easing: Easing.inOut(Easing.ease),
+    }).start(() => {
+      setTimeout(() => {
+        LayoutAnimation.configureNext({
+          duration: 100,
+          update: {
+            type: LayoutAnimation.Types.linear,
+          },
+        });
+        handleRemove(item);
+      }, 10);
+    });
   };
 
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, { opacity }]}>
       <TouchableOpacity
         style={styles.itemBtn}
         onPressIn={() =>
@@ -67,7 +90,7 @@ const HistoryRow = ({
         handlePress={onRemove}
         iconStyle={styles.removeIcon}
       />
-    </View>
+    </Animated.View>
   );
 };
 
@@ -75,6 +98,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "row",
+    height: ROW_HEIGHT,
   },
   itemBtn: {
     width: "86%",

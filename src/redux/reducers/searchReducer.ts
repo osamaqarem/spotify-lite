@@ -1,6 +1,13 @@
-import { searchActions } from "../actions";
 import { Action } from "../../data/models/redux";
 import { AlbumType } from "../../data/models/spotify";
+import { searchActions } from "../actions";
+
+export const ResultKeyMap = {
+  Album: "albums",
+  Song: "tracks",
+  Artist: "artists",
+  Playlist: "playlists",
+};
 
 export type ResultKey =
   | "albums"
@@ -22,6 +29,7 @@ type SearchReducerType = {
   queryEmpty: boolean;
   lastQuery: string;
   queryHistory: AlbumType[];
+  seeAllType: AlbumType["type"] | null;
 };
 
 const initialState: SearchReducerType = {
@@ -42,6 +50,7 @@ const initialState: SearchReducerType = {
   queryEmpty: false,
   lastQuery: "",
   queryHistory: [],
+  seeAllType: null,
 };
 
 export default (
@@ -55,7 +64,8 @@ export default (
         results: payload.results,
         resultsHave: payload.resultsHave,
         queryLoading: false,
-        lastQuery: "",
+        // lastQuery: "",
+        lastQuery: payload.query,
       };
     case searchActions.QUERY_ERROR:
       return {
@@ -85,6 +95,8 @@ export default (
           ...state,
           queryHistory: [payload, ...state.queryHistory],
         };
+      } else {
+        return state;
       }
     case searchActions.QUERY_DELETE:
       const historyCopy = [...state.queryHistory];
@@ -94,6 +106,18 @@ export default (
         ...state,
         queryHistory: historyCopy,
       };
+    case searchActions.QUERY_DELETE_ALL: {
+      return {
+        ...state,
+        queryHistory: [],
+      };
+    }
+    case searchActions.SET_SEE_ALL_TYPE: {
+      return {
+        ...state,
+        seeAllType: payload,
+      };
+    }
     default:
       return state;
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import { YellowBox } from "react-native";
+import { YellowBox, Platform, UIManager } from "react-native";
 import { Provider } from "react-redux";
 import reactotron from "reactotron-react-native";
 import { PersistGate } from "redux-persist/integration/react";
@@ -28,6 +28,12 @@ YellowBox.ignoreWarnings([
   "ERR_CONNECTION_REFUSED",
   "Encountered an error loading page",
 ]);
+
+if (Platform.OS === "android") {
+  if (UIManager.setLayoutAnimationEnabledExperimental) {
+    UIManager.setLayoutAnimationEnabledExperimental(true);
+  }
+}
 
 const AppWithStore = () => (
   <Provider store={store}>

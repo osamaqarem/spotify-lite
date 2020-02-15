@@ -18,6 +18,7 @@ import HomeIcon from "./icons/HomeIcon";
 import SearchIcon from "./icons/SearchIcon";
 import TopTabsStack from "../top-tabs/TopTabsStack";
 import UIHelper from "../../../../../utils/helpers/UIHelper";
+import SeeAll from "../../../../explore/search/see-all/SeeAll";
 
 const createProtectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator(
@@ -46,6 +47,8 @@ const createProtectedBottomTabsNav = () => {
             Search,
             Genre,
             PlaylistDetails,
+            ArtistDetails,
+            SeeAll,
           },
           {
             initialRouteName: "Search",

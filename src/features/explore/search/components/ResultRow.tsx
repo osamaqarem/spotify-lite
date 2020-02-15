@@ -9,7 +9,7 @@ import { COLORS } from "../../../../utils/constants";
 export const MARGIN_HORIZONTAL = 14;
 
 const clock = new Animated.Clock();
-const opacityAnim = UIHelper.opacityTiming(clock, 0, 1, 500);
+const opacityAnim = UIHelper.runTiming(clock, 0, 1, 500);
 
 const ResultRow = React.memo(
   ({

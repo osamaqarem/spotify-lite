@@ -6,7 +6,7 @@ import UIHelper from "../../../../utils/helpers/UIHelper";
 
 const SearchIntro = React.memo(() => {
   const clock = new Animated.Clock();
-  const opacityAnim = UIHelper.opacityTiming(clock, 0.5, 1, 250);
+  const opacityAnim = UIHelper.runTiming(clock, 0.5, 1, 250);
 
   return (
     <Animated.View

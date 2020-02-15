@@ -7,31 +7,41 @@ import { MARGIN_HORIZONTAL } from "./ResultRow";
 import Animated from "react-native-reanimated";
 import UIHelper from "../../../../utils/helpers/UIHelper";
 
-const SeeAllBtn = React.memo(({ type }: { type: AlbumType["type"] }) => {
-  const scale = new Animated.Value(1);
+const SeeAllBtn = React.memo(
+  ({
+    type,
+    handleSeeAll,
+  }: {
+    type: AlbumType["type"];
+    handleSeeAll: (type: AlbumType["type"]) => void;
+  }) => {
+    const scale = new Animated.Value(1);
 
-  return (
-    <TouchableOpacity
-      onPressIn={() => Animated.timing(scale, UIHelper.btnScaleAnim.in).start()}
-      onPressOut={() =>
-        Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
-      }
-      onPress={() => {
-        return;
-      }}
-      style={styles.btnContainer}>
-      <Animated.View
-        style={[
-          {
-            transform: [{ scale }],
-          },
-          styles.container,
-        ]}>
-        <Text style={styles.seeAll}>See all {type?.toLowerCase()}s</Text>
-      </Animated.View>
-    </TouchableOpacity>
-  );
-});
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          handleSeeAll(type);
+        }}
+        onPressIn={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
+        }
+        onPressOut={() =>
+          Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
+        }
+        style={styles.btnContainer}>
+        <Animated.View
+          style={[
+            {
+              transform: [{ scale }],
+            },
+            styles.container,
+          ]}>
+          <Text style={styles.seeAll}>See all {type?.toLowerCase()}s</Text>
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   btnContainer: {

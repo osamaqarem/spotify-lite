@@ -83,6 +83,18 @@ const persistedPlaylistReducer = persistReducer(
   playlistReducer,
 );
 
+// searchReducer
+const searchReducerPersistConfig = {
+  key: "searchReducer",
+  storage: AsyncStorage,
+  whitelist: ["queryHistory"],
+};
+
+const persistedSearchReducer = persistReducer(
+  searchReducerPersistConfig,
+  searchReducer,
+);
+
 const combinedReducers = combineReducers({
   userReducer,
   albumReducer,
@@ -92,7 +104,7 @@ const combinedReducers = combineReducers({
   followRedcuer,
   playlistReducer: persistedPlaylistReducer,
   artistReducer,
-  searchReducer,
+  searchReducer: persistedSearchReducer,
 });
 
 export type RootStoreType = ReturnType<typeof combinedReducers>;

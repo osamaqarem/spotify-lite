@@ -73,7 +73,7 @@ const {
   stopClock,
 } = Animated;
 
-const opacityTiming = (
+const runTiming = (
   clock: Animated.Clock,
   start: number,
   end: number,
@@ -81,23 +81,19 @@ const opacityTiming = (
 ) => {
   const state = {
     finished: new Value(0),
-    position: new Value(0),
+    position: new Value(start),
     time: new Value(0),
     frameTime: new Value(0),
   };
 
   const config = {
     duration,
-    toValue: new Value(0),
+    toValue: new Value(end),
     easing: Easing.out(Easing.exp),
   };
 
   return block([
-    cond(
-      clockRunning(clock),
-      [],
-      [set(state.position, start), set(config.toValue, end), startClock(clock)],
-    ),
+    cond(clockRunning(clock), 0, startClock(clock)),
     timing(clock, state, config),
     cond(state.finished, stopClock(clock)),
     state.position,
@@ -109,7 +105,7 @@ const UIHelper = {
   isIphoneX,
   onScroll,
   fadeIn,
-  opacityTiming,
+  runTiming,
 };
 
 export default UIHelper;

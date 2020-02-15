@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   EmitterSubscription,
@@ -13,8 +13,13 @@ import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import { RootStoreType } from "../../../data/models/redux";
 import { AlbumType } from "../../../data/models/spotify";
-import { deleteQuery, saveQuery, searchForQuery } from "../../../redux/actions";
-import { COLORS } from "../../../utils/constants";
+import {
+  clearAllSearches,
+  deleteQuery,
+  saveQuery,
+  searchForQuery,
+} from "../../../redux/actions";
+import { COLORS, Routes } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
@@ -40,9 +45,11 @@ const Search = ({
   queryHistory,
   results,
   resultsHave,
+  clearAllSearches,
 }: SearchType) => {
   const [showBack, setShowBack] = useState(false);
   const [query, setQuery] = useState("");
+  const searchInput = useRef<TextInput>(null);
 
   useEffect(() => {
     if (results && loading) {
@@ -61,7 +68,7 @@ const Search = ({
   };
 
   const handleWillBlur = () => {
-    keyboardWillHideListener.remove();
+    keyboardWillHideListener && keyboardWillHideListener.remove();
   };
 
   const handleInputFocus = () => {
@@ -86,6 +93,16 @@ const Search = ({
 
   const handleRemove = (item: AlbumType) => {
     deleteQuery(item);
+  };
+
+  const handleclearAll = () => {
+    clearAllSearches();
+    searchInput.current?.focus();
+  };
+
+  const handleSeeAll = (type: AlbumType["type"]) => {
+    // set data to show
+    navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll);
   };
 
   const showLoading = query.length > 0 && loading;
@@ -118,6 +135,7 @@ const Search = ({
           )}
         </>
         <TextInput
+          ref={searchInput}
           autoFocus
           numberOfLines={1}
           value={query}
@@ -142,6 +160,7 @@ const Search = ({
         style={styles.scrollView}>
         {showHistory && (
           <SearchHistory
+            clearAll={handleclearAll}
             queryHistory={queryHistory}
             handleRemove={handleRemove}
           />
@@ -164,10 +183,18 @@ const Search = ({
           ))}
         {showResults && (
           <>
-            {resultsHave.haveArtists && <SeeAllBtn type="Artist" />}
-            {resultsHave.haveTracks && <SeeAllBtn type="Song" />}
-            {resultsHave.havePlaylists && <SeeAllBtn type="Playlist" />}
-            {resultsHave.haveAlbums && <SeeAllBtn type="Album" />}
+            {resultsHave.haveArtists && (
+              <SeeAllBtn type="Artist" handleSeeAll={handleSeeAll} />
+            )}
+            {resultsHave.haveTracks && (
+              <SeeAllBtn type="Song" handleSeeAll={handleSeeAll} />
+            )}
+            {resultsHave.havePlaylists && (
+              <SeeAllBtn type="Playlist" handleSeeAll={handleSeeAll} />
+            )}
+            {resultsHave.haveAlbums && (
+              <SeeAllBtn type="Album" handleSeeAll={handleSeeAll} />
+            )}
           </>
         )}
         {showEmptyResult && <NoResults queryToShow={lastQuery} />}
@@ -189,6 +216,7 @@ const mapDispatchToProps = {
   searchForQuery,
   saveQuery,
   deleteQuery,
+  clearAllSearches,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

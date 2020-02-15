@@ -51,13 +51,13 @@ export const searchForQueryEpic = (
 
           const results = prepareSearchResults(data);
           const resultsHave = getResultsHave(data);
-          const topSearchResults = sortByMostPopular(results);
 
+          const topSearchResults = sortByMostPopular(results);
           results.random = sortBySongAndArtistFirst(topSearchResults);
 
           return of({
             type: searchActions.QUERY_SUCCESS,
-            payload: { results, resultsHave },
+            payload: { results, resultsHave, query },
           });
         }),
         mergeMap(a => a),
@@ -81,6 +81,15 @@ export const saveQuery = (item: AlbumType) => ({
 export const deleteQuery = (item: AlbumType) => ({
   type: searchActions.QUERY_DELETE,
   payload: item,
+});
+
+export const clearAllSearches = () => ({
+  type: searchActions.QUERY_DELETE_ALL,
+});
+
+export const setSeeAllType = (seeAllType: AlbumType["type"]) => ({
+  type: searchActions.SET_SEE_ALL_TYPE,
+  payload: seeAllType,
 });
 
 const queryResponseIsEmpty = (data: SearchResponse) => {
