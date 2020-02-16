@@ -2,7 +2,7 @@ import React from "react";
 import { StyleProp, TextStyle } from "react-native";
 import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const CancelBtn = ({
+const CrossIcon = ({
   handlePress,
   color,
   iconStyle,
@@ -24,4 +24,4 @@ const CancelBtn = ({
   );
 };
 
-export default CancelBtn;
+export default CrossIcon;

@@ -11,7 +11,7 @@ import Animated, { Easing } from "react-native-reanimated";
 import { AlbumType } from "../../../../data/models/spotify";
 import { COLORS } from "../../../../utils/constants";
 import UIHelper from "../../../../utils/helpers/UIHelper";
-import CancelBtn from "./CancelBtn";
+import CrossIcon from "../../../../components/CrossIcon";
 import { MARGIN_HORIZONTAL } from "./ResultRow";
 
 export const ROW_HEIGHT = 67;
@@ -84,7 +84,7 @@ const HistoryRow = ({
           </View>
         </Animated.View>
       </TouchableOpacity>
-      <CancelBtn
+      <CrossIcon
         size={30}
         color={COLORS.darkerGrey}
         handlePress={onRemove}

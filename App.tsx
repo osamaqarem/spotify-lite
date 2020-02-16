@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import GreenIndicator from "./src/components/GreenIndicator";
 import AppWithNavigation from "./src/features/navigation";
 import { persistor, store } from "./src/redux/store";
+import ErrorBoundary from "./ErrorBoundary";
 
 if (__DEV__) {
   import("./ReactotronConfig").then(() => console.log("Reactotron Configured"));
@@ -36,11 +37,13 @@ if (Platform.OS === "android") {
 }
 
 const AppWithStore = () => (
-  <Provider store={store}>
-    <PersistGate loading={<GreenIndicator />} persistor={persistor}>
-      <AppWithNavigation />
-    </PersistGate>
-  </Provider>
+  <ErrorBoundary>
+    <Provider store={store}>
+      <PersistGate loading={<GreenIndicator />} persistor={persistor}>
+        <AppWithNavigation />
+      </PersistGate>
+    </Provider>
+  </ErrorBoundary>
 );
 
 const App = __DEV__ ? reactotron.overlay(AppWithStore) : AppWithStore;

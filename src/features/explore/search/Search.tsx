@@ -24,7 +24,7 @@ import { COLORS, Routes } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
 import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
 import BackBtnSearch from "./components/BackBtnSearch";
-import CancelBtn from "./components/CancelBtn";
+import CrossIcon from "../../../components/CrossIcon";
 import NoResults from "./components/NoResults";
 import ResultRow from "./components/ResultRow";
 import SearchHistory from "./components/SearchHistory";
@@ -149,7 +149,7 @@ const Search = ({
           style={styles.searchInput}
         />
         {showBack && query.length > 0 && (
-          <CancelBtn
+          <CrossIcon
             size={28}
             color={COLORS.lightGrey}
             handlePress={handleClear}
