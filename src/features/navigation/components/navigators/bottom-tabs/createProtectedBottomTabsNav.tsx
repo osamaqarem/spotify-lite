@@ -51,7 +51,6 @@ const createProtectedBottomTabsNav = () => {
             SeeAll,
           },
           {
-            initialRouteName: "Search",
             headerMode: "none",
             transitionConfig: () => UIHelper.fadeIn(),
           },
@@ -72,7 +71,7 @@ const createProtectedBottomTabsNav = () => {
       },
     },
     {
-      initialRouteName: "ExploreStack",
+      initialRouteName: "HomeStack",
     },
   );
 

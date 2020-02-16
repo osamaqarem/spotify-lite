@@ -67,7 +67,7 @@ export const getAllFeaturedPlaylistsEpic = (
             return of(redoLogin());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: browseActions.GET_ALL_FEATURED_PLAYLISTS_ERROR,
             payload: err,
@@ -131,7 +131,7 @@ export const getAllCategoriesForCountryEpic = (
             });
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: browseActions.GET_ALL_CATEGORIES_FOR_COUNTRY_ERROR,
             payload: err,
@@ -264,7 +264,7 @@ export const getCategoryByIdEpic = (
               });
             }
             // handle error
-            reactotron.log(JSON.stringify(err));
+            reactotron.log!(JSON.stringify(err));
             return of(
               {
                 type: browseActions.GET_CATEGORY_BY_ID_ERROR,

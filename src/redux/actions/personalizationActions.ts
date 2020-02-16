@@ -60,7 +60,7 @@ export const getCurrentUserTopArtistsEpic = (
             return of(redoLogin());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: personalizationActions.GET_USER_TOP_ARTISTS_ERROR,
             payload: err,

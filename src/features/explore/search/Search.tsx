@@ -19,6 +19,9 @@ import {
   saveQuery,
   searchForQuery,
   setSeeAll,
+  setArtistId,
+  getAlbumById,
+  getPlayListById,
 } from "../../../redux/actions";
 import { COLORS, Routes } from "../../../utils/constants";
 import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
@@ -47,7 +50,10 @@ const Search = ({
   results,
   resultsHave,
   clearAllSearches,
-  setSeeAllType,
+  setSeeAll,
+  setArtistId,
+  getAlbumById,
+  getPlayListById,
 }: SearchType) => {
   const [showBack, setShowBack] = useState(false);
   const [query, setQuery] = useState("");
@@ -91,6 +97,20 @@ const Search = ({
 
   const handleResultPress = (item: AlbumType) => {
     saveQuery(item);
+    switch (item.type) {
+      case "Artist":
+        setArtistId(item.id);
+        navigation.navigate(Routes.BottomTabs.ExploreStack.ArtistDetails);
+        return;
+      case "Album":
+        getAlbumById(item.id);
+        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
+        return;
+      case "Playlist":
+        getPlayListById(item.id);
+        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
+        return;
+    }
   };
 
   const handleRemove = (item: AlbumType) => {
@@ -103,7 +123,7 @@ const Search = ({
   };
 
   const handleSeeAll = (data: AlbumType[]) => {
-    setSeeAllType(data);
+    setSeeAll(data);
     navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll);
   };
 
@@ -165,6 +185,7 @@ const Search = ({
             clearAll={handleclearAll}
             queryHistory={queryHistory}
             handleRemove={handleRemove}
+            handleResultPress={handleResultPress}
           />
         )}
         {(showIntro && <SearchIntro />) ||
@@ -286,7 +307,10 @@ const mapDispatchToProps = {
   saveQuery,
   deleteQuery,
   clearAllSearches,
-  setSeeAllType: setSeeAll,
+  setSeeAll,
+  setArtistId,
+  getAlbumById,
+  getPlayListById,
 };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

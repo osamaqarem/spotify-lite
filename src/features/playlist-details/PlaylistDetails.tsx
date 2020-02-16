@@ -24,6 +24,7 @@ import { clearPlaylistDetails } from "../../redux/actions";
 import { RootStoreType } from "../../data/models/redux";
 import { COLORS } from "../../utils/constants";
 import UIHelper from "../../utils/helpers/UIHelper";
+import reactotron from "../../../ReactotronConfig";
 
 const PlaylistDetails = ({
   playlistDetails,
@@ -50,6 +51,7 @@ const PlaylistDetails = ({
       if (playlistDetails?.imageUrl && Platform.OS === "android") {
         colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
           if (!err) {
+            reactotron.log!(colors);
             setDominantColor(colors.averageColor);
             setIsLoading(false);
           }

@@ -19,9 +19,11 @@ export const ROW_HEIGHT = 67;
 const HistoryRow = ({
   item,
   handleRemove,
+  handleResultPress,
 }: {
   item: AlbumType;
   handleRemove: (item: AlbumType) => void;
+  handleResultPress: (item: AlbumType) => void;
 }) => {
   const scale = new Animated.Value(1);
   const opacity = new Animated.Value(1);
@@ -44,6 +46,10 @@ const HistoryRow = ({
     });
   };
 
+  const handlePress = () => {
+    handleResultPress(item);
+  };
+
   return (
     <Animated.View style={[styles.container, { opacity }]}>
       <TouchableOpacity
@@ -54,9 +60,7 @@ const HistoryRow = ({
         onPressOut={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
         }
-        onPress={() => {
-          return;
-        }}>
+        onPress={handlePress}>
         <Animated.View
           style={[
             styles.item,

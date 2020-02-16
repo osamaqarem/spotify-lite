@@ -41,7 +41,7 @@ export const getProfileEpic = (action$: Observable<Action<string>>) =>
           };
         }),
         catchError((err: string) => {
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({ type: userActions.GET_PROFILE_ERROR, payload: { err } });
         }),
       );

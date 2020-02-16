@@ -64,7 +64,7 @@ export const getCurrentUserSavedTracksEpic = (
             return of(getCurrentUserSavedTracks());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: libraryActions.GET_CURRENT_USER_SAVED_TRACKS_ERROR,
             payload: err,
@@ -121,7 +121,7 @@ export const getCurrentUserSavedAlbumsEpic = (
             return of(getCurrentUserSavedAlbums());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: libraryActions.GET_CURRENT_USER_SAVED_ALBUMS_ERROR,
             payload: err,

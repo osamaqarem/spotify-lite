@@ -69,7 +69,7 @@ export const getAlbumByIdEpic = (
             });
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: albumActions.GET_ALBUM_ERROR,
             payload: err,
@@ -134,7 +134,7 @@ export const getMultipleAlbumsEpic = (
             });
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: albumActions.GET_MULTIPLE_ALBUM_ERROR,
             payload: err,

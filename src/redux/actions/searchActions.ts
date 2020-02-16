@@ -62,7 +62,7 @@ export const searchForQueryEpic = (
         }),
         mergeMap(a => a),
         catchError((err: Error) => {
-          reactotron.log(err.message);
+          reactotron.log!(err.message);
           return of({
             type: searchActions.QUERY_ERROR,
             payload: err.message,

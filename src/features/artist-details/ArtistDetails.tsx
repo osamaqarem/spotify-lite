@@ -38,6 +38,7 @@ import {
 } from "../../redux/reducers/playlistReducer";
 import { COLORS, REST_API, Routes } from "../../utils/constants";
 import UIHelper from "../../utils/helpers/UIHelper";
+import reactotron from "reactotron-react-native";
 
 const LoadingView = () => (
   <ActivityIndicator
@@ -141,6 +142,7 @@ const ArtistDetails = ({
               if (Platform.OS === "android") {
                 colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
                   if (!err) {
+                    reactotron.log!(colors);
                     setDominantColor(colors.averageColor);
                     setIsLoading(false);
                   }

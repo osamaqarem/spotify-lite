@@ -76,7 +76,7 @@ export const getPlayListByIdEpic = (
               return of(getPlayListById(playListId!));
             }
             // handle error
-            reactotron.log(JSON.stringify(err));
+            reactotron.log!(JSON.stringify(err));
             return of({
               type: playlistActions.GET_PLAYLIST_BY_ID_ERROR,
               payload: err,
@@ -134,7 +134,7 @@ export const getCurrentUserPlaylistsEpic = (
             return of(getCurrentUserPlaylists());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: playlistActions.GET_CURRENT_USER_PLAYLISTS_ERROR,
             payload: err,

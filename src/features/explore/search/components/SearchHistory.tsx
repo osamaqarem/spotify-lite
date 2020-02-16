@@ -14,17 +14,24 @@ const SearchHistory = React.memo(
   ({
     queryHistory,
     handleRemove,
+    handleResultPress,
     clearAll,
   }: {
     queryHistory: AlbumType[];
     handleRemove: (item: AlbumType) => void;
+    handleResultPress: (item: AlbumType) => void;
     clearAll: () => void;
   }) => {
     return (
       <Animated.View style={[styles.container, { opacity: opacityAnim }]}>
         <Text style={styles.title}>Recent searches</Text>
         {queryHistory.map(item => (
-          <HistoryRow item={item} key={item.id} handleRemove={handleRemove} />
+          <HistoryRow
+            item={item}
+            key={item.id}
+            handleRemove={handleRemove}
+            handleResultPress={handleResultPress}
+          />
         ))}
         <Text onPress={clearAll} style={styles.clear}>
           Clear all

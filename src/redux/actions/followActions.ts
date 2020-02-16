@@ -58,7 +58,7 @@ export const getCurrentUserSavedArtistsEpic = (
             return of(getCurrentUserSavedArtists());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: followActions.GET_CURRENT_USER_FOLLOWED_ARTISTS_ERROR,
             payload: err,

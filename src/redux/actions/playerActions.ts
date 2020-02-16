@@ -70,7 +70,7 @@ export const getRecentlyPlayedTracksEpic = (
             return of(redoLogin());
           }
           // handle error
-          reactotron.log(JSON.stringify(err));
+          reactotron.log!(JSON.stringify(err));
           return of({
             type: playerActions.RECENTLY_PLAYED_TRACKS_ERROR,
             payload: err,
