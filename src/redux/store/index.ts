@@ -11,7 +11,7 @@ const epicMiddleware = createEpicMiddleware();
 const store = createStore(
   persistedReducer,
   {},
-  compose(applyMiddleware(thunk, epicMiddleware), Reactotron.createEnhancer()),
+  compose(applyMiddleware(thunk, epicMiddleware), Reactotron.createEnhancer!()),
 );
 
 // Redux observable

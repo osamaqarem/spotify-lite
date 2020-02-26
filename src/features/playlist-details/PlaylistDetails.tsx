@@ -1,16 +1,15 @@
-import React, { useCallback, useLayoutEffect, useRef, useState } from "react";
-import {
-  BackHandler,
-  Platform,
-  StyleSheet,
-  View,
-  StatusBar,
-} from "react-native";
-// @ts-ignore
-import { colorsFromUrl } from "react-native-dominant-color";
+import React, {
+  useCallback,
+  useLayoutEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import { BackHandler, StatusBar, StyleSheet, View } from "react-native";
+import ImageColors from "react-native-image-colors";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
-import { SafeAreaView, NavigationEvents } from "react-navigation";
+import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
 import DetailsCover from "../../components/DetailsCover";
@@ -19,12 +18,16 @@ import LoadingView from "../../components/LoadingView";
 import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
 import PlaylistTitle from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
+import { RootStoreType } from "../../data/models/redux";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { clearPlaylistDetails } from "../../redux/actions";
-import { RootStoreType } from "../../data/models/redux";
 import { COLORS } from "../../utils/constants";
 import UIHelper from "../../utils/helpers/UIHelper";
-import reactotron from "../../../ReactotronConfig";
+
+const initialState = {
+  dominantColor: COLORS.background,
+  isLoading: true,
+};
 
 const PlaylistDetails = ({
   playlistDetails,
@@ -34,8 +37,11 @@ const PlaylistDetails = ({
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
-  const [dominantColor, setDominantColor] = useState(COLORS.background);
-  const [isLoading, setIsLoading] = useState(true);
+  const [{ isLoading, dominantColor }, setState] = useReducer(
+    // eslint-disable-next-line
+    (state = initialState, payload: typeof initialState) => ({ ...payload }),
+    { isLoading: true, dominantColor: COLORS.background },
+  );
   const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
 
   const goBack = useCallback(() => {
@@ -44,21 +50,40 @@ const PlaylistDetails = ({
     return true;
   }, [clearPlaylistDetails, navigation]);
 
+  const setDefaultColors = () => {
+    setState({
+      dominantColor: COLORS.tabBar,
+      isLoading: false,
+    });
+  };
+
   useLayoutEffect(() => {
-    const didFocusSub = navigation.addListener("didFocus", () => {
+    const didFocusSub = navigation.addListener("didFocus", async () => {
       BackHandler.addEventListener("hardwareBackPress", goBack);
 
-      if (playlistDetails?.imageUrl && Platform.OS === "android") {
-        colorsFromUrl(playlistDetails?.imageUrl, (err: any, colors: any) => {
-          if (!err) {
-            reactotron.log!(colors);
-            setDominantColor(colors.averageColor);
-            setIsLoading(false);
+      if (playlistDetails?.imageUrl) {
+        try {
+          const colors = await ImageColors.getColors(
+            playlistDetails?.imageUrl,
+            { average: true },
+          );
+          if (colors.platform === "android") {
+            setState({
+              dominantColor: colors.average,
+              isLoading: false,
+            });
+          } else {
+            setState({
+              dominantColor: colors.background,
+              isLoading: false,
+            });
           }
-        });
+        } catch (e) {
+          console.warn(e);
+          setDefaultColors();
+        }
       } else {
-        setDominantColor(COLORS.tabBar);
-        setIsLoading(false);
+        setDefaultColors();
       }
     });
 

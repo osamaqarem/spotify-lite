@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useReducer, useRef, useState } from "react";
 import { Platform, StatusBar, StyleSheet, Text } from "react-native";
-// @ts-ignore
-import { colorsFromUrl } from "react-native-dominant-color";
+import ImageColors from "react-native-image-colors";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationEvents, SafeAreaView } from "react-navigation";
@@ -49,26 +48,48 @@ const Genre = ({
   );
 
   useLayoutEffect(() => {
-    if (
-      loadingColor &&
-      genrePlaylists[0]?.imageUrl &&
-      Platform.OS === "android"
-    ) {
-      colorsFromUrl(genrePlaylists[0].imageUrl, (err: any, colors: any) => {
-        if (!err) {
-          setState({
-            dominantColor: colors.dominantColor,
-            loadingColor: false,
-          });
+    const fetchColors = async () => {
+      if (
+        loadingColor &&
+        genrePlaylists[0]?.imageUrl &&
+        Platform.OS === "android"
+      ) {
+        if (loadingColor && genrePlaylists[0]?.imageUrl) {
+          try {
+            const colors = await ImageColors.getColors(
+              genrePlaylists[0]?.imageUrl,
+              { average: true },
+            );
+            if (colors.platform === "android") {
+              setState({
+                dominantColor: colors.average,
+                loadingColor: false,
+              });
+            } else {
+              setState({
+                dominantColor: colors.background,
+                loadingColor: false,
+              });
+            }
+          } catch (e) {
+            console.warn(e);
+            setDefaultColors();
+          }
+        } else {
+          setDefaultColors();
         }
-      });
-    } else {
-      setState({
-        dominantColor: COLORS.tabBar,
-        loadingColor: false,
-      });
-    }
+      }
+    };
+
+    fetchColors();
   }, [genrePlaylists, loadingColor]);
+
+  const setDefaultColors = () => {
+    setState({
+      dominantColor: COLORS.tabBar,
+      loadingColor: false,
+    });
+  };
 
   const handleSeeMore = () => {
     setSeeMoreVisible(false);

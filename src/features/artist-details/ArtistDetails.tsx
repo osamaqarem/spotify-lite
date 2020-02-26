@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
   ActivityIndicator,
-  Platform,
   ScrollView,
   StatusBar,
   StyleSheet,
@@ -9,14 +8,11 @@ import {
   View,
 } from "react-native";
 // @ts-ignore
-import { colorsFromUrl } from "react-native-dominant-color";
 import LinearGradient from "react-native-linear-gradient";
 import Animated from "react-native-reanimated";
 import { NavigationEvents, SafeAreaView } from "react-navigation";
 import { NavigationStackProp } from "react-navigation-stack";
 import { connect, ConnectedProps } from "react-redux";
-import { from, Subscription, zip } from "rxjs";
-import { switchMap } from "rxjs/operators";
 import ArtistCover from "../../components/ArtistCover";
 import DetailsCover from "../../components/DetailsCover";
 import ListOfTracks from "../../components/ListOfTracks";
@@ -24,21 +20,11 @@ import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
 import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
 import ShuffleButton from "../../components/ShuffleButton";
 import { RootStoreType } from "../../data/models/redux";
-import {
-  AlbumType,
-  Artist,
-  ErrorResponse,
-  Track,
-} from "../../data/models/spotify";
 import usePlaylistAnim from "../../hooks/usePlaylistAnim";
 import { redoLogin, setArtistId } from "../../redux/actions";
-import {
-  PlaylistDetailsType,
-  TrackType,
-} from "../../redux/reducers/playlistReducer";
-import { COLORS, REST_API, Routes } from "../../utils/constants";
+import { COLORS, Routes } from "../../utils/constants";
 import UIHelper from "../../utils/helpers/UIHelper";
-import reactotron from "reactotron-react-native";
+import useArtistDetails from "./useArtistDetails";
 
 const LoadingView = () => (
   <ActivityIndicator
@@ -47,8 +33,6 @@ const LoadingView = () => (
     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
   />
 );
-
-type ArtistDetails = PlaylistDetailsType & { relatedArtists: AlbumType[] };
 
 const ArtistDetails = ({
   artistId,
@@ -60,118 +44,13 @@ const ArtistDetails = ({
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current;
   const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
-  const [dominantColor, setDominantColor] = useState(COLORS.background);
-  const [isLoading, setIsLoading] = useState(true);
   const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
-  const [artistDetails, setArtistDetails] = useState<null | ArtistDetails>(
-    null,
-  );
-
-  // fetch data
-  useEffect(() => {
-    let subscription: Subscription | undefined;
-
-    const fetchData = async () => {
-      try {
-        if (artistId) {
-          const artist$ = from(
-            fetch(REST_API.getArtistById(artistId), {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }),
-          ).pipe(switchMap(res => res.json()));
-
-          const topTracks$ = from(
-            fetch(REST_API.getArtistTopTracks(artistId, profile!.country), {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }),
-          ).pipe(switchMap(res => res.json()));
-
-          const relatedArtists$ = from(
-            fetch(REST_API.getRelatedArtistsById(artistId), {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            }),
-          ).pipe(switchMap(res => res.json()));
-
-          subscription = zip(artist$, topTracks$, relatedArtists$).subscribe(
-            ([artist, topTracks, relatedArtistsList]: [
-              Artist | ErrorResponse,
-              { tracks: Track[] } | ErrorResponse,
-              { artists: Artist[] } | ErrorResponse,
-            ]) => {
-              if ("error" in artist) {
-                throw artist.error.message;
-              }
-              if ("error" in topTracks) {
-                throw topTracks.error.message;
-              }
-              if ("error" in relatedArtistsList) {
-                throw relatedArtistsList.error.message;
-              }
-
-              const tracks: TrackType[] = topTracks.tracks.map(item => ({
-                artistName:
-                  item.artists[0].name ?? "No track returned by spotify :(",
-                name: item.name ?? "No track",
-              }));
-
-              const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
-                artist => ({
-                  name: artist.name,
-                  imageURL: artist.images[0]?.url,
-                  id: artist.id,
-                }),
-              );
-
-              setArtistDetails({
-                imageUrl: artist.images[0].url,
-                name: artist.name,
-                ownerName: artist.name,
-                tracks,
-                relatedArtists,
-              });
-
-              if (Platform.OS === "android") {
-                colorsFromUrl(artist.images[0].url, (err: any, colors: any) => {
-                  if (!err) {
-                    reactotron.log!(colors);
-                    setDominantColor(colors.averageColor);
-                    setIsLoading(false);
-                  }
-                });
-              } else {
-                setDominantColor(COLORS.tabBar);
-                setIsLoading(false);
-              }
-            },
-          );
-        }
-      } catch (err) {
-        if (err.message.includes("expired")) {
-          redoLogin();
-        } else {
-          console.warn(err);
-        }
-      }
-    };
-
-    // only run the effect if details are currently null
-    if (!artistDetails) {
-      fetchData();
-    }
-
-    return () => {
-      if (subscription) subscription.unsubscribe();
-    };
-  }, [token, artistId, artistDetails, profile, redoLogin]);
+  const { isLoading, dominantColor, artistDetails } = useArtistDetails({
+    artistId,
+    profile,
+    redoLogin,
+    token,
+  });
 
   const goToArtist = (id: string) => {
     setArtistId(id);
