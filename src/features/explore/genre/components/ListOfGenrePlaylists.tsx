@@ -1,18 +1,16 @@
-import React from "react";
-import { FlatList, Text, StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
-import { BACKBTN_HEIGHT } from "../../../../components/BackBtn";
-import { COLORS, width } from "../../../../utils/constants";
-import PlaylistWithFollowers, {
-  ITEM_DIMENSIONS,
-} from "./PlaylistWithFollowers";
-import SeeMoreBtn from "./SeeMoreBtn";
-import { PlaylistDetailsType } from "../../../../redux/reducers/playlistReducer";
-import UIHelper from "../../../../utils/helpers/UIHelper";
+import React from "react"
+import { FlatList, Text, StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
+import { BACKBTN_HEIGHT } from "../../../../common/components/BackBtn"
+import { colors, dimensions } from "../../../../common/theme"
+import PlaylistWithFollowers, { ITEM_DIMENSIONS } from "./PlaylistWithFollowers"
+import SeeMoreBtn from "./SeeMoreBtn"
+import UIHelper from "../../../../common/helpers/UIHelper"
+import { PlaylistDetailsType } from "../../../../redux/slices"
 
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
   FlatList,
-);
+)
 
 const ListOfGenrePlaylists = ({
   offsetY,
@@ -21,11 +19,11 @@ const ListOfGenrePlaylists = ({
   handleSeeMore,
   onPlaylistPressed,
 }: {
-  offsetY: Animated.Node<number>;
-  seeMoreVisible: boolean;
-  handleSeeMore: () => void;
-  genrePlaylists: PlaylistDetailsType[];
-  onPlaylistPressed: (playlist: PlaylistDetailsType) => void;
+  offsetY: Animated.Node<number>
+  seeMoreVisible: boolean
+  handleSeeMore: () => void
+  genrePlaylists: PlaylistDetailsType[]
+  onPlaylistPressed: (playlist: PlaylistDetailsType) => void
 }) => {
   const handleRender = ({ item: playlist }: { item: PlaylistDetailsType }) => (
     <PlaylistWithFollowers
@@ -33,7 +31,7 @@ const ListOfGenrePlaylists = ({
       playlist={playlist}
       onPress={() => onPlaylistPressed(playlist)}
     />
-  );
+  )
 
   return (
     <AnimatedFlatList
@@ -58,8 +56,8 @@ const ListOfGenrePlaylists = ({
         index,
       })}
     />
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   title: {
@@ -67,7 +65,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
     fontSize: 18.5,
-    width: width,
+    width: "100%",
     textAlign: "center",
     marginBottom: 20,
   },
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: "40%",
     paddingBottom: "60%",
     width: "100%",
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
   },
   list: {
     marginHorizontal: 15,
@@ -84,6 +82,6 @@ const styles = StyleSheet.create({
     width: "100%",
     marginTop: BACKBTN_HEIGHT,
   },
-});
+})
 
-export default ListOfGenrePlaylists;
+export default ListOfGenrePlaylists

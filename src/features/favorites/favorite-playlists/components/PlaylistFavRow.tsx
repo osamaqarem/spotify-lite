@@ -1,19 +1,17 @@
-import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import FastImage from "react-native-fast-image";
-import { COLORS } from "../../../../utils/constants";
-import { playlistStyle } from "../../../../components/Playlist";
+import React from "react"
+import { StyleSheet, Text, View } from "react-native"
+import FastImage from "react-native-fast-image"
+import { colors } from "../../../../common/theme"
+import { playlistStyle } from "../../../../common/components/Playlist"
+import { coverImages } from "../../../../common/theme/coverImages"
 
 const PlaylistRowFav = ({
   savedTracksCount,
 }: {
-  savedTracksCount: number | null;
+  savedTracksCount: number | null
 }) => (
   <View style={styles.favRow}>
-    <FastImage
-      source={require("../../../../data/assets/cover/savedTracks.jpg")}
-      style={styles.cover}
-    />
+    <FastImage source={coverImages.savedTracks} style={styles.cover} />
     <View style={styles.favRowText}>
       <Text style={styles.playlistTitle}>Favorite Songs</Text>
       <Text style={styles.playlistOwner}>
@@ -21,7 +19,7 @@ const PlaylistRowFav = ({
       </Text>
     </View>
   </View>
-);
+)
 
 const styles = StyleSheet.create({
   cover: {
@@ -38,14 +36,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   playlistTitle: {
-    color: COLORS.white,
+    color: colors.white,
     textAlignVertical: "center",
     fontSize: playlistStyle.titleFontSize,
   },
   playlistOwner: {
-    color: COLORS.grey,
+    color: colors.grey,
     textAlignVertical: "center",
   },
-});
+})
 
-export default PlaylistRowFav;
+export default PlaylistRowFav

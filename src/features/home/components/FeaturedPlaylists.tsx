@@ -1,24 +1,24 @@
-import React, { useContext } from "react";
-import { Text, View } from "react-native";
-import { NavigationContext } from "react-navigation";
-import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../../data/models/redux";
-import { Routes } from "../../../utils/constants";
-import AlbumItem from "./AlbumItem";
-import { styles } from "../styles";
-import { getPlayListById } from "../../../redux/actions/playlistActions";
-import { AlbumType } from "../../../data/models/spotify";
+import React, { useContext } from "react"
+import { Text, View } from "react-native"
+import { NavigationContext } from "react-navigation"
+import { connect, ConnectedProps } from "react-redux"
+import { Routes } from "../../navigation/_routes"
+import AlbumItem from "./AlbumItem"
+import { styles } from "../styles"
+import { getPlaylistById } from "../../../redux/slices/playlistSlice"
+import { AlbumType } from "../../../services/network/models/spotify/SpotifyCommon"
+import { RootStoreType } from "../../../redux/rootReducer"
 
 const FeaturedPlaylists = ({
   featuredPlaylists,
-  getPlayListById,
+  getPlaylistById,
 }: ReduxProps) => {
-  const navigation = useContext(NavigationContext);
+  const navigation = useContext(NavigationContext)
 
   const onPlaylistPressed = (id: string) => {
-    getPlayListById(id);
-    navigation.navigate(Routes.BottomTabs.HomeStack.PlaylistDetails);
-  };
+    getPlaylistById(id)
+    navigation.navigate(Routes.BottomTabs.HomeStack.PlaylistDetails)
+  }
 
   return (
     <>
@@ -39,19 +39,19 @@ const FeaturedPlaylists = ({
           ))}
       </View>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: RootStoreType) => ({
   featuredPlaylists: state.browseReducer.featuredPlaylists,
-});
+})
 
 const mapDispatchToProps = {
-  getPlayListById,
-};
+  getPlaylistById,
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(FeaturedPlaylists);
+export default connector(FeaturedPlaylists)

@@ -1,7 +1,7 @@
-import React from "react";
-import { Text, View, StyleSheet } from "react-native";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../../../utils/constants";
+import React from "react"
+import { Text, View, StyleSheet } from "react-native"
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import { colors } from "../../../../common/theme"
 
 const NoResults = ({ queryToShow }: { queryToShow: string }) => {
   return (
@@ -10,7 +10,7 @@ const NoResults = ({ queryToShow }: { queryToShow: string }) => {
         style={styles.flagIcon}
         name="flag-outline"
         size={64}
-        color={COLORS.white}
+        color={colors.white}
       />
       <Text style={styles.query}>
         No results found for {`\'${queryToShow}\'`}
@@ -19,8 +19,8 @@ const NoResults = ({ queryToShow }: { queryToShow: string }) => {
         Please check you have the right spelling, or try different keywords.
       </Text>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   query: {
     fontWeight: "bold",
     fontSize: 18,
-    color: COLORS.white,
+    color: colors.white,
     letterSpacing: 0.3,
     textAlign: "center",
     lineHeight: 22,
@@ -42,12 +42,12 @@ const styles = StyleSheet.create({
   },
   tip: {
     fontSize: 14,
-    color: COLORS.grey,
+    color: colors.grey,
     marginTop: 22,
     textAlign: "center",
     maxWidth: "70%",
     lineHeight: 20,
   },
-});
+})
 
-export default NoResults;
+export default NoResults

@@ -1,12 +1,12 @@
-import { createStackNavigator } from "react-navigation-stack";
-import { createMaterialTopTabNavigator } from "react-navigation-tabs";
-import { COLORS } from "../../../../../utils/constants";
-import ArtistDetails from "../../../../artist-details/ArtistDetails";
-import FavoriteAlbums from "../../../../favorites/favorite-albums/FavoriteAlbums";
-import FavoriteArtists from "../../../../favorites/favorite-artists/FavoriteArtists";
-import FavoritePlaylists from "../../../../favorites/favorite-playlists/FavoritePlaylists";
-import PlaylistDetails from "../../../../playlist-details/PlaylistDetails";
-import SafeMaterialTopTabBar from "../../SafeMaterialTopTabBar";
+import { createStackNavigator } from "react-navigation-stack"
+import { createMaterialTopTabNavigator } from "react-navigation-tabs"
+import { colors } from "../../../../../common/theme"
+import ArtistDetails from "../../../../artist-details/ArtistDetails"
+import FavoriteAlbums from "../../../../favorites/favorite-albums/FavoriteAlbums"
+import FavoriteArtists from "../../../../favorites/favorite-artists/FavoriteArtists"
+import FavoritePlaylists from "../../../../favorites/favorite-playlists/FavoritePlaylists"
+import PlaylistDetails from "../../../../playlist-details/PlaylistDetails"
+import SafeMaterialTopTabBar from "../../SafeMaterialTopTabBar"
 
 /**
  * Favorite tabs
@@ -37,10 +37,10 @@ const TopTabsStack = createStackNavigator(
           labelStyle: {
             fontSize: 15.5,
           },
-          activeTintColor: COLORS.white,
-          inactiveTintColor: COLORS.itemInactive,
+          activeTintColor: colors.white,
+          inactiveTintColor: colors.itemInactive,
           style: {
-            backgroundColor: COLORS.tabBar,
+            backgroundColor: colors.tabBar,
             elevation: 0,
             marginEnd: 100,
           },
@@ -52,7 +52,7 @@ const TopTabsStack = createStackNavigator(
           },
         },
         style: {
-          backgroundColor: COLORS.tabBar,
+          backgroundColor: colors.tabBar,
         },
       },
     ),
@@ -60,6 +60,6 @@ const TopTabsStack = createStackNavigator(
     ArtistDetails,
   },
   { headerMode: "none" },
-);
+)
 
-export default TopTabsStack;
+export default TopTabsStack

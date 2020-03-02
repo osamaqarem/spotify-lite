@@ -1,9 +1,9 @@
-import React from "react";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../../../../../utils/constants";
+import React from "react"
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import { colors } from "../../../../../../common/theme"
 
 const FavoritesIcon = ({ tintColor }: { tintColor: string }) => {
-  if (tintColor === COLORS.itemInactive) {
+  if (tintColor === colors.itemInactive) {
     return (
       <MaterialCommunityIcon
         style={{ bottom: 6 }}
@@ -11,7 +11,7 @@ const FavoritesIcon = ({ tintColor }: { tintColor: string }) => {
         size={22}
         color={tintColor}
       />
-    );
+    )
   } else {
     return (
       <MaterialCommunityIcon
@@ -20,8 +20,8 @@ const FavoritesIcon = ({ tintColor }: { tintColor: string }) => {
         size={22}
         color={tintColor}
       />
-    );
+    )
   }
-};
+}
 
-export default FavoritesIcon;
+export default FavoritesIcon

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react"
 import {
   ActivityIndicator,
   EmitterSubscription,
@@ -7,132 +7,133 @@ import {
   StyleSheet,
   TextInput,
   View,
-} from "react-native";
-import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation";
-import { NavigationStackProp } from "react-navigation-stack";
-import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../../data/models/redux";
-import { AlbumType } from "../../../data/models/spotify";
+} from "react-native"
+import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation"
+import { NavigationStackProp } from "react-navigation-stack"
+import { connect, ConnectedProps } from "react-redux"
+import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon"
+import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch"
+import BackBtnSearch from "./components/BackBtnSearch"
+import CrossIcon from "../../../common/components/CrossIcon"
+import NoResults from "./components/NoResults"
+import ResultRow from "./components/ResultRow"
+import SearchHistory from "./components/SearchHistory"
+import SearchIntro from "./components/SearchIntro"
+import SeeAllBtn from "./components/SeeAllBtn"
+import { Routes } from "../../navigation/_routes"
+import { AlbumType } from "../../../services/network/models/spotify/SpotifyCommon"
 import {
-  clearAllSearches,
-  deleteQuery,
-  saveQuery,
-  searchForQuery,
-  setSeeAll,
-  setArtistId,
-  getAlbumById,
-  getPlayListById,
-} from "../../../redux/actions";
-import { COLORS, Routes } from "../../../utils/constants";
-import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
-import { SEARCH_BAR_HEIGHT } from "../components/TopBarSearch";
-import BackBtnSearch from "./components/BackBtnSearch";
-import CrossIcon from "../../../components/CrossIcon";
-import NoResults from "./components/NoResults";
-import ResultRow from "./components/ResultRow";
-import SearchHistory from "./components/SearchHistory";
-import SearchIntro from "./components/SearchIntro";
-import SeeAllBtn from "./components/SeeAllBtn";
+  getQuery,
+  querySave,
+  queryDelete,
+  queryDeleteAll,
+  querySetSeeAll,
+} from "../../../redux/slices/searchSlice"
+import { setArtistId } from "../../../redux/slices/artistSlice"
+import { getAlbumById } from "../../../redux/slices/albumSlice"
+import { getPlaylistById } from "../../../redux/slices/playlistSlice"
+import { RootStoreType } from "../../../redux/rootReducer"
+import { colors } from "../../../common/theme"
 
-type SearchType = { navigation: NavigationStackProp } & ReduxProps;
+type SearchType = { navigation: NavigationStackProp } & ReduxProps
 
-let keyboardWillHideListener: EmitterSubscription;
+let keyboardWillHideListener: EmitterSubscription
 
 const Search = ({
   navigation,
-  searchForQuery,
-  saveQuery,
-  deleteQuery,
+  getQuery,
+  querySave,
+  queryDelete,
   loading,
   queryEmpty,
   lastQuery,
   queryHistory,
   results,
   resultsHave,
-  clearAllSearches,
-  setSeeAll,
+  queryDeleteAll,
+  querySetSeeAll,
   setArtistId,
   getAlbumById,
-  getPlayListById,
+  getPlaylistById,
 }: SearchType) => {
-  const [showBack, setShowBack] = useState(false);
-  const [query, setQuery] = useState("");
-  const searchInput = useRef<TextInput>(null);
+  const [showBack, setShowBack] = useState(false)
+  const [query, setQuery] = useState("")
+  const searchInput = useRef<TextInput>(null)
 
   useEffect(() => {
     if (results && loading) {
-      results.random = [];
+      results.random = []
     }
-  }, [loading, results]);
+  }, [loading, results])
 
   const handleWillFocus = () => {
-    StatusBar.setBarStyle("light-content");
-  };
+    StatusBar.setBarStyle("light-content")
+  }
 
   const handleDidFocus = () => {
     keyboardWillHideListener = Keyboard.addListener("keyboardWillHide", () =>
       setShowBack(false),
-    );
-  };
+    )
+  }
 
   const handleWillBlur = () => {
-    keyboardWillHideListener && keyboardWillHideListener.remove();
-  };
+    keyboardWillHideListener && keyboardWillHideListener.remove()
+  }
 
   const handleInputFocus = () => {
-    setShowBack(true);
-  };
+    setShowBack(true)
+  }
 
   const handleQuery = (text: string) => {
-    setQuery(text);
-    searchForQuery(text);
-  };
+    setQuery(text)
+    getQuery(text)
+  }
 
   const handleClear = () => {
-    searchForQuery("");
-    setQuery("");
-    setShowBack(false);
-    Keyboard.dismiss();
-  };
+    getQuery("")
+    setQuery("")
+    setShowBack(false)
+    Keyboard.dismiss()
+  }
 
   const handleResultPress = (item: AlbumType) => {
-    saveQuery(item);
+    querySave(item)
     switch (item.type) {
       case "Artist":
-        setArtistId(item.id);
-        navigation.navigate(Routes.BottomTabs.ExploreStack.ArtistDetails);
-        return;
+        setArtistId(item.id)
+        navigation.navigate(Routes.BottomTabs.ExploreStack.ArtistDetails)
+        return
       case "Album":
-        getAlbumById(item.id);
-        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
-        return;
+        getAlbumById(item.id)
+        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
+        return
       case "Playlist":
-        getPlayListById(item.id);
-        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
-        return;
+        getPlaylistById(item.id)
+        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
+        return
     }
-  };
+  }
 
   const handleRemove = (item: AlbumType) => {
-    deleteQuery(item);
-  };
+    queryDelete(item)
+  }
 
   const handleclearAll = () => {
-    clearAllSearches();
-    searchInput.current?.focus();
-  };
+    queryDeleteAll()
+    searchInput.current?.focus()
+  }
 
   const handleSeeAll = (data: AlbumType[]) => {
-    setSeeAll(data);
-    navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll);
-  };
+    querySetSeeAll(data)
+    navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll)
+  }
 
-  const showLoading = query.length > 0 && loading;
-  const showResults = results.random.length > 0;
-  const showEmptyResult = queryEmpty && lastQuery.length > 0;
-  const normalState = !showResults && !loading && !showEmptyResult;
-  const showHistory = queryHistory.length > 0 && normalState;
-  const showIntro = !showHistory && normalState;
+  const showLoading = query.length > 0 && loading
+  const showResults = results.random.length > 0
+  const showEmptyResult = queryEmpty && lastQuery.length > 0
+  const normalState = !showResults && !loading && !showEmptyResult
+  const showHistory = queryHistory.length > 0 && normalState
+  const showIntro = !showHistory && normalState
 
   return (
     <SafeAreaView style={styles.container}>
@@ -145,13 +146,13 @@ const Search = ({
         <>
           {(!showBack && (
             <SearchIcon
-              tintColor={COLORS.lightGrey}
+              tintColor={colors.lightGrey}
               textStyle={styles.searchIcon}
             />
           )) || (
             <BackBtnSearch
               onPress={() => navigation.goBack()}
-              tintColor={COLORS.lightGrey}
+              tintColor={colors.lightGrey}
               textStyle={styles.backBtnIcon}
             />
           )}
@@ -164,14 +165,14 @@ const Search = ({
           onChangeText={handleQuery}
           onFocus={handleInputFocus}
           placeholder="Search artists, songs and playlists"
-          placeholderTextColor={COLORS.darkGrey}
-          selectionColor={COLORS.white}
+          placeholderTextColor={colors.darkGrey}
+          selectionColor={colors.white}
           style={styles.searchInput}
         />
         {showBack && query.length > 0 && (
           <CrossIcon
             size={28}
-            color={COLORS.lightGrey}
+            color={colors.lightGrey}
             handlePress={handleClear}
             iconStyle={styles.clearIcon}
           />
@@ -193,7 +194,7 @@ const Search = ({
             <ActivityIndicator
               style={styles.indicator}
               size={50}
-              color={COLORS.green}
+              color={colors.green}
             />
           ))}
         {showResults &&
@@ -239,16 +240,16 @@ const Search = ({
         {showEmptyResult && <NoResults queryToShow={lastQuery} />}
       </ScrollView>
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.darkerGrey,
+    backgroundColor: colors.darkerGrey,
   },
   searchBarContainer: {
-    backgroundColor: COLORS.darkerGrey,
+    backgroundColor: colors.darkerGrey,
     height: SEARCH_BAR_HEIGHT,
     flexDirection: "row",
     justifyContent: "flex-start",
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     fontSize: 16,
-    color: COLORS.white,
+    color: colors.white,
     height: "100%",
     marginLeft: 4,
     width: "70%",
@@ -285,13 +286,13 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   scrollView: {
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
   },
   scrollContent: { flexGrow: 1 },
   indicator: {
     ...StyleSheet.absoluteFillObject,
   },
-});
+})
 
 const mapStateToProps = (state: RootStoreType) => ({
   loading: state.searchReducer.queryLoading,
@@ -300,21 +301,21 @@ const mapStateToProps = (state: RootStoreType) => ({
   queryEmpty: state.searchReducer.queryEmpty,
   lastQuery: state.searchReducer.lastQuery,
   queryHistory: state.searchReducer.queryHistory,
-});
+})
 
 const mapDispatchToProps = {
-  searchForQuery,
-  saveQuery,
-  deleteQuery,
-  clearAllSearches,
-  setSeeAll,
+  getQuery,
+  querySave,
+  queryDelete,
+  queryDeleteAll,
+  querySetSeeAll,
   setArtistId,
   getAlbumById,
-  getPlayListById,
-};
+  getPlaylistById,
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(Search);
+export default connector(Search)

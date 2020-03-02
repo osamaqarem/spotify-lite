@@ -1,9 +1,9 @@
-import React from "react";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { COLORS } from "../../../../../../utils/constants";
+import React from "react"
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons"
+import { colors } from "../../../../../../common/theme"
 
 const HomeIcon = ({ tintColor }: { tintColor: string }) => {
-  if (tintColor === COLORS.itemInactive) {
+  if (tintColor === colors.itemInactive) {
     return (
       <MaterialCommunityIcon
         style={{ bottom: 6 }}
@@ -11,7 +11,7 @@ const HomeIcon = ({ tintColor }: { tintColor: string }) => {
         size={24.5}
         color={tintColor}
       />
-    );
+    )
   } else {
     return (
       <MaterialCommunityIcon
@@ -20,8 +20,8 @@ const HomeIcon = ({ tintColor }: { tintColor: string }) => {
         size={24.5}
         color={tintColor}
       />
-    );
+    )
   }
-};
+}
 
-export default HomeIcon;
+export default HomeIcon

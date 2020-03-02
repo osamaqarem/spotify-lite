@@ -1,20 +1,20 @@
-import React from "react";
-import { Text, TouchableOpacity, StyleSheet } from "react-native";
-import FastImage from "react-native-fast-image";
-import Animated, { Easing } from "react-native-reanimated";
-import { genreImgList } from "../../../data/assets/genre/genreImgList";
-import { COLORS } from "../../../utils/constants";
+import React from "react"
+import { Text, TouchableOpacity, StyleSheet } from "react-native"
+import FastImage from "react-native-fast-image"
+import Animated, { Easing } from "react-native-reanimated"
+import { genreImages } from "../../../common/theme/genreImages"
+import { colors } from "../../../common/theme"
 
 const ColoredCard = ({
   item,
   index,
   onPress,
 }: {
-  item: { name: string; id: string };
-  index: number;
-  onPress: (id: string) => void;
+  item: { name: string; id: string }
+  index: number
+  onPress: (id: string) => void
 }) => {
-  const scale = new Animated.Value(1);
+  const scale = new Animated.Value(1)
 
   return (
     <Animated.View style={{ transform: [{ scale }] }}>
@@ -37,14 +37,14 @@ const ColoredCard = ({
         onPress={() => onPress(item.id)}>
         <FastImage
           key={item.id}
-          source={genreImgList[index].url}
+          source={genreImages[index].url}
           style={[styles.genreCard]}>
           <Text style={styles.genreText}>{item.name}</Text>
         </FastImage>
       </TouchableOpacity>
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   genreCard: {
@@ -57,11 +57,11 @@ const styles = StyleSheet.create({
   },
   genreText: {
     fontSize: 16,
-    color: COLORS.white,
+    color: colors.white,
     top: 26,
     left: 10,
     fontWeight: "bold",
   },
-});
+})
 
-export default ColoredCard;
+export default ColoredCard

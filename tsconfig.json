@@ -13,7 +13,7 @@
     "module": "esnext",
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "incremental": true,
+    "incremental": false,
     "skipLibCheck": true,
     "experimentalDecorators": true
   },

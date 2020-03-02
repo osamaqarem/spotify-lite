@@ -1,17 +1,17 @@
-import { COLORS } from "../../utils/constants";
-import { StyleSheet } from "react-native";
+import { colors } from "../../common/theme"
+import { StyleSheet } from "react-native"
 
-const MARGIN_BOTTOM = 38;
+const MARGIN_BOTTOM = 38
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
   },
   rowScrollContainer: { flexDirection: "row", marginLeft: 9 },
   centeredText: {
     alignSelf: "center",
-    color: COLORS.white,
+    color: colors.white,
     fontWeight: "bold",
   },
   headerText: {
@@ -29,16 +29,16 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: "center",
     fontWeight: "normal",
-    color: COLORS.grey,
+    color: colors.grey,
     top: 10,
     fontSize: 13,
   },
-});
+})
 
 const albumDimensions = {
   ROW_SCROLLVIEW_HEIGHT: 180,
   ALBUM_DIMEN_RECENT: 166 - MARGIN_BOTTOM,
   ALBUM_DIMEN_FEATURED: 156,
-};
+}
 
-export { styles, albumDimensions };
+export { styles, albumDimensions }

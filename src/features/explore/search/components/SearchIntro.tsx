@@ -1,12 +1,12 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import Animated from "react-native-reanimated";
-import { COLORS } from "../../../../utils/constants";
-import UIHelper from "../../../../utils/helpers/UIHelper";
+import React from "react"
+import { Text, StyleSheet } from "react-native"
+import Animated from "react-native-reanimated"
+import { colors } from "../../../../common/theme"
+import UIHelper from "../../../../common/helpers/UIHelper"
 
 const SearchIntro = React.memo(() => {
-  const clock = new Animated.Clock();
-  const opacityAnim = UIHelper.runTiming(clock, 0.5, 1, 250);
+  const clock = new Animated.Clock()
+  const opacityAnim = UIHelper.runTiming(clock, 0.5, 1, 250)
 
   return (
     <Animated.View
@@ -21,8 +21,8 @@ const SearchIntro = React.memo(() => {
         from millions of artists, songs and playlists
       </Text>
     </Animated.View>
-  );
-});
+  )
+})
 
 const styles = StyleSheet.create({
   container: {
@@ -33,18 +33,18 @@ const styles = StyleSheet.create({
   header: {
     fontWeight: "600",
     fontSize: 16,
-    color: COLORS.white,
+    color: colors.white,
     letterSpacing: 0.3,
     textAlign: "center",
   },
   subheader: {
     fontSize: 14,
-    color: COLORS.grey,
+    color: colors.grey,
     marginTop: 10,
     textAlign: "center",
   },
-});
+})
 
-SearchIntro.displayName = "SearchIntro";
+SearchIntro.displayName = "SearchIntro"
 
-export default SearchIntro;
+export default SearchIntro

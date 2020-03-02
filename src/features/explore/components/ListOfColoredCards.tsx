@@ -1,14 +1,14 @@
-import React from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import { COLORS } from "../../../utils/constants";
-import ColoredCard from "./ColoredCard";
+import React from "react"
+import { ScrollView, StyleSheet, View } from "react-native"
+import { colors } from "../../../common/theme"
+import ColoredCard from "./ColoredCard"
 
 const ListOfColoredCards = ({
   categoriesForCountry,
   onGenrePressed,
 }: {
-  categoriesForCountry: { name: string; id: string }[];
-  onGenrePressed: (id: string, title: string) => void;
+  categoriesForCountry: { name: string; id: string }[]
+  onGenrePressed: (id: string, title: string) => void
 }) => {
   return (
     <View style={styles.container}>
@@ -25,13 +25,13 @@ const ListOfColoredCards = ({
         ))}
       </ScrollView>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
     width: "100%",
   },
   scrollViewContent: {
@@ -41,6 +41,6 @@ const styles = StyleSheet.create({
     flexWrap: "wrap",
     paddingBottom: 16,
   },
-});
+})
 
-export default ListOfColoredCards;
+export default ListOfColoredCards

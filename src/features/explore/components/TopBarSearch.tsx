@@ -1,9 +1,9 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
-import { COLORS } from "../../../utils/constants";
-import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon";
+import React from "react"
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native"
+import { colors } from "../../../common/theme"
+import SearchIcon from "../../navigation/components/navigators/bottom-tabs/icons/SearchIcon"
 
-export const SEARCH_BAR_HEIGHT = 58;
+export const SEARCH_BAR_HEIGHT = 58
 
 const TopBarSearch = ({ onSearchPressed }: { onSearchPressed: () => void }) => (
   <TouchableWithoutFeedback onPress={onSearchPressed}>
@@ -14,14 +14,14 @@ const TopBarSearch = ({ onSearchPressed }: { onSearchPressed: () => void }) => (
       </View>
     </View>
   </TouchableWithoutFeedback>
-);
+)
 
 const styles = StyleSheet.create({
   container: {
     top: 0,
     left: 0,
     height: SEARCH_BAR_HEIGHT,
-    backgroundColor: COLORS.white,
+    backgroundColor: colors.white,
     width: "100%",
     justifyContent: "center",
     alignItems: "center",
@@ -32,6 +32,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
   },
-});
+})
 
-export default TopBarSearch;
+export default TopBarSearch

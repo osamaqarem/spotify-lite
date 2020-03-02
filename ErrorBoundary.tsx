@@ -1,32 +1,25 @@
-import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  Clipboard,
-  Linking,
-} from "react-native";
-import { COLORS } from "./src/utils/constants";
-import CrossIcon from "./src/components/CrossIcon";
-import SpotifyButton from "./src/components/SpotifyButton";
-import { NativeModules } from "react-native";
+import React, { Component } from "react"
+import { StyleSheet, Text, View, Alert, Clipboard, Linking } from "react-native"
+import CrossIcon from "./src/common/components/CrossIcon"
+import SpotifyButton from "./src/common/components/SpotifyButton"
+import { NativeModules } from "react-native"
+import { colors } from "./src/common/theme"
 
 export default class ErrorBoundary extends Component {
-  private static NO_STACK = "No stack trace.";
+  private static NO_STACK = "No stack trace."
   private static REPO_URL =
-    "https://github.com/osamaq/react-native-spotify-lite/";
-  private static ISSUE_URL = "issues/new?title=";
+    "https://github.com/osamaq/react-native-spotify-lite/"
+  private static ISSUE_URL = "issues/new?title="
   private static ISSUE_BODY =
-    "&body=%23%23%23 Description%0A%0A%23%23%23 Stack Trace%0A%0A`Paste it here!`";
+    "&body=%23%23%23 Description%0A%0A%23%23%23 Stack Trace%0A%0A`Paste it here!`"
 
   state: { hasError: boolean; error: Error | null } = {
     hasError: false,
     error: null,
-  };
+  }
 
   static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
+    return { hasError: true, error }
   }
 
   showError = () => {
@@ -37,36 +30,35 @@ export default class ErrorBoundary extends Component {
         {
           text: "Cancel",
           onPress: () => {
-            return;
+            return
           },
         },
         {
           text: "Copy & Report On GitHub",
           onPress: () => {
-            const stackTrace =
-              this.state.error?.stack || ErrorBoundary.NO_STACK;
-            const errName = this.state.error?.message || "Crash";
+            const stackTrace = this.state.error?.stack || ErrorBoundary.NO_STACK
+            const errName = this.state.error?.message || "Crash"
 
-            Clipboard.setString(stackTrace);
+            Clipboard.setString(stackTrace)
 
             Linking.openURL(
               ErrorBoundary.REPO_URL +
                 ErrorBoundary.ISSUE_URL +
                 errName +
                 ErrorBoundary.ISSUE_BODY,
-            );
+            )
           },
         },
       ],
       {
         cancelable: false,
       },
-    );
-  };
+    )
+  }
 
   reloadApp = () => {
-    NativeModules.DevSettings.reload();
-  };
+    NativeModules.DevSettings.reload()
+  }
 
   render() {
     if (this.state.hasError) {
@@ -74,9 +66,9 @@ export default class ErrorBoundary extends Component {
         <View style={styles.container}>
           <View style={styles.subContainer}>
             <CrossIcon
-              color={COLORS.white}
+              color={colors.white}
               handlePress={() => {
-                return;
+                return
               }}
               iconStyle={styles.icon}
               size={80}
@@ -94,22 +86,22 @@ export default class ErrorBoundary extends Component {
               <SpotifyButton
                 text="RESTART SPOTIFY"
                 handlePress={this.reloadApp}
-                color={COLORS.green}
-                textColor={COLORS.white}
+                color={colors.green}
+                textColor={colors.white}
               />
             </View>
           </View>
         </View>
-      );
+      )
     }
 
-    return this.props.children;
+    return this.props.children
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
     flex: 1,
     justifyContent: "flex-start",
   },
@@ -123,7 +115,7 @@ const styles = StyleSheet.create({
   },
   bigBoldText: {
     fontSize: 18,
-    color: COLORS.white,
+    color: colors.white,
     letterSpacing: 0.8,
     fontWeight: "bold",
   },
@@ -132,7 +124,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 50,
     lineHeight: 18,
     fontSize: 12,
-    color: COLORS.grey,
+    color: colors.grey,
     letterSpacing: 0.4,
     textAlign: "center",
   },
@@ -142,4 +134,4 @@ const styles = StyleSheet.create({
   restartBtn: {
     marginTop: 34,
   },
-});
+})

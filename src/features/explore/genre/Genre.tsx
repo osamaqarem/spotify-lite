@@ -1,130 +1,121 @@
-import React, { useLayoutEffect, useReducer, useRef, useState } from "react";
-import { Platform, StatusBar, StyleSheet, Text } from "react-native";
-import ImageColors from "react-native-image-colors";
-import LinearGradient from "react-native-linear-gradient";
-import Animated from "react-native-reanimated";
-import { NavigationEvents, SafeAreaView } from "react-navigation";
-import { NavigationStackProp } from "react-navigation-stack";
-import { connect, ConnectedProps } from "react-redux";
-import BackBtn from "../../../components/BackBtn";
-import LoadingView from "../../../components/LoadingView";
-import { getCategoryById, setPlaylistDetails } from "../../../redux/actions";
-import { RootStoreType } from "../../../data/models/redux";
-import { COLORS, Routes } from "../../../utils/constants";
-import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists";
-import { PlaylistDetailsType } from "../../../redux/reducers/playlistReducer";
+import React, { useLayoutEffect, useRef, useState } from "react"
+import { StatusBar, StyleSheet, Text } from "react-native"
+import ImageColors from "react-native-image-colors"
+import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
+import { NavigationEvents, SafeAreaView } from "react-navigation"
+import { NavigationStackProp } from "react-navigation-stack"
+import { connect, ConnectedProps } from "react-redux"
+import BackBtn from "../../../common/components/BackBtn"
+import LoadingView from "../../../common/components/LoadingView"
+import { colors } from "../../../common/theme"
+import { RootStoreType } from "../../../redux/rootReducer"
+import { PlaylistDetailsType } from "../../../redux/slices"
+import { getCategoryById } from "../../../redux/slices/browseSlice"
+import { getPlaylistByIdSuccess } from "../../../redux/slices/playlistSlice"
+import { Routes } from "../../navigation/_routes"
+import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists"
 
 const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedComponent(
   LinearGradient,
-);
+)
 
 const initialState = {
-  dominantColor: COLORS.tabBar,
-  loadingColor: true,
-};
+  dominantColor: colors.tabBar,
+  isLoading: true,
+}
 
 const Genre = ({
   navigation,
   genreDetails,
-  setPlaylistDetails,
+  getPlaylistByIdSuccess,
   getCategoryById,
-  loadingData,
+  isLoadingData,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
-  const offsetY = useRef(new Animated.Value(0)).current;
+  const offsetY = useRef(new Animated.Value(0)).current
 
   const heightAnim = offsetY.interpolate({
     inputRange: [0, 150],
     outputRange: [40, 0],
     extrapolate: Animated.Extrapolate.CLAMP,
-  });
+  })
 
-  const { genrePlaylists, title, id } = genreDetails;
-  const [seeMoreVisible, setSeeMoreVisible] = useState(true);
-
-  const [{ loadingColor, dominantColor }, setState] = useReducer(
-    // eslint-disable-next-line
-    (state = initialState, payload: typeof initialState) => ({ ...payload }),
-    initialState,
-  );
+  const { genrePlaylists, title, id } = genreDetails
+  const [seeMoreVisible, setSeeMoreVisible] = useState(true)
+  const [{ isLoading, dominantColor }, setState] = useState(initialState)
 
   useLayoutEffect(() => {
     const fetchColors = async () => {
-      if (
-        loadingColor &&
-        genrePlaylists[0]?.imageUrl &&
-        Platform.OS === "android"
-      ) {
-        if (loadingColor && genrePlaylists[0]?.imageUrl) {
-          try {
-            const colors = await ImageColors.getColors(
-              genrePlaylists[0]?.imageUrl,
-              { average: true },
-            );
-            if (colors.platform === "android") {
-              setState({
-                dominantColor: colors.average,
-                loadingColor: false,
-              });
-            } else {
-              setState({
-                dominantColor: colors.background,
-                loadingColor: false,
-              });
-            }
-          } catch (e) {
-            console.warn(e);
-            setDefaultColors();
+      if (genrePlaylists[0]?.imageUrl) {
+        try {
+          const colors = await ImageColors.getColors(
+            genrePlaylists[0]?.imageUrl,
+            { average: true },
+          )
+          if (colors.platform === "android") {
+            setState({
+              dominantColor: colors.average,
+              isLoading: false,
+            })
+          } else {
+            setState({
+              dominantColor: colors.background,
+              isLoading: false,
+            })
           }
-        } else {
-          setDefaultColors();
+        } catch (e) {
+          console.warn(e)
+          setDefaultColors()
         }
+      } else {
+        setDefaultColors()
       }
-    };
+    }
 
-    fetchColors();
-  }, [genrePlaylists, loadingColor]);
+    fetchColors()
+  }, [genrePlaylists, isLoading])
 
   const setDefaultColors = () => {
     setState({
-      dominantColor: COLORS.tabBar,
-      loadingColor: false,
-    });
-  };
+      dominantColor: colors.tabBar,
+      isLoading: false,
+    })
+  }
 
   const handleSeeMore = () => {
-    setSeeMoreVisible(false);
+    setSeeMoreVisible(false)
     getCategoryById({
       title: title!,
       id: id!,
       getRestOfItems: true,
-    });
-  };
+    })
+  }
 
   const onPlaylistPressed = (playlist: PlaylistDetailsType) => {
-    setPlaylistDetails(playlist);
-    navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails);
-  };
+    getPlaylistByIdSuccess(playlist)
+    navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
+  }
 
   const handleWillFocus = () => {
-    StatusBar.setBarStyle("light-content");
-  };
+    StatusBar.setBarStyle("light-content")
+  }
 
   const handleBack = () => {
-    navigation.goBack();
-  };
+    navigation.goBack()
+  }
 
   return (
     <SafeAreaView style={styles.container}>
       <NavigationEvents onWillFocus={handleWillFocus} />
       <BackBtn goBack={handleBack} />
-      {((loadingData || loadingColor) && (
+      {((isLoadingData || isLoading) && (
         <LoadingView viewStyle={styles.loading} />
       )) || (
         <>
           <AnimatedLinearGradient
             start={{ x: 0, y: 0 }}
             end={{ x: 0, y: 0.9 }}
-            colors={[dominantColor, COLORS.background]}
+            colors={[dominantColor, colors.background]}
             // @ts-ignore
             style={[
               {
@@ -144,39 +135,39 @@ const Genre = ({
         </>
       )}
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: COLORS.background,
+    backgroundColor: colors.background,
   },
   gradient: { width: "100%", opacity: 1, ...StyleSheet.absoluteFillObject },
   title: {
     position: "absolute",
     top: "25%",
-    color: COLORS.white,
+    color: colors.white,
     fontSize: 40,
     fontWeight: "bold",
   },
   loading: { marginTop: 50 },
-});
+})
 
 const mapStateToProps = (state: RootStoreType) => ({
   genreDetails: state.browseReducer.genreDetails,
-  loadingData: state.browseReducer.isLoading,
-});
+  isLoadingData: state.browseReducer.isLoading,
+})
 
 const mapDispatchToProps = {
-  setPlaylistDetails,
+  getPlaylistByIdSuccess,
   getCategoryById,
-};
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(Genre);
+export default connector(Genre)

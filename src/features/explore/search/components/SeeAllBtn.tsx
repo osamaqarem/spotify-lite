@@ -1,11 +1,11 @@
-import React from "react";
-import { Text, StyleSheet } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { AlbumType } from "../../../../data/models/spotify";
-import { COLORS } from "../../../../utils/constants";
-import { MARGIN_HORIZONTAL } from "./ResultRow";
-import Animated from "react-native-reanimated";
-import UIHelper from "../../../../utils/helpers/UIHelper";
+import React from "react"
+import { Text, StyleSheet } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import { AlbumType } from "../../../../services/network/models/spotify/SpotifyCommon"
+import { colors } from "../../../../common/theme"
+import { MARGIN_HORIZONTAL } from "./ResultRow"
+import Animated from "react-native-reanimated"
+import UIHelper from "../../../../common/helpers/UIHelper"
 
 const SeeAllBtn = React.memo(
   ({
@@ -13,16 +13,16 @@ const SeeAllBtn = React.memo(
     data,
     handleSeeAll,
   }: {
-    type: AlbumType["type"];
-    data: AlbumType[];
-    handleSeeAll: (type: AlbumType[]) => void;
+    type: AlbumType["type"]
+    data: AlbumType[]
+    handleSeeAll: (type: AlbumType[]) => void
   }) => {
-    const scale = new Animated.Value(1);
+    const scale = new Animated.Value(1)
 
     return (
       <TouchableOpacity
         onPress={() => {
-          handleSeeAll(data);
+          handleSeeAll(data)
         }}
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()
@@ -41,9 +41,9 @@ const SeeAllBtn = React.memo(
           <Text style={styles.seeAll}>See all {type?.toLowerCase()}s</Text>
         </Animated.View>
       </TouchableOpacity>
-    );
+    )
   },
-);
+)
 
 const styles = StyleSheet.create({
   btnContainer: {
@@ -54,12 +54,12 @@ const styles = StyleSheet.create({
     marginHorizontal: MARGIN_HORIZONTAL,
   },
   seeAll: {
-    color: COLORS.darkWhite,
+    color: colors.darkWhite,
     letterSpacing: 0.8,
     fontSize: 16,
   },
-});
+})
 
-SeeAllBtn.displayName = "SeeAllBtn";
+SeeAllBtn.displayName = "SeeAllBtn"
 
-export default SeeAllBtn;
+export default SeeAllBtn

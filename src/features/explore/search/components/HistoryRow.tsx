@@ -1,32 +1,32 @@
-import React from "react";
+import React from "react"
 import {
   LayoutAnimation,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import FastImage from "react-native-fast-image";
-import Animated, { Easing } from "react-native-reanimated";
-import { AlbumType } from "../../../../data/models/spotify";
-import { COLORS } from "../../../../utils/constants";
-import UIHelper from "../../../../utils/helpers/UIHelper";
-import CrossIcon from "../../../../components/CrossIcon";
-import { MARGIN_HORIZONTAL } from "./ResultRow";
+} from "react-native"
+import FastImage from "react-native-fast-image"
+import Animated, { Easing } from "react-native-reanimated"
+import { AlbumType } from "../../../../services/network/models/spotify/SpotifyCommon"
+import { colors } from "../../../../common/theme"
+import UIHelper from "../../../../common/helpers/UIHelper"
+import CrossIcon from "../../../../common/components/CrossIcon"
+import { MARGIN_HORIZONTAL } from "./ResultRow"
 
-export const ROW_HEIGHT = 67;
+export const ROW_HEIGHT = 67
 
 const HistoryRow = ({
   item,
   handleRemove,
   handleResultPress,
 }: {
-  item: AlbumType;
-  handleRemove: (item: AlbumType) => void;
-  handleResultPress: (item: AlbumType) => void;
+  item: AlbumType
+  handleRemove: (item: AlbumType) => void
+  handleResultPress: (item: AlbumType) => void
 }) => {
-  const scale = new Animated.Value(1);
-  const opacity = new Animated.Value(1);
+  const scale = new Animated.Value(1)
+  const opacity = new Animated.Value(1)
 
   const onRemove = () => {
     Animated.timing(opacity, {
@@ -40,15 +40,15 @@ const HistoryRow = ({
           update: {
             type: LayoutAnimation.Types.linear,
           },
-        });
-        handleRemove(item);
-      }, 10);
-    });
-  };
+        })
+        handleRemove(item)
+      }, 10)
+    })
+  }
 
   const handlePress = () => {
-    handleResultPress(item);
-  };
+    handleResultPress(item)
+  }
 
   return (
     <Animated.View style={[styles.container, { opacity }]}>
@@ -90,13 +90,13 @@ const HistoryRow = ({
       </TouchableOpacity>
       <CrossIcon
         size={30}
-        color={COLORS.darkerGrey}
+        color={colors.darkerGrey}
         handlePress={onRemove}
         iconStyle={styles.removeIcon}
       />
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -128,14 +128,14 @@ const styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: COLORS.darkWhite,
+    color: colors.darkWhite,
     letterSpacing: 0.8,
     fontSize: 16,
   },
   type: {
     flex: 1,
     fontWeight: "normal",
-    color: COLORS.grey,
+    color: colors.grey,
     letterSpacing: 0.8,
     fontSize: 14,
   },
@@ -145,6 +145,6 @@ const styles = StyleSheet.create({
     top: 4,
     left: 2,
   },
-});
+})
 
-export default HistoryRow;
+export default HistoryRow

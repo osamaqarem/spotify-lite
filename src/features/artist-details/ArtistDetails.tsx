@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from "react"
 import {
   ActivityIndicator,
   ScrollView,
@@ -6,59 +6,61 @@ import {
   StyleSheet,
   Text,
   View,
-} from "react-native";
+} from "react-native"
 // @ts-ignore
-import LinearGradient from "react-native-linear-gradient";
-import Animated from "react-native-reanimated";
-import { NavigationEvents, SafeAreaView } from "react-navigation";
-import { NavigationStackProp } from "react-navigation-stack";
-import { connect, ConnectedProps } from "react-redux";
-import ArtistCover from "../../components/ArtistCover";
-import DetailsCover from "../../components/DetailsCover";
-import ListOfTracks from "../../components/ListOfTracks";
-import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
-import PlaylistTitle, { HEADER_HEIGHT } from "../../components/PlaylistTitle";
-import ShuffleButton from "../../components/ShuffleButton";
-import { RootStoreType } from "../../data/models/redux";
-import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import { redoLogin, setArtistId } from "../../redux/actions";
-import { COLORS, Routes } from "../../utils/constants";
-import UIHelper from "../../utils/helpers/UIHelper";
-import useArtistDetails from "./useArtistDetails";
+import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
+import { NavigationEvents, SafeAreaView } from "react-navigation"
+import { NavigationStackProp } from "react-navigation-stack"
+import { connect, ConnectedProps } from "react-redux"
+import ArtistCover from "../../common/components/ArtistCover"
+import DetailsCover from "../../common/components/DetailsCover"
+import ListOfTracks from "../../common/components/ListOfTracks"
+import PlaylistHeaderControl from "../../common/components/PlaylistHeaderControl"
+import PlaylistTitle, {
+  HEADER_HEIGHT,
+} from "../../common/components/PlaylistTitle"
+import ShuffleButton from "../../common/components/ShuffleButton"
+import usePlaylistAnim from "../../common/hooks/usePlaylistAnim"
+import UIHelper from "../../common/helpers/UIHelper"
+import useArtistDetails from "./hooks/useArtistDetails"
+import { Routes } from "../navigation/_routes"
+import { colors } from "../../common/theme"
+import { setArtistId } from "../../redux/slices/artistSlice"
+import { redoLogin } from "../../redux/slices/userSlice"
+import { RootStoreType } from "../../redux/rootReducer"
 
 const LoadingView = () => (
   <ActivityIndicator
     size={50}
-    color={COLORS.green}
+    color={colors.green}
     style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
   />
-);
+)
 
 const ArtistDetails = ({
   artistId,
   setArtistId,
   navigation,
-  token,
   profile,
   redoLogin,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
-  const offsetY = useRef(new Animated.Value(0)).current;
-  const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
-  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
+  const offsetY = useRef(new Animated.Value(0)).current
+  const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY)
+  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100)
   const { isLoading, dominantColor, artistDetails } = useArtistDetails({
     artistId,
     profile,
     redoLogin,
-    token,
-  });
+  })
 
   const goToArtist = (id: string) => {
-    setArtistId(id);
-    navigation.push(Routes.BottomTabs.HomeStack.ArtistDetails);
-  };
+    setArtistId(id)
+    navigation.push(Routes.BottomTabs.HomeStack.ArtistDetails)
+  }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.background }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       <NavigationEvents
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
       />
@@ -83,7 +85,7 @@ const ArtistDetails = ({
               start={{ x: 0, y: 0 }}
               // end={{ x: 0, y: 0.9 }}
               end={{ x: 0, y: 0.7 }}
-              colors={[dominantColor, COLORS.background]}
+              colors={[dominantColor, colors.background]}
               style={styles.gradient}
             />
           </Animated.View>
@@ -132,7 +134,7 @@ const ArtistDetails = ({
                 contentContainerStyle={{
                   paddingBottom: 30,
                 }}
-                showsVerticalScrollIndicator={false}>
+                showsHorizontalScrollIndicator={false}>
                 {artistDetails.relatedArtists.map(artist => (
                   <ArtistCover
                     coverShape="CIRCLE"
@@ -151,8 +153,8 @@ const ArtistDetails = ({
         </>
       )}
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   gradientContainer: {
@@ -181,21 +183,20 @@ const styles = StyleSheet.create({
     fontSize: 18.5,
     marginTop: 24,
   },
-});
+})
 
 const mapStateToProps = (state: RootStoreType) => ({
   artistId: state.artistReducer.artistId,
-  token: state.userReducer.token,
   profile: state.userReducer.profile,
-});
+})
 
 const mapDispatchToProps = {
   setArtistId,
   redoLogin,
-};
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(ArtistDetails);
+export default connector(ArtistDetails)

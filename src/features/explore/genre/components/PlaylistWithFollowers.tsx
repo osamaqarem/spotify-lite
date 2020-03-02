@@ -1,24 +1,24 @@
-import React from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
-import FastImage from "react-native-fast-image";
-import Animated from "react-native-reanimated";
-import { COLORS } from "../../../../utils/constants";
-import { PlaylistDetailsType } from "../../../../redux/reducers/playlistReducer";
-import UIHelper from "../../../../utils/helpers/UIHelper";
+import React from "react"
+import { Text, TouchableOpacity, View, StyleSheet } from "react-native"
+import FastImage from "react-native-fast-image"
+import Animated from "react-native-reanimated"
+import { colors } from "../../../../common/theme"
+import UIHelper from "../../../../common/helpers/UIHelper"
+import { PlaylistDetailsType } from "../../../../redux/slices"
 
 export const ITEM_DIMENSIONS = {
   MARGIN: 46,
   WIDTH: 156,
-};
+}
 
 const PlaylistWithFollowers = ({
   playlist,
   onPress,
 }: {
-  playlist: PlaylistDetailsType;
-  onPress: () => void;
+  playlist: PlaylistDetailsType
+  onPress: () => void
 }) => {
-  const scale = new Animated.Value(1);
+  const scale = new Animated.Value(1)
   return (
     <Animated.View
       style={[
@@ -53,8 +53,8 @@ const PlaylistWithFollowers = ({
         </View>
       </TouchableOpacity>
     </Animated.View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -74,17 +74,17 @@ const styles = StyleSheet.create({
     width: "94%",
     marginBottom: 10,
     textAlign: "center",
-    color: COLORS.white,
+    color: colors.white,
     top: 10,
     fontSize: 13,
   },
   followers: {
-    color: COLORS.grey,
+    color: colors.grey,
     textAlign: "center",
     marginTop: 6,
     fontSize: 10,
     letterSpacing: 0.4,
   },
-});
+})
 
-export default PlaylistWithFollowers;
+export default PlaylistWithFollowers

@@ -1,100 +1,99 @@
-import React, {
-  useCallback,
-  useLayoutEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
-import { BackHandler, StatusBar, StyleSheet, View } from "react-native";
-import ImageColors from "react-native-image-colors";
-import LinearGradient from "react-native-linear-gradient";
-import Animated from "react-native-reanimated";
-import { NavigationEvents, SafeAreaView } from "react-navigation";
-import { NavigationStackProp } from "react-navigation-stack";
-import { connect, ConnectedProps } from "react-redux";
-import DetailsCover from "../../components/DetailsCover";
-import ListOfTracks from "../../components/ListOfTracks";
-import LoadingView from "../../components/LoadingView";
-import PlaylistHeaderControl from "../../components/PlaylistHeaderControl";
-import PlaylistTitle from "../../components/PlaylistTitle";
-import ShuffleButton from "../../components/ShuffleButton";
-import { RootStoreType } from "../../data/models/redux";
-import usePlaylistAnim from "../../hooks/usePlaylistAnim";
-import { clearPlaylistDetails } from "../../redux/actions";
-import { COLORS } from "../../utils/constants";
-import UIHelper from "../../utils/helpers/UIHelper";
+import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
+import {
+  BackHandler,
+  StatusBar,
+  StyleSheet,
+  ToastAndroid,
+  View,
+} from "react-native"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import ImageColors from "react-native-image-colors"
+import LinearGradient from "react-native-linear-gradient"
+import Animated from "react-native-reanimated"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { NavigationEvents, SafeAreaView } from "react-navigation"
+import { NavigationStackProp } from "react-navigation-stack"
+import { connect, ConnectedProps } from "react-redux"
+import DetailsCover from "../../common/components/DetailsCover"
+import DotsView from "../../common/components/DotsView"
+import LoadingView from "../../common/components/LoadingView"
+import PlaylistTitle from "../../common/components/PlaylistTitle"
+import ShuffleButton from "../../common/components/ShuffleButton"
+import UIHelper from "../../common/helpers/UIHelper"
+import usePlaylistAnim from "../../common/hooks/usePlaylistAnim"
+import { colors } from "../../common/theme"
+import { RootStoreType } from "../../redux/rootReducer"
+import { clearCurrentPlaylist } from "../../redux/slices"
+import ListOfTracks from "../../common/components/ListOfTracks"
+import PlaylistHeaderControl from "../../common/components/PlaylistHeaderControl"
 
 const initialState = {
-  dominantColor: COLORS.background,
+  dominantColor: colors.background,
   isLoading: true,
-};
+}
 
 const PlaylistDetails = ({
   playlistDetails,
-  clearPlaylistDetails,
+  clearCurrentPlaylist,
   navigation,
   username,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
-  const offsetY = useRef(new Animated.Value(0)).current;
-  const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY);
-  const [{ isLoading, dominantColor }, setState] = useReducer(
-    // eslint-disable-next-line
-    (state = initialState, payload: typeof initialState) => ({ ...payload }),
-    { isLoading: true, dominantColor: COLORS.background },
-  );
-  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100);
+  const offsetY = useRef(new Animated.Value(0)).current
+  const { heightAnim, opacityAnim, translateAnim } = usePlaylistAnim(offsetY)
+  const [{ isLoading, dominantColor }, setState] = useState(initialState)
+  const [scrollViewHeight, setScrollViewHeight] = useState<number>(100)
 
   const goBack = useCallback(() => {
-    clearPlaylistDetails();
-    navigation.goBack();
-    return true;
-  }, [clearPlaylistDetails, navigation]);
+    clearCurrentPlaylist()
+    navigation.goBack()
+    return true
+  }, [clearCurrentPlaylist, navigation])
 
   const setDefaultColors = () => {
     setState({
-      dominantColor: COLORS.tabBar,
+      dominantColor: colors.tabBar,
       isLoading: false,
-    });
-  };
+    })
+  }
 
   useLayoutEffect(() => {
     const didFocusSub = navigation.addListener("didFocus", async () => {
-      BackHandler.addEventListener("hardwareBackPress", goBack);
+      BackHandler.addEventListener("hardwareBackPress", goBack)
 
       if (playlistDetails?.imageUrl) {
         try {
           const colors = await ImageColors.getColors(
             playlistDetails?.imageUrl,
             { average: true },
-          );
+          )
           if (colors.platform === "android") {
             setState({
               dominantColor: colors.average,
               isLoading: false,
-            });
+            })
           } else {
             setState({
               dominantColor: colors.background,
               isLoading: false,
-            });
+            })
           }
         } catch (e) {
-          console.warn(e);
-          setDefaultColors();
+          console.warn(e)
+          setDefaultColors()
         }
       } else {
-        setDefaultColors();
+        setDefaultColors()
       }
-    });
+    })
 
     return () => {
-      BackHandler.removeEventListener("hardwareBackPress", goBack);
-      didFocusSub.remove();
-    };
-  }, [goBack, navigation, playlistDetails]);
+      BackHandler.removeEventListener("hardwareBackPress", goBack)
+      didFocusSub.remove()
+    }
+  }, [goBack, navigation, playlistDetails])
 
   return (
-    <SafeAreaView style={{ backgroundColor: COLORS.background, flex: 1 }}>
+    <SafeAreaView style={{ backgroundColor: colors.background, flex: 1 }}>
       <NavigationEvents
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
       />
@@ -115,7 +114,7 @@ const PlaylistDetails = ({
             <LinearGradient
               start={{ x: 0, y: 0 }}
               end={{ x: 0, y: 0.7 }}
-              colors={[dominantColor, COLORS.background]}
+              colors={[dominantColor, colors.background]}
               style={styles.gradient}
             />
           </Animated.View>
@@ -129,10 +128,7 @@ const PlaylistDetails = ({
               username={username}
             />
           </View>
-          <ShuffleButton
-            offsetY={offsetY}
-            scrollViewHeight={scrollViewHeight}
-          />
+          <ShuffleButton offsetY={offsetY} />
           <Animated.ScrollView
             onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
@@ -159,8 +155,8 @@ const PlaylistDetails = ({
         </>
       )}
     </SafeAreaView>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   gradientContainer: {
@@ -178,22 +174,22 @@ const styles = StyleSheet.create({
     marginTop: 90,
   },
   scrollContent: {
-    marginTop: 350,
+    marginTop: 360,
     zIndex: 5,
   },
-});
+})
 
 const mapStateToProps = (state: RootStoreType) => ({
   playlistDetails: state.playlistReducer.playlistDetails,
   username: state.userReducer.profile?.display_name,
-});
+})
 
 const mapDispatchToProps = {
-  clearPlaylistDetails,
-};
+  clearCurrentPlaylist,
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(PlaylistDetails);
+export default connector(PlaylistDetails)

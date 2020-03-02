@@ -1,21 +1,21 @@
-import React from "react";
+import React from "react"
 import {
   Text,
   TouchableOpacity,
   View,
   StyleSheet,
   ViewStyle,
-} from "react-native";
-import FastImage, { ImageStyle } from "react-native-fast-image";
-import Animated from "react-native-reanimated";
-import { AlbumType } from "../../../../data/models/spotify";
-import UIHelper from "../../../../utils/helpers/UIHelper";
-import { COLORS } from "../../../../utils/constants";
+} from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
+import Animated from "react-native-reanimated"
+import { AlbumType } from "../../../../services/network/models/spotify/SpotifyCommon"
+import UIHelper from "../../../../common/helpers/UIHelper"
+import { colors } from "../../../../common/theme"
 
-export const MARGIN_HORIZONTAL = 14;
+export const MARGIN_HORIZONTAL = 14
 
-const clock = new Animated.Clock();
-const opacityAnim = UIHelper.runTiming(clock, 0, 1, 500);
+const clock = new Animated.Clock()
+const opacityAnim = UIHelper.runTiming(clock, 0, 1, 500)
 
 const ResultRow = React.memo(
   ({
@@ -24,12 +24,12 @@ const ResultRow = React.memo(
     coverStyle,
     containerStyle,
   }: {
-    result: AlbumType;
-    handleResultPress: (item: AlbumType) => void;
-    coverStyle?: ImageStyle;
-    containerStyle?: ViewStyle;
+    result: AlbumType
+    handleResultPress: (item: AlbumType) => void
+    coverStyle?: ImageStyle
+    containerStyle?: ViewStyle
   }) => {
-    const scale = new Animated.Value(1);
+    const scale = new Animated.Value(1)
 
     return (
       <TouchableOpacity
@@ -40,7 +40,7 @@ const ResultRow = React.memo(
           Animated.timing(scale, UIHelper.btnScaleAnim.out).start()
         }
         onPress={() => {
-          handleResultPress(result);
+          handleResultPress(result)
         }}>
         <Animated.View
           style={[
@@ -74,11 +74,11 @@ const ResultRow = React.memo(
           </View>
         </Animated.View>
       </TouchableOpacity>
-    );
+    )
   },
-);
+)
 
-ResultRow.displayName = "ResultRow";
+ResultRow.displayName = "ResultRow"
 
 const styles = StyleSheet.create({
   container: {
@@ -100,17 +100,17 @@ const styles = StyleSheet.create({
   },
   name: {
     flex: 1,
-    color: COLORS.darkWhite,
+    color: colors.darkWhite,
     letterSpacing: 0.8,
     fontSize: 16,
   },
   type: {
     flex: 1,
     fontWeight: "normal",
-    color: COLORS.grey,
+    color: colors.grey,
     letterSpacing: 0.8,
     fontSize: 14,
   },
-});
+})
 
-export default ResultRow;
+export default ResultRow

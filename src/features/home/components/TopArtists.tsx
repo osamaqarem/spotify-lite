@@ -1,31 +1,31 @@
-import React, { useContext } from "react";
-import { Text, View } from "react-native";
-import FastImage from "react-native-fast-image";
-import { connect, ConnectedProps } from "react-redux";
-import { RootStoreType } from "../../../data/models/redux";
-import AlbumItem from "./AlbumItem";
-import { albumDimensions, styles } from "../styles";
-import { setArtistId } from "../../../redux/actions";
-import { NavigationContext } from "react-navigation";
-import { Routes } from "../../../utils/constants";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import Animated from "react-native-reanimated";
-import UIHelper from "../../../utils/helpers/UIHelper";
+import React, { useContext } from "react"
+import { Text, View } from "react-native"
+import FastImage from "react-native-fast-image"
+import { connect, ConnectedProps } from "react-redux"
+import AlbumItem from "./AlbumItem"
+import { albumDimensions, styles } from "../styles"
+import { setArtistId } from "../../../redux/slices/artistSlice"
+import { NavigationContext } from "react-navigation"
+import { Routes } from "../../navigation/_routes"
+import { TouchableOpacity } from "react-native-gesture-handler"
+import Animated from "react-native-reanimated"
+import UIHelper from "../../../common/helpers/UIHelper"
+import { RootStoreType } from "../../../redux/rootReducer"
 
 const TopArtists = ({
   userTopArtistsHeader,
   userTopArtists,
   setArtistId,
 }: ReduxProps) => {
-  const scale = new Animated.Value(1);
-  const navigation = useContext(NavigationContext);
+  const scale = new Animated.Value(1)
+  const navigation = useContext(NavigationContext)
 
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
-      setArtistId(id);
-      navigation.navigate(Routes.BottomTabs.HomeStack.ArtistDetails);
+      setArtistId(id)
+      navigation.navigate(Routes.BottomTabs.HomeStack.ArtistDetails)
     }
-  };
+  }
 
   return (
     <>
@@ -81,20 +81,20 @@ const TopArtists = ({
         ))}
       </View>
     </>
-  );
-};
+  )
+}
 
 const mapStateToProps = (state: RootStoreType) => ({
   userTopArtists: state.personalizationReducer.userTopArtists,
   userTopArtistsHeader: state.personalizationReducer.userTopArtistsHeader,
-});
+})
 
 const mapDispatchToProps = {
   setArtistId,
-};
+}
 
-const connector = connect(mapStateToProps, mapDispatchToProps);
+const connector = connect(mapStateToProps, mapDispatchToProps)
 
-type ReduxProps = ConnectedProps<typeof connector>;
+type ReduxProps = ConnectedProps<typeof connector>
 
-export default connector(TopArtists);
+export default connector(TopArtists)
