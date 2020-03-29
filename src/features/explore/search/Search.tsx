@@ -123,8 +123,8 @@ const Search = ({
     searchInput.current?.focus()
   }
 
-  const handleSeeAll = (data: AlbumType[]) => {
-    querySetSeeAll(data)
+  const handleSeeAll = (data: AlbumType[], type: AlbumType["type"]) => {
+    querySetSeeAll({ data, type })
     navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll)
   }
 

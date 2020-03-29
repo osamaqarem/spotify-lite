@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useRef, useState } from "react"
-import { StatusBar, StyleSheet, Text } from "react-native"
+import { StatusBar, StyleSheet, Text, View } from "react-native"
 import ImageColors from "react-native-image-colors"
 import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
@@ -15,6 +15,7 @@ import { getCategoryById } from "../../../redux/slices/browseSlice"
 import { getPlaylistByIdSuccess } from "../../../redux/slices/playlistSlice"
 import { Routes } from "../../navigation/_routes"
 import ListOfGenrePlaylists from "./components/ListOfGenrePlaylists"
+import { HEADER_HEIGHT } from "../../../common/components/PlaylistHeaderControl"
 
 const AnimatedLinearGradient: typeof LinearGradient = Animated.createAnimatedComponent(
   LinearGradient,
@@ -34,11 +35,13 @@ const Genre = ({
 }: ReduxProps & { navigation: NavigationStackProp }) => {
   const offsetY = useRef(new Animated.Value(0)).current
 
-  const heightAnim = offsetY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [40, 0],
-    extrapolate: Animated.Extrapolate.CLAMP,
-  })
+  const heightAnim = useRef(
+    offsetY.interpolate({
+      inputRange: [0, 150],
+      outputRange: [40, 0],
+      extrapolate: Animated.Extrapolate.CLAMP,
+    }),
+  ).current
 
   const { genrePlaylists, title, id } = genreDetails
   const [seeMoreVisible, setSeeMoreVisible] = useState(true)
@@ -104,36 +107,40 @@ const Genre = ({
     navigation.goBack()
   }
 
+  const notReady = isLoadingData || isLoading
+
   return (
     <SafeAreaView style={styles.container}>
-      <NavigationEvents onWillFocus={handleWillFocus} />
-      <BackBtn goBack={handleBack} />
-      {((isLoadingData || isLoading) && (
-        <LoadingView viewStyle={styles.loading} />
-      )) || (
-        <>
-          <AnimatedLinearGradient
-            start={{ x: 0, y: 0 }}
-            end={{ x: 0, y: 0.9 }}
-            colors={[dominantColor, colors.background]}
-            // @ts-ignore
-            style={[
-              {
-                height: Animated.concat(heightAnim, "%"),
-              },
-              styles.gradient,
-            ]}
-          />
-          <Text style={styles.title}>{title}</Text>
-          <ListOfGenrePlaylists
-            genrePlaylists={genrePlaylists}
-            handleSeeMore={handleSeeMore}
-            offsetY={offsetY}
-            onPlaylistPressed={onPlaylistPressed}
-            seeMoreVisible={seeMoreVisible}
-          />
-        </>
+      {!notReady && (
+        <AnimatedLinearGradient
+          start={{ x: 0, y: 0 }}
+          end={{ x: 0, y: 0.7 }}
+          colors={[dominantColor, colors.background]}
+          // @ts-ignore
+          style={[
+            {
+              height: Animated.concat(heightAnim, "%") as any,
+            },
+            styles.gradient,
+          ]}
+        />
       )}
+      <View style={[styles.container, { backgroundColor: "transparent" }]}>
+        <NavigationEvents onWillFocus={handleWillFocus} />
+        {(notReady && <LoadingView viewStyle={styles.loading} />) || (
+          <>
+            <BackBtn goBack={handleBack} />
+            <Text style={styles.title}>{title}</Text>
+            <ListOfGenrePlaylists
+              genrePlaylists={genrePlaylists}
+              handleSeeMore={handleSeeMore}
+              offsetY={offsetY}
+              onPlaylistPressed={onPlaylistPressed}
+              seeMoreVisible={seeMoreVisible}
+            />
+          </>
+        )}
+      </View>
     </SafeAreaView>
   )
 }

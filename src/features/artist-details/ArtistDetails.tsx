@@ -17,18 +17,16 @@ import ArtistCover from "../../common/components/ArtistCover"
 import DetailsCover from "../../common/components/DetailsCover"
 import ListOfTracks from "../../common/components/ListOfTracks"
 import PlaylistHeaderControl from "../../common/components/PlaylistHeaderControl"
-import PlaylistTitle, {
-  HEADER_HEIGHT,
-} from "../../common/components/PlaylistTitle"
+import PlaylistTitle from "../../common/components/PlaylistTitle"
 import ShuffleButton from "../../common/components/ShuffleButton"
-import usePlaylistAnim from "../../common/hooks/usePlaylistAnim"
 import UIHelper from "../../common/helpers/UIHelper"
-import useArtistDetails from "./hooks/useArtistDetails"
-import { Routes } from "../navigation/_routes"
+import usePlaylistAnim from "../../common/hooks/usePlaylistAnim"
 import { colors } from "../../common/theme"
+import { RootStoreType } from "../../redux/rootReducer"
 import { setArtistId } from "../../redux/slices/artistSlice"
 import { redoLogin } from "../../redux/slices/userSlice"
-import { RootStoreType } from "../../redux/rootReducer"
+import { Routes } from "../navigation/_routes"
+import useArtistDetails from "./hooks/useArtistDetails"
 
 const LoadingView = () => (
   <ActivityIndicator
@@ -83,7 +81,6 @@ const ArtistDetails = ({
             ]}>
             <LinearGradient
               start={{ x: 0, y: 0 }}
-              // end={{ x: 0, y: 0.9 }}
               end={{ x: 0, y: 0.7 }}
               colors={[dominantColor, colors.background]}
               style={styles.gradient}
@@ -99,10 +96,7 @@ const ArtistDetails = ({
               username={profile?.display_name}
             />
           </View>
-          <ShuffleButton
-            offsetY={offsetY}
-            scrollViewHeight={scrollViewHeight}
-          />
+          <ShuffleButton offsetY={offsetY} />
           <Animated.ScrollView
             onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
@@ -170,10 +164,10 @@ const styles = StyleSheet.create({
   coverContainer: {
     ...StyleSheet.absoluteFillObject,
     marginTop: UIHelper.isIphoneX() ? -10 : -50,
-    top: HEADER_HEIGHT,
+    top: 100,
   },
   scrollContent: {
-    marginTop: 350,
+    marginTop: 360,
     zIndex: 5,
   },
   relatedArtists: {

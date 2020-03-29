@@ -84,7 +84,7 @@ class ApiClient {
       const abort = setTimeout(() => {
         contoller.abort()
       }, reqTimeout * 1000)
-      debugger
+
       const result = await fetch(fullURL, finalConfig)
 
       clearTimeout(abort)

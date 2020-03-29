@@ -15,14 +15,14 @@ const SeeAllBtn = React.memo(
   }: {
     type: AlbumType["type"]
     data: AlbumType[]
-    handleSeeAll: (type: AlbumType[]) => void
+    handleSeeAll: (data: AlbumType[], type: AlbumType["type"]) => void
   }) => {
     const scale = new Animated.Value(1)
 
     return (
       <TouchableOpacity
         onPress={() => {
-          handleSeeAll(data)
+          handleSeeAll(data, type)
         }}
         onPressIn={() =>
           Animated.timing(scale, UIHelper.btnScaleAnim.in).start()

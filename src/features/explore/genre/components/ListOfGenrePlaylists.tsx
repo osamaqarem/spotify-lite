@@ -1,12 +1,12 @@
 import React from "react"
 import { FlatList, Text, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { BACKBTN_HEIGHT } from "../../../../common/components/BackBtn"
 import { colors, dimensions } from "../../../../common/theme"
 import PlaylistWithFollowers, { ITEM_DIMENSIONS } from "./PlaylistWithFollowers"
 import SeeMoreBtn from "./SeeMoreBtn"
 import UIHelper from "../../../../common/helpers/UIHelper"
 import { PlaylistDetailsType } from "../../../../redux/slices"
+import { HEADER_HEIGHT } from "../../../../common/components/PlaylistHeaderControl"
 
 const AnimatedFlatList: typeof FlatList = Animated.createAnimatedComponent(
   FlatList,
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     zIndex: 10,
     width: "100%",
-    marginTop: BACKBTN_HEIGHT,
+    marginTop: HEADER_HEIGHT + 50,
   },
 })
 

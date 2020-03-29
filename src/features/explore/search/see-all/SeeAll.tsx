@@ -11,44 +11,53 @@ import ResultRow from "../components/ResultRow"
 
 type SeeAllType = { navigation: NavigationStackProp } & ReduxProps
 
-const SeeAll = ({ navigation, lastQuery, seeAll }: SeeAllType) => {
+const SeeAll = ({ navigation, lastQuery, data, type }: SeeAllType) => {
   const handleWillFocus = () => {
     StatusBar.setBarStyle("light-content")
   }
 
-  const items = seeAll.data.map(item => (
-    <ResultRow
-      containerStyle={{ marginTop: 14 }}
-      coverStyle={{ height: 44, width: 44 }}
-      result={item}
-      key={item.id}
-      handleResultPress={() => {
-        return
-      }}
-    />
-  ))
+  const items =
+    data &&
+    data.map(item => (
+      <ResultRow
+        containerStyle={{ marginTop: 14 }}
+        coverStyle={{ height: 44, width: 44 }}
+        result={item}
+        key={item.id}
+        handleResultPress={() => {
+          return
+        }}
+      />
+    ))
 
   return (
-    <SafeAreaView style={styles.container}>
-      <NavigationEvents onWillFocus={handleWillFocus} />
-      <View style={styles.bar}>
-        <BackBtnSearch
-          onPress={() => navigation.goBack()}
-          tintColor={colors.lightGrey}
-          textStyle={styles.backBtnIcon}
-        />
-        <Text style={styles.text}>
-          {`"${lastQuery}"`} in {seeAll.type}
-        </Text>
+    <SafeAreaView style={styles.safeContainer}>
+      <View style={styles.container}>
+        <NavigationEvents onWillFocus={handleWillFocus} />
+        <View style={styles.bar}>
+          <BackBtnSearch
+            onPress={() => navigation.goBack()}
+            tintColor={colors.lightGrey}
+            textStyle={styles.backBtnIcon}
+          />
+          <Text style={styles.text}>
+            {`"${lastQuery}"`} in {type}
+          </Text>
+        </View>
+        <ScrollView
+          contentContainerStyle={{ flexGrow: 1, marginHorizontal: 4 }}>
+          {items}
+        </ScrollView>
       </View>
-      <ScrollView contentContainerStyle={{ flexGrow: 1, marginHorizontal: 4 }}>
-        {items}
-      </ScrollView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
+  safeContainer: {
+    flex: 1,
+    backgroundColor: colors.tabBar,
+  },
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -81,7 +90,8 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = (state: RootStoreType) => ({
-  seeAll: state.searchReducer.seeAll,
+  data: state.searchReducer.seeAll.data,
+  type: state.searchReducer.seeAll.type,
   lastQuery: state.searchReducer.lastQuery,
 })
 

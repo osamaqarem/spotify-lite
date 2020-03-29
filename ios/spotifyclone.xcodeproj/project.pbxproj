@@ -663,7 +663,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/spotifyclone.app/spotifyclone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spotify Lite.app/Spotify Lite";
 			};
 			name = Debug;
 		};
@@ -685,7 +685,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/spotifyclone.app/spotifyclone";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Spotify Lite.app/Spotify Lite";
 			};
 			name = Release;
 		};
@@ -700,6 +700,7 @@
 				DEVELOPMENT_TEAM = L8X2SK2K4X;
 				INFOPLIST_FILE = spotifyclone/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -724,6 +725,7 @@
 				DEVELOPMENT_TEAM = L8X2SK2K4X;
 				INFOPLIST_FILE = spotifyclone/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 0.0.1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",

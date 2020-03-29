@@ -1,10 +1,7 @@
 import React from "react"
 import { StyleSheet, TextStyle, View, ViewStyle } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { colors, dimensions } from "../theme"
-import { HEADER_HEIGHT } from "./PlaylistHeaderControl"
-
-export const BACKBTN_HEIGHT = 80 * dimensions.widthRatio
+import { colors } from "../theme"
 
 const BackBtn = ({
   goBack,
@@ -38,10 +35,11 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 14,
     top: 10,
-    height: HEADER_HEIGHT,
-    width: HEADER_HEIGHT,
+    zIndex: 10,
     justifyContent: "center",
     alignItems: "center",
+    height: 42,
+    width: 42,
   },
 })
 

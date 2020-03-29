@@ -22,7 +22,6 @@ const usePlaylistAnim = (offsetY: Animated.Value<number>) => {
   const translateAnim = useRef(
     offsetY.interpolate({
       inputRange: [0, 300],
-      // outputRange: [0, 54 * dimensions.ratio],
       outputRange: [0, 54 * dimensions.ratio],
       extrapolate: Animated.Extrapolate.CLAMP,
     }),

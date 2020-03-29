@@ -8,6 +8,7 @@
     "runAndroid:debugRelease": "react-native run-android --variant=release",
     "makeAPK": "cd android && ./gradlew assembleRelease",
     "runiOS:debug": "react-native run-ios",
+    "runiOS:debugRelease": "react-native run-ios --configuration Release",
     "detox-build:androidDebug": "detox build -c android.emu.debug",
     "detox-build:androidRelease": "detox build -c android.emu.release",
     "detox-test:androidDebug": "detox test -c android.emu.debug",
@@ -115,7 +116,7 @@
         }
       },
       "ios.sim.debug": {
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/spotifyclone.app",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/Spotify Lite.app",
         "build": "xcodebuild -workspace ios/spotifyclone.xcworkspace -scheme spotifyclone -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
@@ -123,7 +124,7 @@
         }
       },
       "ios.sim.release": {
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/spotifyclone.app",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/Spotify Lite.app",
         "build": "xcodebuild -workspace ios/spotifyclone.xcworkspace -scheme spotifyclone -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {

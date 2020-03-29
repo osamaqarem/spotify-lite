@@ -7,8 +7,7 @@ import { colors } from "./src/common/theme"
 
 export default class ErrorBoundary extends Component {
   private static NO_STACK = "No stack trace."
-  private static REPO_URL =
-    "https://github.com/osamaq/react-native-spotify-lite/"
+  private static REPO_URL = "https://github.com/osamaq/spotify-lite/"
   private static ISSUE_URL = "issues/new?title="
   private static ISSUE_BODY =
     "&body=%23%23%23 Description%0A%0A%23%23%23 Stack Trace%0A%0A`Paste it here!`"
