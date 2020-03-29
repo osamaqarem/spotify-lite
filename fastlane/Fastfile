@@ -32,7 +32,7 @@
   end
 
 
-    # To prepare the original icon set, see:
+  # To prepare the original icon set, see:
   # https://developer.android.com/studio/write/image-asset-studio
   desc 'Android: Overwrite the current icon set with a badged version.'
   private_lane :make_badge_and do
