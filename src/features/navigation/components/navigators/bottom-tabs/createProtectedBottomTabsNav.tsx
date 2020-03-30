@@ -5,20 +5,23 @@ import {
   createStackNavigator,
   NavigationStackProp,
 } from "react-navigation-stack"
+import UIHelper from "../../../../../common/helpers/UIHelper"
 import { colors } from "../../../../../common/theme"
 import ArtistDetails from "../../../../artist-details/ArtistDetails"
 import Explore from "../../../../explore/Explore"
 import Genre from "../../../../explore/genre/Genre"
 import Search from "../../../../explore/search/Search"
+import SeeAll from "../../../../explore/search/see-all/SeeAll"
 import Home from "../../../../home/Home"
+import StickyPlayer from "../../../../player/StickyPlayer"
 import PlaylistDetails from "../../../../playlist-details/PlaylistDetails"
-import FavoritesIcon from "./icons/FavoritesIcon"
 import ProtectedRoute from "../../ProtectedRoute"
+import TopTabsStack from "../top-tabs/TopTabsStack"
+import FavoritesIcon from "./icons/FavoritesIcon"
 import HomeIcon from "./icons/HomeIcon"
 import SearchIcon from "./icons/SearchIcon"
-import TopTabsStack from "../top-tabs/TopTabsStack"
-import UIHelper from "../../../../../common/helpers/UIHelper"
-import SeeAll from "../../../../explore/search/see-all/SeeAll"
+
+const BAR_HEIGHT = 58
 
 const createProtectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator(
@@ -36,7 +39,6 @@ const createProtectedBottomTabsNav = () => {
         ),
         navigationOptions: {
           tabBarIcon: HomeIcon,
-          ...sharedStyles,
           tabBarLabel: <HomeLabel />,
         },
       },
@@ -57,7 +59,6 @@ const createProtectedBottomTabsNav = () => {
         ),
         navigationOptions: {
           tabBarIcon: SearchIcon,
-          ...sharedStyles,
           tabBarLabel: <SearchLabel />,
         },
       },
@@ -65,13 +66,19 @@ const createProtectedBottomTabsNav = () => {
         screen: TopTabsStack,
         navigationOptions: {
           tabBarIcon: FavoritesIcon,
-          ...sharedStyles,
           tabBarLabel: <FavoritesLabel />,
         },
       },
     },
     {
       initialRouteName: "HomeStack",
+      barStyle: {
+        backgroundColor: colors.tabBar,
+        padding: 2,
+        height: BAR_HEIGHT,
+      },
+      activeColor: colors.white,
+      inactiveColor: colors.itemInactive,
     },
   )
 
@@ -85,6 +92,7 @@ const createProtectedBottomTabsNav = () => {
   }) => {
     return (
       <ProtectedRoute navigation={navigation}>
+        <StickyPlayer barHeight={BAR_HEIGHT} />
         <BottomTabsNav navigation={navigation} />
       </ProtectedRoute>
     )
@@ -93,12 +101,6 @@ const createProtectedBottomTabsNav = () => {
   ConnectedBottomTabsNav.router = BottomTabsNav.router
 
   return ConnectedBottomTabsNav
-}
-
-const sharedStyles = {
-  activeColor: colors.white,
-  inactiveColor: colors.itemInactive,
-  barStyle: { backgroundColor: colors.tabBar, padding: 2 },
 }
 
 const HomeLabel = () => <Text style={{ fontSize: 10 }}>Home</Text>

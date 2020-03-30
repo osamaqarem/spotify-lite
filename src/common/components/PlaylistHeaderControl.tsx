@@ -8,29 +8,28 @@ import BackBtn from "./BackBtn"
 
 export const HEADER_HEIGHT = 42
 
-const PlaylistHeaderControl = ({
-  goBack,
-  isLoading,
-}: {
+interface Props {
   goBack: () => void
   isLoading: boolean
-}) => {
+}
+
+const PlaylistHeaderControl = ({ goBack, isLoading }: Props) => {
   return (
-    <SafeAreaView style={stylesHeader.container}>
+    <SafeAreaView style={styles.container}>
       <BackBtn goBack={goBack} />
       {!isLoading && (
         <>
-          <View style={stylesHeader.heartContainer}>
+          <View style={styles.heartContainer}>
             <Icon
               onPress={() => {
                 ToastAndroid.show("Heart!", ToastAndroid.SHORT)
               }}
               name={true ? "heart" : "heart-outline"}
               size={26}
-              style={stylesHeader.heart}
+              style={styles.heart}
             />
           </View>
-          <View style={stylesHeader.dotsContainer}>
+          <View style={styles.dotsContainer}>
             <TouchableWithoutFeedback
               onPress={() => {
                 ToastAndroid.show("Dots!", ToastAndroid.SHORT)
@@ -44,7 +43,7 @@ const PlaylistHeaderControl = ({
   )
 }
 
-const stylesHeader = StyleSheet.create({
+const styles = StyleSheet.create({
   container: {
     zIndex: 10,
     flexDirection: "row",

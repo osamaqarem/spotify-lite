@@ -74,7 +74,7 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
         )
         const relatedArtists$ = ApiClient.getRelatedArtistsById(artistId)
 
-        zip(artist$, topTracks$, relatedArtists$).subscribe(
+        sub = zip(artist$, topTracks$, relatedArtists$).subscribe(
           ([artist, topTracks, relatedArtistsList]: [
             Artist | SpotifyErrorResponse,
             { tracks: Track[] } | SpotifyErrorResponse,

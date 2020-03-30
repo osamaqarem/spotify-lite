@@ -19,7 +19,7 @@ import { colors } from "../../common/theme"
 import { hydrate } from "../../redux/slices/globalSlice"
 import { setToken } from "../../redux/slices/userSlice"
 import { RootStoreType } from "../../redux/rootReducer"
-import RestApi from "../../services/network/RestApi"
+import ApiEndpoints from "../../services/network/RestApi"
 import { Routes } from "../navigation/_routes"
 
 const webViewSub$ = new Subject<string>()
@@ -113,7 +113,7 @@ const Login = ({
         ref={webViewRef}
         onNavigationStateChange={handleNavEvent}
         source={{
-          uri: RestApi.login(),
+          uri: ApiEndpoints.login(),
         }}
         renderError={() => <GreenIndicator />}
       />

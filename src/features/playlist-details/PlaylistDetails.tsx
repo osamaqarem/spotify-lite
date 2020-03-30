@@ -1,22 +1,15 @@
 import React, { useCallback, useLayoutEffect, useRef, useState } from "react"
-import {
-  BackHandler,
-  StatusBar,
-  StyleSheet,
-  ToastAndroid,
-  View,
-} from "react-native"
-import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import { BackHandler, StatusBar, StyleSheet, View } from "react-native"
 import ImageColors from "react-native-image-colors"
 import LinearGradient from "react-native-linear-gradient"
 import Animated from "react-native-reanimated"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { NavigationEvents, SafeAreaView } from "react-navigation"
 import { NavigationStackProp } from "react-navigation-stack"
 import { connect, ConnectedProps } from "react-redux"
 import DetailsCover from "../../common/components/DetailsCover"
-import DotsView from "../../common/components/DotsView"
+import ListOfTracks from "../../common/components/ListOfTracks"
 import LoadingView from "../../common/components/LoadingView"
+import PlaylistHeaderControl from "../../common/components/PlaylistHeaderControl"
 import PlaylistTitle from "../../common/components/PlaylistTitle"
 import ShuffleButton from "../../common/components/ShuffleButton"
 import UIHelper from "../../common/helpers/UIHelper"
@@ -24,8 +17,6 @@ import usePlaylistAnim from "../../common/hooks/usePlaylistAnim"
 import { colors } from "../../common/theme"
 import { RootStoreType } from "../../redux/rootReducer"
 import { clearCurrentPlaylist } from "../../redux/slices"
-import ListOfTracks from "../../common/components/ListOfTracks"
-import PlaylistHeaderControl from "../../common/components/PlaylistHeaderControl"
 
 const initialState = {
   dominantColor: colors.background,
