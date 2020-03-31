@@ -34,9 +34,15 @@ export interface SpotifyAPI {
   search: (query: string) => any
 
   getPlayingTrack: () => any
+
+  resumePlayback: () => any
+
+  pausePlayback: () => any
+
+  nextTrack: () => any
 }
 
-class ApiEndpoints implements SpotifyAPI {
+class SpotifyEndpoints implements SpotifyAPI {
   private loginConfig = {
     clientId: "47417b69c3c0446e99d34e207a505b4e",
     responseType: "token",
@@ -92,6 +98,12 @@ class ApiEndpoints implements SpotifyAPI {
     `${this.V1}/search?market=MY&type=album,artist,playlist,track&q=${query}`
 
   getPlayingTrack = () => `${this.V1}/me/player/currently-playing`
+
+  resumePlayback = () => `${this.V1}/me/player/play`
+
+  pausePlayback = () => `${this.V1}/me/player/pause`
+
+  nextTrack = () => `${this.V1}/me/player/next`
 }
 
-export default new ApiEndpoints()
+export default new SpotifyEndpoints()

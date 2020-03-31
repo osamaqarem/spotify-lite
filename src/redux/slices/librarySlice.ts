@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { Observable, of } from "rxjs"
 import { catchError, map, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { Action } from "../rootReducer"
 import { PlaylistDetailsType, TrackType } from "./playlistSlice"
 
@@ -47,7 +47,7 @@ const librarySlice = createSlice({
 const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedTracks.type),
-    switchMap(() => ApiClient.getCurrentUserSavedTracks()),
+    switchMap(() => SpotifyApiService.getCurrentUserSavedTracks()),
     map(res => {
       const tracks: TrackType[] = res.items.map(item => ({
         artistName: item.track.artists[0].name,
@@ -64,7 +64,7 @@ const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
       return getCurrentUserSavedTracksSuccess({ count: res.total, data })
     }),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
+      if (SpotifyApiService.sessionIsExpired(err)) {
         return of(getCurrentUserSavedTracks())
       }
       // TODO: notify user of error
@@ -77,7 +77,7 @@ const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
 const getCurrentUserSavedAlbumsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedAlbums.type),
-    switchMap(() => ApiClient.getCurrentUserSavedAlbums()),
+    switchMap(() => SpotifyApiService.getCurrentUserSavedAlbums()),
     map(res => {
       const data: SavedAlbumType[] = res.items.map(item => {
         return {
@@ -91,7 +91,7 @@ const getCurrentUserSavedAlbumsEpic = (actions$: Observable<Action<any>>) =>
       return getCurrentUserSavedAlbumsSuccess(data)
     }),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
+      if (SpotifyApiService.sessionIsExpired(err)) {
         return of(getCurrentUserSavedAlbums())
       }
       // TODO: notify user of error

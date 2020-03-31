@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { Observable, of } from "rxjs"
 import { catchError, map, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { AlbumType } from "../../services/network/models/spotify/SpotifyCommon"
 import { Action } from "../rootReducer"
 import { hydrate } from "./globalSlice"
@@ -35,7 +35,7 @@ const personalizationSlice = createSlice({
 const getCurrentUserTopArtistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(hydrate.type),
-    switchMap(() => ApiClient.getCurrentUserTopArtists()),
+    switchMap(() => SpotifyApiService.getCurrentUserTopArtists()),
     map(res => {
       const artists: AlbumType[] = res.items.map(item => {
         return {
@@ -51,8 +51,9 @@ const getCurrentUserTopArtistsEpic = (actions$: Observable<Action<any>>) =>
       return getUserTopArtistsSuccess({ data, header })
     }),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
-        return of(redoLogin())
+      if (SpotifyApiService.sessionIsExpired(err)) {
+        // dont do anything
+        return of()
       }
       // TODO: notify user of error
       console.warn(err)

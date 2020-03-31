@@ -3,7 +3,7 @@ import ImageColors from "react-native-image-colors"
 import { from, of, Subscription, zip } from "rxjs"
 import { colors } from "../../../common/theme"
 import { redoLogin } from "../../../redux/slices/userSlice"
-import ApiClient from "../../../services/network/ApiService"
+import SpotifyApiService from "../../../services/network/SpotifyApiService"
 import { ProfileResponse } from "../../../services/network/models/spotify/ProfileResponse"
 import {
   AlbumType,
@@ -67,12 +67,14 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
 
     const fetchData = () => {
       if (artistId) {
-        const artist$ = ApiClient.getArtistById(artistId)
-        const topTracks$ = ApiClient.getArtistTopTracks(
+        const artist$ = SpotifyApiService.getArtistById(artistId)
+        const topTracks$ = SpotifyApiService.getArtistTopTracks(
           artistId,
           profile?.country!,
         )
-        const relatedArtists$ = ApiClient.getRelatedArtistsById(artistId)
+        const relatedArtists$ = SpotifyApiService.getRelatedArtistsById(
+          artistId,
+        )
 
         sub = zip(artist$, topTracks$, relatedArtists$).subscribe(
           ([artist, topTracks, relatedArtistsList]: [
@@ -115,7 +117,7 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
             from(handleGradientColor(artist.images[0]?.url)).subscribe()
           },
           err => {
-            if (ApiClient.sessionIsExpired(err)) {
+            if (SpotifyApiService.sessionIsExpired(err)) {
               redoLogin()
             } else {
               console.warn(err)

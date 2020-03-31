@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { EMPTY, interval, Observable, of } from "rxjs"
 import { catchError, map, mergeMap, startWith, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { AlbumType } from "../../services/network/models/spotify/SpotifyCommon"
 import { Action } from "../rootReducer"
 import { pushActionToRestart, hydrate } from "./globalSlice"
@@ -37,7 +37,7 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getAlbumById.type),
     switchMap(({ payload: id }) =>
-      ApiClient.getAlbumById(id).pipe(
+      SpotifyApiService.getAlbumById(id).pipe(
         map(res => {
           const tracks = res.tracks.items.map((track, i) => ({
             name: track.name,
@@ -54,7 +54,7 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
           return getPlaylistByIdSuccess(album)
         }),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(redoLogin(), pushActionToRestart(getAlbumById(id)))
           }
           // TODO: notify user of error
@@ -70,7 +70,7 @@ const getMultipleAlbumsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getMultipleAlbums.type),
     switchMap(({ payload: ids }) =>
-      ApiClient.getMultipleAlbums(ids).pipe(
+      SpotifyApiService.getMultipleAlbums(ids).pipe(
         map(res => {
           // we want array of url strings
           const albumImageUrls: AlbumType[] = res.albums.map(album => ({
@@ -84,7 +84,7 @@ const getMultipleAlbumsEpic = (actions$: Observable<Action<any>>) =>
           return getMultipleAlbumsSuccess(albumImageUrls)
         }),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(redoLogin(), pushActionToRestart(getMultipleAlbums(ids)))
           }
           // TODO: notify user of error
@@ -100,7 +100,7 @@ const getRecentlyPlayedTracksEpic = (actions$: Observable<Action<undefined>>) =>
   actions$.pipe(
     ofType(hydrate.type),
     switchMap(() => interval(180 * 1000).pipe(startWith(EMPTY))),
-    switchMap(() => ApiClient.getRecentlyPlayedTracks()),
+    switchMap(() => SpotifyApiService.getRecentlyPlayedTracks()),
     map(res => {
       let commaList = ""
       res.items.forEach(item => {
@@ -115,8 +115,9 @@ const getRecentlyPlayedTracksEpic = (actions$: Observable<Action<undefined>>) =>
     }),
     mergeMap(a => a),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
-        return of(redoLogin())
+      if (SpotifyApiService.sessionIsExpired(err)) {
+        // dont do anything
+        return of()
       }
       // TODO: notify user of error
       console.warn(err)

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { Observable, of } from "rxjs"
 import { catchError, map, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { Action } from "../rootReducer"
 import { pushActionToRestart } from "./globalSlice"
 import { redoLogin } from "./userSlice"
@@ -58,7 +58,7 @@ const getPlayListByIdEpic = (actions$: Observable<Action<string>>) =>
   actions$.pipe(
     ofType(getPlaylistById.type),
     switchMap(({ payload: playListId }: Action<string>) =>
-      ApiClient.getPlaylistById(playListId!).pipe(
+      SpotifyApiService.getPlaylistById(playListId!).pipe(
         map(res => {
           const tracks: TrackType[] = res.tracks.items.map(item => ({
             artistName:
@@ -76,7 +76,7 @@ const getPlayListByIdEpic = (actions$: Observable<Action<string>>) =>
           return getPlaylistByIdSuccess(data)
         }),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(
               redoLogin(),
               pushActionToRestart(getPlaylistById(playListId)),
@@ -95,7 +95,7 @@ const getCurrentUserPlaylistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserPlaylists.type),
     switchMap(() =>
-      ApiClient.getCurrentUserPlaylists().pipe(
+      SpotifyApiService.getCurrentUserPlaylists().pipe(
         map(res => {
           const data: SavedPlaylistsType[] = res.items.map(item => {
             return {
@@ -109,7 +109,7 @@ const getCurrentUserPlaylistsEpic = (actions$: Observable<Action<any>>) =>
           return getCurrentUserPlaylistsSuccess(data)
         }),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(getCurrentUserPlaylists())
           }
           // handle error

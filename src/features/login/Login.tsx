@@ -19,7 +19,7 @@ import { colors } from "../../common/theme"
 import { hydrate } from "../../redux/slices/globalSlice"
 import { setToken } from "../../redux/slices/userSlice"
 import { RootStoreType } from "../../redux/rootReducer"
-import ApiEndpoints from "../../services/network/RestApi"
+import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
 import { Routes } from "../navigation/_routes"
 
 const webViewSub$ = new Subject<string>()
@@ -63,6 +63,7 @@ const Login = ({
     if (authenticated) {
       //TODO: don't navigate to bottomtabs if refreshing token,
       // go back instead.
+      hydrate()
       navigation.navigate(Routes.BottomTabs.navigator)
     }
   }, [authenticated, navigation, hydrate])
@@ -113,7 +114,7 @@ const Login = ({
         ref={webViewRef}
         onNavigationStateChange={handleNavEvent}
         source={{
-          uri: ApiEndpoints.login(),
+          uri: SpotifyEndpoints.login(),
         }}
         renderError={() => <GreenIndicator />}
       />

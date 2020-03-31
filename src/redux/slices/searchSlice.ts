@@ -3,7 +3,7 @@ import reactotron from "reactotron-react-native"
 import { ofType } from "redux-observable"
 import { concat, EMPTY, Observable, of, timer } from "rxjs"
 import { catchError, debounce, map, mergeMap, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { SearchResponse } from "../../services/network/models/spotify/SearchResponse"
 import { AlbumType } from "../../services/network/models/spotify/SpotifyCommon"
 import { Action } from "../rootReducer"
@@ -123,7 +123,7 @@ const searchForQueryEpic = (actions$: Observable<Action<string>>) =>
     switchMap(action => {
       const query = action.payload as string
 
-      const request$ = ApiClient.search(query).pipe(
+      const request$ = SpotifyApiService.search(query).pipe(
         map(data => {
           if (queryResponseIsEmpty(data)) {
             return of(queryEmpty(query))
@@ -139,7 +139,7 @@ const searchForQueryEpic = (actions$: Observable<Action<string>>) =>
         }),
         mergeMap(a => a),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(redoLogin())
           }
           // TODO: notify user of error

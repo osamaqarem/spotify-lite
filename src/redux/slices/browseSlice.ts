@@ -8,7 +8,7 @@ import {
   switchMap,
   withLatestFrom,
 } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import {
   AlbumType,
   Playlist,
@@ -81,7 +81,7 @@ const browseSlice = createSlice({
 const getAllFeaturedPlaylistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(hydrate.type),
-    switchMap(() => ApiClient.getAllFeaturedPlaylists()),
+    switchMap(() => SpotifyApiService.getAllFeaturedPlaylists()),
     map(res => {
       const data: AlbumType[] = res.playlists.items.map(item => ({
         name: item.name,
@@ -92,8 +92,9 @@ const getAllFeaturedPlaylistsEpic = (actions$: Observable<Action<any>>) =>
       return getAllFeaturedPlaylistsSuccess(data)
     }),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
-        return of(redoLogin())
+      if (SpotifyApiService.sessionIsExpired(err)) {
+        // dont do anything
+        return of()
       }
       // TODO: notify user of error
       console.warn(err)
@@ -111,7 +112,9 @@ const getAllCategoriesForCountryEpic = (
     withLatestFrom(state$),
     switchMap(([, state]) => {
       const { profile } = state.userReducer
-      return ApiClient.getAllCategoriesForCountry(profile?.country!).pipe(
+      return SpotifyApiService.getAllCategoriesForCountry(
+        profile?.country!,
+      ).pipe(
         map(res => {
           const data = res.categories.items
 
@@ -124,7 +127,7 @@ const getAllCategoriesForCountryEpic = (
           return getAllCategoriesForCountrySuccess(categories)
         }),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(
               redoLogin(),
               pushActionToRestart(getAllCategoriesForCountry()),
@@ -147,7 +150,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
 
       const urlQuery = getRestOfItems ? "offset=4" : "limit=4"
 
-      const request$ = ApiClient.getCategoryById(id, urlQuery).pipe(
+      const request$ = SpotifyApiService.getCategoryById(id, urlQuery).pipe(
         map(res => {
           if (res.playlists.items.length === 0) {
             return of(getCategoryByIdSuccess({ data: [], title, id }))
@@ -155,7 +158,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
 
           // Get playlist by ID for each playlist
           const request$Array = res.playlists.items.map(item => {
-            return ApiClient.getPlaylistById(item.id)
+            return SpotifyApiService.getPlaylistById(item.id)
           })
 
           return zip(...request$Array)
@@ -196,7 +199,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
         }),
         mergeMap(a => a),
         catchError(err => {
-          if (ApiClient.sessionIsExpired(err)) {
+          if (SpotifyApiService.sessionIsExpired(err)) {
             return of(
               redoLogin(),
               pushActionToRestart(

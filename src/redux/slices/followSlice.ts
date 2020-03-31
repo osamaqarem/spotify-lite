@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { Observable, of } from "rxjs"
 import { catchError, map, switchMap } from "rxjs/operators"
-import ApiClient from "../../services/network/ApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { AlbumType } from "../../services/network/models/spotify/SpotifyCommon"
 import { Action } from "../rootReducer"
 import { pushActionToRestart } from "./globalSlice"
@@ -32,7 +32,7 @@ const followSlice = createSlice({
 const getCurrentUserSavedArtistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedArtists.type),
-    switchMap(() => ApiClient.getCurrentUserSavedArtists()),
+    switchMap(() => SpotifyApiService.getCurrentUserSavedArtists()),
     map(res => {
       const data: AlbumType[] = res.artists.items.map(item => {
         return {
@@ -45,7 +45,7 @@ const getCurrentUserSavedArtistsEpic = (actions$: Observable<Action<any>>) =>
       return getCurrentUserSavedArtistsSuccess(data)
     }),
     catchError(err => {
-      if (ApiClient.sessionIsExpired(err)) {
+      if (SpotifyApiService.sessionIsExpired(err)) {
         return of(
           redoLogin(),
           pushActionToRestart(getCurrentUserSavedArtists()),

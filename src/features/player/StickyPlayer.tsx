@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef, useCallback } from "react"
 import { StyleSheet, Text, View } from "react-native"
 import Animated, {
-  call,
   Clock,
   concat,
   cond,
@@ -14,69 +13,105 @@ import Animated, {
 } from "react-native-reanimated"
 import { bin, timing } from "react-native-redash"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { useDispatch } from "react-redux"
 import { colors } from "../../common/theme"
-import ApiService from "../../services/network/ApiService"
+import { redoLogin } from "../../redux/slices"
+import ApiService from "../../services/network/SpotifyApiService"
+import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
 
 const PLAYER_HEIGHT = 44
-const INTERVAL_LENGTH_SECONDS = 10
+const POLLING_PERIOD_SECONDS = 10
 
 interface Props {
   barHeight: number
-  // title: string
-  // showing: boolean
-  // playerState: 'PAUSED' | 'RESUMED' | 'LOADING'
 }
 
 const animatedProgress = new Value(0)
 const clock = new Clock()
 
 const StickyPlayer = ({ barHeight }: Props) => {
-  const showing = true
-  const playerState = "PAUSED"
-
+  const dispatch = useDispatch()
+  const { getTrackData, trackState } = useCurrentPlayingTrack()
   const {
     title,
     artist,
-    currentProgress,
+    currentProgressPct,
     intervalAmountPct,
     isPlaying,
-  } = useCurrentPlayingTrack()
+  } = trackState
 
-  const timingTo = currentProgress + intervalAmountPct
+  const timingTo = currentProgressPct + intervalAmountPct
 
   useCode(
     () => [
       cond(
         eq(1, bin(isPlaying)),
         cond(
-          greaterThan(new Value(currentProgress), 0),
+          greaterThan(new Value(currentProgressPct), 0),
           set(
             animatedProgress,
             timing({
-              duration: INTERVAL_LENGTH_SECONDS * 1000,
-              from: currentProgress,
+              duration: POLLING_PERIOD_SECONDS * 1000,
+              from: currentProgressPct,
               to: timingTo >= 100 ? 100 : timingTo,
               easing: Easing.linear,
               clock,
             }),
           ),
         ),
+        set(animatedProgress, currentProgressPct),
       ),
     ],
-    [currentProgress],
+    [currentProgressPct],
   )
 
   const progressValue = concat(animatedProgress, "%")
 
-  useCode(
-    () =>
-      call([progressValue], ([p]) => {
-        console.tron(p)
-      }),
-    [progressValue],
-  )
+  const handlePlay = useCallback(async () => {
+    try {
+      await ApiService.resumePlayback()
+      await getTrackData()
+    } catch (e) {
+      if (ApiService.sessionIsExpired(e)) {
+        dispatch(redoLogin())
+      } else {
+        console.warn(e)
+      }
+    }
+  }, [dispatch, getTrackData])
 
-  if (!showing) return null
+  const handlePause = useCallback(async () => {
+    try {
+      await ApiService.pausePlayback()
+      await getTrackData()
+    } catch (e) {
+      if (ApiService.sessionIsExpired(e)) {
+        dispatch(redoLogin())
+      } else {
+        console.warn(e)
+      }
+    }
+  }, [dispatch, getTrackData])
+
+  const nextTrack = useCallback(async () => {
+    try {
+      await ApiService.nextTrack()
+      await getTrackData()
+    } catch (e) {
+      if (ApiService.sessionIsExpired(e)) {
+        dispatch(redoLogin())
+      } else {
+        console.warn(e)
+      }
+    }
+  }, [dispatch, getTrackData])
+
+  // TODO:
+  // if((`${title} • ` + artist).length > 10){
+
+  // }
+
+  if (title.length === 0) return null
   return (
     <View
       style={[
@@ -86,24 +121,14 @@ const StickyPlayer = ({ barHeight }: Props) => {
         },
       ]}>
       <Animated.View
-        style={{
-          position: "absolute",
-          top: -2,
-          backgroundColor: colors.white,
-          width: progressValue,
-          height: 2,
-          zIndex: 2,
-        }}
+        style={[
+          styles.progressBar,
+          {
+            width: progressValue,
+          },
+        ]}
       />
-      <View
-        style={{
-          position: "absolute",
-          top: -2,
-          backgroundColor: "#3E3E3E",
-          width: "100%",
-          height: 3,
-        }}
-      />
+      <View style={styles.progressBarBackground} />
       <View style={styles.iconContainer}>
         <Icon
           onPress={() => {
@@ -121,20 +146,16 @@ const StickyPlayer = ({ barHeight }: Props) => {
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
           <Icon
-            onPress={() => {
-              console.tron("pressable")
-            }}
-            name="play"
+            onPress={isPlaying ? handlePause : handlePlay}
+            name={isPlaying ? "pause" : "play"}
             size={28}
             style={styles.playIcon}
           />
         </View>
         <View style={styles.iconContainer}>
           <Icon
-            onPress={() => {
-              return
-            }}
-            name="play-pause"
+            onPress={nextTrack}
+            name="skip-next"
             size={28}
             style={styles.playIcon}
           />
@@ -142,6 +163,94 @@ const StickyPlayer = ({ barHeight }: Props) => {
       </View>
     </View>
   )
+}
+
+const initialTrackState = {
+  currentProgressPct: 0,
+  intervalAmountPct: 0,
+  title: "",
+  artist: "",
+  isPlaying: false,
+}
+
+const useCurrentPlayingTrack = () => {
+  const [trackState, setTrackState] = useState(initialTrackState)
+  const isFirstRender = useRef(true)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const getLastPlayedTrack = async () => {
+      const trackData = await SpotifyAsyncStoreService.getTrackData()
+
+      if (trackData) {
+        setTrackState(JSON.parse(trackData))
+      }
+    }
+
+    getLastPlayedTrack()
+  }, [])
+
+  const getTrackData = useCallback(async () => {
+    try {
+      const trackData = await ApiService.getPlayingTrack()
+
+      if (typeof trackData === "object" && "item" in trackData) {
+        const currentProgressPct =
+          (trackData.progress_ms / trackData.item.duration_ms) * 100
+
+        const intervalAmountPct =
+          ((POLLING_PERIOD_SECONDS * 1000) / trackData.item.duration_ms) * 100
+
+        if (trackState.currentProgressPct != currentProgressPct) {
+          // if track is not paused
+          const newState = {
+            currentProgressPct,
+            intervalAmountPct,
+            title: trackData.item.name,
+            artist: trackData.item.artists[0].name,
+            isPlaying: trackData.is_playing,
+          }
+
+          setTrackState(newState)
+
+          await SpotifyAsyncStoreService.putTrackData(
+            JSON.stringify({ ...newState, isPlaying: false }),
+          )
+        }
+      } else {
+        // paused
+        setTrackState(state => ({
+          ...state,
+          isPlaying: false,
+        }))
+      }
+    } catch (e) {
+      if (ApiService.sessionIsExpired(e)) {
+        dispatch(redoLogin())
+      } else {
+        console.warn(e)
+      }
+    }
+  }, [trackState.currentProgressPct, dispatch])
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      getTrackData()
+      isFirstRender.current = false
+    }
+
+    const fetchInterval = setInterval(
+      getTrackData,
+      POLLING_PERIOD_SECONDS * 1000,
+    )
+
+    return () => {
+      clearInterval(fetchInterval)
+    }
+  }, [getTrackData, trackState.currentProgressPct, trackState.title, dispatch])
+
+  return { trackState, getTrackData }
 }
 
 const styles = StyleSheet.create({
@@ -197,47 +306,20 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "flex-end",
   },
+  progressBar: {
+    position: "absolute",
+    top: -2,
+    backgroundColor: colors.white,
+    height: 2,
+    zIndex: 2,
+  },
+  progressBarBackground: {
+    position: "absolute",
+    top: -2,
+    backgroundColor: "#3E3E3E",
+    width: "100%",
+    height: 3,
+  },
 })
-
-const useCurrentPlayingTrack = () => {
-  const [trackState, setTrackState] = useState({
-    currentProgress: 0,
-    intervalAmountPct: 0,
-    title: "",
-    artist: "",
-    isPlaying: false,
-  })
-
-  useEffect(() => {
-    const fetchInterval = setInterval(async () => {
-      try {
-        const trackData = await ApiService.getPlayingTrack()
-
-        const currentProgress =
-          (trackData.progress_ms / trackData.item.duration_ms) * 100
-
-        const intervalAmountPct =
-          ((INTERVAL_LENGTH_SECONDS * 1000) / trackData.item.duration_ms) * 100
-
-        // no useless rerenders
-        if (trackState.currentProgress != currentProgress) {
-          setTrackState({
-            currentProgress,
-            intervalAmountPct,
-            title: trackData.item.name,
-            artist: trackData.item.artists[0].name,
-            isPlaying: trackData.is_playing,
-          })
-        }
-      } catch (e) {}
-    }, INTERVAL_LENGTH_SECONDS * 1000)
-
-    return () => {
-      clearInterval(fetchInterval)
-    }
-  }, [])
-
-  return trackState
-}
 
 export default StickyPlayer
