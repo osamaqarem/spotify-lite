@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from "react"
-import { StyleSheet, Text, View } from "react-native"
+import { StyleSheet, Text, View, LayoutChangeEvent } from "react-native"
 import Animated, {
   Clock,
   concat,
@@ -10,17 +10,20 @@ import Animated, {
   set,
   useCode,
   Value,
+  and,
 } from "react-native-reanimated"
 import { bin, timing } from "react-native-redash"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useDispatch } from "react-redux"
-import { colors } from "../../common/theme"
+import { colors, dimensions } from "../../common/theme"
 import { redoLogin } from "../../redux/slices"
 import ApiService from "../../services/network/SpotifyApiService"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
 
 const PLAYER_HEIGHT = 44
 const POLLING_PERIOD_SECONDS = 10
+
+const OFFSET = 150
 
 interface Props {
   barHeight: number
@@ -29,8 +32,12 @@ interface Props {
 const animatedProgress = new Value(0)
 const clock = new Clock()
 
+const translateX = new Value(0)
+const clockText = new Clock()
+
 const StickyPlayer = ({ barHeight }: Props) => {
   const dispatch = useDispatch()
+  const [trackTitleWidth, setTrackTitleWidth] = useState(0)
   const { getTrackData, trackState } = useCurrentPlayingTrack()
   const {
     title,
@@ -96,7 +103,9 @@ const StickyPlayer = ({ barHeight }: Props) => {
   const nextTrack = useCallback(async () => {
     try {
       await ApiService.nextTrack()
-      await getTrackData()
+      setTimeout(async () => {
+        await getTrackData()
+      }, 50)
     } catch (e) {
       if (ApiService.sessionIsExpired(e)) {
         dispatch(redoLogin())
@@ -106,10 +115,33 @@ const StickyPlayer = ({ barHeight }: Props) => {
     }
   }, [dispatch, getTrackData])
 
-  // TODO:
-  // if((`${title} • ` + artist).length > 10){
+  const shouldAnimateTrackTitle = (`${title} • ` + artist).length > 30
 
-  // }
+  useCode(
+    () =>
+      cond(
+        and(
+          greaterThan(trackTitleWidth, 0),
+          eq(1, bin(shouldAnimateTrackTitle)),
+        ),
+        set(
+          translateX,
+          timing({
+            duration: 6 * 1000,
+            from: 0,
+            to: -trackTitleWidth - OFFSET,
+            easing: Easing.linear,
+            clock: clockText,
+          }),
+        ),
+      ),
+    [shouldAnimateTrackTitle, trackTitleWidth],
+  )
+
+  const captureWidth = useCallback(
+    (e: LayoutChangeEvent) => setTrackTitleWidth(e.nativeEvent.layout.width),
+    [],
+  )
 
   if (title.length === 0) return null
   return (
@@ -139,10 +171,28 @@ const StickyPlayer = ({ barHeight }: Props) => {
           style={styles.heartIcon}
         />
       </View>
-      <Text style={styles.title}>
+      <Animated.Text
+        onLayout={captureWidth}
+        style={[
+          styles.title,
+          {
+            transform: [{ translateX }],
+          },
+        ]}>
         {`${title} • `}
         <Text style={styles.artist}>{artist}</Text>
-      </Text>
+      </Animated.Text>
+      <Animated.Text
+        style={[
+          styles.title,
+          {
+            left: OFFSET,
+            transform: [{ translateX }],
+          },
+        ]}>
+        {`${title} • `}
+        <Text style={styles.artist}>{artist}</Text>
+      </Animated.Text>
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
           <Icon
@@ -278,6 +328,8 @@ const styles = StyleSheet.create({
     height: PLAYER_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: colors.tabBar,
+    zIndex: 1,
   },
   heartIcon: {
     color: colors.green,
