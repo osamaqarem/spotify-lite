@@ -69,7 +69,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
         set(animatedProgress, currentProgressPct),
       ),
     ],
-    [currentProgressPct],
+    [currentProgressPct, isPlaying],
   )
 
   const progressValue = concat(animatedProgress, "%")
@@ -115,7 +115,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
     }
   }, [dispatch, getTrackData])
 
-  const shouldAnimateTrackTitle = (`${title} • ` + artist).length > 30
+  const shouldAnimateTrackTitle = (`${title} • ` + artist).length > 40
 
   useCode(
     () =>
@@ -127,7 +127,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
         set(
           translateX,
           timing({
-            duration: 6 * 1000,
+            duration: 15 * 1000,
             from: 0,
             to: -trackTitleWidth - OFFSET,
             easing: Easing.linear,
@@ -182,17 +182,19 @@ const StickyPlayer = ({ barHeight }: Props) => {
         {`${title} • `}
         <Text style={styles.artist}>{artist}</Text>
       </Animated.Text>
-      <Animated.Text
-        style={[
-          styles.title,
-          {
-            left: OFFSET,
-            transform: [{ translateX }],
-          },
-        ]}>
-        {`${title} • `}
-        <Text style={styles.artist}>{artist}</Text>
-      </Animated.Text>
+      {shouldAnimateTrackTitle && (
+        <Animated.Text
+          style={[
+            styles.title,
+            {
+              left: OFFSET,
+              transform: [{ translateX }],
+            },
+          ]}>
+          {`${title} • `}
+          <Text style={styles.artist}>{artist}</Text>
+        </Animated.Text>
+      )}
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
           <Icon
@@ -329,7 +331,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: colors.tabBar,
-    zIndex: 1,
+    zIndex: -1,
   },
   heartIcon: {
     color: colors.green,
@@ -342,6 +344,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     marginLeft: 2,
     letterSpacing: 0.4,
+    zIndex: -2,
   },
   artist: {
     fontWeight: "normal",
@@ -354,9 +357,10 @@ const styles = StyleSheet.create({
     right: -4,
   },
   controlsContainer: {
-    flex: 1,
     flexDirection: "row",
-    justifyContent: "flex-end",
+    position: "absolute",
+    right: 0,
+    zIndex: -1,
   },
   progressBar: {
     position: "absolute",

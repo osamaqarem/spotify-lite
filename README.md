@@ -21,7 +21,7 @@ You will need a [Spotify](https://www.spotify.com/us/) account to login.
 
 ### Android
 
-You can download the latest APK [here]().
+You can download the latest APK [here](https://github.com/osamaq/spotify-lite/tree/master/docs/apk).
 
 ### iOS
 
@@ -54,7 +54,6 @@ You can also refer to available [npm scripts](https://github.com/osamaq/spotify-
 
 - [ ] Details modal
 - [ ] Like/Save
-- [ ] Can we play music?
 - [ ] Settings Menu
 - [ ] Logout
 - [ ] Error UI
