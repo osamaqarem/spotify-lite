@@ -21,7 +21,7 @@ import FavoritesIcon from "./icons/FavoritesIcon"
 import HomeIcon from "./icons/HomeIcon"
 import SearchIcon from "./icons/SearchIcon"
 
-const BAR_HEIGHT = 58
+const BAR_HEIGHT = UIHelper.isIphoneX() ? 78 : 58
 
 const createProtectedBottomTabsNav = () => {
   const BottomTabsNav = createMaterialBottomTabNavigator(

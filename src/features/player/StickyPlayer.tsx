@@ -21,12 +21,12 @@ import Animated, {
 import { bin, delay, loop, timing } from "react-native-redash"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useDispatch } from "react-redux"
-import { colors } from "../../common/theme"
+import { colors, dimensions } from "../../common/theme"
 import { redoLogin } from "../../redux/slices"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
 import ApiService from "../../services/network/SpotifyApiService"
 
-const PLAYER_HEIGHT = 44
+const PLAYER_HEIGHT = 84 / dimensions.heightRatio
 const POLLING_PERIOD_SECONDS = 5
 
 const OFFSET = 150
