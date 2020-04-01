@@ -1,0 +1,69 @@
+# -------------Icons & Versioning-------------#
+  desc 'Android: Increment versionCode and set versionName to package.json version.'
+  package = load_json(json_path: "./package.json")
+  private_lane :inc_ver_and do
+    increment_version_code(
+      gradle_file_path: "./android/app/build.gradle",
+    )
+
+    increment_version_name(
+      gradle_file_path: "./android/app/build.gradle",
+      version_name: package['version']
+    )
+  end
+
+
+  desc 'iOS: Increment build number and set the version to package.json version.'
+  private_lane :inc_ver_ios do
+    increment_build_number(
+      xcodeproj: './ios/' + ENV['APP_NAME'] + '.xcodeproj'
+    )
+    increment_version_number(
+      xcodeproj: './ios/' + ENV['APP_NAME'] + '.xcodeproj',
+      version_number: package['version']
+    )
+  end
+
+
+  desc 'Bump build numbers, and set the display version to match the pacakage.json version.'
+  lane :bump do
+    inc_ver_ios
+    inc_ver_and
+  end
+
+
+  # To prepare the original icon set, see:
+  # https://developer.android.com/studio/write/image-asset-studio
+  desc 'Android: Overwrite the current icon set with a badged version.'
+  private_lane :make_badge_and do
+    add_badge(
+      shield: "CLONE-" + "" + "-orange", 
+      no_badge: true,
+      dark: true,
+      shield_scale: "0.55",
+      shield_gravity: "Center",
+      shield_geometry: "+0+30%",
+      glob: "/android/app/src/main/res/mipmap-*/ic_launcher*.png",
+    )
+  end
+
+  # To prepare the original icon set, you can use:
+  # https://appicon.co/
+  desc 'iOS: Overwrite the current icon set with a badged version.'
+  private_lane :make_badge_ios do
+    add_badge(
+      shield: "CLONE-" + "" + "-orange", 
+      no_badge: true,
+      dark: true,
+      shield_scale: "0.85",
+      shield_gravity: "Center",
+      shield_geometry: "+0+30%",
+      glob: "/ios/spotifyclone" + "/Images.xcassets/AppIcon.appiconset/*.png",
+    )
+  end
+
+  desc 'Make new versioned icon badges.'
+  lane :make_badge do
+    make_badge_ios
+    make_badge_and
+  end

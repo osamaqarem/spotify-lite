@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: load_json" time="0.001327">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: Switch to make_badge_ios lane" time="0.000914">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: add_badge" time="6.587193">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: Switch to make_badge_and lane" time="0.000897">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: add_badge" time="5.467981">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

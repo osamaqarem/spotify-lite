@@ -1,0 +1,50 @@
+matrix:
+  include:
+    # - language: android
+    #   dist: trusty
+    #   cache: npm
+    #   android:
+    #     components:
+    #       # use the latest revision of Android SDK Tools
+    #       - tools
+    #       - platform-tools
+
+    #       # The BuildTools version used by your project
+    #       - build-tools-28.0.3
+
+    #       # The SDK version used to compile your project
+    #       - android-28
+
+    #       # Additional components
+    #       - extra-google-google_play_services
+    #       - extra-google-m2repository
+    #       - extra-android-m2repository
+    #   install:
+    #     - nvm install 12.14.0
+    #     - npm i
+    #   before_script:
+    #     - cd android
+    #   script:
+    #     - ./gradlew assembleRelease
+
+    - language: objective-c
+      os: osx
+      osx_image: xcode11.3
+      podfile: ios/Podfile
+      cache:
+        - cocoapods
+        - npm
+      install:
+        - brew update
+        - brew tap wix/brew
+        - brew install applesimutils
+        - gem install cocoapods
+        - nvm install 12.14.0
+        - npm i
+      before_script:
+        - cd ios
+        - pod install
+        - cd ..
+      script:
+        - npm run detox-build:iosRelease | xcpretty
+        - npm run detox-test:iosRelease --cleanup
