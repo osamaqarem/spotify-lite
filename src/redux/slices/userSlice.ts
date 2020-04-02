@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { Observable, of } from "rxjs"
-import { catchError, map, switchMap, repeat } from "rxjs/operators"
+import { catchError, map, switchMap } from "rxjs/operators"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
-import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { ProfileResponse } from "../../services/network/models/spotify/ProfileResponse"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { Action, DispatchFun } from "../rootReducer"
 import { hydrate } from "./globalSlice"
 
@@ -44,19 +44,21 @@ export const setToken = (token: string) => async (
 const getProfileEpic = (action$: Observable<Action<string>>) =>
   action$.pipe(
     ofType(hydrate.type),
-    switchMap(() => SpotifyApiService.getMyProfile()),
-    map(res => getProfileSuccess(res)),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        return of(redoLogin())
-      }
+    switchMap(() =>
+      SpotifyApiService.getMyProfile().pipe(
+        map(res => getProfileSuccess(res)),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            return of(redoLogin())
+          }
 
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getProfileError())
-    }),
-    repeat(),
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getProfileError())
+        }),
+      ),
+    ),
   )
 
 export const userEpics = [getProfileEpic]

@@ -81,26 +81,29 @@ const browseSlice = createSlice({
 const getAllFeaturedPlaylistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(hydrate.type),
-    switchMap(() => SpotifyApiService.getAllFeaturedPlaylists()),
-    map(res => {
-      const data: AlbumType[] = res.playlists.items.map(item => ({
-        name: item.name,
-        imageURL: item.images[0].url,
-        id: item.id,
-      }))
+    switchMap(() =>
+      SpotifyApiService.getAllFeaturedPlaylists().pipe(
+        map(res => {
+          const data: AlbumType[] = res.playlists.items.map(item => ({
+            name: item.name,
+            imageURL: item.images[0].url,
+            id: item.id,
+          }))
 
-      return getAllFeaturedPlaylistsSuccess(data)
-    }),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        // dont do anything
-        return of({ type: "getAllFeaturedPlaylistsEpic: catchError" })
-      }
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getAllFeaturedPlaylistsError())
-    }),
+          return getAllFeaturedPlaylistsSuccess(data)
+        }),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            // dont do anything
+            return of({ type: "getAllFeaturedPlaylistsEpic: catchError" })
+          }
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getAllFeaturedPlaylistsError())
+        }),
+      ),
+    ),
   )
 
 const getAllCategoriesForCountryEpic = (

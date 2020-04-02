@@ -47,58 +47,64 @@ const librarySlice = createSlice({
 const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedTracks.type),
-    switchMap(() => SpotifyApiService.getCurrentUserSavedTracks()),
-    map(res => {
-      const tracks: TrackType[] = res.items.map(item => ({
-        artistName: item.track.artists[0].name,
-        name: item.track.name,
-      }))
+    switchMap(() =>
+      SpotifyApiService.getCurrentUserSavedTracks().pipe(
+        map(res => {
+          const tracks: TrackType[] = res.items.map(item => ({
+            artistName: item.track.artists[0].name,
+            name: item.track.name,
+          }))
 
-      const data: PlaylistDetailsType = {
-        imageUrl: "https://i.imgur.com/N1uXnyS.jpg",
-        tracks,
-        name: "Favorite Songs",
-        ownerName: null,
-      }
+          const data: PlaylistDetailsType = {
+            imageUrl: "https://i.imgur.com/N1uXnyS.jpg",
+            tracks,
+            name: "Favorite Songs",
+            ownerName: null,
+          }
 
-      return getCurrentUserSavedTracksSuccess({ count: res.total, data })
-    }),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        return of(getCurrentUserSavedTracks())
-      }
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getCurrentUserSavedTracksError())
-    }),
+          return getCurrentUserSavedTracksSuccess({ count: res.total, data })
+        }),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            return of(getCurrentUserSavedTracks())
+          }
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getCurrentUserSavedTracksError())
+        }),
+      ),
+    ),
   )
 
 const getCurrentUserSavedAlbumsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedAlbums.type),
-    switchMap(() => SpotifyApiService.getCurrentUserSavedAlbums()),
-    map(res => {
-      const data: SavedAlbumType[] = res.items.map(item => {
-        return {
-          owner: item.album.artists[0].name,
-          url: (item.album.images[0] && item.album.images[0].url) || null,
-          name: item.album.name,
-          id: item.album.id,
-        }
-      })
+    switchMap(() =>
+      SpotifyApiService.getCurrentUserSavedAlbums().pipe(
+        map(res => {
+          const data: SavedAlbumType[] = res.items.map(item => {
+            return {
+              owner: item.album.artists[0].name,
+              url: (item.album.images[0] && item.album.images[0].url) || null,
+              name: item.album.name,
+              id: item.album.id,
+            }
+          })
 
-      return getCurrentUserSavedAlbumsSuccess(data)
-    }),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        return of(getCurrentUserSavedAlbums())
-      }
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getCurrentUserSavedAlbumsError())
-    }),
+          return getCurrentUserSavedAlbumsSuccess(data)
+        }),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            return of(getCurrentUserSavedAlbums())
+          }
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getCurrentUserSavedAlbumsError())
+        }),
+      ),
+    ),
   )
 
 export const libraryEpics = [

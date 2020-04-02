@@ -32,30 +32,33 @@ const followSlice = createSlice({
 const getCurrentUserSavedArtistsEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getCurrentUserSavedArtists.type),
-    switchMap(() => SpotifyApiService.getCurrentUserSavedArtists()),
-    map(res => {
-      const data: AlbumType[] = res.artists.items.map(item => {
-        return {
-          imageURL: (item.images[0] && item.images[0].url) || null,
-          name: item.name,
-          id: item.id,
-        }
-      })
+    switchMap(() =>
+      SpotifyApiService.getCurrentUserSavedArtists().pipe(
+        map(res => {
+          const data: AlbumType[] = res.artists.items.map(item => {
+            return {
+              imageURL: (item.images[0] && item.images[0].url) || null,
+              name: item.name,
+              id: item.id,
+            }
+          })
 
-      return getCurrentUserSavedArtistsSuccess(data)
-    }),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        return of(
-          redoLogin(),
-          pushActionToRestart(getCurrentUserSavedArtists()),
-        )
-      }
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getCurrentUserSavedArtistsError())
-    }),
+          return getCurrentUserSavedArtistsSuccess(data)
+        }),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            return of(
+              redoLogin(),
+              pushActionToRestart(getCurrentUserSavedArtists()),
+            )
+          }
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getCurrentUserSavedArtistsError())
+        }),
+      ),
+    ),
   )
 
 export const followEpics = [getCurrentUserSavedArtistsEpic]

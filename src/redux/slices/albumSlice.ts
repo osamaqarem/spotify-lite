@@ -1,12 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { ofType } from "redux-observable"
 import { EMPTY, interval, Observable, of } from "rxjs"
-import { catchError, map, mergeMap, startWith, switchMap } from "rxjs/operators"
-import SpotifyApiService from "../../services/network/SpotifyApiService"
+import { catchError, map, startWith, switchMap } from "rxjs/operators"
 import { AlbumType } from "../../services/network/models/spotify/SpotifyCommon"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import { Action } from "../rootReducer"
-import { pushActionToRestart, hydrate } from "./globalSlice"
-import { PlaylistDetailsType, getPlaylistByIdSuccess } from "./playlistSlice"
+import { hydrate, pushActionToRestart } from "./globalSlice"
+import { getPlaylistByIdSuccess, PlaylistDetailsType } from "./playlistSlice"
 import { redoLogin } from "./userSlice"
 
 type AlbumReducerType = {
@@ -100,30 +100,32 @@ const getRecentlyPlayedTracksEpic = (actions$: Observable<Action<undefined>>) =>
   actions$.pipe(
     ofType(hydrate.type),
     switchMap(() => interval(180 * 1000).pipe(startWith(EMPTY))),
-    switchMap(() => SpotifyApiService.getRecentlyPlayedTracks()),
-    map(res => {
-      let commaList = ""
-      res.items.forEach(item => {
-        const [, albumId] = item.track.album.href.split("albums/")
-        if (!commaList.includes(albumId))
-          commaList = commaList.concat(albumId + ",")
-      })
-      // Remove last comma. else request fails
-      const commaListCommaRemoved = commaList.slice(0, commaList.length - 1)
+    switchMap(() =>
+      SpotifyApiService.getRecentlyPlayedTracks().pipe(
+        map(res => {
+          let commaList = ""
+          res.items.forEach(item => {
+            const [, albumId] = item.track.album.href.split("albums/")
+            if (!commaList.includes(albumId))
+              commaList = commaList.concat(albumId + ",")
+          })
+          // Remove last comma. else request fails
+          const commaListCommaRemoved = commaList.slice(0, commaList.length - 1)
 
-      return of(getMultipleAlbums(commaListCommaRemoved))
-    }),
-    mergeMap(a => a),
-    catchError(err => {
-      if (SpotifyApiService.sessionIsExpired(err)) {
-        // dont do anything
-        return of({ type: "getRecentlyPlayedTracksEpic: catchError" })
-      }
-      // TODO: notify user of error
-      console.warn(err)
-      __DEV__ && console.tron(err.stack)
-      return of(getRecentlyPlayedTracksError())
-    }),
+          return getMultipleAlbums(commaListCommaRemoved)
+        }),
+        catchError(err => {
+          if (SpotifyApiService.sessionIsExpired(err)) {
+            // dont do anything
+            return of({ type: "getRecentlyPlayedTracksEpic: catchError" })
+          }
+          // TODO: notify user of error
+          console.warn(err)
+          __DEV__ && console.tron(err.stack)
+          return of(getRecentlyPlayedTracksError())
+        }),
+      ),
+    ),
   )
 
 export const albumEpics = [
