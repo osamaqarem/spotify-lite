@@ -27,31 +27,16 @@ import { CurrentPlayingTrack } from "./models/spotify/CurrentPlayingTrack"
 type ContentType = "JSON" | "Text" | "Unsupported"
 interface ApiConfig {
   url: RequestInfo
-  verb?: "GET" | "PUT" | "POST"
+  verb?: "GET" | "PUT" | "POST" | "DELETE"
   timeoutInSeconds?: number
 }
 
 class SpotifyApiService implements SpotifyAPI {
   private defaultTimeout = 30
   private BASE_URL = "https://api.spotify.com/"
-  private httpGetConfig = (token: string) => ({
-    method: "GET",
-    headers: {
-      accept: "application/json",
-      authorization: `Bearer ${token}`,
-    },
-  })
 
-  private httpPutConfig = (token: string) => ({
-    method: "PUT",
-    headers: {
-      accept: "application/json",
-      authorization: `Bearer ${token}`,
-    },
-  })
-
-  private httpPostConfig = (token: string) => ({
-    method: "POST",
+  private getHttpConfig = (token: string, verb: ApiConfig["verb"] = "GET") => ({
+    method: verb,
     headers: {
       accept: "application/json",
       authorization: `Bearer ${token}`,
@@ -104,31 +89,11 @@ class SpotifyApiService implements SpotifyAPI {
     return this.doThrow(res, contentType)
   }
 
-  private getConfigForVerb = async (verb: ApiConfig["verb"]) => {
-    const token = await SpotifyAsyncStoreService.getToken()
-    switch (verb) {
-      case "GET":
-        return this.httpGetConfig(token!)
-      case "PUT":
-        return this.httpPutConfig(token!)
-      case "POST":
-        return this.httpPostConfig(token!)
-      default:
-        throw new SpotifyHttpException(
-          "Error",
-          "Invalid HTTP verb. Did you update getConfigForVerb?",
-          verb!,
-        )
-    }
-  }
-
-  private api = async <T>({
-    url,
-    verb = "GET",
-    timeoutInSeconds,
-  }: ApiConfig) => {
+  private api = async <T>({ url, verb, timeoutInSeconds }: ApiConfig) => {
     if (NetworkHelper.isInternetReachable) {
-      const reqConfig = await this.getConfigForVerb(verb)
+      const token = await SpotifyAsyncStoreService.getToken()
+      const reqConfig = await this.getHttpConfig(token!, verb)
+
       const fullURL = this.BASE_URL + url
       const reqTimeout = timeoutInSeconds || this.defaultTimeout
 
@@ -168,6 +133,98 @@ class SpotifyApiService implements SpotifyAPI {
     from(
       this.api<ProfileResponse>({ url: SpotifyEndpoints.getMyProfile() }),
     )
+  getCurrentUserSavedArtists = () =>
+    from(
+      this.api<{ artists: SpotifyPager<Artist> }>({
+        url: SpotifyEndpoints.getCurrentUserSavedArtists(),
+      }),
+    )
+
+  getCurrentUserSavedTracks = () =>
+    from(
+      this.api<SpotifyPager<PlaylistTrackObject>>({
+        url: SpotifyEndpoints.getCurrentUserSavedTracks(),
+      }),
+    )
+  checkSavedTracks = (ids: string) =>
+    this.api<boolean[]>({
+      url: SpotifyEndpoints.checkSavedTracks(ids),
+    })
+
+  getCurrentUserSavedAlbums = () =>
+    from(
+      this.api<SpotifyPager<SavedAlbumObject>>({
+        url: SpotifyEndpoints.getCurrentUserSavedAlbums(),
+      }),
+    )
+  checkSavedAlbums = (ids: string) =>
+    this.api<boolean[]>({
+      url: SpotifyEndpoints.checkSavedAlbums(ids),
+    })
+  getCurrentUserTopArtists = () =>
+    from(
+      this.api<SpotifyPager<Artist>>({
+        url: SpotifyEndpoints.getCurrentUserTopArtists(),
+      }),
+    )
+
+  getRecentlyPlayedTracks = () =>
+    from(
+      this.api<SpotifyPager<SavedTrackObject>>({
+        url: SpotifyEndpoints.getRecentlyPlayedTracks(),
+      }),
+    )
+
+  getCurrentUserPlaylists = () =>
+    from(
+      this.api<Tracks>({ url: SpotifyEndpoints.getCurrentUserPlaylists() }),
+    )
+  getPlayingTrack = () =>
+    this.api<CurrentPlayingTrack | Response>({
+      url: SpotifyEndpoints.getPlayingTrack(),
+    })
+
+  resumePlayback = () =>
+    this.api<Response>({
+      url: SpotifyEndpoints.resumePlayback(),
+      verb: "PUT",
+    })
+
+  pausePlayback = () =>
+    this.api<Response>({
+      url: SpotifyEndpoints.pausePlayback(),
+      verb: "PUT",
+    })
+
+  nextTrack = () =>
+    this.api<Response>({
+      url: SpotifyEndpoints.nextTrack(),
+      verb: "POST",
+    })
+
+  saveAlbums = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.saveAlbums(ids),
+      verb: "PUT",
+    })
+
+  saveTracks = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.saveTracks(ids),
+      verb: "PUT",
+    })
+
+  removeAlbums = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.removeAlbums(ids),
+      verb: "DELETE",
+    })
+
+  removeTracks = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.removeTracks(ids),
+      verb: "DELETE",
+    })
 
   getAlbumById = (id: string) =>
     from(
@@ -207,46 +264,6 @@ class SpotifyApiService implements SpotifyAPI {
       this.api<Playlist>({ url: SpotifyEndpoints.getPlaylistById(id) }),
     )
 
-  getCurrentUserSavedArtists = () =>
-    from(
-      this.api<{ artists: SpotifyPager<Artist> }>({
-        url: SpotifyEndpoints.getCurrentUserSavedArtists(),
-      }),
-    )
-
-  getCurrentUserSavedTracks = () =>
-    from(
-      this.api<SpotifyPager<PlaylistTrackObject>>({
-        url: SpotifyEndpoints.getCurrentUserSavedTracks(),
-      }),
-    )
-
-  getCurrentUserSavedAlbums = () =>
-    from(
-      this.api<SpotifyPager<SavedAlbumObject>>({
-        url: SpotifyEndpoints.getCurrentUserSavedAlbums(),
-      }),
-    )
-
-  getCurrentUserTopArtists = () =>
-    from(
-      this.api<SpotifyPager<Artist>>({
-        url: SpotifyEndpoints.getCurrentUserTopArtists(),
-      }),
-    )
-
-  getRecentlyPlayedTracks = () =>
-    from(
-      this.api<SpotifyPager<SavedTrackObject>>({
-        url: SpotifyEndpoints.getRecentlyPlayedTracks(),
-      }),
-    )
-
-  getCurrentUserPlaylists = () =>
-    from(
-      this.api<Tracks>({ url: SpotifyEndpoints.getCurrentUserPlaylists() }),
-    )
-
   getArtistById = (id: string) =>
     from(
       this.api<Artist>({ url: SpotifyEndpoints.getArtistById(id) }),
@@ -270,29 +287,6 @@ class SpotifyApiService implements SpotifyAPI {
     from(
       this.api<SearchResponse>({ url: SpotifyEndpoints.search(`"${query}"`) }),
     )
-
-  getPlayingTrack = () =>
-    this.api<CurrentPlayingTrack | Response>({
-      url: SpotifyEndpoints.getPlayingTrack(),
-    })
-
-  resumePlayback = () =>
-    this.api<Response>({
-      url: SpotifyEndpoints.resumePlayback(),
-      verb: "PUT",
-    })
-
-  pausePlayback = () =>
-    this.api<Response>({
-      url: SpotifyEndpoints.pausePlayback(),
-      verb: "PUT",
-    })
-
-  nextTrack = () =>
-    this.api<Response>({
-      url: SpotifyEndpoints.nextTrack(),
-      verb: "POST",
-    })
 }
 
 export default new SpotifyApiService()

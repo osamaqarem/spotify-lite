@@ -1,6 +1,22 @@
 export interface SpotifyAPI {
   getMyProfile: () => any
 
+  getCurrentUserSavedArtists: () => any
+
+  getCurrentUserSavedTracks: () => any
+
+  checkSavedTracks: (ids: string) => any
+
+  getCurrentUserSavedAlbums: () => any
+
+  checkSavedAlbums: (ids: string) => any
+
+  getCurrentUserTopArtists: () => any
+
+  getRecentlyPlayedTracks: () => any
+
+  getCurrentUserPlaylists: () => any
+
   getAlbumById: (id: string) => any
 
   getMultipleAlbums: (ids: string) => any
@@ -12,18 +28,6 @@ export interface SpotifyAPI {
   getCategoryById: (id: string, urlQuery: string) => any
 
   getPlaylistById: (id: string) => any
-
-  getCurrentUserSavedArtists: () => any
-
-  getCurrentUserSavedTracks: () => any
-
-  getCurrentUserSavedAlbums: () => any
-
-  getCurrentUserTopArtists: () => any
-
-  getRecentlyPlayedTracks: () => any
-
-  getCurrentUserPlaylists: () => any
 
   getArtistById: (id: string) => any
 
@@ -40,6 +44,14 @@ export interface SpotifyAPI {
   pausePlayback: () => any
 
   nextTrack: () => any
+
+  saveTracks: (ids: string) => any
+
+  saveAlbums: (ids: string) => any
+
+  removeTracks: (ids: string) => any
+
+  removeAlbums: (ids: string) => any
 }
 
 class SpotifyEndpoints implements SpotifyAPI {
@@ -59,6 +71,39 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   getMyProfile = () => `${this.V1}/me`
 
+  getCurrentUserSavedArtists = () => `${this.V1}/me/following?type=artist`
+
+  getCurrentUserSavedTracks = () => `${this.V1}/me/tracks?limit=50`
+
+  checkSavedTracks = (ids: string) => `${this.V1}/me/tracks/contains?ids=${ids}`
+
+  getCurrentUserSavedAlbums = () => `${this.V1}/me/albums`
+
+  checkSavedAlbums = (ids: string) => `${this.V1}/me/albums/contains?ids=${ids}`
+
+  getCurrentUserTopArtists = () => `${this.V1}/me/top/artists?limit=19`
+
+  getRecentlyPlayedTracks = () =>
+    `${this.V1}/me/player/recently-played?limit=20`
+
+  getCurrentUserPlaylists = () => `${this.V1}/me/playlists`
+
+  getPlayingTrack = () => `${this.V1}/me/player/currently-playing`
+
+  resumePlayback = () => `${this.V1}/me/player/play`
+
+  pausePlayback = () => `${this.V1}/me/player/pause`
+
+  nextTrack = () => `${this.V1}/me/player/next`
+
+  saveAlbums = (ids: string) => `${this.V1}/me/albums?ids=${ids}`
+
+  saveTracks = (ids: string) => `${this.V1}/me/tracks?ids=${ids}`
+
+  removeAlbums = (ids: string) => `${this.V1}/me/albums?ids=${ids}`
+
+  removeTracks = (ids: string) => `${this.V1}/me/tracks?ids=${ids}`
+
   getAlbumById = (id: string) => `${this.V1}/albums/${id}`
 
   getMultipleAlbums = (ids: string) => `${this.V1}/albums?ids=${ids}`
@@ -73,19 +118,6 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   getPlaylistById = (id: string) => `${this.V1}/playlists/${id}`
 
-  getCurrentUserSavedArtists = () => `${this.V1}/me/following?type=artist`
-
-  getCurrentUserSavedTracks = () => `${this.V1}/me/tracks?limit=50`
-
-  getCurrentUserSavedAlbums = () => `${this.V1}/me/albums`
-
-  getCurrentUserTopArtists = () => `${this.V1}/me/top/artists?limit=19`
-
-  getRecentlyPlayedTracks = () =>
-    `${this.V1}/me/player/recently-played?limit=20`
-
-  getCurrentUserPlaylists = () => `${this.V1}/me/playlists`
-
   getArtistById = (id: string) => `${this.V1}/artists/${id}`
 
   getRelatedArtistsById = (id: string) =>
@@ -96,14 +128,6 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   search = (query: string) =>
     `${this.V1}/search?market=MY&type=album,artist,playlist,track&q=${query}`
-
-  getPlayingTrack = () => `${this.V1}/me/player/currently-playing`
-
-  resumePlayback = () => `${this.V1}/me/player/play`
-
-  pausePlayback = () => `${this.V1}/me/player/pause`
-
-  nextTrack = () => `${this.V1}/me/player/next`
 }
 
 export default new SpotifyEndpoints()
