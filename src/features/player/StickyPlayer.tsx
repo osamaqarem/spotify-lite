@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     width: "100%",
     position: "absolute",
     zIndex: 1,
-    borderBottomColor: "black",
+    borderBottomColor: colors.tabBar,
     borderBottomWidth: StyleSheet.hairlineWidth,
     shadowColor: "#000",
     shadowOffset: {
