@@ -25,7 +25,7 @@ You need to build from source. See [development](#Development).
 
 iOS
 
-<img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/splash.png"><img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/home.png">
+<img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/splash.png"> <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/home.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/explore.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/favorites.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/iphone11/playlist.png">
@@ -38,7 +38,7 @@ iOS
 
 ### Android
 
-<img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/splash.png"><img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/home.png">
+<img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/splash.png"> <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/home.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/explore.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/favorites.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/playlist.png">
