@@ -49,6 +49,7 @@ iOS
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/search.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/see-all-songs.png">
 
+
 ## Development
 
 ```bash
