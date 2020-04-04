@@ -8,6 +8,7 @@ import RecentlyPlayed from "./components/RecentlyPlayed"
 import { styles } from "./styles"
 import TopArtists from "./components/TopArtists"
 import { SafeAreaView, NavigationEvents } from "react-navigation"
+import { PLAYER_HEIGHT } from "../player/StickyPlayer"
 
 const Home = () => {
   return (
@@ -32,6 +33,7 @@ const Home = () => {
         </TopBar>
         <ScrollView
           style={{ width: "100%" }}
+          contentContainerStyle={{ paddingBottom: PLAYER_HEIGHT }}
           showsVerticalScrollIndicator={false}>
           <RecentlyPlayed />
           <FeaturedPlaylists />

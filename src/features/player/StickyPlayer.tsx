@@ -26,7 +26,7 @@ import { redoLogin } from "../../redux/slices"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
 import ApiService from "../../services/network/SpotifyApiService"
 
-const PLAYER_HEIGHT = 50
+export const PLAYER_HEIGHT = 50
 const POLLING_PERIOD_SECONDS = 5
 
 const OFFSET = 150
@@ -302,7 +302,7 @@ const useCurrentPlayingTrack = () => {
         }
       } else {
         // paused
-        setTrackState(state => ({
+        setTrackState((state) => ({
           ...state,
           isPlaying: false,
         }))

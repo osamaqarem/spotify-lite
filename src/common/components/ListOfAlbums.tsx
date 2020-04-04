@@ -3,6 +3,7 @@ import { FlatList, View } from "react-native"
 import { colors } from "../theme"
 import Album from "./Album"
 import { SavedAlbumType } from "../../redux/slices"
+import { PLAYER_HEIGHT } from "../../features/player/StickyPlayer"
 
 const ListOfAlbums = ({
   currentUserAlbums,
@@ -18,6 +19,7 @@ const ListOfAlbums = ({
         backgroundColor: colors.background,
       }}>
       <FlatList
+        contentContainerStyle={{ paddingBottom: PLAYER_HEIGHT + 10 }}
         data={currentUserAlbums}
         renderItem={({ item }) => (
           <Album album={item} onPlaylistPressed={onPlaylistPressed} />

@@ -48,7 +48,7 @@ const ListOfGenrePlaylists = ({
       style={styles.list}
       numColumns={2}
       data={genrePlaylists}
-      keyExtractor={playlist => playlist.name}
+      keyExtractor={(playlist) => playlist.name}
       renderItem={handleRender}
       getItemLayout={(data, index) => ({
         length: ITEM_DIMENSIONS.WIDTH,

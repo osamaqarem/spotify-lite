@@ -5,6 +5,7 @@ import PlaylistRowFav from "../../features/favorites/favorite-playlists/componen
 import { colors } from "../theme"
 import Playlist, { playlistStyle } from "./Playlist"
 import { SavedPlaylistsType } from "../../redux/slices"
+import { PLAYER_HEIGHT } from "../../features/player/StickyPlayer"
 
 const ListOfPlaylists = ({
   currentUserPlaylists,
@@ -27,6 +28,7 @@ const ListOfPlaylists = ({
       }}>
       {Array.isArray(currentUserPlaylists) && (
         <FlatList
+          contentContainerStyle={{ paddingBottom: PLAYER_HEIGHT + 10 }}
           ListHeaderComponent={
             <TouchableOpacity
               onPress={onFavSongsPressed}

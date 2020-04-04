@@ -18,7 +18,7 @@ const SeeAll = ({ navigation, lastQuery, data, type }: SeeAllType) => {
 
   const items =
     data &&
-    data.map(item => (
+    data.map((item) => (
       <ResultRow
         containerStyle={{ marginTop: 14 }}
         coverStyle={{ height: 44, width: 44 }}
@@ -41,7 +41,7 @@ const SeeAll = ({ navigation, lastQuery, data, type }: SeeAllType) => {
             textStyle={styles.backBtnIcon}
           />
           <Text style={styles.text}>
-            {`"${lastQuery}"`} in {type}
+            {`"${lastQuery}"`} in {type}s
           </Text>
         </View>
         <ScrollView

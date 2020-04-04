@@ -2,6 +2,7 @@ import React from "react"
 import { ScrollView, StyleSheet, View } from "react-native"
 import { colors } from "../../../common/theme"
 import ColoredCard from "./ColoredCard"
+import { PLAYER_HEIGHT } from "../../player/StickyPlayer"
 
 const ListOfColoredCards = ({
   categoriesForCountry,
@@ -39,7 +40,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     flexWrap: "wrap",
-    paddingBottom: 16,
+    paddingBottom: 16 + PLAYER_HEIGHT,
   },
 })
 
