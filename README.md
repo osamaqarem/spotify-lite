@@ -9,6 +9,16 @@
 
 Based on the [Spotify Lite app for Android](https://play.google.com/store/apps/details?id=com.spotify.lite&referrer=adjust_reftag%3Dcc6cp0nuUCn33%26utm_source%3DLanding%2Bpage).
 
+
+## Features
+
+- Home feed (recently played, featured playlists and your top artists).
+- Explore genres.
+- Remote playback control
+- View playlists, artists and albums.
+- View your music library.
+- Search.
+
 ## Try The App
 
 You will need a [Spotify](https://www.spotify.com/us/) account to login.
