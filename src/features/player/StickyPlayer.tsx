@@ -24,7 +24,11 @@ import { useDispatch } from "react-redux"
 import { colors } from "../../common/theme"
 import { redoLogin } from "../../redux/slices"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
-import ApiService from "../../services/network/SpotifyApiService"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import UIHelper from "../../common/helpers/UIHelper"
+import SpotifyHttpException from "../../services/network/exceptions/SpotifyHttpException"
+import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
 
 export const PLAYER_HEIGHT = 50
 const POLLING_PERIOD_SECONDS = 5
@@ -42,6 +46,8 @@ const trackTitleclock = new Clock()
 const mayStartAnimation = new Value(0)
 const translateX = new Value(0)
 
+const heartScale = new Animated.Value(1)
+
 const StickyPlayer = ({ barHeight }: Props) => {
   const dispatch = useDispatch()
   const [trackTitleWidth, setTrackTitleWidth] = useState(0)
@@ -52,6 +58,8 @@ const StickyPlayer = ({ barHeight }: Props) => {
     currentProgressPct,
     intervalAmountPct,
     isPlaying,
+    isSaved,
+    id,
   } = trackState
 
   const timingTo = currentProgressPct + intervalAmountPct
@@ -81,8 +89,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
 
   const progressValue = concat(animatedProgress, "%")
 
-  const titleIsTooLong = (`${title} • ` + artist).length > 46
-  // const titleIsTooLong = (`${title} • ` + artist).length > 10
+  const titleIsTooLong = (`${title} • ` + artist).length > 44
   const validTrackWidth = trackTitleWidth > 0
 
   useCode(
@@ -126,10 +133,10 @@ const StickyPlayer = ({ barHeight }: Props) => {
 
   const handlePlay = useCallback(async () => {
     try {
-      await ApiService.resumePlayback()
+      await SpotifyApiService.resumePlayback()
       await getTrackData()
     } catch (e) {
-      if (ApiService.sessionIsExpired(e)) {
+      if (SpotifyApiService.sessionIsExpired(e)) {
         dispatch(redoLogin())
       } else {
         console.warn(e)
@@ -139,10 +146,10 @@ const StickyPlayer = ({ barHeight }: Props) => {
 
   const handlePause = useCallback(async () => {
     try {
-      await ApiService.pausePlayback()
+      await SpotifyApiService.pausePlayback()
       await getTrackData()
     } catch (e) {
-      if (ApiService.sessionIsExpired(e)) {
+      if (SpotifyApiService.sessionIsExpired(e)) {
         dispatch(redoLogin())
       } else {
         console.warn(e)
@@ -152,18 +159,64 @@ const StickyPlayer = ({ barHeight }: Props) => {
 
   const nextTrack = useCallback(async () => {
     try {
-      await ApiService.nextTrack()
+      await SpotifyApiService.nextTrack()
       setTimeout(async () => {
         await getTrackData()
       }, 50)
     } catch (e) {
-      if (ApiService.sessionIsExpired(e)) {
+      if (SpotifyApiService.sessionIsExpired(e)) {
         dispatch(redoLogin())
       } else {
         console.warn(e)
       }
     }
   }, [dispatch, getTrackData])
+
+  const handleSave = useCallback(async () => {
+    if (!isSaved) {
+      try {
+        const res = await SpotifyApiService.saveTracks(id)
+        if (res.ok) {
+          await getTrackData()
+        } else {
+          throw new SpotifyHttpException(
+            "not ok",
+            "failed to save track",
+            SpotifyEndpoints.saveTracks(id),
+          )
+        }
+      } catch (e) {
+        if (SpotifyApiService.sessionIsExpired(e)) {
+          dispatch(redoLogin())
+        } else {
+          console.warn(e)
+        }
+      }
+    }
+  }, [dispatch, getTrackData, id, isSaved])
+
+  const handleRemove = useCallback(async () => {
+    if (isSaved) {
+      try {
+        const res = await SpotifyApiService.removeTracks(id)
+        if (res.ok) {
+          await getTrackData()
+        } else {
+          throw new SpotifyHttpException(
+            "not ok",
+            "failed to remove track",
+            SpotifyEndpoints.removeTracks(id),
+          )
+        }
+      } catch (e) {
+        if (SpotifyApiService.sessionIsExpired(e)) {
+          dispatch(redoLogin())
+        } else {
+          console.warn(e)
+        }
+      }
+    }
+  }, [dispatch, getTrackData, id, isSaved])
 
   const captureWidth = useCallback((e: LayoutChangeEvent) => {
     setTrackTitleWidth(e.nativeEvent.layout.width)
@@ -187,16 +240,28 @@ const StickyPlayer = ({ barHeight }: Props) => {
         ]}
       />
       <View style={styles.progressBarBackground} />
-      <View style={styles.iconContainer}>
-        <Icon
-          onPress={() => {
-            return
-          }}
-          name={true ? "heart" : "heart-outline"}
-          size={24}
-          style={styles.heartIcon}
-        />
-      </View>
+      <Animated.View
+        style={[styles.iconContainer, { transform: [{ scale: heartScale }] }]}>
+        <TouchableWithoutFeedback
+          onPress={isSaved ? handleRemove : handleSave}
+          onPressIn={() =>
+            Animated.timing(heartScale, UIHelper.heartScaleAnim.in).start()
+          }
+          onPressOut={() =>
+            Animated.timing(heartScale, UIHelper.heartScaleAnim.out).start()
+          }>
+          <Icon
+            name={isSaved ? "heart" : "heart-outline"}
+            size={24}
+            style={[
+              styles.heartIcon,
+              {
+                color: isSaved ? colors.green : colors.white,
+              },
+            ]}
+          />
+        </TouchableWithoutFeedback>
+      </Animated.View>
       <Animated.Text
         onLayout={captureWidth}
         style={[
@@ -249,6 +314,8 @@ const initialTrackState = {
   title: "",
   artist: "",
   isPlaying: false,
+  isSaved: false,
+  id: "",
 }
 
 const useCurrentPlayingTrack = () => {
@@ -271,13 +338,17 @@ const useCurrentPlayingTrack = () => {
 
   const getTrackData = useCallback(async () => {
     try {
-      const trackData = await ApiService.getPlayingTrack()
+      const trackData = await SpotifyApiService.getPlayingTrack()
 
       if (
         typeof trackData === "object" &&
         "item" in trackData &&
         trackData.item
       ) {
+        const [isSaved] = await SpotifyApiService.checkSavedTracks(
+          trackData.item.id,
+        )
+
         const currentProgressPct =
           (trackData.progress_ms / trackData.item.duration_ms) * 100
 
@@ -292,6 +363,8 @@ const useCurrentPlayingTrack = () => {
             title: trackData.item.name,
             artist: trackData.item.artists[0].name,
             isPlaying: trackData.is_playing,
+            isSaved: isSaved,
+            id: trackData.item.id,
           }
 
           setTrackState(newState)
@@ -308,7 +381,7 @@ const useCurrentPlayingTrack = () => {
         }))
       }
     } catch (e) {
-      if (ApiService.sessionIsExpired(e)) {
+      if (SpotifyApiService.sessionIsExpired(e)) {
         dispatch(redoLogin())
       } else {
         console.warn(e)
@@ -364,7 +437,6 @@ const styles = StyleSheet.create({
     zIndex: -1,
   },
   heartIcon: {
-    color: colors.green,
     right: 2,
     bottom: 1,
   },

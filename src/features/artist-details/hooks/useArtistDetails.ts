@@ -92,14 +92,14 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
               throw relatedArtistsList.error.message
             }
 
-            const tracks: TrackType[] = topTracks.tracks.map(item => ({
+            const tracks: TrackType[] = topTracks.tracks.map((item) => ({
               artistName:
                 item.artists[0].name ?? "No track returned by spotify :(",
               name: item.name ?? "No track",
             }))
 
             const relatedArtists: AlbumType[] = relatedArtistsList.artists.map(
-              artist => ({
+              (artist) => ({
                 name: artist.name,
                 imageURL: artist.images[0]?.url,
                 id: artist.id,
@@ -112,11 +112,12 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
               ownerName: artist.name,
               tracks,
               relatedArtists,
+              id: artist.id,
             })
 
             from(handleGradientColor(artist.images[0]?.url)).subscribe()
           },
-          err => {
+          (err) => {
             if (SpotifyApiService.sessionIsExpired(err)) {
               redoLogin()
             } else {

@@ -60,7 +60,7 @@ class SpotifyEndpoints implements SpotifyAPI {
     responseType: "token",
     redirectURI: encodeURIComponent("http://localhost:8000"),
     scopes: encodeURIComponent(
-      "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read user-follow-read user-modify-playback-state user-read-playback-state user-read-currently-playing",
+      "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read user-follow-read user-modify-playback-state user-read-playback-state user-read-currently-playing user-library-modify",
     ),
     showDialog: "false",
   }

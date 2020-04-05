@@ -63,6 +63,7 @@ const ArtistDetails = ({
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
       />
       <PlaylistHeaderControl
+        id={artistId}
         goBack={() => navigation.goBack()}
         isLoading={isLoading}
       />
@@ -98,7 +99,7 @@ const ArtistDetails = ({
           </View>
           <ShuffleButton offsetY={offsetY} />
           <Animated.ScrollView
-            onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
+            onLayout={(e) => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"
@@ -129,7 +130,7 @@ const ArtistDetails = ({
                   paddingBottom: 30,
                 }}
                 showsHorizontalScrollIndicator={false}>
-                {artistDetails.relatedArtists.map(artist => (
+                {artistDetails.relatedArtists.map((artist) => (
                   <ArtistCover
                     coverShape="CIRCLE"
                     key={artist.id}

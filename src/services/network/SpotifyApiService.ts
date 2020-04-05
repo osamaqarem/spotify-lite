@@ -146,6 +146,7 @@ class SpotifyApiService implements SpotifyAPI {
         url: SpotifyEndpoints.getCurrentUserSavedTracks(),
       }),
     )
+
   checkSavedTracks = (ids: string) =>
     this.api<boolean[]>({
       url: SpotifyEndpoints.checkSavedTracks(ids),

@@ -28,15 +28,15 @@ const librarySlice = createSlice({
   name: "library",
   initialState,
   reducers: {
-    getCurrentUserSavedTracks: state => state,
-    getCurrentUserSavedTracksError: state => state,
+    getCurrentUserSavedTracks: (state) => state,
+    getCurrentUserSavedTracksError: (state) => state,
     getCurrentUserSavedTracksSuccess: (state, action) => ({
       ...state,
       currentUserSavedTracksCount: action.payload.count,
       currentUserSavedTracks: action.payload.data,
     }),
-    getCurrentUserSavedAlbums: state => state,
-    getCurrentUserSavedAlbumsError: state => state,
+    getCurrentUserSavedAlbums: (state) => state,
+    getCurrentUserSavedAlbumsError: (state) => state,
     getCurrentUserSavedAlbumsSuccess: (state, action) => ({
       ...state,
       currentUserSavedAlbums: action.payload,
@@ -49,8 +49,8 @@ const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
     ofType(getCurrentUserSavedTracks.type),
     switchMap(() =>
       SpotifyApiService.getCurrentUserSavedTracks().pipe(
-        map(res => {
-          const tracks: TrackType[] = res.items.map(item => ({
+        map((res) => {
+          const tracks: TrackType[] = res.items.map((item) => ({
             artistName: item.track.artists[0].name,
             name: item.track.name,
           }))
@@ -60,11 +60,12 @@ const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
             tracks,
             name: "Favorite Songs",
             ownerName: null,
+            id: null,
           }
 
           return getCurrentUserSavedTracksSuccess({ count: res.total, data })
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(getCurrentUserSavedTracks())
           }
@@ -82,8 +83,8 @@ const getCurrentUserSavedAlbumsEpic = (actions$: Observable<Action<any>>) =>
     ofType(getCurrentUserSavedAlbums.type),
     switchMap(() =>
       SpotifyApiService.getCurrentUserSavedAlbums().pipe(
-        map(res => {
-          const data: SavedAlbumType[] = res.items.map(item => {
+        map((res) => {
+          const data: SavedAlbumType[] = res.items.map((item) => {
             return {
               owner: item.album.artists[0].name,
               url: (item.album.images[0] && item.album.images[0].url) || null,
@@ -94,7 +95,7 @@ const getCurrentUserSavedAlbumsEpic = (actions$: Observable<Action<any>>) =>
 
           return getCurrentUserSavedAlbumsSuccess(data)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(getCurrentUserSavedAlbums())
           }
