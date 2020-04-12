@@ -37,7 +37,7 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getAlbumById.type),
     switchMap(({ payload: id }) =>
-      SpotifyApiService.getAlbumById(id).pipe(
+      SpotifyApiService.getAlbum(id).pipe(
         map((res) => {
           const tracks = res.tracks.items.map((track, i) => ({
             name: track.name,
@@ -50,6 +50,7 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
             tracks,
             imageUrl: res.images[0].url,
             id: res.id,
+            type: "ALBUM",
           }
 
           return getPlaylistByIdSuccess(album)

@@ -66,6 +66,7 @@ const ArtistDetails = ({
         id={artistId}
         goBack={() => navigation.goBack()}
         isLoading={isLoading}
+        itemType="ARTIST"
       />
       {isLoading ? (
         <LoadingView />

@@ -28,6 +28,8 @@ module.exports = {
     "@typescript-eslint/no-non-null-assertion": 0,
     "@typescript-eslint/ban-ts-ignore": 0,
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
+    "@typescript-eslint/no-empty-interface": 0,
+    "@typescript-eslint/no-empty-function": 0,
   },
   settings: {
     react: {

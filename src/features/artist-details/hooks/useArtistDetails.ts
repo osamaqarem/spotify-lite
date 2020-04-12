@@ -67,14 +67,12 @@ const useArtistDetails = ({ artistId, profile, redoLogin }: Props) => {
 
     const fetchData = () => {
       if (artistId) {
-        const artist$ = SpotifyApiService.getArtistById(artistId)
+        const artist$ = SpotifyApiService.getArtist(artistId)
         const topTracks$ = SpotifyApiService.getArtistTopTracks(
           artistId,
           profile?.country!,
         )
-        const relatedArtists$ = SpotifyApiService.getRelatedArtistsById(
-          artistId,
-        )
+        const relatedArtists$ = SpotifyApiService.getRelatedArtists(artistId)
 
         sub = zip(artist$, topTracks$, relatedArtists$).subscribe(
           ([artist, topTracks, relatedArtistsList]: [

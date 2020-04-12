@@ -153,7 +153,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
 
       const urlQuery = getRestOfItems ? "offset=4" : "limit=4"
 
-      const request$ = SpotifyApiService.getCategoryById(id, urlQuery).pipe(
+      const request$ = SpotifyApiService.getCategory(id, urlQuery).pipe(
         map((res) => {
           if (res.playlists.items.length === 0) {
             return of(getCategoryByIdSuccess({ data: [], title, id }))
@@ -161,7 +161,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
 
           // Get playlist by ID for each playlist
           const request$Array = res.playlists.items.map((item) => {
-            return SpotifyApiService.getPlaylistById(item.id)
+            return SpotifyApiService.getPlaylist(item.id)
           })
 
           return zip(...request$Array)

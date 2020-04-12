@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { LayoutChangeEvent, StyleSheet, Text, View } from "react-native"
+import { LayoutChangeEvent, StyleSheet, View } from "react-native"
+import { TouchableWithoutFeedback } from "react-native-gesture-handler"
 import Animated, {
   and,
   Clock,
@@ -21,17 +22,17 @@ import Animated, {
 import { bin, delay, loop, timing } from "react-native-redash"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useDispatch } from "react-redux"
+import { Subject, zip } from "rxjs"
+import UIHelper from "../../common/helpers/UIHelper"
 import { colors } from "../../common/theme"
 import { redoLogin } from "../../redux/slices"
 import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncStoreService"
-import SpotifyApiService from "../../services/network/SpotifyApiService"
-import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import UIHelper from "../../common/helpers/UIHelper"
 import SpotifyHttpException from "../../services/network/exceptions/SpotifyHttpException"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
 
 export const PLAYER_HEIGHT = 50
-const POLLING_PERIOD_SECONDS = 5
+const POLLING_PERIOD_SECONDS = 10
 
 const OFFSET = 150
 
@@ -48,9 +49,14 @@ const translateX = new Value(0)
 
 const heartScale = new Animated.Value(1)
 
+const trackTitleWidth$ = new Subject<number>()
+const artistWidth$ = new Subject<number>()
+const totalWidth$ = zip(trackTitleWidth$, artistWidth$)
+
 const StickyPlayer = ({ barHeight }: Props) => {
   const dispatch = useDispatch()
-  const [trackTitleWidth, setTrackTitleWidth] = useState(0)
+  const [shown, setShown] = useState(false)
+  const [trackWidth, setTrackWidth] = useState(0)
   const { getTrackData, trackState } = useCurrentPlayingTrack()
   const {
     title,
@@ -61,6 +67,23 @@ const StickyPlayer = ({ barHeight }: Props) => {
     isSaved,
     id,
   } = trackState
+
+  useEffect(() => {
+    const sub = totalWidth$.subscribe(handleWidth)
+    return () => {
+      sub.unsubscribe()
+    }
+  }, [])
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShown(true)
+    }, 1000)
+
+    return () => {
+      clearTimeout(timeout)
+    }
+  }, [])
 
   const timingTo = currentProgressPct + intervalAmountPct
 
@@ -90,7 +113,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
   const progressValue = concat(animatedProgress, "%")
 
   const titleIsTooLong = (`${title} • ` + artist).length > 44
-  const validTrackWidth = trackTitleWidth > 0
+  const validTrackWidth = trackWidth > 0
 
   useCode(
     () => [
@@ -102,7 +125,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
           set(
             translateX,
             multiply(
-              -trackTitleWidth - OFFSET,
+              -trackWidth - OFFSET,
               loop({
                 duration: 15 * 1000,
                 easing: Easing.linear,
@@ -115,20 +138,21 @@ const StickyPlayer = ({ barHeight }: Props) => {
         set(translateX, 0),
       ),
     ],
-    [titleIsTooLong, validTrackWidth, trackTitleWidth],
+    [titleIsTooLong, validTrackWidth, trackWidth],
   )
 
   useCode(
     () => [
       cond(
         and(
+          // TODO: this is not working well on iOS
           eq(1, mayStartAnimation),
-          lessOrEq(translateX, -trackTitleWidth - OFFSET + 0.5),
+          lessOrEq(translateX, -trackWidth - OFFSET + 0.5),
         ),
         [stopClock(trackTitleclock), delay(startClock(trackTitleclock), 1000)],
       ),
     ],
-    [translateX, trackTitleWidth, mayStartAnimation],
+    [translateX, trackWidth, mayStartAnimation],
   )
 
   const handlePlay = useCallback(async () => {
@@ -218,9 +242,17 @@ const StickyPlayer = ({ barHeight }: Props) => {
     }
   }, [dispatch, getTrackData, id, isSaved])
 
-  const captureWidth = useCallback((e: LayoutChangeEvent) => {
-    setTrackTitleWidth(e.nativeEvent.layout.width)
+  const captureTitleWidth = useCallback((e: LayoutChangeEvent) => {
+    trackTitleWidth$.next(e.nativeEvent.layout.width)
   }, [])
+
+  const captureTotalWidth = useCallback((e: LayoutChangeEvent) => {
+    artistWidth$.next(e.nativeEvent.layout.width)
+  }, [])
+
+  const handleWidth = ([trackTitleWidth, artistWidth]: [number, number]) => {
+    setTrackWidth(trackTitleWidth + artistWidth)
+  }
 
   if (title.length === 0) return null
   return (
@@ -229,6 +261,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
         styles.bar,
         {
           bottom: barHeight,
+          opacity: shown ? 1 : 0,
         },
       ]}>
       <Animated.View
@@ -263,7 +296,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
         </TouchableWithoutFeedback>
       </Animated.View>
       <Animated.Text
-        onLayout={captureWidth}
+        onLayout={captureTitleWidth}
         style={[
           styles.title,
           {
@@ -271,20 +304,39 @@ const StickyPlayer = ({ barHeight }: Props) => {
           },
         ]}>
         {`${title} • `}
-        <Text style={styles.artist}>{artist}</Text>
+      </Animated.Text>
+      <Animated.Text
+        onLayout={captureTotalWidth}
+        style={[
+          styles.artist,
+          {
+            transform: [{ translateX }],
+          },
+        ]}>
+        {artist}
       </Animated.Text>
       {titleIsTooLong && (
-        <Animated.Text
-          style={[
-            styles.title,
-            {
-              left: OFFSET,
-              transform: [{ translateX }],
-            },
-          ]}>
-          {`${title} • `}
-          <Text style={styles.artist}>{artist}</Text>
-        </Animated.Text>
+        <>
+          <Animated.Text
+            style={[
+              styles.title,
+              {
+                left: OFFSET,
+                transform: [{ translateX }],
+              },
+            ]}>
+            {`${title} • `}
+          </Animated.Text>
+          <Animated.Text
+            style={[
+              styles.artist,
+              {
+                transform: [{ translateX }],
+              },
+            ]}>
+            {artist}
+          </Animated.Text>
+        </>
       )}
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
@@ -345,7 +397,7 @@ const useCurrentPlayingTrack = () => {
         "item" in trackData &&
         trackData.item
       ) {
-        const [isSaved] = await SpotifyApiService.checkSavedTracks(
+        const [isSaved] = await SpotifyApiService.getSavedStateForTracks(
           trackData.item.id,
         )
 
@@ -452,6 +504,7 @@ const styles = StyleSheet.create({
     fontWeight: "normal",
     fontSize: 11,
     color: colors.lightGrey,
+    zIndex: -2,
   },
   playIcon: {
     color: colors.white,

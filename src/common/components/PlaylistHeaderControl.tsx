@@ -1,17 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react"
+import React, { useEffect, useState } from "react"
 import { SafeAreaView, StyleSheet, ToastAndroid, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { colors } from "../theme"
-import DotsView from "./DotsView"
-import BackBtn from "./BackBtn"
 import Animated, { Value } from "react-native-reanimated"
+import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import UIHelper from "../helpers/UIHelper"
-import SpotifyApiService from "../../services/network/SpotifyApiService"
-import { useDispatch } from "react-redux"
-import { redoLogin } from "../../redux/slices"
-import SpotifyHttpException from "../../services/network/exceptions/SpotifyHttpException"
-import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
+import { ItemType, SpotifyLibraryManager } from "../hooks/useLibraryManager"
+import { colors } from "../theme"
+import BackBtn from "./BackBtn"
+import DotsView from "./DotsView"
+import { useSelector } from "react-redux"
+import { RootStoreType } from "../../redux/rootReducer"
 
 export const HEADER_HEIGHT = 42
 
@@ -21,79 +19,49 @@ interface Props {
   goBack: () => void
   isLoading: boolean
   id: string | undefined | null
+  itemType: ItemType | undefined
 }
 
-// TODO:
-// Like/Save for artists, playlists, tracks, albums is all different.
-
-const PlaylistHeaderControl = ({ goBack, isLoading, id }: Props) => {
-  const dispatch = useDispatch()
+const PlaylistHeaderControl = ({ goBack, isLoading, id, itemType }: Props) => {
+  const {
+    getItemSavedOrFollowedState,
+    saveItem,
+    removeItem,
+  } = SpotifyLibraryManager()
   const [isSaved, setIsSaved] = useState<boolean | undefined>(undefined)
+  const userId = useSelector(
+    (state: RootStoreType) => state.userReducer.profile?.id,
+  )
 
   useEffect(() => {
     ;(async () => {
-      try {
-        if (id) {
-          const [isSaved] = await SpotifyApiService.checkSavedAlbums(id)
-
-          setIsSaved(isSaved)
-        }
-      } catch (e) {
-        if (SpotifyApiService.sessionIsExpired(e)) {
-          dispatch(redoLogin())
+      if (typeof isSaved === "undefined" && id && userId && itemType) {
+        let result
+        if (itemType === "PLAYLIST") {
+          result = await getItemSavedOrFollowedState(id, itemType, userId)
         } else {
-          console.warn(e)
+          result = await getItemSavedOrFollowedState(id, itemType)
         }
+        setIsSaved(Boolean(result))
       }
     })()
-  }, [id, dispatch])
+  }, [getItemSavedOrFollowedState, id, itemType, isSaved, userId])
 
-  const handleSave = useCallback(async () => {
-    console.tron(id)
-    if (id && !isSaved) {
-      try {
-        const res = await SpotifyApiService.saveAlbums(id)
-        if (res.ok) {
-          setIsSaved(true)
-        } else {
-          throw new SpotifyHttpException(
-            "not ok",
-            "failed to save track",
-            SpotifyEndpoints.saveAlbums(id),
-          )
-        }
-      } catch (e) {
-        if (SpotifyApiService.sessionIsExpired(e)) {
-          dispatch(redoLogin())
-        } else {
-          console.warn(e)
-        }
-      }
+  const handleSave = async () => {
+    if (id && !isSaved && itemType) {
+      const success = await saveItem(id, itemType)
+      success && setIsSaved(true)
+      // TODO: add item to user library manually
     }
-  }, [dispatch, id, isSaved])
+  }
 
-  const handleRemove = useCallback(async () => {
-    if (id && isSaved) {
-      try {
-        const res = await SpotifyApiService.removeAlbums(id)
-        if (res.ok) {
-          setIsSaved(false)
-        } else {
-          throw new SpotifyHttpException(
-            "not ok",
-            "failed to remove track",
-            SpotifyEndpoints.removeAlbums(id),
-          )
-        }
-      } catch (e) {
-        if (SpotifyApiService.sessionIsExpired(e)) {
-          dispatch(redoLogin())
-        } else {
-          console.warn(e)
-        }
-      }
+  const handleRemove = async () => {
+    if (id && isSaved && itemType) {
+      const success = await removeItem(id, itemType)
+      success && setIsSaved(false)
+      // TODO: remove item if its to user library manually
     }
-  }, [dispatch, id, isSaved])
+  }
 
   return (
     <SafeAreaView style={styles.container}>

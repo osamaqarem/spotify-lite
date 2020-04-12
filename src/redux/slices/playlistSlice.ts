@@ -16,6 +16,7 @@ export type PlaylistDetailsType = {
   tracks: TrackType[]
   followerCount?: number
   id: string | null
+  type: "ALBUM" | "PLAYLIST"
 }
 
 export type SavedPlaylistsType = {
@@ -59,7 +60,7 @@ const getPlayListByIdEpic = (actions$: Observable<Action<string>>) =>
   actions$.pipe(
     ofType(getPlaylistById.type),
     switchMap(({ payload: playListId }: Action<string>) =>
-      SpotifyApiService.getPlaylistById(playListId!).pipe(
+      SpotifyApiService.getPlaylist(playListId!).pipe(
         map((res) => {
           const tracks: TrackType[] = res.tracks.items.map((item) => ({
             artistName:
@@ -67,15 +68,16 @@ const getPlayListByIdEpic = (actions$: Observable<Action<string>>) =>
             name: item.track?.name ?? "No track",
           }))
 
-          const data: PlaylistDetailsType = {
+          const playlist: PlaylistDetailsType = {
             imageUrl: res.images[0].url,
             name: res.name,
             ownerName: res.owner.display_name,
             tracks,
             id: res.id,
+            type: "PLAYLIST",
           }
 
-          return getPlaylistByIdSuccess(data)
+          return getPlaylistByIdSuccess(playlist)
         }),
         catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {

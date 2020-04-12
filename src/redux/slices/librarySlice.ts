@@ -61,6 +61,7 @@ const getCurrentUserSavedTracksEpic = (actions$: Observable<Action<any>>) =>
             name: "Favorite Songs",
             ownerName: null,
             id: null,
+            type: "PLAYLIST",
           }
 
           return getCurrentUserSavedTracksSuccess({ count: res.total, data })

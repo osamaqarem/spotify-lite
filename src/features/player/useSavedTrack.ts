@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react"
-import { View, Text } from "react-native"
-import SpotifyApiService from "../../services/network/SpotifyApiService"
+import { useEffect, useState } from "react"
 import SpotifyHttpException from "../../services/network/exceptions/SpotifyHttpException"
+import SpotifyApiService from "../../services/network/SpotifyApiService"
 import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
 
 interface Props {
@@ -14,7 +13,7 @@ const useSavedTrack = ({ id }: Props) => {
   useEffect(() => {
     ;(async () => {
       try {
-        const [res] = await SpotifyApiService.checkSavedTracks(id)
+        const [res] = await SpotifyApiService.getSavedStateForTracks(id)
 
         if (typeof res === "boolean") {
           setIsSaved(res)
@@ -23,7 +22,7 @@ const useSavedTrack = ({ id }: Props) => {
           throw new SpotifyHttpException(
             "success",
             "not a boolean: " + JSON.stringify(res),
-            SpotifyEndpoints.checkSavedTracks(id),
+            SpotifyEndpoints.getSavedStateForTracks(id),
           )
         }
       } catch (e) {

@@ -92,6 +92,7 @@ const PlaylistDetails = ({
         goBack={goBack}
         isLoading={isLoading}
         id={playlistDetails?.id}
+        itemType={playlistDetails?.type}
       />
       {isLoading ? (
         <LoadingView />

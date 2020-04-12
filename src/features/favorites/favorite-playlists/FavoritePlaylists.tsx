@@ -38,6 +38,7 @@ const FavoritePlaylists = ({
     currentUserSavedTracks && getPlaylistByIdSuccess(currentUserSavedTracks)
     navigation.navigate(Routes.BottomTabs.FavoritesStack.PlaylistDetails)
   }
+
   return (
     <>
       <NavigationEvents
