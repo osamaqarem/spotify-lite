@@ -195,9 +195,9 @@ class SpotifyApiService implements SpotifyAPI {
       verb: "PUT",
     })
 
-  unfollowArtistsOrUsers = (ids: string) =>
+  unfollowArtistsOrUsers = (ids: string, type: 'artist' | 'user') =>
     this.api<Response>({
-      url: SpotifyEndpoints.unfollowArtistsOrUsers(ids),
+      url: SpotifyEndpoints.unfollowArtistsOrUsers(ids, type),
       verb: "DELETE",
     })
 

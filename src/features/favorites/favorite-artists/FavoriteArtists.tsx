@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useCallback } from "react"
 import { NavigationStackProp } from "react-navigation-stack"
 import { connect, ConnectedProps } from "react-redux"
 import ListOfArtists from "../../../common/components/ListOfArtists"
@@ -6,6 +6,7 @@ import { getCurrentUserSavedArtists } from "../../../redux/slices/followSlice"
 import { setArtistId } from "../../../redux/slices/artistSlice"
 import { Routes } from "../../navigation/_routes"
 import { RootStoreType } from "../../../redux/rootReducer"
+import { NavigationEvents } from "react-navigation"
 
 const FavoriteArtists = ({
   getCurrentUserSavedArtists,
@@ -15,9 +16,13 @@ const FavoriteArtists = ({
 }: ReduxProps & {
   navigation: NavigationStackProp
 }) => {
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     getCurrentUserSavedArtists()
   }, [getCurrentUserSavedArtists])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const onArtistPressed = (id: string | undefined) => {
     if (id) {
@@ -27,10 +32,13 @@ const FavoriteArtists = ({
   }
 
   return (
-    <ListOfArtists
-      currentUserArtists={currentUserArtists}
-      onArtistPressed={onArtistPressed}
-    />
+    <>
+      <NavigationEvents onWillFocus={fetchData} />
+      <ListOfArtists
+        currentUserArtists={currentUserArtists}
+        onArtistPressed={onArtistPressed}
+      />
+    </>
   )
 }
 

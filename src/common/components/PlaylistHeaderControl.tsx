@@ -51,7 +51,6 @@ const PlaylistHeaderControl = ({ goBack, isLoading, id, itemType }: Props) => {
     if (id && !isSaved && itemType) {
       const success = await saveItem(id, itemType)
       success && setIsSaved(true)
-      // TODO: add item to user library manually
     }
   }
 
@@ -59,7 +58,6 @@ const PlaylistHeaderControl = ({ goBack, isLoading, id, itemType }: Props) => {
     if (id && isSaved && itemType) {
       const success = await removeItem(id, itemType)
       success && setIsSaved(false)
-      // TODO: remove item if its to user library manually
     }
   }
 

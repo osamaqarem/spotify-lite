@@ -66,7 +66,7 @@ export interface SpotifyAPI {
 
   followArtistsOrUsers: (ids: string, type: "artist" | "user") => any
 
-  unfollowArtistsOrUsers: (ids: string) => any
+  unfollowArtistsOrUsers: (ids: string, type: "artist" | "user") => any
 }
 
 class SpotifyEndpoints implements SpotifyAPI {
@@ -128,7 +128,7 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   saveTracks = (ids: string) => `${this.V1}/me/tracks?ids=${ids}`
 
-  unfollowArtistsOrUsers = (ids: string) => `${this.V1}/me/following?ids=${ids}`
+  unfollowArtistsOrUsers = (ids: string, type: "artist" | "user") => `${this.V1}/me/following?type=${type}&ids=${ids}`
 
   removeAlbums = (ids: string) => `${this.V1}/me/albums?ids=${ids}`
 

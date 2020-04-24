@@ -8,6 +8,13 @@ export type ItemType = "ALBUM" | "PLAYLIST" | "ARTIST" | "TRACK" | "USER"
 export const SpotifyLibraryManager = () => {
   const dispatch = useDispatch()
 
+  const handleError = (e: any) => {
+    if (SpotifyApiService.sessionIsExpired(e)) {
+      dispatch(redoLogin())
+    } else {
+      console.warn(e)
+    }
+  }
   const saveTracks = async (formattedIds: string) => {
     try {
       const res = await SpotifyApiService.saveTracks(formattedIds)
@@ -17,11 +24,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -34,11 +37,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -49,11 +48,7 @@ export const SpotifyLibraryManager = () => {
       )
       return isSaved
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -66,11 +61,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -83,11 +74,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -98,11 +85,7 @@ export const SpotifyLibraryManager = () => {
       )
       return isSaved
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -121,28 +104,20 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
-  const unfollowArtistsOrUsers = async (formattedIds: string) => {
+  const unfollowArtistsOrUsers = async (formattedIds: string, type: 'artist' | 'user') => {
     try {
-      const res = await SpotifyApiService.unfollowArtistsOrUsers(formattedIds)
+      const res = await SpotifyApiService.unfollowArtistsOrUsers(formattedIds, type)
       if (!res.ok) {
         const err: SpotifyErrorResponse = await res.json()
         throw err
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -159,11 +134,7 @@ export const SpotifyLibraryManager = () => {
       )
       return isSaved
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -176,11 +147,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -193,11 +160,7 @@ export const SpotifyLibraryManager = () => {
       }
       return true
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -209,11 +172,7 @@ export const SpotifyLibraryManager = () => {
       )
       return isSaved
     } catch (e) {
-      if (SpotifyApiService.sessionIsExpired(e)) {
-        dispatch(redoLogin())
-      } else {
-        console.warn(e)
-      }
+      handleError(e)
     }
   }
 
@@ -239,8 +198,9 @@ export const SpotifyLibraryManager = () => {
       case "ALBUM":
         return removeAlbums(formattedIds)
       case "ARTIST":
+        return unfollowArtistsOrUsers(formattedIds, 'artist')
       case "USER":
-        return unfollowArtistsOrUsers(formattedIds)
+        return unfollowArtistsOrUsers(formattedIds, 'user')
       case "PLAYLIST":
         return unfollowPlaylist(formattedIds)
       case "TRACK":

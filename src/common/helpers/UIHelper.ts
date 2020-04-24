@@ -26,7 +26,6 @@ const heartScaleAnim = {
 
 // Forked from: react-native-iphone-x-helper
 // https://github.com/ptelad/react-native-iphone-x-helper
-// TODO: better approach?
 const isIphoneX = () => {
   return (
     Platform.OS === "ios" &&
