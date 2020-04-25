@@ -5,11 +5,18 @@ export interface SpotifyAPI {
 
   getCurrentUserSavedTracks: () => any
 
-  checkSavedTracks: (ids: string) => any
+  getSavedStateForTracks: (ids: string) => any
 
   getCurrentUserSavedAlbums: () => any
 
-  checkSavedAlbums: (ids: string) => any
+  getSavedStateForAlbums: (ids: string) => any
+
+  getFollowingStateForArtistsOrUsers: (
+    ids: string,
+    type: "artist" | "user",
+  ) => any
+
+  getFollowingStateForPlaylist: (ids: string, userId: string) => any
 
   getCurrentUserTopArtists: () => any
 
@@ -17,7 +24,7 @@ export interface SpotifyAPI {
 
   getCurrentUserPlaylists: () => any
 
-  getAlbumById: (id: string) => any
+  getAlbum: (id: string) => any
 
   getMultipleAlbums: (ids: string) => any
 
@@ -25,13 +32,13 @@ export interface SpotifyAPI {
 
   getAllCategoriesForCountry: (country: string) => any
 
-  getCategoryById: (id: string, urlQuery: string) => any
+  getCategory: (id: string, urlQuery: string) => any
 
-  getPlaylistById: (id: string) => any
+  getPlaylist: (id: string) => any
 
-  getArtistById: (id: string) => any
+  getArtist: (id: string) => any
 
-  getRelatedArtistsById: (id: string) => any
+  getRelatedArtists: (id: string) => any
 
   getArtistTopTracks: (id: string, country: string) => any
 
@@ -52,6 +59,14 @@ export interface SpotifyAPI {
   removeTracks: (ids: string) => any
 
   removeAlbums: (ids: string) => any
+
+  followPlaylist: (ids: string) => any
+
+  unfollowPlaylist: (ids: string) => any
+
+  followArtistsOrUsers: (ids: string, type: "artist" | "user") => any
+
+  unfollowArtistsOrUsers: (ids: string, type: "artist" | "user") => any
 }
 
 class SpotifyEndpoints implements SpotifyAPI {
@@ -60,7 +75,7 @@ class SpotifyEndpoints implements SpotifyAPI {
     responseType: "token",
     redirectURI: encodeURIComponent("http://localhost:8000"),
     scopes: encodeURIComponent(
-      "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read user-follow-read user-modify-playback-state user-read-playback-state user-read-currently-playing",
+      "user-read-private user-read-recently-played user-top-read playlist-read-private user-library-read user-follow-read user-modify-playback-state user-read-playback-state user-read-currently-playing user-library-modify user-follow-modify playlist-modify-public playlist-modify-private",
     ),
     showDialog: "false",
   }
@@ -75,11 +90,7 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   getCurrentUserSavedTracks = () => `${this.V1}/me/tracks?limit=50`
 
-  checkSavedTracks = (ids: string) => `${this.V1}/me/tracks/contains?ids=${ids}`
-
   getCurrentUserSavedAlbums = () => `${this.V1}/me/albums`
-
-  checkSavedAlbums = (ids: string) => `${this.V1}/me/albums/contains?ids=${ids}`
 
   getCurrentUserTopArtists = () => `${this.V1}/me/top/artists?limit=19`
 
@@ -96,15 +107,36 @@ class SpotifyEndpoints implements SpotifyAPI {
 
   nextTrack = () => `${this.V1}/me/player/next`
 
+  getSavedStateForAlbums = (ids: string) =>
+    `${this.V1}/me/albums/contains?ids=${ids}`
+
+  getFollowingStateForArtistsOrUsers = (ids: string, type: "artist" | "user") =>
+    `${this.V1}/me/following/contains?type=${type}&ids=${ids}`
+
+  getFollowingStateForPlaylist = (id: string, userId: string) =>
+    `${this.V1}/playlists/${id}/followers/contains?ids=${userId}`
+
+  getSavedStateForTracks = (ids: string) =>
+    `${this.V1}/me/tracks/contains?ids=${ids}`
+
   saveAlbums = (ids: string) => `${this.V1}/me/albums?ids=${ids}`
 
+  followArtistsOrUsers = (ids: string, type: "artist" | "user") =>
+    `${this.V1}/me/following?type=${type}&ids=${ids}`
+
+  followPlaylist = (id: string) => `${this.V1}/playlists/${id}/followers`
+
   saveTracks = (ids: string) => `${this.V1}/me/tracks?ids=${ids}`
+
+  unfollowArtistsOrUsers = (ids: string, type: "artist" | "user") => `${this.V1}/me/following?type=${type}&ids=${ids}`
 
   removeAlbums = (ids: string) => `${this.V1}/me/albums?ids=${ids}`
 
   removeTracks = (ids: string) => `${this.V1}/me/tracks?ids=${ids}`
 
-  getAlbumById = (id: string) => `${this.V1}/albums/${id}`
+  unfollowPlaylist = (id: string) => `${this.V1}/playlists/${id}/followers`
+
+  getAlbum = (id: string) => `${this.V1}/albums/${id}`
 
   getMultipleAlbums = (ids: string) => `${this.V1}/albums?ids=${ids}`
 
@@ -113,15 +145,14 @@ class SpotifyEndpoints implements SpotifyAPI {
   getAllCategoriesForCountry = (country: string) =>
     `${this.V1}/browse/categories?country=${country}`
 
-  getCategoryById = (id: string, urlQuery: string) =>
+  getCategory = (id: string, urlQuery: string) =>
     `${this.V1}/browse/categories/${id}/playlists?${urlQuery}`
 
-  getPlaylistById = (id: string) => `${this.V1}/playlists/${id}`
+  getPlaylist = (id: string) => `${this.V1}/playlists/${id}`
 
-  getArtistById = (id: string) => `${this.V1}/artists/${id}`
+  getArtist = (id: string) => `${this.V1}/artists/${id}`
 
-  getRelatedArtistsById = (id: string) =>
-    `${this.V1}/artists/${id}/related-artists`
+  getRelatedArtists = (id: string) => `${this.V1}/artists/${id}/related-artists`
 
   getArtistTopTracks = (id: string, country: string) =>
     `${this.V1}/artists/${id}/top-tracks?market=${country}`

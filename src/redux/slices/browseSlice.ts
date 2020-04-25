@@ -46,13 +46,13 @@ const browseSlice = createSlice({
       ...state,
       featuredPlaylists: action.payload,
     }),
-    getAllFeaturedPlaylistsError: state => state,
-    getAllCategoriesForCountry: state => state,
+    getAllFeaturedPlaylistsError: (state) => state,
+    getAllCategoriesForCountry: (state) => state,
     getAllCategoriesForCountrySuccess: (state, action) => ({
       ...state,
       categoriesForCountry: action.payload,
     }),
-    getAllCategoriesForCountryError: state => state,
+    getAllCategoriesForCountryError: (state) => state,
     getCategoryById: (state, _) => state,
     getCategoryByIdSuccess: (state, action) => ({
       ...state,
@@ -62,7 +62,7 @@ const browseSlice = createSlice({
         id: action.payload.id,
       },
     }),
-    getCategoryByIdError: state => state,
+    getCategoryByIdError: (state) => state,
     getMoreCategoriesByIdSuccess: (state, action) => ({
       ...state,
       genreDetails: {
@@ -73,8 +73,8 @@ const browseSlice = createSlice({
         ],
       },
     }),
-    isLoading: state => ({ ...state, isLoading: true }),
-    isNotLoading: state => ({ ...state, isLoading: false }),
+    isLoading: (state) => ({ ...state, isLoading: true }),
+    isNotLoading: (state) => ({ ...state, isLoading: false }),
   },
 })
 
@@ -83,8 +83,8 @@ const getAllFeaturedPlaylistsEpic = (actions$: Observable<Action<any>>) =>
     ofType(hydrate.type),
     switchMap(() =>
       SpotifyApiService.getAllFeaturedPlaylists().pipe(
-        map(res => {
-          const data: AlbumType[] = res.playlists.items.map(item => ({
+        map((res) => {
+          const data: AlbumType[] = res.playlists.items.map((item) => ({
             name: item.name,
             imageURL: item.images[0].url,
             id: item.id,
@@ -92,7 +92,7 @@ const getAllFeaturedPlaylistsEpic = (actions$: Observable<Action<any>>) =>
 
           return getAllFeaturedPlaylistsSuccess(data)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             // dont do anything
             return of({ type: "getAllFeaturedPlaylistsEpic: catchError" })
@@ -118,18 +118,18 @@ const getAllCategoriesForCountryEpic = (
       return SpotifyApiService.getAllCategoriesForCountry(
         profile?.country!,
       ).pipe(
-        map(res => {
+        map((res) => {
           const data = res.categories.items
 
           const dataWithoutFirstElement = data.slice(1, data.length - 1)
 
-          const categories = dataWithoutFirstElement.map(item => {
+          const categories = dataWithoutFirstElement.map((item) => {
             return { name: item.name, id: item.id }
           })
 
           return getAllCategoriesForCountrySuccess(categories)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(
               redoLogin(),
@@ -153,27 +153,27 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
 
       const urlQuery = getRestOfItems ? "offset=4" : "limit=4"
 
-      const request$ = SpotifyApiService.getCategoryById(id, urlQuery).pipe(
-        map(res => {
+      const request$ = SpotifyApiService.getCategory(id, urlQuery).pipe(
+        map((res) => {
           if (res.playlists.items.length === 0) {
             return of(getCategoryByIdSuccess({ data: [], title, id }))
           }
 
           // Get playlist by ID for each playlist
-          const request$Array = res.playlists.items.map(item => {
-            return SpotifyApiService.getPlaylistById(item.id)
+          const request$Array = res.playlists.items.map((item) => {
+            return SpotifyApiService.getPlaylist(item.id)
           })
 
           return zip(...request$Array)
         }),
-        switchMap(data$ => data$),
-        map(result => {
+        switchMap((data$) => data$),
+        map((result) => {
           if (!Array.isArray(result)) {
             return of(result as Action<any>)
           }
 
           const data: PlaylistDetailsType[] = result.map((res: Playlist) => {
-            const tracks: TrackType[] = res.tracks.items.map(item => ({
+            const tracks: TrackType[] = res.tracks.items.map((item) => ({
               artistName:
                 item.track?.artists[0].name ??
                 "No track returned by spotify :(",
@@ -186,6 +186,7 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
               ownerName: res.owner.display_name,
               followerCount: res.followers.total,
               tracks,
+              id: res.id,
             }
 
             return playlist
@@ -200,8 +201,8 @@ const getCategoryByIdEpic = (actions$: Observable<Action<any>>) =>
             return of(getMoreCategoriesByIdSuccess({ data }), isNotLoading())
           }
         }),
-        mergeMap(a => a),
-        catchError(err => {
+        mergeMap((a) => a),
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(
               redoLogin(),

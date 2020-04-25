@@ -1,34 +1,100 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import { SafeAreaView, StyleSheet, ToastAndroid, View } from "react-native"
 import { TouchableWithoutFeedback } from "react-native-gesture-handler"
+import Animated, { Value } from "react-native-reanimated"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import UIHelper from "../helpers/UIHelper"
+import { ItemType, SpotifyLibraryManager } from "../hooks/useLibraryManager"
 import { colors } from "../theme"
-import DotsView from "./DotsView"
 import BackBtn from "./BackBtn"
+import DotsView from "./DotsView"
+import { useSelector } from "react-redux"
+import { RootStoreType } from "../../redux/rootReducer"
 
 export const HEADER_HEIGHT = 42
+
+const heartScale = new Value(1)
 
 interface Props {
   goBack: () => void
   isLoading: boolean
+  id: string | undefined | null
+  itemType: ItemType | undefined
 }
 
-const PlaylistHeaderControl = ({ goBack, isLoading }: Props) => {
+const PlaylistHeaderControl = ({ goBack, isLoading, id, itemType }: Props) => {
+  const {
+    getItemSavedOrFollowedState,
+    saveItem,
+    removeItem,
+  } = SpotifyLibraryManager()
+  const [isSaved, setIsSaved] = useState<boolean | undefined>(undefined)
+  const userId = useSelector(
+    (state: RootStoreType) => state.userReducer.profile?.id,
+  )
+
+  useEffect(() => {
+    ;(async () => {
+      if (typeof isSaved === "undefined" && id && userId && itemType) {
+        let result
+        if (itemType === "PLAYLIST") {
+          result = await getItemSavedOrFollowedState(id, itemType, userId)
+        } else {
+          result = await getItemSavedOrFollowedState(id, itemType)
+        }
+        setIsSaved(Boolean(result))
+      }
+    })()
+  }, [getItemSavedOrFollowedState, id, itemType, isSaved, userId])
+
+  const handleSave = async () => {
+    if (id && !isSaved && itemType) {
+      const success = await saveItem(id, itemType)
+      success && setIsSaved(true)
+    }
+  }
+
+  const handleRemove = async () => {
+    if (id && isSaved && itemType) {
+      const success = await removeItem(id, itemType)
+      success && setIsSaved(false)
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <BackBtn goBack={goBack} />
       {!isLoading && (
         <>
-          <View style={styles.heartContainer}>
-            <Icon
-              onPress={() => {
-                ToastAndroid.show("Heart!", ToastAndroid.SHORT)
-              }}
-              name={true ? "heart" : "heart-outline"}
-              size={26}
-              style={styles.heart}
-            />
-          </View>
+          <Animated.View
+            style={[
+              styles.heartContainer,
+              { transform: [{ scale: heartScale }] },
+            ]}>
+            <TouchableWithoutFeedback
+              onPress={isSaved ? handleRemove : handleSave}
+              onPressIn={() =>
+                Animated.timing(heartScale, UIHelper.heartScaleAnim.in).start()
+              }
+              onPressOut={() =>
+                Animated.timing(heartScale, UIHelper.heartScaleAnim.out).start()
+              }>
+              <Icon
+                name={
+                  id === null ? "heart" : isSaved ? "heart" : "heart-outline"
+                }
+                size={26}
+                style={{
+                  color:
+                    id === null
+                      ? colors.green
+                      : isSaved
+                      ? colors.green
+                      : colors.white,
+                }}
+              />
+            </TouchableWithoutFeedback>
+          </Animated.View>
           <View style={styles.dotsContainer}>
             <TouchableWithoutFeedback
               onPress={() => {
@@ -59,9 +125,6 @@ const styles = StyleSheet.create({
     width: HEADER_HEIGHT,
     justifyContent: "center",
     alignItems: "center",
-  },
-  heart: {
-    color: colors.green,
   },
   dotsContainer: {
     position: "absolute",

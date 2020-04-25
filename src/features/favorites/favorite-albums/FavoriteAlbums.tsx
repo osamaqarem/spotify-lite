@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useCallback } from "react"
 import { NavigationStackProp } from "react-navigation-stack"
 import { connect, ConnectedProps } from "react-redux"
 import ListOfAlbums from "../../../common/components/ListOfAlbums"
@@ -6,6 +6,7 @@ import { RootStoreType } from "../../../redux/rootReducer"
 import { getCurrentUserSavedAlbums } from "../../../redux/slices/librarySlice"
 import { getAlbumById } from "../../../redux/slices/albumSlice"
 import { Routes } from "../../navigation/_routes"
+import { NavigationEvents } from "react-navigation"
 
 const FavoriteAlbums = ({
   getCurrentUserSavedAlbums,
@@ -13,9 +14,13 @@ const FavoriteAlbums = ({
   getAlbumById,
   navigation,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     getCurrentUserSavedAlbums()
   }, [getCurrentUserSavedAlbums])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const onPlaylistPressed = (id: string) => {
     getAlbumById(id)
@@ -23,10 +28,13 @@ const FavoriteAlbums = ({
   }
 
   return (
-    <ListOfAlbums
-      currentUserAlbums={currentUserAlbums}
-      onPlaylistPressed={onPlaylistPressed}
-    />
+    <>
+      <NavigationEvents onWillFocus={fetchData} />
+      <ListOfAlbums
+        currentUserAlbums={currentUserAlbums}
+        onPlaylistPressed={onPlaylistPressed}
+      />
+    </>
   )
 }
 

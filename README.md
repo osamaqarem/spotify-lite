@@ -9,7 +9,6 @@
 
 Based on the [Spotify Lite app for Android](https://play.google.com/store/apps/details?id=com.spotify.lite&referrer=adjust_reftag%3Dcc6cp0nuUCn33%26utm_source%3DLanding%2Bpage).
 
-
 ## Features
 
 - Home feed (recently played, featured playlists and your top artists).
@@ -18,6 +17,7 @@ Based on the [Spotify Lite app for Android](https://play.google.com/store/apps/d
 - View playlists, artists and albums.
 - View your music library.
 - Search.
+- Like/follow.
 
 ## Try The App
 
@@ -59,7 +59,6 @@ iOS
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/search.png">
 <img width="288px" src="https://github.com/osamaq/spotify-lite/raw/master/docs/assets/screenshots/pixel3/see-all-songs.png">
 
-
 ## Development
 
 ```bash
@@ -86,7 +85,6 @@ You can also refer to available [npm scripts](https://github.com/osamaq/spotify-
 ## TODO
 
 - [ ] Details modal
-- [ ] Like/Save
 - [ ] Settings Menu
 - [ ] Logout
 - [ ] Error UI

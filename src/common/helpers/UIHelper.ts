@@ -15,9 +15,17 @@ const btnScaleAnim = {
   },
 }
 
+const heartScaleAnim = {
+  in: { toValue: 0.9, duration: 50, easing: Easing.inOut(Easing.ease) },
+  out: {
+    toValue: 1,
+    duration: 50,
+    easing: Easing.inOut(Easing.ease),
+  },
+}
+
 // Forked from: react-native-iphone-x-helper
 // https://github.com/ptelad/react-native-iphone-x-helper
-// TODO: better approach?
 const isIphoneX = () => {
   return (
     Platform.OS === "ios" &&
@@ -108,6 +116,7 @@ const UIHelper = {
   onScroll,
   fadeIn,
   runTiming,
+  heartScaleAnim,
 }
 
 export default UIHelper

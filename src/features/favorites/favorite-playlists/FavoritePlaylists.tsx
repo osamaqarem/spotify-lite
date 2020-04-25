@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useCallback } from "react"
 import { StatusBar } from "react-native"
 import { NavigationEvents } from "react-navigation"
 import { NavigationStackProp } from "react-navigation-stack"
@@ -24,10 +24,14 @@ const FavoritePlaylists = ({
   getPlaylistById,
   getPlaylistByIdSuccess,
 }: ReduxProps & { navigation: NavigationStackProp }) => {
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     getCurrentUserPlaylists()
     getCurrentUserSavedTracks()
   }, [getCurrentUserPlaylists, getCurrentUserSavedTracks])
+
+  useEffect(() => {
+    fetchData()
+  }, [fetchData])
 
   const onPlaylistPressed = (id: string) => {
     getPlaylistById(id)
@@ -38,14 +42,15 @@ const FavoritePlaylists = ({
     currentUserSavedTracks && getPlaylistByIdSuccess(currentUserSavedTracks)
     navigation.navigate(Routes.BottomTabs.FavoritesStack.PlaylistDetails)
   }
+
+  const handleWillFocus = () => {
+    StatusBar.setBarStyle("light-content")
+    fetchData()
+  }
+
   return (
     <>
-      <NavigationEvents
-        onWillFocus={() => {
-          StatusBar.setBarStyle("light-content")
-        }}
-      />
-
+      <NavigationEvents onWillFocus={handleWillFocus} />
       <ListOfPlaylists
         username={(profile && profile.display_name) || "Error"}
         currentUserPlaylists={currentUserPlaylists}

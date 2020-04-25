@@ -22,14 +22,14 @@ const albumSlice = createSlice({
   name: "album",
   reducers: {
     getAlbumById: (state, _) => state,
-    getAlbumError: state => state,
+    getAlbumError: (state) => state,
     getMultipleAlbums: (state, _) => state,
-    getMultipleAlbumsError: state => state,
+    getMultipleAlbumsError: (state) => state,
     getMultipleAlbumsSuccess: (state, action) => ({
       ...state,
       recentlyPlayedAlbums: action.payload,
     }),
-    getRecentlyPlayedTracksError: state => state,
+    getRecentlyPlayedTracksError: (state) => state,
   },
 })
 
@@ -37,8 +37,8 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
   actions$.pipe(
     ofType(getAlbumById.type),
     switchMap(({ payload: id }) =>
-      SpotifyApiService.getAlbumById(id).pipe(
-        map(res => {
+      SpotifyApiService.getAlbum(id).pipe(
+        map((res) => {
           const tracks = res.tracks.items.map((track, i) => ({
             name: track.name,
             artistName: track.artists[i]?.name || res.artists[0].name,
@@ -49,11 +49,13 @@ const getAlbumByIdEpic = (actions$: Observable<Action<any>>) =>
             ownerName: res.artists[0].name,
             tracks,
             imageUrl: res.images[0].url,
+            id: res.id,
+            type: "ALBUM",
           }
 
           return getPlaylistByIdSuccess(album)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(redoLogin(), pushActionToRestart(getAlbumById(id)))
           }
@@ -71,9 +73,9 @@ const getMultipleAlbumsEpic = (actions$: Observable<Action<any>>) =>
     ofType(getMultipleAlbums.type),
     switchMap(({ payload: ids }) =>
       SpotifyApiService.getMultipleAlbums(ids).pipe(
-        map(res => {
+        map((res) => {
           // we want array of url strings
-          const albumImageUrls: AlbumType[] = res.albums.map(album => ({
+          const albumImageUrls: AlbumType[] = res.albums.map((album) => ({
             name: album.name,
             // [2] is lowest quality
             // [0] is highest quality
@@ -83,7 +85,7 @@ const getMultipleAlbumsEpic = (actions$: Observable<Action<any>>) =>
 
           return getMultipleAlbumsSuccess(albumImageUrls)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             return of(redoLogin(), pushActionToRestart(getMultipleAlbums(ids)))
           }
@@ -102,9 +104,9 @@ const getRecentlyPlayedTracksEpic = (actions$: Observable<Action<undefined>>) =>
     switchMap(() => interval(180 * 1000).pipe(startWith(EMPTY))),
     switchMap(() =>
       SpotifyApiService.getRecentlyPlayedTracks().pipe(
-        map(res => {
+        map((res) => {
           let commaList = ""
-          res.items.forEach(item => {
+          res.items.forEach((item) => {
             const [, albumId] = item.track.album.href.split("albums/")
             if (!commaList.includes(albumId))
               commaList = commaList.concat(albumId + ",")
@@ -114,7 +116,7 @@ const getRecentlyPlayedTracksEpic = (actions$: Observable<Action<undefined>>) =>
 
           return getMultipleAlbums(commaListCommaRemoved)
         }),
-        catchError(err => {
+        catchError((err) => {
           if (SpotifyApiService.sessionIsExpired(err)) {
             // dont do anything
             return of({ type: "getRecentlyPlayedTracksEpic: catchError" })

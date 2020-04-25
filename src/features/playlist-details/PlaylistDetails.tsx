@@ -88,7 +88,12 @@ const PlaylistDetails = ({
       <NavigationEvents
         onWillFocus={() => StatusBar.setBarStyle("light-content")}
       />
-      <PlaylistHeaderControl goBack={goBack} isLoading={isLoading} />
+      <PlaylistHeaderControl
+        goBack={goBack}
+        isLoading={isLoading}
+        id={playlistDetails?.id}
+        itemType={playlistDetails?.type}
+      />
       {isLoading ? (
         <LoadingView />
       ) : (
@@ -121,7 +126,7 @@ const PlaylistDetails = ({
           </View>
           <ShuffleButton offsetY={offsetY} />
           <Animated.ScrollView
-            onLayout={e => setScrollViewHeight(e.nativeEvent.layout.height)}
+            onLayout={(e) => setScrollViewHeight(e.nativeEvent.layout.height)}
             bounces={false}
             decelerationRate={0.994}
             overScrollMode="never"

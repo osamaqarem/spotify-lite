@@ -26,7 +26,7 @@ import { CurrentPlayingTrack } from "./models/spotify/CurrentPlayingTrack"
 
 type ContentType = "JSON" | "Text" | "Unsupported"
 interface ApiConfig {
-  url: RequestInfo
+  url: string
   verb?: "GET" | "PUT" | "POST" | "DELETE"
   timeoutInSeconds?: number
 }
@@ -110,11 +110,7 @@ class SpotifyApiService implements SpotifyAPI {
 
       return this.processResponse(res) as Promise<T>
     } else {
-      throw new OfflineException(
-        "Offline",
-        "Internet not reachable",
-        url.toString(),
-      )
+      throw new OfflineException("Offline", "Internet not reachable", url)
     }
   }
 
@@ -133,10 +129,18 @@ class SpotifyApiService implements SpotifyAPI {
     from(
       this.api<ProfileResponse>({ url: SpotifyEndpoints.getMyProfile() }),
     )
+
   getCurrentUserSavedArtists = () =>
     from(
       this.api<{ artists: SpotifyPager<Artist> }>({
         url: SpotifyEndpoints.getCurrentUserSavedArtists(),
+      }),
+    )
+
+  getCurrentUserSavedAlbums = () =>
+    from(
+      this.api<SpotifyPager<SavedAlbumObject>>({
+        url: SpotifyEndpoints.getCurrentUserSavedAlbums(),
       }),
     )
 
@@ -146,21 +150,75 @@ class SpotifyApiService implements SpotifyAPI {
         url: SpotifyEndpoints.getCurrentUserSavedTracks(),
       }),
     )
-  checkSavedTracks = (ids: string) =>
+
+  getSavedStateForAlbums = (ids: string) =>
     this.api<boolean[]>({
-      url: SpotifyEndpoints.checkSavedTracks(ids),
+      url: SpotifyEndpoints.getSavedStateForAlbums(ids),
     })
 
-  getCurrentUserSavedAlbums = () =>
-    from(
-      this.api<SpotifyPager<SavedAlbumObject>>({
-        url: SpotifyEndpoints.getCurrentUserSavedAlbums(),
-      }),
-    )
-  checkSavedAlbums = (ids: string) =>
+  getFollowingStateForArtistsOrUsers = (ids: string, type: "artist" | "user") =>
     this.api<boolean[]>({
-      url: SpotifyEndpoints.checkSavedAlbums(ids),
+      url: SpotifyEndpoints.getFollowingStateForArtistsOrUsers(ids, type),
     })
+
+  getFollowingStateForPlaylist = (id: string, userId: string) =>
+    this.api<boolean[]>({
+      url: SpotifyEndpoints.getFollowingStateForPlaylist(id, userId),
+    })
+
+  getSavedStateForTracks = (ids: string) =>
+    this.api<boolean[]>({
+      url: SpotifyEndpoints.getSavedStateForTracks(ids),
+    })
+
+  saveAlbums = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.saveAlbums(ids),
+      verb: "PUT",
+    })
+
+  followArtistsOrUsers = (ids: string, type: "artist" | "user") =>
+    this.api<Response>({
+      url: SpotifyEndpoints.followArtistsOrUsers(ids, type),
+      verb: "PUT",
+    })
+
+  followPlaylist = (id: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.followPlaylist(id),
+      verb: "PUT",
+    })
+
+  saveTracks = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.saveTracks(ids),
+      verb: "PUT",
+    })
+
+  unfollowArtistsOrUsers = (ids: string, type: 'artist' | 'user') =>
+    this.api<Response>({
+      url: SpotifyEndpoints.unfollowArtistsOrUsers(ids, type),
+      verb: "DELETE",
+    })
+
+  removeAlbums = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.removeAlbums(ids),
+      verb: "DELETE",
+    })
+
+  removeTracks = (ids: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.removeTracks(ids),
+      verb: "DELETE",
+    })
+
+  unfollowPlaylist = (id: string) =>
+    this.api<Response>({
+      url: SpotifyEndpoints.unfollowPlaylist(id),
+      verb: "DELETE",
+    })
+
   getCurrentUserTopArtists = () =>
     from(
       this.api<SpotifyPager<Artist>>({
@@ -202,33 +260,9 @@ class SpotifyApiService implements SpotifyAPI {
       verb: "POST",
     })
 
-  saveAlbums = (ids: string) =>
-    this.api<Response>({
-      url: SpotifyEndpoints.saveAlbums(ids),
-      verb: "PUT",
-    })
-
-  saveTracks = (ids: string) =>
-    this.api<Response>({
-      url: SpotifyEndpoints.saveTracks(ids),
-      verb: "PUT",
-    })
-
-  removeAlbums = (ids: string) =>
-    this.api<Response>({
-      url: SpotifyEndpoints.removeAlbums(ids),
-      verb: "DELETE",
-    })
-
-  removeTracks = (ids: string) =>
-    this.api<Response>({
-      url: SpotifyEndpoints.removeTracks(ids),
-      verb: "DELETE",
-    })
-
-  getAlbumById = (id: string) =>
+  getAlbum = (id: string) =>
     from(
-      this.api<Album>({ url: SpotifyEndpoints.getAlbumById(id) }),
+      this.api<Album>({ url: SpotifyEndpoints.getAlbum(id) }),
     )
 
   getMultipleAlbums = (ids: string) =>
@@ -252,27 +286,27 @@ class SpotifyApiService implements SpotifyAPI {
       }),
     )
 
-  getCategoryById = (id: string, urlQueryString: string) =>
+  getCategory = (id: string, urlQueryString: string) =>
     from(
       this.api<{ playlists: SpotifyPager<Category> }>({
-        url: SpotifyEndpoints.getCategoryById(id, urlQueryString),
+        url: SpotifyEndpoints.getCategory(id, urlQueryString),
       }),
     )
 
-  getPlaylistById = (id: string) =>
+  getPlaylist = (id: string) =>
     from(
-      this.api<Playlist>({ url: SpotifyEndpoints.getPlaylistById(id) }),
+      this.api<Playlist>({ url: SpotifyEndpoints.getPlaylist(id) }),
     )
 
-  getArtistById = (id: string) =>
+  getArtist = (id: string) =>
     from(
-      this.api<Artist>({ url: SpotifyEndpoints.getArtistById(id) }),
+      this.api<Artist>({ url: SpotifyEndpoints.getArtist(id) }),
     )
 
-  getRelatedArtistsById = (id: string) =>
+  getRelatedArtists = (id: string) =>
     from(
       this.api<{ artists: Artist[] }>({
-        url: SpotifyEndpoints.getRelatedArtistsById(id),
+        url: SpotifyEndpoints.getRelatedArtists(id),
       }),
     )
 
