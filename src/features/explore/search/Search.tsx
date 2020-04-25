@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState, useCallback } from "react"
 import {
   ActivityIndicator,
   EmitterSubscription,
@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TextInput,
   View,
+  BackHandler,
 } from "react-native"
 import { NavigationEvents, SafeAreaView, ScrollView } from "react-navigation"
 import { NavigationStackProp } from "react-navigation-stack"
@@ -66,67 +67,92 @@ const Search = ({
     }
   }, [loading, results])
 
-  const handleWillFocus = () => {
+  const handleWillFocus = useCallback(() => {
     StatusBar.setBarStyle("light-content")
-  }
+  }, [])
 
-  const handleDidFocus = () => {
+  const handleDidFocus = useCallback(() => {
     keyboardWillHideListener = Keyboard.addListener("keyboardWillHide", () =>
       setShowBack(false),
     )
-  }
+  }, [])
 
-  const handleWillBlur = () => {
+  const handleWillBlur = useCallback(() => {
     keyboardWillHideListener && keyboardWillHideListener.remove()
-  }
+  }, [])
 
-  const handleInputFocus = () => {
+  const handleInputFocus = useCallback(() => {
     setShowBack(true)
-  }
+  }, [])
 
-  const handleQuery = (text: string) => {
-    setQuery(text)
-    getQuery(text)
-  }
+  const handleQuery = useCallback(
+    (text: string) => {
+      setQuery(text)
+      getQuery(text)
+    },
+    [getQuery],
+  )
 
-  const handleClear = () => {
+  const handleClear = useCallback(() => {
     getQuery("")
     setQuery("")
     setShowBack(false)
     Keyboard.dismiss()
-  }
+  }, [getQuery])
 
-  const handleResultPress = (item: AlbumType) => {
-    querySave(item)
-    switch (item.type) {
-      case "Artist":
-        setArtistId(item.id)
-        navigation.navigate(Routes.BottomTabs.ExploreStack.ArtistDetails)
-        return
-      case "Album":
-        getAlbumById(item.id)
-        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
-        return
-      case "Playlist":
-        getPlaylistById(item.id)
-        navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
-        return
-    }
-  }
+  const handleResultPress = useCallback(
+    (item: AlbumType) => {
+      querySave(item)
+      switch (item.type) {
+        case "Artist":
+          setArtistId(item.id)
+          navigation.navigate(Routes.BottomTabs.ExploreStack.ArtistDetails)
+          return
+        case "Album":
+          getAlbumById(item.id)
+          navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
+          return
+        case "Playlist":
+          getPlaylistById(item.id)
+          navigation.navigate(Routes.BottomTabs.ExploreStack.PlaylistDetails)
+          return
+      }
+    },
+    [getAlbumById, getPlaylistById, navigation, querySave, setArtistId],
+  )
 
-  const handleRemove = (item: AlbumType) => {
-    queryDelete(item)
-  }
+  const handleRemove = useCallback(
+    (item: AlbumType) => {
+      queryDelete(item)
+    },
+    [queryDelete],
+  )
 
-  const handleclearAll = () => {
+  const handleclearAll = useCallback(() => {
     queryDeleteAll()
     searchInput.current?.focus()
-  }
+  }, [queryDeleteAll])
 
-  const handleSeeAll = (data: AlbumType[], type: AlbumType["type"]) => {
-    querySetSeeAll({ data, type })
-    navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll)
-  }
+  const handleSeeAll = useCallback(
+    (data: AlbumType[], type: AlbumType["type"]) => {
+      querySetSeeAll({ data, type })
+      navigation.navigate(Routes.BottomTabs.ExploreStack.SeeAll)
+    },
+    [navigation, querySetSeeAll],
+  )
+
+  const handleBack = useCallback(() => {
+    handleClear()
+    navigation.goBack()
+    return true
+  }, [handleClear, navigation])
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", handleBack)
+    return () => {
+      BackHandler.removeEventListener("hardwareBackPress", handleBack)
+    }
+  }, [handleBack])
 
   const showLoading = query.length > 0 && loading
   const showResults = results.random.length > 0
@@ -151,7 +177,7 @@ const Search = ({
             />
           )) || (
             <BackBtnSearch
-              onPress={() => navigation.goBack()}
+              onPress={handleBack}
               tintColor={colors.lightGrey}
               textStyle={styles.backBtnIcon}
             />
@@ -198,7 +224,7 @@ const Search = ({
             />
           ))}
         {showResults &&
-          results.random.map(result => (
+          results.random.map((result) => (
             <ResultRow
               key={result.id}
               result={result}

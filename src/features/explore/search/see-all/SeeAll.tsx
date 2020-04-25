@@ -45,7 +45,11 @@ const SeeAll = ({ navigation, lastQuery, data, type }: SeeAllType) => {
           </Text>
         </View>
         <ScrollView
-          contentContainerStyle={{ flexGrow: 1, marginHorizontal: 4 }}>
+          contentContainerStyle={{
+            flexGrow: 1,
+            marginHorizontal: 4,
+            paddingBottom: 10,
+          }}>
           {items}
         </ScrollView>
       </View>
