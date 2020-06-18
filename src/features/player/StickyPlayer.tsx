@@ -30,6 +30,7 @@ import SpotifyAsyncStoreService from "../../services/asyncstorage/SpotifyAsyncSt
 import SpotifyHttpException from "../../services/network/exceptions/SpotifyHttpException"
 import SpotifyApiService from "../../services/network/SpotifyApiService"
 import SpotifyEndpoints from "../../services/network/SpotifyEndpoints"
+import { Button, IconButton, Colors } from "react-native-paper"
 
 export const PLAYER_HEIGHT = 50
 const POLLING_PERIOD_SECONDS = 10
@@ -275,25 +276,21 @@ const StickyPlayer = ({ barHeight }: Props) => {
       <View style={styles.progressBarBackground} />
       <Animated.View
         style={[styles.iconContainer, { transform: [{ scale: heartScale }] }]}>
-        <TouchableWithoutFeedback
+
+        <IconButton
+          icon={isSaved ? "heart" : "heart-outline"}
           onPress={isSaved ? handleRemove : handleSave}
           onPressIn={() =>
             Animated.timing(heartScale, UIHelper.heartScaleAnim.in).start()
           }
           onPressOut={() =>
             Animated.timing(heartScale, UIHelper.heartScaleAnim.out).start()
-          }>
-          <Icon
-            name={isSaved ? "heart" : "heart-outline"}
-            size={24}
-            style={[
-              styles.heartIcon,
-              {
-                color: isSaved ? colors.green : colors.white,
-              },
-            ]}
-          />
-        </TouchableWithoutFeedback>
+          }
+          size={24}
+          style={styles.heartIcon}
+          color={isSaved ? colors.green : colors.white}
+        />
+
       </Animated.View>
       <Animated.Text
         onLayout={captureTitleWidth}
@@ -340,20 +337,26 @@ const StickyPlayer = ({ barHeight }: Props) => {
       )}
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
-          <Icon
+          <IconButton
+            icon={isPlaying ? "pause" : "play"}
             onPress={isPlaying ? handlePause : handlePlay}
             name={isPlaying ? "pause" : "play"}
             size={28}
             style={styles.playIcon}
+            color={Colors.white}
           />
+
         </View>
         <View style={styles.iconContainer}>
-          <Icon
+          <IconButton
+            icon={"skip-next"}
             onPress={nextTrack}
-            name="skip-next"
+            name={isPlaying ? "pause" : "play"}
             size={28}
             style={styles.playIcon}
+            color={Colors.white}
           />
+
         </View>
       </View>
     </View>
