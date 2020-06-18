@@ -33,7 +33,9 @@
     "runIpadAir": "react-native run-ios --simulator=\"iPad Air\"",
     "adb-metro": "adb reverse tcp:8081 tcp:8081",
     "adb-reactotron": "adb reverse tcp:9090 tcp:9090",
-    "icon": "npx app-icon generate -i ./src/services/publishing/icon.png"
+    "rename": "react-native-rename",
+    "icon": "npx app-icon generate -i ./src/services/publishing/icon.png",
+    "setup": "yarn rename"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
