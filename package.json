@@ -32,7 +32,8 @@
     "runIphone8": "react-native run-ios --simulator=\"iPhone 8\"",
     "runIpadAir": "react-native run-ios --simulator=\"iPad Air\"",
     "adb-metro": "adb reverse tcp:8081 tcp:8081",
-    "adb-reactotron": "adb reverse tcp:9090 tcp:9090"
+    "adb-reactotron": "adb reverse tcp:9090 tcp:9090",
+    "icon": "npx app-icon generate -i ./src/services/publishing/icon.png"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.2",
