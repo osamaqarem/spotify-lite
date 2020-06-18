@@ -292,7 +292,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
         />
 
       </Animated.View>
-      <Animated.Text
+      {/* <Animated.Text
         onLayout={captureTitleWidth}
         style={[
           styles.title,
@@ -334,7 +334,7 @@ const StickyPlayer = ({ barHeight }: Props) => {
             {artist}
           </Animated.Text>
         </>
-      )}
+      )} */}
       <View style={styles.controlsContainer}>
         <View style={styles.iconContainer}>
           <IconButton

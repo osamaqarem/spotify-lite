@@ -1,6 +1,7 @@
 import React from "react";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-import { TextStyle } from "react-native";
+import { TextStyle, View } from "react-native";
+import { IconButton } from "react-native-paper";
 
 const BackBtnSearch = ({
   tintColor,
@@ -14,10 +15,10 @@ const BackBtnSearch = ({
   onPress?: () => void;
 }) => {
   return (
-    <Icon
+    <IconButton
       onPress={onPress}
-      style={[textStyle]}
-      name="arrow-left"
+      // style={[textStyle, { borderRadius: size || 26 }]}
+      icon="arrow-left"
       size={size || 26}
       color={tintColor}
     />

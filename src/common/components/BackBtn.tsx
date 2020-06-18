@@ -2,6 +2,7 @@ import React from "react"
 import { StyleSheet, TextStyle, View, ViewStyle } from "react-native"
 import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { colors } from "../theme"
+import { IconButton } from "react-native-paper"
 
 const BackBtn = ({
   goBack,
@@ -14,18 +15,11 @@ const BackBtn = ({
 }) => {
   return (
     <View style={[styles.backContainer, viewStyle]}>
-      <Icon
+      <IconButton
         onPress={goBack}
-        name="arrow-left"
+        icon="arrow-left"
         size={28}
-        style={[
-          {
-            color: colors.white,
-            textAlign: "center",
-            textAlignVertical: "center",
-          },
-          textStyle,
-        ]}
+        color={colors.white}
       />
     </View>
   )

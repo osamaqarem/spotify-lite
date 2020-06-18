@@ -1,6 +1,7 @@
 import React from "react"
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native"
 import { colors } from "../../../../common/theme"
+import { Button } from "react-native-paper"
 
 const SeeMoreBtn = ({
   onPress,
@@ -11,9 +12,10 @@ const SeeMoreBtn = ({
 }) => {
   return (
     <View style={[styles.container, { opacity: isVisible ? 1 : 0 }]}>
-      <TouchableOpacity style={styles.button} onPress={onPress}>
+      <Button onPress={onPress} mode={'outlined'} style={styles.button} labelStyle={styles.btnText} color="white" >SEE MORE</Button>
+      {/* <TouchableOpacity style={styles.button} onPress={onPress}>
         <Text style={styles.btnText}>SEE MORE</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   )
 }
@@ -22,21 +24,15 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 30,
     alignItems: "center",
-    height: 32,
   },
   button: {
-    width: 144,
-    height: 32,
-    backgroundColor: colors.background,
     borderColor: colors.grey,
     borderWidth: 1,
-    justifyContent: "center",
     alignItems: "center",
     borderRadius: 32,
   },
   btnText: {
     color: colors.white,
-    fontSize: 16,
     letterSpacing: 1.8,
     fontWeight: "bold",
   },

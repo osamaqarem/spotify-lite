@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
+    "baseUrl": ".",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": false,
@@ -15,7 +16,11 @@
     "strictNullChecks": true,
     "incremental": false,
     "skipLibCheck": true,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "paths": {
+      "*": ["src/*"],
+      "assets": ["./src/common/assets"],
+    }
   },
   "exclude": [
     "node_modules",
