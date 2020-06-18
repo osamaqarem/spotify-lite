@@ -121,7 +121,7 @@
         }
       },
       "ios.sim.debug": {
-        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/Spotify Lite.app",
+        "binaryPath": "ios/build/Build/Products/Debug-iphonesimulator/Spotify Night.app",
         "build": "xcodebuild -workspace ios/spotifyclone.xcworkspace -scheme spotifyclone -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
@@ -129,7 +129,7 @@
         }
       },
       "ios.sim.release": {
-        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/Spotify Lite.app",
+        "binaryPath": "ios/build/Build/Products/Release-iphonesimulator/Spotify Night.app",
         "build": "xcodebuild -workspace ios/spotifyclone.xcworkspace -scheme spotifyclone -configuration Release -sdk iphonesimulator -derivedDataPath ios/build",
         "type": "ios.simulator",
         "device": {
