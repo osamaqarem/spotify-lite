@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   name: {
     flex: 1,
     color: colors.darkWhite,
+    fontWeight: '500',
     // letterSpacing: 0.8,
     fontSize: 16,
   },

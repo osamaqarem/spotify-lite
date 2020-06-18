@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     textAlignVertical: "center",
     fontSize: 16,
+    fontWeight: '500',
   },
   artistOwner: {
     color: colors.grey,
