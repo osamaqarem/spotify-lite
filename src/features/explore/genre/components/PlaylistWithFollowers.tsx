@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 6,
     fontSize: 10,
-    letterSpacing: 0.4,
+    // letterSpacing: 0.4,
   },
 })
 

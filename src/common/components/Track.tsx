@@ -27,11 +27,15 @@ const styles = StyleSheet.create({
   },
   title: {
     color: colors.white,
+    fontWeight: '500',
     fontSize: 16,
-    letterSpacing: 0.6,
+    // letterSpacing: 0.6,
     marginRight: 15,
   },
-  artist: { color: colors.grey, fontSize: 12.5, letterSpacing: 0.6 },
+  artist: {
+    color: colors.grey, fontSize: 12.5,
+    // letterSpacing: 0.6
+  },
 })
 
 export default Track

@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
   },
   seeAll: {
     color: colors.darkWhite,
-    letterSpacing: 0.8,
+    // letterSpacing: 0.8,
     fontSize: 16,
   },
 })

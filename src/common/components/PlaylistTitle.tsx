@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "bold",
-    letterSpacing: 0.6,
+    // letterSpacing: 0.6,
     color: colors.white,
     textAlign: "center",
     zIndex: -5,

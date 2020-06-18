@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 18,
     fontWeight: "bold",
-    letterSpacing: 0.6,
+    // letterSpacing: 0.6,
     textAlign: "center",
     marginHorizontal: 50,
   },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     color: colors.grey,
     fontSize: 14,
-    letterSpacing: 0.6,
+    // letterSpacing: 0.6,
   },
 })
 

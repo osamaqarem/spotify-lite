@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
   bigBoldText: {
     fontSize: 18,
     color: colors.white,
-    letterSpacing: 0.8,
+    // letterSpacing: 0.8,
     fontWeight: "bold",
   },
   text: {
@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     fontSize: 12,
     color: colors.grey,
-    letterSpacing: 0.4,
+    // letterSpacing: 0.4,
     textAlign: "center",
   },
   btnContainer: {

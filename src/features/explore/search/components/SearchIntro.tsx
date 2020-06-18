@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     fontSize: 16,
     color: colors.white,
-    letterSpacing: 0.3,
+    // letterSpacing: 0.3,
     textAlign: "center",
   },
   subheader: {

@@ -500,7 +500,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 12,
     marginLeft: 2,
-    letterSpacing: 0.4,
+    // letterSpacing: 0.4,
     zIndex: -2,
   },
   artist: {

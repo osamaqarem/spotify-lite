@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: colors.darkWhite,
     fontSize: 16,
     fontWeight: "bold",
-    letterSpacing: 1,
+    // letterSpacing: 1,
   },
 })
 

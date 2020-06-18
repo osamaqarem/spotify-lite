@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: colors.white,
     fontSize: 14,
-    letterSpacing: 2,
+    letterSpacing: 1,
     fontWeight: "bold",
   },
 })

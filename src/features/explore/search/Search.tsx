@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     height: "100%",
     marginLeft: 4,
     width: "70%",
-    letterSpacing: 0.4,
+    // letterSpacing: 0.4,
     marginTop: 2,
   },
   clearIcon: {
