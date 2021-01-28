@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "start": "react-native start",
     "runAndroid:debug": "react-native run-android",
     "runAndroid:debugRelease": "react-native run-android --variant=release",
@@ -85,6 +86,8 @@
     "eslint-plugin-react-hooks": "^2.0.1",
     "jest": "^24.1.0",
     "metro-react-native-babel-preset": "^0.51.1",
+    "patch-package": "^6.2.2",
+    "postinstall-postinstall": "^2.1.0",
     "react-test-renderer": "16.8.1",
     "reactotron-react-native": "^4.0.3",
     "reactotron-redux": "^3.1.2",
