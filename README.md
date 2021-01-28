@@ -5,8 +5,6 @@
   <h1 align="center">Spotify Lite - React Native</h1>  
 </p>
 
-[![Build Status](https://travis-ci.com/osamaq/spotify-lite.svg?token=zR9jL4Gd5mWdyyzMybgQ&branch=master)](https://travis-ci.com/osamaq/spotify-lite)
-
 Based on the [Spotify Lite app for Android](https://play.google.com/store/apps/details?id=com.spotify.lite&referrer=adjust_reftag%3Dcc6cp0nuUCn33%26utm_source%3DLanding%2Bpage).
 
 ## Features
