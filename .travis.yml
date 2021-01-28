@@ -39,7 +39,8 @@ matrix:
         - brew tap wix/brew
         - brew install applesimutils
         - gem install cocoapods
-        - nvm install 12.14.0
+        - nvm install 12.18.2
+        - nvm alias default 12.18.2
         - npm i
       before_script:
         - cd ios
