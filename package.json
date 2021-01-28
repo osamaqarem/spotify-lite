@@ -64,6 +64,9 @@
     "redux-persist": "^6.0.0",
     "rxjs": "^6.5.4"
   },
+  "resolutions": {
+    "@react-native-community/cli-platform-ios": "4.13.0"
+  },
   "devDependencies": {
     "@babel/core": "^7.5.0",
     "@babel/runtime": "^7.5.0",
