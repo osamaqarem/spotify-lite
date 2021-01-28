@@ -29,22 +29,29 @@ matrix:
 
     - language: objective-c
       os: osx
-      osx_image: xcode12.2
+      osx_image: xcode11.3
       podfile: ios/Podfile
       cache:
-        - cocoapods
-        - npm
+        cocoapods: true
+        npm: false
+        yarn: false
+      before_install:
+        # Repo for Yarn
+        - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+        - echo "deb http://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+        - sudo apt-get update -qq
+        - sudo apt-get install -y -qq yarn
       install:
         - brew update
         - brew tap wix/brew
         - brew install applesimutils
         - gem install cocoapods
         - nvm install 12.14.0
-        - npm i
+        - yarn install
       before_script:
         - cd ios
         - pod install
         - cd ..
       script:
-        - npm run detox-build:iosRelease | xcpretty
-        - npm run detox-test:iosRelease --cleanup
+        - yarn detox-build:iosRelease | xcpretty
+        - yarn detox-test:iosRelease --cleanup
