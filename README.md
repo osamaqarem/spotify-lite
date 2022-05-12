@@ -29,6 +29,11 @@ You can download the latest APK [here](https://github.com/osamaq/spotify-lite/tr
 
 You need to build from source. See [development](#Development).
 
+
+### Notes
+
+- For a real app, you don't want to perform authentication as done here. Consider using [react-native-inappbrowser](https://github.com/proyecto26/react-native-inappbrowser) or [react-native-app-auth](https://github.com/FormidableLabs/react-native-app-auth). With an in-app browser, an existing authentication session can be reused if it exists in the user's browser. It's also a sign of security to your users as the page cannot be manipulated via JavaScript by the developer.
+
 ## Screenshots
 
 iOS
@@ -76,9 +81,6 @@ npx react-native run-android
 
 You can also refer to available [npm scripts](https://github.com/osamaq/spotify-lite/blob/b8f763b48ec95ed7e1b4cacfae750b57051cd68e/package.json#L5).
 
-## Notes
-
-- Implicit grant flow is used for authentication with localhost as a redirect URI. In a real application, we probably want to use authorization code flow with a middleware server. See Spotify's [authorization guide](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-flows) for more info.
 
 ## TODO
 
